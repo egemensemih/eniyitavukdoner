@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Türkiye'nin En İyi Tavuk Dönerini Arıyoruz | eniyitavukdoner.com</title>
+<meta name="description" content="Şehir şehir, usta usta Türkiye'nin en iyi tavuk dönerini arıyoruz. Hayalindeki döneri tasarla, favori mekânını bildir.">
+<meta property="og:title" content="Türkiye'nin En İyi Tavuk Dönerini Arıyoruz">
+<meta property="og:description" content="Hayalindeki döneri tasarla, story kartını paylaş. Favori dönercini bildir, gidip deneyelim.">
+<meta property="og:image" content="assets/og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2340B8">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="eniyitavukdoner.com ana sayfa">
+    <img src="assets/favicon.svg" alt="" width="36" height="36">
+    <span>eniyitavukdoner<b>.com</b></span>
+  </a>
+  <nav class="links" aria-label="Bölümler">
+    <a href="#manifesto">Manifesto</a>
+    <a href="#harita">Harita</a>
+    <a href="#tasarla">Döneri Tasarla</a>
+    <a href="#bildir">Mekân Bildir</a>
+  </nav>
+  <a class="btn btn-cobalt btn-sm" href="#haber">Bana Haber Ver</a>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="shape s1"></div><div class="shape s2"></div><div class="shape s3"></div>
+  <div class="wrap hero-in">
+    <span class="pill pill-yellow">Denedik <i>•</i> Tavuk Döner Dosyası</span>
+    <h1>Türkiye'nin en iyi tavuk dönerini <span class="hl">bulmayı deniyoruz.</span></h1>
+    <p class="lead">Şehir şehir geziyor, ustaları yerinde dinliyor, her mekânı aynı kriterlerle puanlıyoruz. Sen de hayalindeki döneri tasarla, favori dönercini bize bildir.</p>
+    <div class="cta">
+      <a class="btn btn-orange" href="#tasarla">Hayalindeki Döneri Tasarla →</a>
+      <a class="btn btn-ghost" href="#bildir">Gidip Deneyelim: Mekân Bildir</a>
+    </div>
+    <div class="stickers" aria-hidden="true">
+      <span class="stk st-1">Şehir şehir</span>
+      <span class="stk st-2">Usta usta</span>
+      <span class="stk st-3">10 üzerinden</span>
+    </div>
+    <div id="sayac" class="countdown" hidden>
+      <span class="cd-label">Seri başlıyor</span>
+      <span class="cd-box"><b id="cd-g">0</b><small>gün</small></span>
+      <span class="cd-box"><b id="cd-s">0</b><small>saat</small></span>
+      <span class="cd-box"><b id="cd-d">0</b><small>dakika</small></span>
+    </div>
+    <div id="istatistik" class="stats" hidden>
+      <div class="stat"><b id="st-recete">0</b><small>döner tasarlandı</small></div>
+      <div class="stat"><b id="st-bekleyen">0</b><small>kişi haber bekliyor</small></div>
+      <div class="stat"><b id="st-mekan">0</b><small>mekân puanlandı</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto" class="band band-cobalt">
+  <div class="wrap two">
+    <div>
+      <span class="kicker">Manifesto</span>
+      <h2>Neden<br>buradayız?</h2>
+    </div>
+    <div class="manifesto">
+      <p>Tavuk döner bu ülkenin en samimi sokak lezzeti. Herkesin bir dönercisi var: okul çıkışı, maç sonrası, gece yarısı, ilk maaş. <b>Ve herkesin en iyisi farklı.</b></p>
+      <p>Denedik'te tek bir soruya cevap arıyoruz: Türkiye'nin en iyi tavuk döneri nerede? Şehir şehir geziyor, ustaları yerinde dinliyor, her mekânı aynı kriterlerle ve saygıyla puanlıyoruz.</p>
+      <p>Bu arayışı tek başımıza yapmıyoruz. Sen de favorini bildir, hayalindeki döneri tasarla.</p>
+      <p class="big">İyi döner, onu tutkuyla arayanlarla birlikte bulunur.</p>
+      <a class="btn btn-yellow" id="yt-link" href="#" target="_blank" rel="noopener">▶ Denedik: Seriyi İzle</a>
+    </div>
+  </div>
+</section>
+
+<!-- KRİTERLER -->
+<section class="wrap block">
+  <span class="kicker o">Nasıl puanlıyoruz?</span>
+  <h2>Her mekân, aynı altı kriter.</h2>
+  <div class="criteria">
+    <div class="crit c-or"><b>01</b><h3>Lezzet</h3><p>İlk lokmadan son lokmaya genel tat.</p></div>
+    <div class="crit"><b>02</b><h3>Tavuk</h3><p>Etin kalitesi, pişmesi, suyu.</p></div>
+    <div class="crit"><b>03</b><h3>Ekmek</h3><p>Lavaş, pide ya da somun; tazeliği ve dokusu.</p></div>
+    <div class="crit c-co"><b>04</b><h3>Hijyen</h3><p>Tezgâh, mutfak ve servis.</p></div>
+    <div class="crit"><b>05</b><h3>Fiyat / performans</h3><p>Ödediğine değiyor mu?</p></div>
+    <div class="crit c-ye"><b>06</b><h3>Hizmet</h3><p>Güler yüz, hız, samimiyet.</p></div>
+  </div>
+</section>
+
+<!-- HARİTA -->
+<section id="harita" class="band band-cream">
+  <div class="wrap">
+    <div class="head-row">
+      <div><span class="kicker o">Puanlanmış mekânlar</span><h2>Tavuk Döner Haritası</h2></div>
+      <p class="muted">Denediğimiz mekânların 10 üzerinden puanları. Pinlere dokunup notlarımızı oku.</p>
+    </div>
+    <div class="map-grid">
+      <div class="map-box"><div id="map"></div>
+        <div id="map-bos" class="map-empty">
+          <div class="me-in"><span class="pill pill-orange">Yakında</span>
+          <h3>İlk puanlar seriyle birlikte geliyor.</h3>
+          <p>Her yeni bölümde gittiğimiz mekânlar bu haritaya eklenecek.</p>
+          <a class="btn btn-cobalt btn-sm" href="#bildir">İlk durağı sen öner</a></div>
+        </div>
+      </div>
+      <aside id="mekan-kart" class="card place" hidden></aside>
+    </div>
+  </div>
+</section>
+
+<!-- TASARLA -->
+<section id="tasarla" class="wrap block">
+  <span class="kicker o">Reçete oluşturucu</span>
+  <h2>Hayalindeki Döneri Tasarla</h2>
+  <p class="muted lead-s">Ekmeğinden sosuna, acısından yanındaki içeceğe kadar seç. Reçeteni çıkar, story kartı olarak paylaş.</p>
+  <div class="builder">
+    <form id="recete-form" class="card steps" autocomplete="off"></form>
+    <aside class="receipt-wrap">
+      <div class="receipt" id="fis">
+        <div class="r-top"><span>Canlı reçete fişi</span><span class="o">#EnİyiTavukDöner</span></div>
+        <h3>Senin mükemmel dönerin</h3>
+        <p class="muted small">Seçimlerin bu fişe anında yansır.</p>
+        <div class="tip-box"><small>Döner tipin</small><b id="fis-tip">Klasik Dürümcü</b></div>
+        <dl id="fis-liste"></dl>
+        <div class="r-loc">
+          <label for="r-il">Nerede yaşıyorsun? <small>(isteğe bağlı)</small></label>
+          <div class="row2"><select id="r-il"></select><input id="r-ilce" placeholder="İlçe / semt" maxlength="60"></div>
+        </div>
+        <button type="button" class="btn btn-orange full" id="story-btn">Story kartı oluştur ve paylaş</button>
+        <p class="tiny muted" id="recete-durum" role="status"></p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- BİLDİR -->
+<section id="bildir" class="band band-orange">
+  <div class="wrap two">
+    <div>
+      <span class="kicker">Sokak istihbaratı</span>
+      <h2>Gidip deneyelim: mekân bildir.</h2>
+      <p class="lead-s">“Burası pek bilinmiyor ama tavuğu inanılmaz yapıyor” dediğin o ustayı anlat. Listeye alalım, belki bir sonraki bölüm orada.</p>
+    </div>
+    <form id="bildir-form" class="card form" novalidate>
+      <div class="row2">
+        <label>Mekân / usta adı<input name="mekan_adi" required maxlength="120" placeholder="Örn: Kardeşler Tavuk Döner"></label>
+        <label>İl<select name="il" required data-iller></select></label>
+      </div>
+      <div class="row2">
+        <label>İlçe / semt<input name="ilce" maxlength="60" placeholder="Örn: Osmangazi"></label>
+        <label>Google Maps linki veya adres<input name="adres" maxlength="400" placeholder="maps.app.goo.gl/… veya mahalle, cadde"></label>
+      </div>
+      <label>Neden gitmeliyiz? Farkı ne?<textarea name="neden" rows="3" maxlength="1000" placeholder="Örn: Tavuğu sulu, lavaşı ateşte çıtırtıyorlar…"></textarea></label>
+      <label>Senin adın / takma adın<input name="takma_ad" maxlength="60" placeholder="Örn: Egemen S."></label>
+      <input class="hp" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="check"><input type="checkbox" name="kvkk_onay" required> <span><a href="kvkk.html" target="_blank">Aydınlatma metnini</a> okudum; bilgilerimin bu öneriyi değerlendirmek için işlenmesini kabul ediyorum.</span></label>
+      <button class="btn btn-cobalt full" type="submit">Haritaya bildir</button>
+      <p class="form-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- HABER VER -->
+<section id="haber" class="wrap block">
+  <div class="notify">
+    <div class="shape s4"></div>
+    <span class="pill pill-yellow">Tek bir bildirim</span>
+    <h2>Bir gün gerçekten en iyi tavuk döneri bulursak sana haber verelim mi?</h2>
+    <p class="lead-s">Bülten yok, reklam yok. Şehirleri gezip o lokmayı gerçekten bulduğumuz gün sana tek bir mesaj göndereceğiz.</p>
+    <form id="haber-form" class="notify-form" novalidate>
+      <input name="iletisim" required maxlength="120" placeholder="E-posta veya telefon numaran" aria-label="E-posta veya telefon">
+      <select name="il" data-iller aria-label="İl"></select>
+      <input class="hp" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn btn-orange" type="submit">Bana haber ver</button>
+      <label class="check light"><input type="checkbox" name="kvkk_onay" required> <span><a href="kvkk.html" target="_blank">Aydınlatma metnini</a> okudum; bana tek seferlik bilgilendirme yapılmasını kabul ediyorum.</span></label>
+      <p class="form-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-brand"><img src="assets/denedik.svg" alt="Denedik" width="84" height="61"><p>Bir <b>Denedik</b> serisi.<br>Türkiye'nin en iyi tavuk dönerini arıyoruz.</p></div>
+    <nav class="foot-links"><a id="yt-link2" href="#" target="_blank" rel="noopener">YouTube</a><a id="ig-link" href="#" target="_blank" rel="noopener" hidden>Instagram</a><a href="kvkk.html">KVKK aydınlatma metni</a></nav>
+  </div>
+</footer>
+
+<script src="assets/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
