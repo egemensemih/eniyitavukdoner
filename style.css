@@ -351,3 +351,6 @@ textarea{resize:vertical;min-height:96px}
 .mbar>div{flex:1;min-width:0}
 .mbar .btn{padding:12px 16px;font-size:14px}
 @media(max-width:1000px){.mbar{display:flex}}
+
+.phone-stage{width:fit-content;margin:0 auto}
+.map-legend{top:14px;bottom:auto}
