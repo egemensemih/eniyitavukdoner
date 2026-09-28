@@ -1,0 +1,27 @@
+# Supabase ücretsiz planı 7 gün hareketsiz kalınca projeyi duraklatır.
+# Bu iş iki günde bir veritabanına küçük bir istek atarak projeyi uyanık tutar.
+name: Supabase uyanik tut
+on:
+  schedule:
+    - cron: "17 6 */2 * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Veritabanina dokun
+        run: |
+          curl -fsS -X POST "https://glonoumtcfrzjybuslnw.supabase.co/rest/v1/rpc/canli_mi" \
+            -H "apikey: sb_publishable_8aQzEW5k8xWrFZxtoSrhsQ_FpqOkrao" \
+            -H "Content-Type: application/json" -d '{}'
+      - name: Ayda bir depoya iz birak (GitHub zamanlanmis isleri 60 gun hareketsizlikte kapatir)
+        if: ${{ github.event_name == 'schedule' }}
+        run: |
+          if [ "$(date +%d)" -le "02" ]; then
+            git clone --depth 1 "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" repo
+            cd repo && date -u +%Y-%m-%dT%H:%MZ > .github/son-kontrol.txt
+            git config user.name "uyanik-bot" && git config user.email "bot@users.noreply.github.com"
+            git add .github/son-kontrol.txt && git commit -m "Aylik kontrol" && git push
+          fi
