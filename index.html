@@ -7,7 +7,9 @@
 <meta name="description" content="Şehir şehir, usta usta Türkiye'nin en iyi tavuk dönerini arıyoruz. Hayalindeki döneri tasarla, favori mekânını bildir.">
 <meta property="og:title" content="Türkiye'nin En İyi Tavuk Dönerini Arıyoruz">
 <meta property="og:description" content="Hayalindeki döneri tasarla, story kartını paylaş. Favori dönercini bildir, gidip deneyelim.">
-<meta property="og:image" content="og.png">
+<meta property="og:image" content="https://eniyitavukdoner.com/og.png">
+<meta property="og:url" content="https://eniyitavukdoner.com/">
+<link rel="canonical" href="https://eniyitavukdoner.com/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#2340B8">
@@ -102,18 +104,22 @@
   <div class="wrap">
     <div class="head-row">
       <div><span class="kicker o">Puanlanmış mekânlar</span><h2>Tavuk Döner Haritası</h2></div>
-      <p class="muted">Denediğimiz mekânların 10 üzerinden puanları. Pinlere dokunup notlarımızı oku.</p>
+      <p class="muted">Denediğimiz mekânların 10 üzerinden puanları ve sizden gelen öneriler. Pinlere ve dairelere dokun.</p>
     </div>
     <div class="map-grid">
       <div class="map-box"><div id="map"></div>
-        <div id="map-bos" class="map-empty">
-          <div class="me-in"><span class="pill pill-orange">Yakında</span>
-          <h3>İlk puanlar seriyle birlikte geliyor.</h3>
-          <p>Her yeni bölümde gittiğimiz mekânlar bu haritaya eklenecek.</p>
-          <a class="btn btn-cobalt btn-sm" href="#bildir">İlk durağı sen öner</a></div>
+        <div class="map-legend">
+          <span><i class="lg-pin"></i>Denedik puanı</span>
+          <span><i class="lg-dot"></i>Sizden gelen öneriler</span>
         </div>
       </div>
-      <aside id="mekan-kart" class="card place" hidden></aside>
+      <aside id="mekan-kart" class="card place">
+        <span class="pill pill-orange">Yakında</span>
+        <h3>İlk puanlar 1 Ocak'ta geliyor.</h3>
+        <p class="muted">Her yeni bölümde gittiğimiz mekânlar puanlarıyla bu haritaya eklenecek.</p>
+        <p class="muted">Turuncu daireler, sizin önerdiğiniz şehirleri gösteriyor. En çok önerilen şehirler, sıradaki duraklarımız olacak.</p>
+        <a class="btn btn-cobalt btn-sm" href="#bildir">Favori dönercini öner</a>
+      </aside>
     </div>
   </div>
 </section>
@@ -193,7 +199,8 @@
 <footer class="foot">
   <div class="wrap foot-in">
     <div class="foot-brand"><img src="denedik.svg" alt="Denedik" width="84" height="61"><p>Bir <b>Denedik</b> serisi.<br>Türkiye'nin en iyi tavuk dönerini arıyoruz.</p></div>
-    <nav class="foot-links"><a id="yt-link2" href="#" target="_blank" rel="noopener">YouTube</a><a id="ig-link" href="#" target="_blank" rel="noopener" hidden>Instagram</a><a href="kvkk.html">KVKK aydınlatma metni</a></nav>
+    <nav class="foot-links" id="sosyal"></nav>
+    <a class="foot-kvkk" href="kvkk.html">KVKK aydınlatma metni</a>
   </div>
 </footer>
 

@@ -32,8 +32,13 @@
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- links ---------- */
-  ["#yt-link", "#yt-link2"].forEach(id => { const a = $(id); if (a) a.href = C.YOUTUBE_URL || "#"; });
-  if (C.INSTAGRAM_URL) { const ig = $("#ig-link"); ig.href = C.INSTAGRAM_URL; ig.hidden = false; }
+  const yt = $("#yt-link"); if (yt) yt.href = C.YOUTUBE_URL || "#";
+  const IKON = {
+    youtube: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23 7.2a3 3 0 00-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 001 7.2 31 31 0 00.5 12a31 31 0 00.5 4.8 3 3 0 002.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 002.1-2.1 31 31 0 00.5-4.8 31 31 0 00-.5-4.8zM9.7 15.1V8.9L15.5 12z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>'
+  };
+  const sos = $("#sosyal");
+  if (sos) sos.innerHTML = (C.SOSYAL || []).map(x => `<a href="${esc(x.url)}" target="_blank" rel="noopener">${IKON[x.tur] || ""}<span>${esc(x.ad)}</span></a>`).join("");
   $$("select[data-iller]").forEach(s => fillIller(s, "İl seç"));
   fillIller($("#r-il"), "İl seç");
 
@@ -79,26 +84,50 @@
   setInterval(() => { if (!document.hidden) loadStats(); }, 60000);
 
   /* ---------- map ---------- */
+  const IL_KOORD = {"Adana":[37.00,35.32],"Adıyaman":[37.76,38.28],"Afyonkarahisar":[38.76,30.54],"Ağrı":[39.72,43.05],"Aksaray":[38.37,34.03],"Amasya":[40.65,35.83],"Ankara":[39.93,32.86],"Antalya":[36.89,30.71],"Ardahan":[41.11,42.70],"Artvin":[41.18,41.82],"Aydın":[37.84,27.85],"Balıkesir":[39.65,27.88],"Bartın":[41.63,32.34],"Batman":[37.88,41.13],"Bayburt":[40.26,40.23],"Bilecik":[40.14,29.98],"Bingöl":[38.88,40.50],"Bitlis":[38.40,42.11],"Bolu":[40.73,31.61],"Burdur":[37.72,30.29],"Bursa":[40.19,29.06],"Çanakkale":[40.15,26.41],"Çankırı":[40.60,33.62],"Çorum":[40.55,34.95],"Denizli":[37.78,29.09],"Diyarbakır":[37.91,40.24],"Düzce":[40.84,31.16],"Edirne":[41.68,26.56],"Elazığ":[38.68,39.22],"Erzincan":[39.75,39.49],"Erzurum":[39.90,41.27],"Eskişehir":[39.78,30.52],"Gaziantep":[37.07,37.38],"Giresun":[40.91,38.39],"Gümüşhane":[40.46,39.48],"Hakkâri":[37.58,43.74],"Hatay":[36.20,36.16],"Iğdır":[39.92,44.04],"Isparta":[37.76,30.55],"İstanbul":[41.01,28.98],"İzmir":[38.42,27.14],"Kahramanmaraş":[37.58,36.94],"Karabük":[41.20,32.63],"Karaman":[37.18,33.22],"Kars":[40.60,43.10],"Kastamonu":[41.39,33.78],"Kayseri":[38.72,35.49],"Kırıkkale":[39.85,33.51],"Kırklareli":[41.73,27.22],"Kırşehir":[39.15,34.17],"Kilis":[36.72,37.12],"Kocaeli":[40.77,29.92],"Konya":[37.87,32.48],"Kütahya":[39.42,29.98],"Malatya":[38.35,38.31],"Manisa":[38.61,27.43],"Mardin":[37.31,40.74],"Mersin":[36.81,34.64],"Muğla":[37.22,28.36],"Muş":[38.74,41.49],"Nevşehir":[38.62,34.71],"Niğde":[37.97,34.68],"Ordu":[40.98,37.88],"Osmaniye":[37.07,36.25],"Rize":[41.02,40.52],"Sakarya":[40.78,30.40],"Samsun":[41.29,36.33],"Siirt":[37.93,41.94],"Sinop":[42.03,35.15],"Sivas":[39.75,37.02],"Şanlıurfa":[37.16,38.79],"Şırnak":[37.52,42.46],"Tekirdağ":[40.98,27.51],"Tokat":[40.31,36.55],"Trabzon":[41.00,39.72],"Tunceli":[39.11,39.55],"Uşak":[38.68,29.41],"Van":[38.49,43.38],"Yalova":[40.65,29.27],"Yozgat":[39.82,34.81],"Zonguldak":[41.45,31.79]};
+  let MAP = null;
   async function initMap() {
     if (!window.L) return;
-    const map = L.map("map", { scrollWheelZoom: false, zoomControl: true }).setView([39.1, 35.2], 6);
+    const mob = L.Browser.mobile;
+    MAP = L.map("map", { scrollWheelZoom: false, dragging: !mob, tap: !mob, zoomControl: true, minZoom: 5 }).setView([39.0, 35.2], 6);
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
       attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: "abcd", maxZoom: 19
-    }).addTo(map);
+    }).addTo(MAP);
+    if (mob) MAP.on("click", () => { MAP.dragging.enable(); });
     const d = getDb(); if (!d) return;
-    const { data, error } = await d.from("mekanlar").select("*").eq("yayinda", true).order("puan", { ascending: false });
-    if (error || !data || !data.length) return;
-    $("#map-bos").hidden = true;
+    // 1) sizden gelen öneriler (il bazında toplam)
+    const onr = await d.rpc("il_oneri_sayilari");
+    const rows = (onr.data || []).filter(r => IL_KOORD[r.il]);
+    const max = Math.max(1, ...rows.map(r => r.adet));
+    rows.forEach(r => {
+      const rad = 9 + 26 * Math.sqrt(r.adet / max);
+      const c = L.circleMarker(IL_KOORD[r.il], { radius: rad, color: "#fff", weight: 2, fillColor: "#FF6A00", fillOpacity: .78 }).addTo(MAP);
+      c.bindTooltip(`<b>${esc(r.il)}</b><br>${r.adet} öneri`, { direction: "top" });
+      c.on("click", () => showCity(r));
+    });
+    // 2) puanlı mekânlar
+    const { data } = await d.from("mekanlar").select("*").eq("yayinda", true).order("puan", { ascending: false });
+    if (!data || !data.length) return;
     const markers = [];
     data.forEach((m, i) => {
       const icon = L.divIcon({ className: "pin", html: Number(m.puan).toFixed(1), iconSize: [40, 40] });
-      const mk = L.marker([m.lat, m.lng], { icon }).addTo(map);
+      const mk = L.marker([m.lat, m.lng], { icon, zIndexOffset: 1000 }).addTo(MAP);
       mk.on("click", () => showPlace(m, mk, markers));
       markers.push(mk);
       if (i === 0) showPlace(m, mk, markers);
     });
-    map.fitBounds(L.featureGroup(markers).getBounds().pad(0.2));
+    MAP.fitBounds(L.featureGroup(markers).getBounds().pad(0.3), { maxZoom: 11 });
   }
+  function showCity(r) {
+    $("#mekan-kart").innerHTML = `<span class="pill pill-orange">Sizden gelen öneriler</span>
+      <h3>${esc(r.il)}</h3><div class="score">${r.adet}<small> öneri</small></div>
+      <p class="muted">En çok önerilen şehirler sıradaki duraklarımız olacak. ${esc(r.il)} için sen de favorini öner.</p>
+      <a class="btn btn-cobalt btn-sm" href="#bildir" data-il="${esc(r.il)}">${esc(r.il)} için mekân öner</a>`;
+  }
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a[data-il]"); if (!a) return;
+    const sel = $("#bildir-form select[name=il]"); if (sel) sel.value = a.dataset.il;
+  });
   function showPlace(m, mk, all) {
     all.forEach(x => x.getElement() && x.getElement().classList.remove("on"));
     mk.getElement() && mk.getElement().classList.add("on");

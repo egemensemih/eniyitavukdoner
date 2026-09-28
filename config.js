@@ -8,8 +8,15 @@ window.SITE_CONFIG = {
   SERI_BASLANGIC: "2027-01-01T00:00:00+03:00",
 
   // Bağlantılar
+  // "Seriyi izle" düğmesi bu kanala gider
   YOUTUBE_URL: "https://www.youtube.com/@Denedik",
-  INSTAGRAM_URL: "",       // boş bırakılırsa gösterilmez
+  // Sayfanın altındaki sosyal medya hesapları
+  SOSYAL: [
+    { tur: "youtube",   ad: "@denedik",         url: "https://www.youtube.com/@Denedik" },
+    { tur: "youtube",   ad: "@eniyitavukdoner", url: "https://www.youtube.com/@eniyitavukdoner" },
+    { tur: "instagram", ad: "@denedikco",       url: "https://www.instagram.com/denedikco/" },
+    { tur: "instagram", ad: "@eniyitavukdoner", url: "https://www.instagram.com/eniyitavukdoner/" }
+  ],
 
   // Sayaç tabanı: gerçek sayı bu değerin altındayken sitede bu değer görünür,
   // gerçek sayı tabanı geçince gerçek sayı akmaya devam eder.
