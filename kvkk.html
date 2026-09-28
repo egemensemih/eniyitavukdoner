@@ -3,59 +3,215 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KVKK Aydınlatma Metni | eniyitavukdoner.com</title>
-<meta name="robots" content="noindex">
+<title>KVKK ve Gizlilik | eniyitavukdoner.com</title>
+<meta name="description" content="eniyitavukdoner.com kişisel verilerin korunması aydınlatma metni, ticari elektronik ileti onayı, çerez bilgisi ve başvuru yolları.">
+<link rel="canonical" href="https://eniyitavukdoner.com/kvkk.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=4">
 <style>
-  .doc{max-width:760px;margin:0 auto;padding:64px 20px 96px}
-  .doc h1{font-size:clamp(32px,5vw,48px);font-weight:800;margin:18px 0 10px}
-  .doc h2{font-size:22px;margin:36px 0 10px;letter-spacing:-.02em}
-  .doc p,.doc li{font-size:16px;line-height:1.7;color:#3C4466;margin-bottom:10px}
-  .doc ul{padding-left:20px}
-  .fill{background:#FFF3C2;padding:1px 6px;border-radius:6px;font-weight:600}
+  .doc-wrap{display:grid;grid-template-columns:240px 1fr;gap:56px;max-width:1120px;margin:0 auto;padding:56px 24px 110px}
+  .toc{position:sticky;top:calc(var(--nav-h) + 24px);align-self:start}
+  .toc h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+  .toc a{display:block;text-decoration:none;font-size:14px;font-weight:500;color:var(--muted);padding:7px 12px;border-radius:10px;border-left:2px solid transparent}
+  .toc a:hover{color:var(--cobalt);background:var(--cobalt-l)}
+  .doc h1{font-size:clamp(34px,4.6vw,52px);margin:18px 0 14px}
+  .doc .intro{font-size:18px;line-height:1.7;color:var(--muted);margin-bottom:12px}
+  .doc section{padding-top:18px;margin-top:40px;border-top:1px solid var(--line)}
+  .doc h2{font-size:clamp(24px,2.6vw,30px);margin:10px 0 16px}
+  .doc h3{font-size:18px;margin:26px 0 8px}
+  .doc p,.doc li{font-size:16px;line-height:1.75;color:#3A4368;margin-bottom:10px}
+  .doc ul,.doc ol{padding-left:22px;margin-bottom:12px}
+  .doc a{color:var(--cobalt);font-weight:600}
+  .doc b{color:var(--navy)}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--faint)}
+  .vs{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;margin:20px 0;box-shadow:var(--sh-1)}
+  .vs dl{display:grid;grid-template-columns:150px 1fr;gap:8px 16px;font-size:15px}
+  .vs dt{color:var(--muted);font-weight:500}.vs dd{font-weight:600;color:var(--navy);word-break:break-word}
+  .tw{overflow-x:auto;margin:16px 0 8px;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+  .tw table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+  .tw th{background:#FAF6EE;text-align:left;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line)}
+  .tw td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55;color:#3A4368}
+  .tw tr:last-child td{border-bottom:0}
+  .tw td:first-child{font-weight:600;color:var(--navy);white-space:nowrap}
+  .callout{background:var(--cobalt-l);border-radius:var(--r);padding:18px 22px;margin:18px 0}
+  .callout p{margin:0;color:var(--navy)}
+  .quote{background:#fff;border-left:4px solid var(--orange);border-radius:0 14px 14px 0;padding:16px 20px;margin:14px 0;font-weight:500;color:var(--navy)}
+  @media(max-width:900px){.doc-wrap{grid-template-columns:1fr;gap:24px;padding:36px 16px 80px}.toc{position:static;display:flex;flex-wrap:wrap;gap:6px}.toc h4{width:100%;margin-bottom:4px}.toc a{background:#fff;border:1px solid var(--line);padding:7px 12px}.vs dl{grid-template-columns:1fr;gap:2px}.vs dd{margin-bottom:10px}}
 </style>
 </head>
 <body>
-<header class="nav">
-  <a class="brand" href="index.html"><img src="favicon.svg" alt="" width="36" height="36"><span>eniyitavukdoner<b>.com</b></span></a>
-  <a class="btn btn-cobalt btn-sm" href="index.html">Ana sayfaya dön</a>
+<header class="nav scrolled">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="favicon.svg" alt="" width="34" height="34"><span>eniyitavukdoner<b>.com</b></span></a>
+    <a class="btn btn-line btn-sm" href="./">← Ana sayfa</a>
+  </div>
 </header>
-<main class="doc">
-  <span class="pill pill-yellow">Kişisel verilerin korunması</span>
-  <h1>Aydınlatma Metni</h1>
-  <p class="muted small">Son güncelleme: <span class="fill">[TARİH]</span></p>
 
-  <p>Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, eniyitavukdoner.com üzerinden paylaştığın kişisel verilerin nasıl işlendiğini açıklar.</p>
+<div class="doc-wrap">
+  <nav class="toc" aria-label="İçindekiler">
+    <h4>İçindekiler</h4>
+    <a href="#aydinlatma">Aydınlatma metni</a>
+    <a href="#veriler">Hangi veriler, neden?</a>
+    <a href="#aktarim">Kimlerle paylaşılır?</a>
+    <a href="#haklar">Hakların</a>
+    <a href="#basvuru">Başvuru yolu</a>
+    <a href="#ileti">Ticari ileti onayı</a>
+    <a href="#yayin">Yayın izni</a>
+    <a href="#cerez">Çerez bilgisi</a>
+    <a href="#guvenlik">Güvenlik</a>
+  </nav>
 
-  <h2>1. Veri sorumlusu</h2>
-  <p><span class="fill">[Ad Soyad / Şirket Unvanı]</span>, <span class="fill">[Adres]</span>. İletişim: <span class="fill">[e-posta]</span></p>
+  <main class="doc">
+    <span class="pill">Kişisel verilerin korunması</span>
+    <h1>KVKK ve gizlilik</h1>
+    <p class="intro">Bu sayfada eniyitavukdoner.com'da paylaştığın bilgilerin neden alındığını, nasıl korunduğunu ve üzerinde hangi haklara sahip olduğunu sade bir dille anlatıyoruz.</p>
+    <p class="meta"><span>Sürüm 1.0</span><span>·</span><span>Yürürlük: 28 Eylül 2026</span></p>
 
-  <h2>2. Hangi verileri topluyoruz?</h2>
-  <ul>
-    <li><b>Bana Haber Ver formu:</b> e-posta adresin veya telefon numaran, isteğe bağlı olarak yaşadığın il.</li>
-    <li><b>Mekân Bildir formu:</b> önerdiğin mekânın bilgileri ve isteğe bağlı olarak adın veya takma adın.</li>
-    <li><b>Hayalindeki Döneri Tasarla:</b> yaptığın tercihler ve isteğe bağlı olarak il ve ilçe bilgisi. Bu bölümde seni tanımlayan bir bilgi (ad, e-posta, telefon) istenmez.</li>
-  </ul>
+    <div class="callout"><p><b>Kısaca:</b> Sadece ihtiyacımız olan bilgiyi alıyoruz, kimseye satmıyoruz, reklam amacıyla üçüncü kişilerle paylaşmıyoruz. İstediğin an bilgilerinin silinmesini isteyebilirsin.</p></div>
 
-  <h2>3. Verileri hangi amaçla işliyoruz?</h2>
-  <ul>
-    <li>Bana Haber Ver listesindekilere, en iyi tavuk döneri bulduğumuzda <b>tek seferlik</b> bilgilendirme yapmak.</li>
-    <li>Önerilen mekânları değerlendirmek ve seride ziyaret edilecek yerleri belirlemek.</li>
-    <li>Tasarlanan dönerlerden elde edilen anonim tercihleri, bölge bazında toplu olarak analiz etmek (örneğin hangi şehirde hangi tercihlerin öne çıktığı).</li>
-  </ul>
-  <p>Bülten, reklam veya pazarlama iletisi göndermiyoruz. Verilerini üçüncü kişilere satmıyoruz.</p>
+    <section id="aydinlatma">
+      <h2>1. Aydınlatma metni</h2>
+      <p>Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("<b>KVKK</b>") madde 10 ve Aydınlatma Yükümlülüğünün Yerine Getirilmesinde Uyulacak Usul ve Esaslar Hakkında Tebliğ uyarınca, veri sorumlusu sıfatıyla hazırlanmıştır.</p>
+      <div class="vs"><dl>
+        <dt>Veri sorumlusu</dt><dd id="vs-unvan">eniyitavukdoner.com / Denedik</dd>
+        <dt id="vs-adres-l" hidden>Adres</dt><dd id="vs-adres" hidden></dd>
+        <dt>E-posta</dt><dd><a id="vs-mail" href="mailto:iletisim@eniyitavukdoner.com">iletisim@eniyitavukdoner.com</a></dd>
+        <dt id="vs-kep-l" hidden>KEP adresi</dt><dd id="vs-kep" hidden></dd>
+        <dt>İnternet sitesi</dt><dd>https://eniyitavukdoner.com</dd>
+      </dl></div>
+      <p>eniyitavukdoner.com, Denedik YouTube serisi kapsamında Türkiye'nin en iyi tavuk dönerini arayan bir projedir. Sitede üç form bulunur: <b>Bana haber ver</b>, <b>Mekân öner</b> ve <b>Hayalindeki döneri tasarla</b>. Kişisel verilerin yalnızca aşağıda açıklanan amaçlarla, amaçla bağlantılı, sınırlı ve ölçülü biçimde işlenir.</p>
+    </section>
 
-  <h2>4. Hukuki sebep ve toplama yöntemi</h2>
-  <p>Verilerin, bu internet sitesindeki formlar aracılığıyla elektronik ortamda toplanır ve KVKK madde 5/1 uyarınca açık rızana dayanılarak işlenir.</p>
+    <section id="veriler">
+      <h2>2. Hangi verileri, neden ve hangi hukuki sebeple işliyoruz?</h2>
+      <div class="tw"><table>
+        <thead><tr><th>Nerede?</th><th>İşlenen veri</th><th>Amaç</th><th>Hukuki sebep (KVKK md. 5)</th><th>Saklama süresi</th></tr></thead>
+        <tbody>
+          <tr><td>Bana haber ver</td>
+            <td>İletişim: e-posta adresi, cep telefonu numarası. Konum: il, ilçe. İşlem güvenliği: kayıt tarihi ve saati, verdiğin onayın metni ve sürümü.</td>
+            <td>Proje, yeni bölümler ve açılış haberlerini e-posta ve SMS ile sana iletmek; aynı kişinin listeye iki kez eklenmesini önlemek; onayın alındığını ispat etmek; hangi şehirlerde ilgi olduğunu toplu olarak görmek.</td>
+            <td>İleti gönderimi için <b>açık rızan</b> (md. 5/1) ve 6563 sayılı Kanun kapsamındaki <b>onayın</b>. Onay kaydının saklanması için <b>hukuki yükümlülük</b> (md. 5/2-ç) ve <b>bir hakkın tesisi, kullanılması veya korunması</b> (md. 5/2-e).</td>
+            <td>Onayını geri alana ya da proje sona erene kadar. Onay ve ret kayıtları, mevzuatın öngördüğü süre boyunca saklanır, sonra silinir.</td></tr>
+          <tr><td>Mekân öner</td>
+            <td>Önerdiğin mekânın adı, il/ilçesi, adresi ya da harita linki, "neden gitmeliyiz" açıklaman; isteğe bağlı olarak takma adın; yayın iznini verip vermediğin; gönderim tarihi.</td>
+            <td>Önerileri okuyup değerlendirmek, çekim rotasını belirlemek, en çok öneri gelen şehirleri sitedeki haritada <b>toplu sayı</b> olarak göstermek.</td>
+            <td><b>Meşru menfaat</b> (md. 5/2-f): gönderdiğin öneriyi, gönderme amacına uygun olarak değerlendirmemiz. Takma adının ve öneri cümlenin videoda veya sosyal medyada gösterilmesi yalnızca <b>açık rızanla</b> (md. 5/1).</td>
+            <td>Proje süresince, en fazla 3 yıl. Yayınlanan videolardaki gösterim, rızanı geri alman hâlinde yeni içeriklerde kullanılmaz.</td></tr>
+          <tr><td>Döneri tasarla</td>
+            <td>Seçtiğin döner malzemeleri, isteğe bağlı ek notun, isteğe bağlı il/ilçe.</td>
+            <td>Hangi tatların sevildiğini toplu ve istatistiksel olarak anlamak; sitedeki sayaçları göstermek.</td>
+            <td>Bu form ad, e-posta ya da telefon istemez; kayıtlar seni tanımlamaz. Not alanına kişisel bilgi yazmamanı rica ederiz.</td>
+            <td>Anonim istatistik olarak süresiz saklanabilir.</td></tr>
+          <tr><td>Siteyi ziyaret</td>
+            <td>IP adresi, tarayıcı ve cihaz bilgisi, ziyaret zamanı (sunucu kayıtları).</td>
+            <td>Siteyi çalıştırmak, güvenliğini sağlamak, kötüye kullanımı (ör. otomatik spam) önlemek.</td>
+            <td><b>Meşru menfaat</b> (md. 5/2-f).</td>
+            <td>Altyapı sağlayıcılarının kendi politikalarında belirtilen süreler kadar.</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>Toplama yöntemi:</b> Veriler, sitedeki formları doldurduğunda elektronik ortamda, kısmen otomatik yollarla toplanır. Formlardaki "isteğe bağlı" alanları boş bırakabilirsin. Özel nitelikli kişisel veri (sağlık, din, etnik köken vb.) istemiyoruz; lütfen serbest metin alanlarına bu tür bilgi yazma.</p>
+      <p><b>18 yaş altı:</b> Bana haber ver formu 18 yaşından büyükler içindir.</p>
+    </section>
 
-  <h2>5. Verilerin aktarılması ve saklanması</h2>
-  <p>Veriler, hizmet aldığımız bulut veritabanı sağlayıcısının (Supabase) sunucularında saklanır. Bu sunucular yurt dışında bulunabilir; bu nedenle verilerin yurt dışına aktarılması söz konusu olabilir. <span class="fill">[Sunucu bölgesi ve aktarım dayanağı hukuk danışmanıyla netleştirilecek]</span></p>
-  <p>Bana Haber Ver verileri, bilgilendirme yapıldıktan sonra en geç <span class="fill">[X ay]</span> içinde silinir.</p>
+    <section id="aktarim">
+      <h2>3. Verilerin kimlere aktarılır?</h2>
+      <p>Kişisel verilerini <b>satmıyoruz</b> ve reklam amacıyla üçüncü kişilere vermiyoruz. Veriler yalnızca aşağıdaki durumlarda ve gerektiği kadar paylaşılır:</p>
+      <ul>
+        <li><b>Altyapı hizmet sağlayıcıları:</b> Veritabanı ve form altyapısı (Supabase), sitenin barındırılması (GitHub Pages), yazı tipi (Google Fonts), kütüphane dağıtımı (jsDelivr) ve harita altlığı (OpenFreeMap). Bu hizmetler verileri bizim adımıza ve talimatımızla işler.</li>
+        <li><b>İleti gönderim hizmetleri ve İleti Yönetim Sistemi (İYS):</b> Onay verdiysen, sana e-posta/SMS göndermek için kullanılacak aracı hizmet sağlayıcı ile 6563 sayılı Kanun gereği onay kayıtlarının işlendiği İYS.</li>
+        <li><b>Yetkili kamu kurum ve kuruluşları:</b> Kanunen yetkili bir merci talep ettiğinde, hukuki yükümlülüğümüz kapsamında.</li>
+      </ul>
+      <h3>Yurt dışına aktarım</h3>
+      <p>Yukarıdaki altyapı sağlayıcılarının sunucularının bir kısmı Türkiye dışında (Avrupa Birliği ve ABD) bulunmaktadır. Bu nedenle verilerin yurt dışına aktarılabilir. Bu aktarım, KVKK madde 9'da öngörülen şartlara ve güvencelere (standart sözleşme gibi) uygun olarak yapılır.</p>
+    </section>
 
-  <h2>6. Hakların</h2>
-  <p>KVKK madde 11 kapsamında; verilerinin işlenip işlenmediğini öğrenme, bilgi talep etme, düzeltilmesini veya silinmesini isteme ve rızanı geri çekme haklarına sahipsin. Taleplerini <span class="fill">[e-posta]</span> adresine iletebilirsin.</p>
-</main>
+    <section id="haklar">
+      <h2>4. KVKK madde 11 kapsamındaki hakların</h2>
+      <p>Bize başvurarak şu haklarını kullanabilirsin:</p>
+      <ol>
+        <li>Kişisel verilerinin işlenip işlenmediğini öğrenme,</li>
+        <li>İşlenmişse buna ilişkin bilgi talep etme,</li>
+        <li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+        <li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme,</li>
+        <li>Eksik veya yanlış işlenmişse düzeltilmesini isteme,</li>
+        <li>KVKK madde 7'deki şartlar çerçevesinde silinmesini veya yok edilmesini isteme,</li>
+        <li>5. ve 6. maddelerdeki işlemlerin, verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,</li>
+        <li>İşlenen verilerin münhasıran otomatik sistemlerle analiz edilmesi suretiyle aleyhine bir sonucun ortaya çıkmasına itiraz etme,</li>
+        <li>Kanuna aykırı işleme sebebiyle zarara uğraman hâlinde zararın giderilmesini talep etme.</li>
+      </ol>
+      <p>Açık rızana dayanan işlemler için rızanı <b>istediğin zaman</b> geri alabilirsin. Geri alma, o tarihe kadar yapılan işlemleri etkilemez.</p>
+    </section>
+
+    <section id="basvuru">
+      <h2>5. Nasıl başvurursun?</h2>
+      <p>Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ uyarınca başvurunu aşağıdaki yollardan biriyle yapabilirsin:</p>
+      <ul>
+        <li><b>E-posta:</b> Formda kullandığın e-posta adresinden <a class="js-mail" href="mailto:iletisim@eniyitavukdoner.com">iletisim@eniyitavukdoner.com</a> adresine,</li>
+        <li><b>Yazılı olarak:</b> Islak imzalı dilekçeyle veri sorumlusunun adresine,</li>
+        <li><b>KEP ya da güvenli elektronik imza</b> ile.</li>
+      </ul>
+      <p>Başvurunda ad-soyadını, formda kullandığın e-posta adresini ya da telefon numaranı ve talebini açıkça yazman yeterli. Başvurunu en geç <b>30 gün</b> içinde ücretsiz olarak sonuçlandırırız. Kimliğini doğrulamak için ek bilgi isteyebiliriz. Cevabımızı yeterli bulmazsan Kişisel Verileri Koruma Kurulu'na şikâyette bulunabilirsin.</p>
+      <p><b>Sadece listeden çıkmak mı istiyorsun?</b> Başvuru gerekmez: sana gönderdiğimiz her iletideki ret bağlantısını kullanman ya da bize "listeden çıkar" yazman yeterli.</p>
+    </section>
+
+    <section id="ileti">
+      <h2>6. Ticari elektronik ileti onay metni</h2>
+      <p>"Bana haber ver" formundaki onay kutusunu işaretlediğinde aşağıdaki metni kabul etmiş olursun:</p>
+      <div class="quote">Bu proje ve açılış haberleri için bana e-posta ve SMS gönderilmesine onay veriyorum.</div>
+      <p>Bu onayla, 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun ve ilgili yönetmelik kapsamında; Türkiye'nin en iyi tavuk döneri arayışı, yeni bölümler ve bu projeden doğacak mekân açılışlarıyla ilgili duyuruların, formda paylaştığın e-posta adresine ve cep telefonuna gönderilmesine izin verirsin. Bu kapsamda sana ayrıca kişisel verilerinin yukarıdaki amaçlarla işlenmesine açık rıza verirsin.</p>
+      <ul>
+        <li>Seni mesaj yağmuruna tutmayacağız; yalnızca önemli gelişmelerde yazacağız.</li>
+        <li>Onayını <b>her zaman ücretsiz</b> geri alabilirsin: iletilerdeki ret bağlantısıyla, İYS üzerinden ya da bize yazarak.</li>
+        <li>Ret talebin en geç 3 iş günü içinde işlenir.</li>
+      </ul>
+    </section>
+
+    <section id="yayin">
+      <h2>7. Takma ad ve öneri cümlesi için yayın izni</h2>
+      <p>"Mekân öner" formunda isteğe bağlı kutuyu işaretlersen, önerdiğin mekâna gittiğimiz bölümde ve sosyal medya paylaşımlarımızda <b>takma adını</b> ve <b>"neden gitmeliyiz" cümleni</b> gösterebiliriz (ör. "Bu mekânı @takmaadın önerdi"). Bu, tamamen isteğe bağlı bir açık rızadır; vermezsen önerin yine aynı şekilde değerlendirilir.</p>
+      <p>Takma ad alanına gerçek adını yazmak zorunda değilsin. İznini geri alırsan yeni içeriklerde kullanmayız; yayınlanmış içeriklerde de makul imkânlar ölçüsünde düzeltme yaparız.</p>
+    </section>
+
+    <section id="cerez">
+      <h2>8. Çerez bilgisi</h2>
+      <p>eniyitavukdoner.com'da <b>reklam, takip ya da analiz çerezi kullanılmaz</b>; ziyaretçiler için tarayıcıya çerez yazılmaz. Bu yüzden çerez onay penceresi göstermiyoruz.</p>
+      <p>Sayfanın çalışması için tarayıcın şu hizmetlere teknik istek gönderir: yazı tipi için Google Fonts, kütüphaneler için jsDelivr, harita için OpenFreeMap, formlar için Supabase. Bu isteklerde, internetin doğası gereği IP adresin ve tarayıcı bilgin ilgili sağlayıcıya iletilir.</p>
+      <p>Bu politika değişirse (örneğin ileride ziyaret istatistiği eklenirse) bu sayfayı güncelleyecek ve gerekiyorsa onayını isteyeceğiz.</p>
+    </section>
+
+    <section id="guvenlik">
+      <h2>9. Verilerini nasıl koruyoruz?</h2>
+      <ul>
+        <li>Site yalnızca şifreli bağlantı (HTTPS) üzerinden çalışır.</li>
+        <li>Ziyaretçiler formlardan yalnızca kayıt <b>ekleyebilir</b>; kimse başkasının kaydını göremez. Kayıtları yalnızca yetkili yönetici, şifreli girişle görüntüleyebilir.</li>
+        <li>Veritabanında satır düzeyinde güvenlik kuralları uygulanır; erişim yetkileri en az yetki ilkesine göre verilir.</li>
+        <li>Veri minimizasyonu: adını, adresini ya da kimlik bilgini istemiyoruz.</li>
+        <li>Saklama süresi dolan veriler silinir veya anonim hâle getirilir.</li>
+      </ul>
+      <p style="margin-top:22px">Bu metni güncelleyebiliriz; güncel sürüm her zaman bu sayfada yayımlanır. Önemli bir değişiklik olursa onay verdiysen sana haber veririz.</p>
+    </section>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-bot" style="border:0;padding:0"><span>© <span id="yil">2026</span> eniyitavukdoner.com</span><a href="./">Ana sayfaya dön</a></div>
+  </div>
+</footer>
+
+<script src="config.js?v=4"></script>
+<script>
+(function () {
+  var C = window.SITE_CONFIG || {}, V = C.VERI_SORUMLUSU || {}, $ = function (s) { return document.getElementById(s); };
+  if (V.unvan) $("vs-unvan").textContent = V.unvan;
+  if (V.adres) { $("vs-adres").textContent = V.adres; $("vs-adres").hidden = $("vs-adres-l").hidden = false; }
+  if (V.kep) { $("vs-kep").textContent = V.kep; $("vs-kep").hidden = $("vs-kep-l").hidden = false; }
+  if (C.ILETISIM_EPOSTA) document.querySelectorAll("#vs-mail,.js-mail").forEach(function (a) { a.href = "mailto:" + C.ILETISIM_EPOSTA; a.textContent = C.ILETISIM_EPOSTA; });
+  $("yil").textContent = new Date().getFullYear();
+})();
+</script>
 </body>
 </html>

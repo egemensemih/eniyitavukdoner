@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Yönetim Paneli | eniyitavukdoner.com</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="panel.css?v=4">
+</head>
+<body class="pnl">
+
+<!-- GİRİŞ -->
+<section class="login" id="login" hidden>
+  <div class="login-card">
+    <a class="brand" href="./"><img src="favicon.svg" alt="" width="34" height="34"><span>eniyitavukdoner<b>.com</b></span></a>
+    <h1>Yönetim paneli</h1>
+    <form id="login-form" novalidate>
+      <label class="field"><span>E-posta</span><input name="email" type="email" autocomplete="username" required></label>
+      <label class="field"><span>Şifre</span><input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn full" type="submit">Giriş yap</button>
+      <p class="form-msg" role="status"></p>
+      <button type="button" class="linkish" id="forgot">Şifremi unuttum</button>
+    </form>
+    <form id="newpass-form" hidden novalidate>
+      <p class="muted" style="margin-bottom:16px">Yeni şifreni belirle (en az 8 karakter).</p>
+      <label class="field"><span>Yeni şifre</span><input name="password" type="password" autocomplete="new-password" minlength="8" required></label>
+      <button class="btn full" type="submit">Şifreyi kaydet</button>
+      <p class="form-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- UYGULAMA -->
+<div class="app" id="app" hidden>
+  <header class="top">
+    <a class="brand" href="./" target="_blank"><img src="favicon.svg" alt="" width="30" height="30"><span>eniyitavukdoner<b>.com</b></span></a>
+    <span class="top-tag">Panel</span>
+    <nav class="tabs" id="tabs" role="tablist">
+      <button role="tab" data-tab="ozet" aria-selected="true">Özet</button>
+      <button role="tab" data-tab="oneri">Öneriler <em id="cnt-oneri"></em></button>
+      <button role="tab" data-tab="bekleme">Bekleme listesi <em id="cnt-bekleme"></em></button>
+      <button role="tab" data-tab="mekan">Mekânlar <em id="cnt-mekan"></em></button>
+      <button role="tab" data-tab="recete">Reçeteler <em id="cnt-recete"></em></button>
+    </nav>
+    <div class="me"><span id="me-mail"></span><button class="btn btn-line btn-sm" id="logout">Çıkış</button></div>
+  </header>
+
+  <main class="pmain">
+    <!-- ÖZET -->
+    <section data-pane="ozet">
+      <div class="p-head"><h2>Özet</h2><button class="btn btn-line btn-sm" data-refresh>Yenile</button></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="grid2">
+        <div class="box"><h3>Bekleme listesine katılım <small>son 30 gün</small></h3><div class="chart" id="ch-bekleme"></div></div>
+        <div class="box"><h3>Mekân önerileri <small>son 30 gün</small></h3><div class="chart" id="ch-oneri"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="box"><h3>En çok öneri gelen iller</h3><div id="top-il"></div></div>
+        <div class="box"><h3>En çok önerilen mekânlar</h3><div id="top-mekan"></div></div>
+      </div>
+    </section>
+
+    <!-- ÖNERİLER -->
+    <section data-pane="oneri" hidden>
+      <div class="p-head"><h2>Mekân önerileri</h2>
+        <div class="acts"><button class="btn btn-line btn-sm" data-csv="oneri">CSV indir</button><button class="btn btn-sm" id="add-oneri">+ Öneri ekle</button></div></div>
+      <div class="toolbar">
+        <input type="search" id="q-oneri" placeholder="Mekân, öneren, not içinde ara…">
+        <select id="f-oneri-il"></select>
+        <select id="f-oneri-durum">
+          <option value="">Tüm durumlar</option><option value="yeni">Yeni</option><option value="incelendi">İncelendi</option>
+          <option value="listede">Rotada</option><option value="gidildi">Gidildi</option><option value="uygun_degil">Uygun değil</option>
+        </select>
+      </div>
+      <div class="tbl-wrap"><table class="tbl" id="t-oneri"></table></div>
+    </section>
+
+    <!-- BEKLEME -->
+    <section data-pane="bekleme" hidden>
+      <div class="p-head"><h2>Bekleme listesi</h2>
+        <div class="acts"><button class="btn btn-line btn-sm" data-csv="bekleme">CSV indir</button><button class="btn btn-sm" id="add-bekleme">+ Kayıt ekle</button></div></div>
+      <div class="toolbar">
+        <input type="search" id="q-bekleme" placeholder="E-posta, telefon içinde ara…">
+        <select id="f-bekleme-il"></select>
+      </div>
+      <p class="hint">İzinli kişilere ticari ileti göndermeden önce bu listeyi İleti Yönetim Sistemi'ne (İYS) yüklemen gerekir. Ayrıntılar KVKK notlarında.</p>
+      <div class="tbl-wrap"><table class="tbl" id="t-bekleme"></table></div>
+    </section>
+
+    <!-- MEKÂNLAR -->
+    <section data-pane="mekan" hidden>
+      <div class="p-head"><h2>Haritadaki mekânlar</h2>
+        <div class="acts"><button class="btn btn-o btn-sm" id="add-mekan">+ Yeni mekân</button></div></div>
+      <p class="hint">“Yayında” olan mekânlar sitedeki haritada puanıyla görünür. Taslak olarak kaydedip bölüm yayınlanınca açabilirsin.</p>
+      <div class="tbl-wrap"><table class="tbl" id="t-mekan"></table></div>
+    </section>
+
+    <!-- REÇETELER -->
+    <section data-pane="recete" hidden>
+      <div class="p-head"><h2>Tasarlanan dönerler</h2><button class="btn btn-line btn-sm" data-csv="recete">CSV indir</button></div>
+      <div class="toolbar"><select id="f-recete-il"></select></div>
+      <div class="kpis" id="recete-kpi"></div>
+      <div class="picks" id="picks"></div>
+      <div class="box"><h3>Son notlar</h3><div id="notlar"></div></div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-h"><h3 id="modal-title"></h3><button class="x" data-close aria-label="Kapat">×</button></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script src="config.js?v=4"></script>
+<script src="ilceler.js?v=4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" defer></script>
+<script src="panel.js?v=4" defer></script>
+</body>
+</html>

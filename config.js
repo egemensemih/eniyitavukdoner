@@ -1,5 +1,4 @@
 // eniyitavukdoner.com — ayarlar
-// Supabase projesini açtıktan sonra aşağıdaki iki değeri doldur (README.md, Adım 2).
 window.SITE_CONFIG = {
   SUPABASE_URL: "https://glonoumtcfrzjybuslnw.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_8aQzEW5k8xWrFZxtoSrhsQ_FpqOkrao",
@@ -17,6 +16,13 @@ window.SITE_CONFIG = {
     { tur: "instagram", ad: "@denedikco",       url: "https://www.instagram.com/denedikco/" },
     { tur: "instagram", ad: "@eniyitavukdoner", url: "https://www.instagram.com/eniyitavukdoner/" }
   ],
+
+  // İletişim / KVKK başvuru adresi (sitenin altında ve KVKK sayfasında görünür)
+  ILETISIM_EPOSTA: "iletisim@eniyitavukdoner.com",
+
+  // KVKK: veri sorumlusunun resmî bilgileri (KVKK sayfasında görünür).
+  // Şahıs işletmesiyse ad soyad, şirketse ticaret unvanı yazılır.
+  VERI_SORUMLUSU: { unvan: "", adres: "", kep: "" },
 
   // Sayaç tabanı: gerçek sayı bu değerin altındayken sitede bu değer görünür,
   // gerçek sayı tabanı geçince gerçek sayı akmaya devam eder.
