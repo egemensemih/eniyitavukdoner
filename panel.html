@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=4">
-<link rel="stylesheet" href="panel.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="panel.css?v=5">
 </head>
 <body class="pnl">
 
@@ -44,6 +44,7 @@
     <nav class="tabs" id="tabs" role="tablist">
       <button role="tab" data-tab="ozet" aria-selected="true">Özet</button>
       <button role="tab" data-tab="oneri">Öneriler <em id="cnt-oneri"></em></button>
+      <button role="tab" data-tab="rota">Rota <em id="cnt-rota"></em></button>
       <button role="tab" data-tab="bekleme">Bekleme listesi <em id="cnt-bekleme"></em></button>
       <button role="tab" data-tab="mekan">Mekânlar <em id="cnt-mekan"></em></button>
       <button role="tab" data-tab="recete">Reçeteler <em id="cnt-recete"></em></button>
@@ -79,6 +80,17 @@
         </select>
       </div>
       <div class="tbl-wrap"><table class="tbl" id="t-oneri"></table></div>
+    </section>
+
+    <!-- ROTA -->
+    <section data-pane="rota" hidden>
+      <div class="p-head"><h2>Rota</h2></div>
+      <p class="hint">Rotaya eklediğin mekânlar bölge ve il bazında, senin rota puanına göre sıralanır. Düğme açıksa mekân sitedeki haritada “Rotamızda” olarak görünür.</p>
+      <div class="toolbar">
+        <select id="f-rota-bolge"><option value="">Tüm bölgeler</option></select>
+        <select id="f-rota-sira"><option value="rota">Sırala: rota puanım</option><option value="google">Sırala: Google puanı</option><option value="yorum">Sırala: Google yorum sayısı</option><option value="oneri">Sırala: öneri sayısı</option></select>
+      </div>
+      <div id="rota-list"></div>
     </section>
 
     <!-- BEKLEME -->
@@ -122,10 +134,10 @@
 </div>
 <div class="tip" id="tip" hidden></div>
 
-<script src="config.js?v=4"></script>
-<script src="ilceler.js?v=4"></script>
+<script src="config.js?v=5"></script>
+<script src="ilceler.js?v=5"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" defer></script>
-<script src="panel.js?v=4" defer></script>
+<script src="panel.js?v=5" defer></script>
 </body>
 </html>

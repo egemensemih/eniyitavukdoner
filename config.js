@@ -22,10 +22,9 @@ window.SITE_CONFIG = {
 
   // KVKK: veri sorumlusunun resmî bilgileri (KVKK sayfasında görünür).
   // Şahıs işletmesiyse ad soyad, şirketse ticaret unvanı yazılır.
-  VERI_SORUMLUSU: { unvan: "", adres: "", kep: "" },
+  VERI_SORUMLUSU: { unvan: "Denedik YouTube Kanalı adına Egemen Semih Sönmez", adres: "Bereketzade Mah. Camekan Sok. No:4J, Beyoğlu / İstanbul, Türkiye", kep: "" },
 
-  // Sayaç tabanı: gerçek sayı bu değerin altındayken sitede bu değer görünür,
-  // gerçek sayı tabanı geçince gerçek sayı akmaya devam eder.
-  // Kapatmak için ikisini de 0 yap.
-  SAYAC_TABANI: { recete: 250, bekleyen: 250 }
+  // Sayaç eşiği: gerçek sayı bu eşiğe ulaşana kadar eşiğin altında, zamanla
+  // artan bir sayı gösterilir; eşik geçilince gerçek sayı görünür. Kapatmak için 0 yap.
+  SAYAC_ESIK: { recete: 300, bekleyen: 200 }
 };

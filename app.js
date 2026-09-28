@@ -29,9 +29,17 @@
   function fillIl(sel, ph = "İl seç") {
     sel.innerHTML = `<option value="">${ph}</option>` + ILLER().map(i => `<option>${esc(i)}</option>`).join("") + `<option>Yurt dışı</option>`;
   }
+  const ULKELER = ["Almanya", "Hollanda", "Belçika", "Avusturya", "Fransa", "İngiltere", "İsviçre", "Danimarka", "İsveç", "Norveç", "İtalya", "İspanya", "Yunanistan", "Bulgaristan", "KKTC", "Azerbaycan", "Gürcistan", "BAE", "Katar", "ABD", "Kanada", "Avustralya", "Diğer"];
   function fillIlce(sel, il, ph = "İlçe seç") {
+    const lab = sel.closest("label"), span = lab && lab.querySelector("span");
+    if (span && !span.dataset.orig) span.dataset.orig = span.textContent;
+    if (span) span.textContent = il === "Yurt dışı" ? "Ülke" : span.dataset.orig;
+    if (il === "Yurt dışı") {
+      sel.innerHTML = `<option value="">Ülke seç</option>` + ULKELER.map(u => `<option>${esc(u)}</option>`).join("");
+      sel.disabled = false; return;
+    }
     const list = (window.ILCELER || {})[il];
-    if (!list) { sel.innerHTML = `<option value="">${il === "Yurt dışı" ? "—" : "Önce il seç"}</option>`; sel.disabled = true; return; }
+    if (!list) { sel.innerHTML = `<option value="">Önce il seç</option>`; sel.disabled = true; return; }
     sel.innerHTML = `<option value="">${ph}</option>` + [...list].sort((a, b) => a.localeCompare(b, TR)).map(i => `<option>${esc(i)}</option>`).join("");
     sel.disabled = false;
   }
@@ -40,7 +48,12 @@
     ilSel.addEventListener("change", () => { fillIlce(ilceSel, ilSel.value); clearErr(ilSel); });
     ilceSel.addEventListener("change", () => clearErr(ilceSel));
   }
-  function setIl(ilSel, ilceSel, il) { ilSel.value = il; fillIlce(ilceSel, il); }
+  function setIl(ilSel, ilceSel, il) {
+    if (ULKELER.includes(il)) { ilSel.value = "Yurt dışı"; fillIlce(ilceSel, "Yurt dışı"); ilceSel.value = il; return; }
+    ilSel.value = il; fillIlce(ilceSel, il);
+  }
+  // il / ilçe / ülke değerlerini kayıt biçimine çevirir
+  const konum = (il, ilce) => il === "Yurt dışı" ? { il, ilce: null, ulke: ilce || null } : { il: il || null, ilce: ilce || null };
 
   function fieldErr(el, msg) {
     el.setAttribute("aria-invalid", "true");
@@ -101,7 +114,15 @@
   tick(); setInterval(tick, 30000);
 
   /* ---------- stats ---------- */
-  const TABAN = C.SAYAC_TABANI || { recete: 0, bekleyen: 0 };
+  // Sayaç: gerçek sayı eşiğe (ör. 300) ulaşana kadar, zamanla yavaşça artan ve eşiğin
+  // hep altında kalan bir sayı gösterilir. Eşik geçilince gerçek sayı görünür.
+  const ESIK = C.SAYAC_ESIK || { recete: 300, bekleyen: 200 };
+  function vitrin(key, real) {
+    const cap = ESIK[key] || 0; if (!cap || real >= cap) return real;
+    const dk = Math.max(0, (Date.now() - Date.parse("2026-09-01T00:00:00+03:00")) / 6e4);
+    const sahte = Math.floor(cap * (0.4 + 0.55 * (1 - Math.exp(-dk / 90000))));
+    return Math.min(cap - 1, Math.max(real, sahte));
+  }
   const shown = { recete: 0, bekleyen: 0, mekan: 0 };
   function animateTo(key, target) {
     const el = $("#st-" + key); const from = shown[key]; shown[key] = target;
@@ -117,8 +138,8 @@
     let real = { recete: 0, bekleyen: 0, mekan: 0 };
     const d = getDb();
     if (d) { try { const { data } = await d.rpc("site_istatistik"); if (data) real = data; } catch (e) {} }
-    animateTo("recete", Math.max(Number(real.recete) || 0, TABAN.recete || 0));
-    animateTo("bekleyen", Math.max(Number(real.bekleyen) || 0, TABAN.bekleyen || 0));
+    animateTo("recete", vitrin("recete", Number(real.recete) || 0));
+    animateTo("bekleyen", vitrin("bekleyen", Number(real.bekleyen) || 0));
     const m = Number(real.mekan) || 0;
     $("#stat-mekan").hidden = m === 0;
     $("#istatistik").classList.toggle("two-up", m === 0);
@@ -128,9 +149,10 @@
   setInterval(() => { if (!document.hidden) loadStats(); }, 60000);
 
   /* ---------- map (MapLibre + OpenFreeMap, anahtar gerekmez) ---------- */
-  const IL_KOORD = {"Adana":[37.00,35.32],"Adıyaman":[37.76,38.28],"Afyonkarahisar":[38.76,30.54],"Ağrı":[39.72,43.05],"Aksaray":[38.37,34.03],"Amasya":[40.65,35.83],"Ankara":[39.93,32.86],"Antalya":[36.89,30.71],"Ardahan":[41.11,42.70],"Artvin":[41.18,41.82],"Aydın":[37.84,27.85],"Balıkesir":[39.65,27.88],"Bartın":[41.63,32.34],"Batman":[37.88,41.13],"Bayburt":[40.26,40.23],"Bilecik":[40.14,29.98],"Bingöl":[38.88,40.50],"Bitlis":[38.40,42.11],"Bolu":[40.73,31.61],"Burdur":[37.72,30.29],"Bursa":[40.19,29.06],"Çanakkale":[40.15,26.41],"Çankırı":[40.60,33.62],"Çorum":[40.55,34.95],"Denizli":[37.78,29.09],"Diyarbakır":[37.91,40.24],"Düzce":[40.84,31.16],"Edirne":[41.68,26.56],"Elazığ":[38.68,39.22],"Erzincan":[39.75,39.49],"Erzurum":[39.90,41.27],"Eskişehir":[39.78,30.52],"Gaziantep":[37.07,37.38],"Giresun":[40.91,38.39],"Gümüşhane":[40.46,39.48],"Hakkâri":[37.58,43.74],"Hatay":[36.20,36.16],"Iğdır":[39.92,44.04],"Isparta":[37.76,30.55],"İstanbul":[41.01,28.98],"İzmir":[38.42,27.14],"Kahramanmaraş":[37.58,36.94],"Karabük":[41.20,32.63],"Karaman":[37.18,33.22],"Kars":[40.60,43.10],"Kastamonu":[41.39,33.78],"Kayseri":[38.72,35.49],"Kırıkkale":[39.85,33.51],"Kırklareli":[41.73,27.22],"Kırşehir":[39.15,34.17],"Kilis":[36.72,37.12],"Kocaeli":[40.77,29.92],"Konya":[37.87,32.48],"Kütahya":[39.42,29.98],"Malatya":[38.35,38.31],"Manisa":[38.61,27.43],"Mardin":[37.31,40.74],"Mersin":[36.81,34.64],"Muğla":[37.22,28.36],"Muş":[38.74,41.49],"Nevşehir":[38.62,34.71],"Niğde":[37.97,34.68],"Ordu":[40.98,37.88],"Osmaniye":[37.07,36.25],"Rize":[41.02,40.52],"Sakarya":[40.78,30.40],"Samsun":[41.29,36.33],"Siirt":[37.93,41.94],"Sinop":[42.03,35.15],"Sivas":[39.75,37.02],"Şanlıurfa":[37.16,38.79],"Şırnak":[37.52,42.46],"Tekirdağ":[40.98,27.51],"Tokat":[40.31,36.55],"Trabzon":[41.00,39.72],"Tunceli":[39.11,39.55],"Uşak":[38.68,29.41],"Van":[38.49,43.38],"Yalova":[40.65,29.27],"Yozgat":[39.82,34.81],"Zonguldak":[41.45,31.79]};
+  const IL_KOORD = {"Adana":[37.00,35.32],"Adıyaman":[37.76,38.28],"Afyonkarahisar":[38.76,30.54],"Ağrı":[39.72,43.05],"Aksaray":[38.37,34.03],"Amasya":[40.65,35.83],"Ankara":[39.93,32.86],"Antalya":[36.89,30.71],"Ardahan":[41.11,42.70],"Artvin":[41.18,41.82],"Aydın":[37.84,27.85],"Balıkesir":[39.65,27.88],"Bartın":[41.63,32.34],"Batman":[37.88,41.13],"Bayburt":[40.26,40.23],"Bilecik":[40.14,29.98],"Bingöl":[38.88,40.50],"Bitlis":[38.40,42.11],"Bolu":[40.73,31.61],"Burdur":[37.72,30.29],"Bursa":[40.19,29.06],"Çanakkale":[40.15,26.41],"Çankırı":[40.60,33.62],"Çorum":[40.55,34.95],"Denizli":[37.78,29.09],"Diyarbakır":[37.91,40.24],"Düzce":[40.84,31.16],"Edirne":[41.68,26.56],"Elazığ":[38.68,39.22],"Erzincan":[39.75,39.49],"Erzurum":[39.90,41.27],"Eskişehir":[39.78,30.52],"Gaziantep":[37.07,37.38],"Giresun":[40.91,38.39],"Gümüşhane":[40.46,39.48],"Hakkâri":[37.58,43.74],"Hatay":[36.20,36.16],"Iğdır":[39.92,44.04],"Isparta":[37.76,30.55],"İstanbul":[41.01,28.98],"İzmir":[38.42,27.14],"Kahramanmaraş":[37.58,36.94],"Karabük":[41.20,32.63],"Karaman":[37.18,33.22],"Kars":[40.60,43.10],"Kastamonu":[41.39,33.78],"Kayseri":[38.72,35.49],"Kırıkkale":[39.85,33.51],"Kırklareli":[41.73,27.22],"Kırşehir":[39.15,34.17],"Kilis":[36.72,37.12],"Kocaeli":[40.77,29.92],"Konya":[37.87,32.48],"Kütahya":[39.42,29.98],"Malatya":[38.35,38.31],"Manisa":[38.61,27.43],"Mardin":[37.31,40.74],"Mersin":[36.81,34.64],"Muğla":[37.22,28.36],"Muş":[38.74,41.49],"Nevşehir":[38.62,34.71],"Niğde":[37.97,34.68],"Ordu":[40.98,37.88],"Osmaniye":[37.07,36.25],"Rize":[41.02,40.52],"Sakarya":[40.78,30.40],"Samsun":[41.29,36.33],"Siirt":[37.93,41.94],"Sinop":[42.03,35.15],"Sivas":[39.75,37.02],"Şanlıurfa":[37.16,38.79],"Şırnak":[37.52,42.46],"Tekirdağ":[40.98,27.51],"Tokat":[40.31,36.55],"Trabzon":[41.00,39.72],"Tunceli":[39.11,39.55],"Uşak":[38.68,29.41],"Van":[38.49,43.38],"Yalova":[40.65,29.27],"Yozgat":[39.82,34.81],"Zonguldak":[41.45,31.79],
+    "Almanya":[52.52,13.40],"Hollanda":[52.37,4.90],"Belçika":[50.85,4.35],"Avusturya":[48.21,16.37],"Fransa":[48.86,2.35],"İngiltere":[51.51,-0.13],"İsviçre":[47.38,8.54],"Danimarka":[55.68,12.57],"İsveç":[59.33,18.07],"Norveç":[59.91,10.75],"İtalya":[41.90,12.50],"İspanya":[40.42,-3.70],"Yunanistan":[37.98,23.73],"Bulgaristan":[42.70,23.32],"KKTC":[35.19,33.38],"Azerbaycan":[40.41,49.87],"Gürcistan":[41.72,44.79],"BAE":[25.20,55.27],"Katar":[25.29,51.53],"ABD":[40.71,-74.01],"Kanada":[43.65,-79.38],"Avustralya":[-33.87,151.21]};
   const TR_BOUNDS = [[25.6, 35.7], [44.9, 42.2]];
-  let MAP = null, CITIES = [], PLACES = [], MARKERS = [];
+  let MAP = null, CITIES = [], PLACES = [], ROTA = [], MARKERS = [];
 
   function loadAsset(tag, attrs) {
     return new Promise((res, rej) => { const el = document.createElement(tag); Object.assign(el, attrs); el.onload = res; el.onerror = rej; document.head.appendChild(el); });
@@ -138,12 +160,13 @@
   async function fetchMapData() {
     const d = getDb(); if (!d) return;
     try {
-      const [onr, mek] = await Promise.all([
-        d.rpc("il_oneri_sayilari"),
+      const [onr, rota, mek] = await Promise.all([
+        d.rpc("il_oneri_sayilari"), d.rpc("rota_mekanlari"),
         d.from("mekanlar").select("id,ad,il,ilce,adres,lat,lng,puan,puan_notu,etiketler,bolum_url,maps_url").eq("yayinda", true).order("puan", { ascending: false })
       ]);
       CITIES = (onr.data || []).filter(r => IL_KOORD[r.il]).sort((a, b) => b.adet - a.adet || a.il.localeCompare(b.il, TR));
       PLACES = mek.data || [];
+      ROTA = (rota.data || []).filter(r => r.lat && r.lng);
     } catch (e) { console.warn(e); }
   }
   function renderBoard() {
@@ -169,6 +192,15 @@
       <p class="sub" style="margin-top:14px">${esc(r.il)} yarışta yükselsin mi? Oradaki favori dönercini öner.</p>
       <div class="side-foot"><a class="btn btn-o full" href="#oner" data-oner-il="${esc(r.il)}">${esc(r.il)} için mekân öner</a></div>`;
     if (MAP) MAP.easeTo({ center: [IL_KOORD[r.il][1], IL_KOORD[r.il][0]], zoom: Math.max(MAP.getZoom(), 6.2), duration: 700 });
+  }
+  function showRota(r) {
+    MARKERS.forEach(x => x.el.classList.toggle("on", x.id === "r" + r.id));
+    $("#side").innerHTML = `<button class="back" type="button" data-back>← Öneri yarışı</button>
+      <span class="tag yel">Rotamızda</span>
+      <h3>${esc(r.ad)}</h3><p class="addr">${esc([r.ilce, r.il].filter(Boolean).join(" · "))}</p>
+      <p class="sub" style="margin-top:14px">Bu mekân sizden gelen önerilerle rotamıza girdi. Yakında gidip deniyoruz; puanı bölümle birlikte bu haritaya düşecek.</p>
+      <div class="side-foot"><a class="btn btn-o full" href="#haber">Bölüm çıkınca haber ver</a></div>`;
+    if (MAP) MAP.easeTo({ center: [r.lng, r.lat], zoom: Math.max(MAP.getZoom(), 9), duration: 700 });
   }
   function showPlace(m) {
     MARKERS.forEach(x => x.el.classList.toggle("on", x.id === m.id));
@@ -258,6 +290,14 @@
         el.addEventListener("click", ev => { ev.stopPropagation(); showPlace(m); });
         new maplibregl.Marker({ element: el }).setLngLat([m.lng, m.lat]).addTo(MAP);
         MARKERS.push({ id: m.id, el });
+      });
+      ROTA.forEach(r => {
+        const el = document.createElement("button"); el.type = "button"; el.className = "pin pin-rota";
+        el.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg>';
+        el.setAttribute("aria-label", `${r.ad}, rotamızda`);
+        el.addEventListener("click", ev => { ev.stopPropagation(); showRota(r); });
+        new maplibregl.Marker({ element: el }).setLngLat([r.lng, r.lat]).addTo(MAP);
+        MARKERS.push({ id: "r" + r.id, el });
       });
       if (PLACES.length) MARKERS[0].el.classList.add("on");
     });
@@ -360,11 +400,11 @@
   async function saveRecipe() {
     const secimler = {}; STEPS.forEach(s => secimler[s.k] = state[s.k]);
     secimler.not = ($("#r-not").value || "").trim().slice(0, 200);
-    const il = $("#r-il").value || null, ilce = $("#r-ilce").value || null;
-    const sig = JSON.stringify([secimler, il, ilce]);
+    const loc = konum($("#r-il").value, $("#r-ilce").value);
+    const sig = JSON.stringify([secimler, loc]);
     if (sig === savedSig) return true;
     const d = getDb(); if (!d) return false;
-    const { error } = await d.from("receteler").insert({ secimler, il, ilce });
+    const { error } = await d.from("receteler").insert({ secimler, ...loc });
     if (error) { console.warn(error); return false; }
     savedSig = sig; return true;
   }
@@ -525,11 +565,11 @@
     const need = (el, ok, msg) => { if (!ok) { fieldErr(el, msg); bad = bad || el; } else clearErr(el); };
     need(of.mekan_adi, v("mekan_adi").length >= 2, "Mekânın adını yazar mısın?");
     need(of.il, !!v("il"), "İl seç.");
-    need(of.ilce, of.ilce.disabled || !!v("ilce"), "İlçe seç.");
+    need(of.ilce, of.ilce.disabled || !!v("ilce"), v("il") === "Yurt dışı" ? "Ülke seç." : "İlçe seç.");
     need(of.kvkk_onay, of.kvkk_onay.checked, "Devam etmek için onaylaman gerekiyor.");
     if (bad) { bad.focus(); return; }
     const btn = $("button[type=submit]", of); btn.disabled = true; btn.textContent = "Gönderiliyor…";
-    const err = await insert("mekan_onerileri", { mekan_adi: v("mekan_adi"), il: v("il"), ilce: v("ilce") || null, adres: v("adres") || null,
+    const err = await insert("mekan_onerileri", { mekan_adi: v("mekan_adi"), ...konum(v("il"), v("ilce")), adres: v("adres") || null,
       neden: v("neden") || null, takma_ad: v("takma_ad") || null, yayin_izni: of.yayin_izni.checked, kvkk_onay: true });
     btn.disabled = false; btn.textContent = "Önerimi gönder";
     if (err) { console.warn(err); $(".form-msg", of).className = "form-msg err"; $(".form-msg", of).textContent = "Bir sorun oldu, birazdan tekrar dener misin?"; return; }
@@ -564,12 +604,12 @@
     need(hf.eposta, /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail), "Geçerli bir e-posta adresi yazar mısın?");
     need(hf.telefon, !!tel, hf.il.value === "Yurt dışı" ? "Numaranı ülke koduyla yaz (örn. +49…)." : "05XX XXX XX XX biçiminde bir cep numarası yazar mısın?");
     need(hf.il, !!hf.il.value, "İl seç.");
-    need(hf.ilce, hf.ilce.disabled || !!hf.ilce.value, "İlçe seç.");
+    need(hf.ilce, hf.ilce.disabled || !!hf.ilce.value, hf.il.value === "Yurt dışı" ? "Ülke seç." : "İlçe seç.");
     need(hf.ileti_onay, hf.ileti_onay.checked, "Sana haber verebilmemiz için bu onay gerekli.");
     need(hf.kvkk_onay, hf.kvkk_onay.checked, "Devam etmek için onaylaman gerekiyor.");
     if (bad) { bad.focus(); return; }
     const btn = $("button[type=submit]", hf); btn.disabled = true; btn.textContent = "Kaydediliyor…";
-    const err = await insert("bekleme_listesi", { eposta: mail, telefon: tel, il: hf.il.value || null, ilce: hf.ilce.value || null,
+    const err = await insert("bekleme_listesi", { eposta: mail, telefon: tel, ...konum(hf.il.value, hf.ilce.value),
       ileti_onay: true, onay_metni: ONAY_METNI, kvkk_onay: true });
     btn.disabled = false; btn.textContent = "Bana haber ver";
     const dup = err && err.code === "23505";
