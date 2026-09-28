@@ -222,3 +222,6 @@ textarea{resize:vertical}
 .foot-kvkk{font-size:13px;color:var(--muted);text-decoration:none;width:100%;text-align:right}
 @media(max-width:860px){.foot-kvkk{text-align:left}}
 .leaflet-tooltip{font-family:var(--f);font-size:13px}
+
+/* orta genişlik: çıkartmalar başlığa binmesin */
+@media(max-width:1280px){.stickers{display:none}.s1{width:260px;height:260px;left:-170px;top:40px}.s2{width:200px;height:200px;right:-100px;top:-70px}}
