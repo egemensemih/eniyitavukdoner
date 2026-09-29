@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -67,9 +67,12 @@
         </div>
       </div>
       <div class="phone-stage" aria-hidden="true">
-        <span class="float f1">Şehir şehir</span>
-        <span class="float f2">10 üzerinden</span>
-        <span class="float f3">Usta usta</span>
+        <span class="float s1">Şehir şehir</span>
+        <span class="float s2">Lavaş mı, pide mi?</span>
+        <span class="float s3">Usta usta</span>
+        <span class="float s4">Ülke ülke</span>
+        <span class="float s5">Soslu mu, sossuz mu?</span>
+        <span class="float s6">Acılı mı, acısız mı?</span>
         <div class="phone"><div class="screen"><img id="hero-story" alt="" width="1080" height="1920"></div></div>
         <span class="sample-tag">Örnek story kartı</span>
       </div>
@@ -131,21 +134,39 @@
 <section id="harita" class="sec map-sec">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="eyebrow">Tavuk döner haritası</span><h2>Sıradaki durak neresi?</h2></div>
-      <p class="lede">Turuncu daireler sizden gelen önerileri gösteriyor; en çok önerilen şehirler rotamıza giriyor. Puanladığımız mekânlar her bölümle birlikte haritaya ekleniyor.</p>
+      <div><span class="eyebrow">Harita</span><h2>Türkiye Tavuk Dönerci Haritası</h2></div>
+      <p class="lede">Gidip denediklerimiz, rotamızdakiler ve sizin önerdikleriniz tek haritada. Yakınındaki tavuk dönercileri bul, tek dokunuşla Google Maps'te aç.</p>
+    </div>
+    <div class="dh-bar rv">
+      <div class="dh-chips" id="dh-chips" role="tablist" aria-label="Mekân türü">
+        <button type="button" role="tab" data-tur="" aria-selected="true">Tümü <em id="dc-all">0</em></button>
+        <button type="button" role="tab" data-tur="denedik" aria-selected="false"><i class="lg-pin"></i>Denedik <em id="dc-denedik">0</em></button>
+        <button type="button" role="tab" data-tur="rota" aria-selected="false"><i class="lg-rota"></i>Rotamızda <em id="dc-rota">0</em></button>
+        <button type="button" role="tab" data-tur="oneri" aria-selected="false"><i class="lg-dot"></i>Önerilenler <em id="dc-oneri">0</em></button>
+      </div>
+      <div class="dh-tools">
+        <label class="dh-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span class="sr">Mekân ara</span><input type="search" id="dh-q" placeholder="Mekân ya da ilçe ara"></label>
+        <label class="dh-il"><span class="sr">İl</span><select id="dh-il"><option value="">Tüm iller</option></select></label>
+        <button type="button" class="btn btn-sm dh-near" id="dh-near"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></svg>Yakınımdakiler</button>
+      </div>
     </div>
     <div class="map-grid">
       <div class="map-box">
-        <div id="map" role="region" aria-label="Tavuk döner haritası"></div>
+        <div id="map" role="region" aria-label="Türkiye Tavuk Dönerci Haritası"></div>
         <div class="map-loading" id="map-loading">Harita yükleniyor…</div>
         <div class="map-legend">
-          <span><i class="lg-dot"></i>Sizden gelen öneriler</span>
+          <span><i class="lg-pin"></i>Denedik puanı</span>
           <span><i class="lg-rota"></i>Rotamızda</span>
-          <span><i class="lg-pin"></i>Denedik puanı <small id="lg-pin-note">(ilk bölümle geliyor)</small></span>
+          <span><i class="lg-dot"></i>Sizin önerdikleriniz</span>
         </div>
       </div>
-      <aside class="side" id="side" aria-live="polite"></aside>
+      <aside class="dh-list" aria-live="polite">
+        <div class="dh-head"><b id="dh-count">Mekânlar</b><small id="dh-sub">Denedik puanına ve öneri sayısına göre</small></div>
+        <ol class="dh-items" id="dh-items"></ol>
+        <div class="dh-foot"><span>Favori dönercin haritada yok mu?</span><a class="btn btn-o btn-sm" href="#oner">Mekân öner</a></div>
+      </aside>
     </div>
+    <p class="dh-note">Önerilen mekânlar incelendikten sonra haritaya eklenir. “Yakınımdakiler” konumunu yalnızca tarayıcında kullanır; hiçbir yere kaydedilmez.</p>
   </div>
 </section>
 
@@ -274,9 +295,9 @@
   </div>
 </footer>
 
-<script src="config.js?v=5"></script>
-<script src="ilceler.js?v=5" defer></script>
+<script src="config.js?v=6"></script>
+<script src="ilceler.js?v=6" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<script src="app.js?v=5" defer></script>
+<script src="app.js?v=6" defer></script>
 </body>
 </html>

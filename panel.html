@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=5">
-<link rel="stylesheet" href="panel.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="panel.css?v=6">
 </head>
 <body class="pnl">
 
@@ -77,8 +77,10 @@
         <select id="f-oneri-durum">
           <option value="">Tüm durumlar</option><option value="yeni">Yeni</option><option value="incelendi">İncelendi</option>
           <option value="listede">Rotada</option><option value="gidildi">Gidildi</option><option value="uygun_degil">Uygun değil</option>
+          <option value="_bekleyen">Harita onayı bekleyen</option><option value="_onayli">Haritada (onaylı)</option>
         </select>
       </div>
+      <p class="hint">“Haritada” düğmesini açtığın öneriler sitedeki Türkiye Tavuk Dönerci Haritası'nda turuncu nokta olarak görünür. Tekel bayi, mobilyacı gibi alakasız önerileri açma; “Uygun değil” yap. Konumu olmayan öneriyi açarken konum seçmen istenir.</p>
       <div class="tbl-wrap"><table class="tbl" id="t-oneri"></table></div>
     </section>
 
@@ -134,10 +136,10 @@
 </div>
 <div class="tip" id="tip" hidden></div>
 
-<script src="config.js?v=5"></script>
-<script src="ilceler.js?v=5"></script>
+<script src="config.js?v=6"></script>
+<script src="ilceler.js?v=6"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" defer></script>
-<script src="panel.js?v=5" defer></script>
+<script src="panel.js?v=6" defer></script>
 </body>
 </html>

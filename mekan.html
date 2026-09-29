@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Denedik puanı | eniyitavukdoner.com</title>
+<meta name="description" content="Denedik'in gidip denediği tavuk dönercinin puanı, altı kriterdeki notları ve bölümü.">
+<meta property="og:site_name" content="eniyitavukdoner.com">
+<meta property="og:image" content="https://eniyitavukdoner.com/og.png">
+<meta name="theme-color" content="#F5ECDD">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+
+<header class="nav scrolled" id="nav">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="eniyitavukdoner.com ana sayfa">
+      <img src="favicon.svg" alt="" width="34" height="34">
+      <span>eniyitavukdoner<b>.com</b></span>
+    </a>
+    <a class="btn btn-sm" href="./#harita" style="margin-left:auto;padding:11px 16px">Haritaya dön</a>
+  </div>
+</header>
+
+<main id="mk">
+  <div class="mk-empty wrap" id="mk-load"><p class="muted">Yükleniyor…</p></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-bot" style="border:0;padding-top:0"><span>© <span id="yil">2026</span> eniyitavukdoner.com · Bir Denedik serisi</span><a href="kvkk.html">KVKK</a></div>
+  </div>
+</footer>
+
+<script src="config.js?v=6"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<script>
+(function () {
+  "use strict";
+  const C = window.SITE_CONFIG || {};
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const KRITER = [["lezzet", "Lezzet"], ["tavuk", "Tavuk"], ["ekmek", "Ekmek"], ["hijyen", "Hijyen"], ["fiyat", "Fiyat / performans"], ["hizmet", "Hizmet"]];
+  $("#yil").textContent = new Date().getFullYear();
+  const main = $("#mk");
+  const bos = (t, p) => { main.innerHTML = `<div class="mk-empty wrap"><h1 style="font-size:40px;margin-bottom:12px">${t}</h1><p class="muted" style="margin-bottom:24px">${p}</p><a class="btn btn-o" href="./#harita">Haritaya dön</a></div>`; };
+  const ytId = u => { const m = String(u || "").match(/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/); return m ? m[1] : null; };
+  const yer = m => [m.adres, m.ilce, m.il === "Yurt dışı" ? m.ulke : m.il].filter(Boolean).join(", ");
+  const maps = m => m.maps_url || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([m.ad, m.ilce, m.il].filter(Boolean).join(" "));
+  const yol = m => `https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}`;
+
+  async function run() {
+    const id = parseInt(new URLSearchParams(location.search).get("id"), 10);
+    if (!id) return bos("Mekân bulunamadı", "Bağlantı eksik görünüyor. Haritadan bir mekân seçebilirsin.");
+    if (!window.supabase || !C.SUPABASE_URL) return bos("Şu an yüklenemedi", "Birazdan tekrar dener misin?");
+    const db = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+    const { data: m, error } = await db.from("mekanlar").select("*").eq("id", id).eq("yayinda", true).maybeSingle();
+    if (error || !m) return bos("Mekân bulunamadı", "Bu mekân henüz yayında değil ya da kaldırılmış.");
+
+    document.title = `${m.ad} · Denedik puanı ${Number(m.puan).toFixed(1)} | eniyitavukdoner.com`;
+    const d = document.querySelector('meta[name=description]');
+    d.content = `${m.ad} (${[m.ilce, m.il].filter(Boolean).join(", ")}): Denedik puanı ${Number(m.puan).toFixed(1)}/10. ${m.puan_notu || ""}`.trim();
+    const k = m.kriterler || {}, kv = KRITER.filter(([key]) => k[key] != null && k[key] !== "");
+    const vid = ytId(m.bolum_url);
+    const paras = String(m.aciklama || "").split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+
+    main.innerHTML = `
+    <section class="mk-hero"><div class="wrap">
+      <a class="mk-back" href="./#harita">← Türkiye Tavuk Dönerci Haritası</a>
+      <div class="mk-top">
+        <div><span class="tag blue">Denedik'te denendi</span>
+          <h1>${esc(m.ad)}</h1><p class="addr">${esc(yer(m))}</p>
+          ${m.etiketler && m.etiketler.length ? `<div class="tags" style="margin-top:16px">${m.etiketler.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}</div>
+        <div class="mk-score"><small>Denedik puanı</small><b>${Number(m.puan).toFixed(1)}</b><small>/ 10</small></div>
+      </div>
+    </div></section>
+    <section class="sec" style="padding-top:40px"><div class="wrap mk-grid">
+      <div>
+        <div class="mk-card">
+          ${vid ? `<div class="mk-video"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="${esc(m.ad)} bölümü" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>` : ""}
+          ${m.puan_notu ? `<div class="note" style="margin-top:0;font-size:18px;font-weight:600">“${esc(m.puan_notu)}”</div>` : ""}
+          <div class="mk-text">${paras.length ? paras.map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("") : `<p class="muted">Bu mekânın hikâyesini bölümde anlatıyoruz.</p>`}</div>
+          ${m.bolum_url ? `<a class="btn btn-y" href="${esc(m.bolum_url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Bölümü YouTube'da izle</a>` : ""}
+        </div>
+      </div>
+      <div>
+        <div class="mk-card"><h2>Altı kriter</h2>
+          ${kv.length ? kv.map(([key, ad]) => `<div class="kbar"><span>${ad}</span><span class="t"><i style="width:${Math.max(0, Math.min(100, Number(k[key]) * 10))}%"></i></span><b>${Number(k[key]).toFixed(1)}</b></div>`).join("")
+            : `<p class="muted">Kriter puanları bölümle birlikte eklenecek.</p>`}
+        </div>
+        <div class="mk-card"><h2>Nerede?</h2>
+          <div class="mk-map" id="mk-map"></div>
+          <p class="addr" style="margin-bottom:14px">${esc(yer(m))}</p>
+          <div class="mk-acts"><a class="btn btn-sm" href="${esc(yol(m))}" target="_blank" rel="noopener">Yol tarifi al</a><a class="btn btn-line btn-sm" href="${esc(maps(m))}" target="_blank" rel="noopener">Google Maps'te aç ↗</a></div>
+        </div>
+      </div>
+    </div></section>`;
+
+    if (window.maplibregl) {
+      const map = new maplibregl.Map({ container: "mk-map", style: "https://tiles.openfreemap.org/styles/positron", center: [m.lng, m.lat], zoom: 14.5,
+        attributionControl: false, cooperativeGestures: true, dragRotate: false });
+      map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: "© OpenFreeMap" }), "bottom-right");
+      const el = document.createElement("div"); el.className = "pin"; el.textContent = Number(m.puan).toFixed(1);
+      new maplibregl.Marker({ element: el }).setLngLat([m.lng, m.lat]).addTo(map);
+    }
+  }
+  run().catch(e => { console.warn(e); bos("Şu an yüklenemedi", "Birazdan tekrar dener misin?"); });
+})();
+</script>
+</body>
+</html>
