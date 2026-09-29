@@ -146,3 +146,11 @@ body.pnl{background:#F4F1EA}
 .krit small{font-size:12.5px;color:var(--muted);font-weight:600}
 .krit input{padding:10px 12px}
 @media(max-width:560px){.krit{grid-template-columns:1fr 1fr}}
+
+/* v7: Google */
+.warn{color:#9A5B00;font-weight:600}
+.gget{color:var(--cobalt)}
+.gbig{font-weight:800;font-size:17px}
+.gbig small{font-weight:500;font-size:13px;color:var(--muted);margin-left:6px}
+.kp-item em.kapali{background:#FDECEC;color:var(--err)}
+#g-kullanim{display:inline-block;margin-top:6px;color:var(--navy);font-weight:600}

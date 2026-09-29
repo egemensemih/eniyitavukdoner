@@ -88,7 +88,7 @@
   }
   async function loadAll() {
     [D.oneri, D.bekleme, D.mekan, D.recete] = await Promise.all([fetchAll("mekan_onerileri"), fetchAll("bekleme_listesi"), fetchAll("mekanlar"), fetchAll("receteler")]);
-    renderAll();
+    renderAll(); gKullanim(); otoEslestir();
   }
   function renderAll() {
     $("#cnt-oneri").textContent = D.oneri.length; $("#cnt-bekleme").textContent = D.bekleme.length;
@@ -186,18 +186,26 @@
         ${openRow === r.id ? detRow(r) : ""}`; }).join("") : `<tr><td colspan="7" class="empty">Kayıt bulunamadı.</td></tr>`) + "</tbody>";
   }
   const mapsAra = r => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([r.google_ad || r.mekan_adi || r.ad, r.ilce, r.il === "Yurt dışı" ? r.ulke : r.il].filter(Boolean).join(" "));
+  const YEMEK = /(döner|kebap|restoran|lokanta|yemek|fast food|büfe|dürüm|tavuk|et |ızgara|pide|kafe|restaurant|food|meal|cafe|imbiss|grill)/i;
+  const starHtml = r => `★ ${r.google_puan != null ? Number(r.google_puan).toFixed(1) : "–"}<small>${r.google_yorum != null ? nf(r.google_yorum) + " yorum" : ""}</small>`;
   function gCell(r) {
-    if (r.google_puan == null && r.google_yorum == null) return `<a class="icon-btn" href="${esc(r.google_url || mapsAra(r))}" target="_blank" rel="noopener" data-tip="Google Maps'te aç; puanı görüp 'Konum ve Google' ile kaydedebilirsin">Maps'te ara ↗</a>`;
-    return `<a class="gstar" href="${esc(r.google_url || mapsAra(r))}" target="_blank" rel="noopener" data-tip="${r.google_tarih ? "Kaydedildi: " + fmtD(r.google_tarih) : "Google Maps'te aç"}">★ ${r.google_puan != null ? Number(r.google_puan).toFixed(1) : "–"}<small>${r.google_yorum != null ? nf(r.google_yorum) + " yorum" : ""}</small></a>`;
+    if (r.google_puan != null || r.google_yorum != null) return `<a class="gstar" href="${esc(r.google_url || mapsAra(r))}" target="_blank" rel="noopener" data-tip="${esc((r.google_ad || "") + (r.google_puan_tarih || r.google_tarih ? " · " + fmtD(r.google_puan_tarih || r.google_tarih) : ""))}">${starHtml(r)}</a>`;
+    if (r.google_place_id) return `<button class="icon-btn gget" data-gpuan="${r.id}" data-tip="${esc(r.google_ad || "")}${r.google_tur ? " · " + esc(r.google_tur) : ""}">★ Puanı getir</button>${r.google_tur && !YEMEK.test(r.google_tur) ? `<div class="sm warn">${esc(r.google_tur)}</div>` : ""}${r.google_eslesme === "kapali" ? `<div class="sm warn">Kalıcı kapalı</div>` : ""}`;
+    if (r.google_eslesme === "bulunamadi") return `<button class="icon-btn" data-gfind="${r.id}">Bulunamadı · ara</button>`;
+    return `<a class="icon-btn" href="${esc(mapsAra(r))}" target="_blank" rel="noopener">Maps'te ara ↗</a>`;
   }
   function onayCell(r) {
     if (r.durum === "listede" || r.durum === "gidildi") return `<span class="badge b-listede" data-tip="Rotadaki mekânlar haritada 'Rotamızda' olarak görünür">Rota</span>`;
     return `<label class="sw" data-tip="${r.onayli ? "Haritada görünüyor" : "Onayla: haritada 'Önerilen' olarak göster"}"><input type="checkbox" data-onay="${r.id}"${r.onayli ? " checked" : ""}${r.durum === "uygun_degil" ? " disabled" : ""}><i></i></label>${r.lat == null ? `<div class="sm" style="margin-top:4px">konum yok</div>` : ""}`;
   }
   function gBox(r) {
-    return `<h4>Google ve konum</h4><p>${r.google_puan != null || r.google_yorum != null ? `★ <b>${r.google_puan != null ? Number(r.google_puan).toFixed(1) : "–"}</b> · ${r.google_yorum != null ? nf(r.google_yorum) : "–"} yorum<br>` : `<span class="sm">Google puanı girilmedi.</span><br>`}
-      <span class="sm">${r.lat != null ? "Konum seçildi" : "Konum seçilmedi"}${r.google_tarih ? " · " + fmtD(r.google_tarih) : ""}</span></p>
-      <div class="det-acts" style="margin:-4px 0 14px"><a class="btn btn-line btn-sm" href="${esc(r.google_url || mapsAra(r))}" target="_blank" rel="noopener">Google Maps'te ara ↗</a><button class="btn btn-line btn-sm" data-gfind="${r.id}">Konum ve Google bilgisi</button></div>`;
+    const tarih = r.google_puan_tarih || r.google_tarih;
+    const bilgi = r.google_place_id
+      ? `<b>${esc(r.google_ad || "")}</b>${r.google_tur ? ` <span class="badge ${YEMEK.test(r.google_tur) ? "b-ok" : "b-dup"}">${esc(r.google_tur)}</span>` : ""}${r.google_eslesme === "kapali" ? ` <span class="badge b-uygun_degil">Kalıcı kapalı</span>` : ""}<br><span class="sm">${esc(r.google_adres || "")}</span><br>
+         ${r.google_puan != null || r.google_yorum != null ? `<span class="gbig">${starHtml(r)}</span>${tarih ? `<span class="sm"> · ${fmtD(tarih)}</span>` : ""}` : `<span class="sm">Puan henüz çekilmedi.</span>`}`
+      : `<span class="sm">${r.google_eslesme === "bulunamadi" ? "Google'da otomatik bulunamadı. Aramayı değiştirerek dene." : "Google ile henüz eşleşmedi."}</span>`;
+    return `<h4>Google</h4><p>${bilgi}</p>
+      <div class="det-acts" style="margin:-4px 0 14px">${r.google_place_id ? `<button class="btn btn-sm" data-gpuan="${r.id}">${r.google_puan != null ? "Puanı yenile" : "★ Puanı getir"}</button>` : ""}<button class="btn btn-line btn-sm" data-gfind="${r.id}">${r.google_place_id ? "Eşleşmeyi değiştir / konum" : "Google'da ara / konum"}</button><a class="btn btn-line btn-sm" href="${esc(r.google_url || mapsAra(r))}" target="_blank" rel="noopener">Maps'te aç ↗</a></div>`;
   }
   function detRow(r) {
     const link = /^https?:\/\//i.test(r.adres || "") ? `<a href="${esc(r.adres)}" target="_blank" rel="noopener">${esc(r.adres)}</a>` : esc(r.adres || "—");
@@ -222,6 +230,7 @@
       if (b.dataset.toMap) toMap(D.oneri.find(x => x.id === +b.dataset.toMap));
       if (b.dataset.rota) rotaForm(D.oneri.find(x => x.id === +b.dataset.rota));
       if (b.dataset.gfind) googleFind(D.oneri.find(x => x.id === +b.dataset.gfind));
+      if (b.dataset.gpuan) puanGetir(D.oneri.find(x => x.id === +b.dataset.gpuan), b);
       if (b.dataset.delOneri) {
         const id = +b.dataset.delOneri; if (!(await confirmBox("Bu öneri kalıcı olarak silinecek. Bu işlem geri alınamaz."))) return;
         const { error } = await db.from("mekan_onerileri").delete().eq("id", id);
@@ -263,6 +272,54 @@
       return { ad: p.name || [p.street, p.housenumber].filter(Boolean).join(" "), tur: p.osm_value, lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0],
         alt: [[p.street, p.housenumber].filter(Boolean).join(" "), p.district || p.locality, p.city || p.county, p.state, p.country && p.country !== "Türkiye" ? p.country : ""].filter(Boolean).join(", ") }; });
   }
+  /* ---------- Google Places (sunucu fonksiyonu üzerinden, günlük sınırlı) ---------- */
+  let G_OFF = false;
+  async function gfn(islem, body) {
+    if (G_OFF) return { error: "GOOGLE_MAPS_KEY eklenmemiş." };
+    try {
+      const { data, error } = await db.functions.invoke("google-mekan", { body: { islem, ...body } });
+      let err = data && data.error;
+      if (error && !err) { const j = error.context && error.context.json ? await error.context.json().catch(() => null) : null; err = (j && j.error) || error.message || "Bilinmeyen hata"; }
+      if (err && /GOOGLE_MAPS_KEY/.test(err)) G_OFF = true;
+      return err ? { error: err } : data;
+    } catch (e) { return { error: String(e) }; }
+  }
+  async function gKullanim() {
+    const el = $("#g-kullanim"); if (!el) return;
+    const gun = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+    const { data } = await db.from("google_kullanim").select("tur,adet").eq("gun", gun);
+    const m = Object.fromEntries((data || []).map(x => [x.tur, x.adet]));
+    el.textContent = G_OFF ? "Google bağlantısı: anahtar bekleniyor" : `Bugün Google: ${m.ara || 0}/150 arama · ${m.puan || 0}/30 puan sorgusu (ücretsiz sınır içinde)`;
+  }
+  let ESLESIYOR = false;
+  async function otoEslestir() {
+    if (ESLESIYOR || G_OFF) return; ESLESIYOR = true;
+    const bek = D.oneri.filter(r => !r.google_place_id && !r.google_eslesme && r.durum !== "uygun_degil").slice(0, 20);
+    let n = 0;
+    for (const r of bek) {
+      const d = await gfn("eslestir", { id: r.id });
+      if (d.error) { if (!G_OFF) toast("Google eşleştirme: " + d.error); break; }
+      if (d.satir) { Object.assign(r, d.satir); n++; }
+    }
+    ESLESIYOR = false;
+    if (n) { renderAll(); toast(n + " öneri Google ile eşleşti"); }
+    gKullanim();
+  }
+  async function puanGetir(r, btn) {
+    if (!r) return;
+    if (btn) { btn.disabled = true; btn.textContent = "Getiriliyor…"; }
+    const d = await gfn("puan", { id: r.id, zorla: r.google_puan != null });
+    if (d.error) { if (btn) { btn.disabled = false; btn.textContent = "★ Puanı getir"; } return toast(G_OFF ? "Google anahtarı henüz eklenmemiş." : d.error); }
+    D.oneri.filter(x => x.google_place_id === d.place_id).forEach(x => Object.assign(x, d.puan));
+    renderAll(); gKullanim(); toast(`★ ${d.puan.google_puan ?? "–"} · ${nf(d.puan.google_yorum || 0)} yorum`);
+  }
+  async function konumAra(q) {
+    if (!G_OFF) {
+      const d = await gfn("ara", { q });
+      if (!d.error) return (d.sonuc || []).map(p => ({ ad: p.ad, alt: p.adres, tur: p.tur, lat: p.lat, lng: p.lng, g: p, kaynak: "Google" }));
+    }
+    return (await photon(q)).map(p => ({ ...p, tur: OSM_TUR[p.tur] || null, kaynak: "OSM" }));
+  }
   const kpHtml = q => `<div class="kp-search"><input type="search" data-kp-q value="${esc(q)}" placeholder="Mekân adı, ilçe, il"><button type="button" class="btn btn-line btn-sm" data-kp-go>Haritada ara</button></div><div class="kp-res" data-kp-res></div>`;
   function kpWire(root, onPick, auto) {
     const inp = $("[data-kp-q]", root), box = $("[data-kp-res]", root);
@@ -270,10 +327,10 @@
       const q = inp.value.trim(); if (q.length < 2) return;
       box.innerHTML = `<div class="kp-msg">Aranıyor…</div>`;
       try {
-        const list = await photon(q);
-        box.innerHTML = list.length ? list.map((p, i) => `<button type="button" class="kp-item" data-i="${i}"><b>${esc(p.ad || "(adsız)")}${OSM_TUR[p.tur] ? ` <em>${OSM_TUR[p.tur]}</em>` : ""}</b><small>${esc(p.alt)}</small></button>`).join("")
+        const list = await konumAra(q);
+        box.innerHTML = list.length ? list.map((p, i) => `<button type="button" class="kp-item" data-i="${i}"><b>${esc(p.ad || "(adsız)")}${p.tur ? ` <em>${esc(p.tur)}</em>` : ""}${p.g && p.g.kapali ? ` <em class="kapali">Kalıcı kapalı</em>` : ""}</b><small>${esc(p.alt)}${p.g ? "" : " · OpenStreetMap"}</small></button>`).join("")
           : `<div class="kp-msg">Bulunamadı. Aramayı kısalt (ör. sadece mekân adı + ilçe), haritada elle işaretle ya da Google Maps linkini yapıştır.</div>`;
-        box.onclick = e => { const b = e.target.closest("[data-i]"); if (!b) return; $$(".kp-item", box).forEach(x => x.classList.toggle("on", x === b)); const p = list[+b.dataset.i]; onPick(p.lat, p.lng); };
+        box.onclick = e => { const b = e.target.closest("[data-i]"); if (!b) return; $$(".kp-item", box).forEach(x => x.classList.toggle("on", x === b)); const p = list[+b.dataset.i]; onPick(p.lat, p.lng, p.g); };
       } catch (err) { box.innerHTML = `<div class="kp-msg">Arama şu an çalışmadı. Haritaya tıklayarak işaretleyebilirsin.</div>`; }
     };
     $("[data-kp-go]", root).addEventListener("click", go);
@@ -296,16 +353,38 @@
     if (has) set(lat, lng);
     return set;
   }
-  const gFields = r => `<label class="field"><span>Google Maps linki <small>uzun linkten konum otomatik okunur</small></span><input name="gurl" type="url" value="${esc(r.google_url || "")}" placeholder="https://www.google.com/maps/place/…"></label>
-    <div class="row2"><label class="field"><span>Google puanı <small>(isteğe bağlı)</small></span><input name="gp" type="number" min="1" max="5" step="0.1" inputmode="decimal" value="${r.google_puan ?? ""}" placeholder="4.6"></label>
+  const gFields = r => `<input type="hidden" name="gid"><input type="hidden" name="gad"><input type="hidden" name="gadres"><input type="hidden" name="gtur">
+    <label class="field"><span>Google Maps linki <small>yapıştırınca mekân otomatik tanınır (kısa linkler dahil)</small></span><input name="gurl" type="url" value="${esc(r.google_url || "")}" placeholder="https://maps.app.goo.gl/…"><span class="sm" data-gnote></span></label>
+    <div class="row2"><label class="field"><span>Google puanı <small>(elle düzeltmek için)</small></span><input name="gp" type="number" min="1" max="5" step="0.1" inputmode="decimal" value="${r.google_puan ?? ""}" placeholder="4.6"></label>
       <label class="field"><span>Yorum sayısı</span><input name="gy" type="number" min="0" step="1" inputmode="numeric" value="${r.google_yorum ?? ""}" placeholder="1250"></label></div>`;
+  function gSec(f, g, set) {
+    if (!g) return;
+    f.gid.value = g.id; f.gad.value = g.ad || ""; f.gadres.value = g.adres || ""; f.gtur.value = g.tur || ""; if (g.url) f.gurl.value = g.url;
+    if (g.lat != null) set(g.lat, g.lng, true);
+    const n = $("[data-gnote]", f); if (n) n.textContent = `Google: ${g.ad}${g.tur ? " · " + g.tur : ""}${g.kapali ? " · KALICI KAPALI" : ""} — kaydedince eşleşir, puanı panelden çekebilirsin.`;
+  }
   function gWire(f, set) {
-    f.gurl.addEventListener("input", () => { const p = parseMaps(f.gurl.value); if (p) set(p[0], p[1], true); else if (/goo\.gl|maps\.app/.test(f.gurl.value)) toast("Kısa linkten konum okunamıyor; haritada ara ya da elle işaretle. Link yine de kaydedilir."); });
+    let t;
+    f.gurl.addEventListener("input", () => {
+      const u = f.gurl.value.trim(), p = parseMaps(u); if (p) set(p[0], p[1], true);
+      clearTimeout(t); if (!/^https?:\/\//i.test(u)) return;
+      t = setTimeout(async () => {
+        const n = $("[data-gnote]", f); if (n) n.textContent = "Google'da tanınıyor…";
+        const d = await gfn("link", { url: u });
+        if (d.error) { if (n) n.textContent = G_OFF ? "Google anahtarı eklenince link otomatik tanınacak." : d.error; return; }
+        if (d.sonuc && d.sonuc[0]) { const url = f.gurl.value; gSec(f, d.sonuc[0], set); f.gurl.value = url; }
+        else if (d.konum && d.konum.lat != null) { set(d.konum.lat, d.konum.lng, true); if (n) n.textContent = "Konum linkten alındı."; }
+      }, 500);
+    });
   }
   function gVals(f, r) {
     const gp = parseFloat(f.gp.value), gy = parseInt(f.gy.value, 10);
     const o = { google_url: f.gurl.value.trim() || null, google_puan: isNaN(gp) ? null : Math.min(5, Math.max(0, Math.round(gp * 10) / 10)), google_yorum: isNaN(gy) ? null : Math.max(0, gy) };
     if (o.google_puan !== (r.google_puan == null ? null : +r.google_puan) || o.google_yorum !== (r.google_yorum == null ? null : +r.google_yorum)) o.google_tarih = new Date().toISOString();
+    if (f.gid.value && f.gid.value !== r.google_place_id) {
+      Object.assign(o, { google_place_id: f.gid.value, google_ad: f.gad.value || null, google_adres: f.gadres.value || null, google_tur: f.gtur.value || null,
+        google_eslesme: "elle", google_puan: null, google_yorum: null, google_puan_tarih: null });
+    }
     return o;
   }
   const qOf = r => [r.google_ad || r.mekan_adi, r.ilce, r.il === "Yurt dışı" ? r.ulke : r.il].filter(Boolean).join(" ");
@@ -313,14 +392,14 @@
     const rotada = r.durum === "listede" || r.durum === "gidildi";
     openModal("Konum ve Google bilgisi", `<form id="kf" novalidate>
       <p style="margin-bottom:6px"><b>${esc(r.google_ad || r.mekan_adi)}</b> <span class="sm">${esc([r.ilce, r.il === "Yurt dışı" ? r.ulke : r.il].filter(Boolean).join(" · "))}</span></p>
-      <p class="sm" style="margin-bottom:16px">Önce <a href="${esc(mapsAra(r))}" target="_blank" rel="noopener" style="color:var(--cobalt);font-weight:600">Google Maps'te ara ↗</a> ve gerçekten bir dönerci mi bak. Konumu aşağıdan bul ya da haritaya tıkla.</p>
-      <div class="field"><span>Konum <small>arama OpenStreetMap ile ücretsiz; pini sürükleyebilirsin</small></span>${kpHtml(qOf(r))}
+      <p class="sm" style="margin-bottom:16px">Önce <a href="${esc(mapsAra(r))}" target="_blank" rel="noopener" style="color:var(--cobalt);font-weight:600">Google Maps'te ara ↗</a> ve gerçekten bir dönerci mi bak. Aşağıdan doğru mekânı seçince Google bilgileri eşleşir.</p>
+      <div class="field"><span>Konum <small>Google'da ara, linki yapıştır ya da haritaya tıkla; pini sürükleyebilirsin</small></span>${kpHtml(qOf(r))}
         <div class="mini-map" id="k-map"></div><input type="hidden" name="lat" value="${r.lat ?? ""}"><input type="hidden" name="lng" value="${r.lng ?? ""}"></div>
       ${gFields(r)}
       ${rotada ? "" : `<label class="check"><input type="checkbox" name="onayli"${r.onayli || onayla ? " checked" : ""}><span><b>Onayla:</b> sitedeki haritada “Önerilen” olarak göster <small>(sadece mekân adı, ilçe ve öneri sayısı görünür)</small></span></label>`}
       <div class="m-foot"><button type="button" class="btn btn-line btn-sm" data-close>Vazgeç</button><button class="btn btn-sm">Kaydet</button></div></form>`);
     const f = $("#kf"); const set = miniMap("k-map", r.lat, r.lng, "#FF6A00", f);
-    kpWire(f, (la, ln) => set(la, ln, true), r.lat == null); gWire(f, set);
+    kpWire(f, (la, ln, g) => g ? gSec(f, g, set) : set(la, ln, true), r.lat == null && !r.google_place_id); gWire(f, set);
     f.addEventListener("submit", async e => {
       e.preventDefault();
       const lat = parseFloat(f.lat.value), lng = parseFloat(f.lng.value);
@@ -370,7 +449,8 @@
   ["#f-rota-bolge", "#f-rota-sira"].forEach(x => $(x).addEventListener("input", renderRota));
   $("#rota-list").addEventListener("click", async e => {
     const b = e.target.closest("button"); if (!b) return;
-    const r = D.oneri.find(x => x.id === +(b.dataset.rota || b.dataset.tomap2 || b.dataset.cikar || b.dataset.gfind));
+    const r = D.oneri.find(x => x.id === +(b.dataset.rota || b.dataset.tomap2 || b.dataset.cikar || b.dataset.gfind || b.dataset.gpuan));
+    if (b.dataset.gpuan) return puanGetir(r, b);
     if (b.dataset.rota) rotaForm(r);
     if (b.dataset.gfind) googleFind(r);
     if (b.dataset.tomap2) toMap(r);
@@ -402,7 +482,7 @@
     const f = $("#rf"); const out = $("output", f);
     f.rp.addEventListener("input", () => out.textContent = Number(f.rp.value).toFixed(1));
     const set = miniMap("rota-map", r.lat, r.lng, "#FFD500", f);
-    kpWire(f, (la, ln) => set(la, ln, true), r.lat == null); gWire(f, set);
+    kpWire(f, (la, ln, g) => g ? gSec(f, g, set) : set(la, ln, true), r.lat == null && !r.google_place_id); gWire(f, set);
     f.addEventListener("submit", async e => {
       e.preventDefault();
       const lat = parseFloat(f.lat.value), lng = parseFloat(f.lng.value);
