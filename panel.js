@@ -88,6 +88,7 @@
   }
   async function loadAll() {
     [D.oneri, D.bekleme, D.mekan, D.recete] = await Promise.all([fetchAll("mekan_onerileri"), fetchAll("bekleme_listesi"), fetchAll("mekanlar"), fetchAll("receteler")]);
+    DEG.clear(); await degYukle(D.mekan.map(m => m.id));
     renderAll(); gKullanim(); otoEslestir();
   }
   function renderAll() {
@@ -259,7 +260,7 @@
   });
   function toMap(r) {
     const url = /^https?:/i.test(r.adres || "") ? r.adres : "";
-    mekanForm({ ad: r.google_ad || r.mekan_adi, il: r.il === "Yurt dışı" ? "" : r.il, ilce: r.ilce, adres: url ? "" : (r.adres || ""), maps_url: r.google_url || url, lat: r.lat, lng: r.lng, oneri_id: r.id });
+    mekanForm({ ad: r.google_ad || r.mekan_adi, il: r.il, ilce: r.ilce, ulke: r.ulke, adres: url ? "" : (r.adres || ""), maps_url: r.google_url || url, lat: r.lat, lng: r.lng, oneri_id: r.id, google_place_id: r.google_place_id || null });
   }
 
   /* ---------- ücretsiz konum arama (Photon / OpenStreetMap) + elle Google bilgisi ---------- */
@@ -287,9 +288,9 @@
   async function gKullanim() {
     const el = $("#g-kullanim"); if (!el) return;
     const gun = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
-    const { data } = await db.from("google_kullanim").select("tur,adet").eq("gun", gun);
+    const [{ data }, { data: genel }] = await Promise.all([db.from("google_kullanim").select("tur,adet").eq("gun", gun), db.from("istek_sayac").select("adet").eq("anahtar", "google:genel:" + gun).maybeSingle()]);
     const m = Object.fromEntries((data || []).map(x => [x.tur, x.adet]));
-    el.textContent = G_OFF ? "Google bağlantısı: anahtar bekleniyor" : `Bugün Google: ${m.ara || 0}/150 arama · ${m.puan || 0}/30 puan sorgusu (ücretsiz sınır içinde)`;
+    el.textContent = G_OFF ? "Google bağlantısı: anahtar bekleniyor" : `Bugün Google: panel ${m.ara || 0}/60 arama · ${(m.detay || 0) + (m.puan || 0)}/30 detay · ziyaretçi linkleri ${Math.min(100, (genel && genel.adet) || 0)}/100 (ücretsiz sınır içinde)`;
   }
   let ESLESIYOR = false;
   async function otoEslestir() {
@@ -338,7 +339,7 @@
     if (auto) go();
   }
   function miniMap(el, lat, lng, color, f) {
-    if (!window.maplibregl) return () => {};
+    if (!window.maplibregl) return (la, ln) => { f.lat.value = (+la).toFixed(6); f.lng.value = (+ln).toFixed(6); };
     const has = lat != null && lng != null;
     const mp = new maplibregl.Map({ container: el, style: "https://tiles.openfreemap.org/styles/liberty", center: has ? [lng, lat] : [35.2, 39], zoom: has ? 15.5 : 4.6, attributionControl: { compact: true } });
     mp.addControl(new maplibregl.NavigationControl({ showCompass: false }));
@@ -557,32 +558,47 @@
     });
   });
 
-  /* ---------- mekânlar ---------- */
-  const KRITER = [["lezzet", "Lezzet"], ["tavuk", "Tavuk"], ["ekmek", "Ekmek"], ["hijyen", "Hijyen"], ["fiyat", "Fiyat/perf."], ["hizmet", "Hizmet"]];
+  /* ---------- mekânlar: Google linki + Tahsin/Egemen değerlendirmesi ---------- */
+  const KRITER = C.KRITERLER || [];
+  const KISI = C.KISILER || [{ k: "tahsin", ad: "Tahsin" }, { k: "egemen", ad: "Egemen" }];
+  const fP = p => { if (p == null || p === "") return "–"; const n = Math.round(Number(p) * 10) / 10; return Number.isInteger(n) ? String(n) : n.toFixed(1).replace(".", ","); };
+  const guvenli = u => /^https?:\/\/[^\s"'<>]+$/i.test(String(u || "").trim()) ? String(u).trim() : "";
+  const anahtar = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLocaleLowerCase(TR).replace(/[^a-z0-9]/g, "");
+  const eslesen = (list, ad) => { const k = anahtar(ad); return k ? list.find(x => anahtar(x) === k) || null : null; };
+  const temizAd = s => String(s || "").replace(/̇/g, "").normalize("NFC");
+  const DEG = new Map(); // mekan_id -> {tahsin:{}, egemen:{}}
+  async function degYukle(ids) {
+    if (!ids.length) return;
+    const { data } = await db.from("degerlendirmeler").select("*").in("mekan_id", ids);
+    (data || []).forEach(d => { if (!DEG.has(d.mekan_id)) DEG.set(d.mekan_id, {}); DEG.get(d.mekan_id)[d.kisi] = d; });
+  }
+
   function renderMekan() {
     const rows = D.mekan;
-    $("#t-mekan").innerHTML = `<thead><tr><th>Puan</th><th>Mekân</th><th>İl / ilçe</th><th>Bölüm</th><th>Yayında</th><th></th></tr></thead><tbody>` +
-      (rows.length ? rows.map(m => `<tr><td><span class="score-b">${Number(m.puan).toFixed(1)}</span></td>
+    $("#t-mekan").innerHTML = `<thead><tr><th>Puan</th><th>Mekân</th><th>İl / ilçe</th>${KISI.map(k => `<th class="num">${esc(k.ad)}</th>`).join("")}<th>Bölüm</th><th>Yayında</th><th></th></tr></thead><tbody>` +
+      (rows.length ? rows.map(m => `<tr><td><span class="score-b">${fP(m.puan)}</span></td>
         <td><span class="nm">${esc(m.ad)}</span><div class="sm">${esc(m.puan_notu || "")}</div></td>
-        <td>${esc(m.il)}<div class="sm">${esc(m.ilce || "")}</div></td>
-        <td>${m.bolum_url ? `<a href="${esc(m.bolum_url)}" target="_blank" rel="noopener" style="color:var(--cobalt);font-weight:600">İzle ↗</a>` : `<span class="sm">—</span>`}</td>
+        <td>${esc(m.il === "Yurt dışı" ? (m.ulke || m.il) : m.il)}<div class="sm">${esc(m.ilce || "")}</div></td>
+        ${KISI.map(k => `<td class="num"><b>${fP(m["puan_" + k.k])}</b></td>`).join("")}
+        <td>${guvenli(m.bolum_url) ? `<a href="${esc(m.bolum_url)}" target="_blank" rel="noopener" style="color:var(--cobalt);font-weight:600">İzle ↗</a>` : `<span class="sm">—</span>`}</td>
         <td><label class="sw"><input type="checkbox" data-yayin="${m.id}"${m.yayinda ? " checked" : ""}><i></i></label></td>
         <td class="num" style="white-space:nowrap">${m.yayinda ? `<a class="icon-btn" href="mekan.html?id=${m.id}" target="_blank" rel="noopener">Sayfa ↗</a>` : ""}<button class="icon-btn" data-edit="${m.id}">Düzenle</button><button class="icon-btn danger" data-del-mek="${m.id}">Sil</button></td></tr>`).join("")
-        : `<tr><td colspan="6" class="empty">Henüz mekân yok. İlk bölümü çektiğinde “Yeni mekân” ile ekle.</td></tr>`) + "</tbody>";
+        : `<tr><td colspan="${6 + KISI.length}" class="empty">Henüz mekân yok. Gittiğiniz ilk mekânı “Yeni mekân” ile ekleyin ya da Rota'dan “Gidildi” deyin.</td></tr>`) + "</tbody>";
   }
   $("#t-mekan").addEventListener("change", async e => {
     const c = e.target.closest("[data-yayin]"); if (!c) return;
-    const id = +c.dataset.yayin;
+    const id = +c.dataset.yayin, m = D.mekan.find(x => x.id === id);
+    if (c.checked && m.puan == null) { c.checked = false; return toast("Yayına almadan önce en az bir kişinin puanını girin."); }
     const { error } = await db.from("mekanlar").update({ yayinda: c.checked }).eq("id", id);
     if (error) { c.checked = !c.checked; return toast("Güncellenemedi: " + error.message); }
-    D.mekan.find(x => x.id === id).yayinda = c.checked; renderOzet(); toast(c.checked ? "Haritada yayında" : "Haritadan kaldırıldı");
+    m.yayinda = c.checked; renderOzet(); toast(c.checked ? "Sitede yayında" : "Siteden kaldırıldı");
   });
   $("#t-mekan").addEventListener("click", async e => {
     const ed = e.target.closest("[data-edit]"); if (ed) return mekanForm(D.mekan.find(x => x.id === +ed.dataset.edit));
     const dl = e.target.closest("[data-del-mek]"); if (!dl) return;
-    const id = +dl.dataset.delMek; if (!(await confirmBox("Bu mekân haritadan ve listeden kalıcı olarak silinecek."))) return;
+    const id = +dl.dataset.delMek; if (!(await confirmBox("Bu mekân, Tahsin ve Egemen'in puanlarıyla birlikte kalıcı olarak silinecek."))) return;
     const { error } = await db.from("mekanlar").delete().eq("id", id);
-    if (error) return toast("Silinemedi: " + error.message); D.mekan = D.mekan.filter(x => x.id !== id); renderAll(); toast("Silindi");
+    if (error) return toast("Silinemedi: " + error.message); D.mekan = D.mekan.filter(x => x.id !== id); DEG.delete(id); renderAll(); toast("Silindi");
   });
   $("#add-mekan").addEventListener("click", () => mekanForm({}));
   function parseMaps(u) {
@@ -590,69 +606,223 @@
     let m = s.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || s.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || s.match(/[?&](?:q|query|ll|destination)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/) || s.match(/^\s*(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)\s*$/);
     return m ? [parseFloat(m[1]), parseFloat(m[2])] : null;
   }
-  function mekanForm(m) {
+
+  // Google bilgileri kutusu (sadece panelde; sitede gösterilmez)
+  function gDetayHtml(y) {
+    if (!y) return "";
+    const saat = Array.isArray(y.saatler) && y.saatler.length ? `<details class="gd-saat"><summary>Çalışma saatleri</summary>${y.saatler.map(t => `<div>${esc(t)}</div>`).join("")}</details>` : "";
+    const yor = Array.isArray(y.yorumlar) && y.yorumlar.length ? `<div class="gd-yor">${y.yorumlar.map(r => `<div class="gd-y"><div class="gd-yh"><b>${esc(r.yazar || "Google kullanıcısı")}</b><span>${"★".repeat(Math.round(r.puan || 0))}<em>${esc(r.zaman || "")}</em></span></div><p>${esc(r.metin || "")}</p></div>`).join("")}</div>` : "";
+    return `<div class="gd">
+      <div class="gd-top">${y.puan != null ? `<span class="gd-p">★ ${Number(y.puan).toFixed(1)}</span><span class="sm">${nf(y.yorum_sayisi || 0)} Google yorumu</span>` : `<span class="sm">Google puanı henüz çekilmedi.</span>`}
+        ${y.detay_tarih ? `<span class="sm">· ${fmtD(y.detay_tarih)}</span>` : ""}</div>
+      <div class="gd-info">${y.telefon ? `<span>☎ ${esc(y.telefon)}</span>` : ""}${guvenli(y.web) ? `<a href="${esc(y.web)}" target="_blank" rel="noopener">${esc(y.web.replace(/^https?:\/\/(www\.)?/, "").slice(0, 40))} ↗</a>` : ""}${guvenli(y.url) ? `<a href="${esc(y.url)}" target="_blank" rel="noopener">Google sayfası ↗</a>` : ""}</div>
+      ${saat}${yor}${yor ? `<p class="sm" style="margin-top:6px">Google yorumları sadece panelde görünür; sitede yayınlanmaz.</p>` : ""}</div>`;
+  }
+  async function gDetayGetir(place_id, zorla) {
+    const d = await gfn("detay", { place_id, zorla: !!zorla });
+    gKullanim();
+    return d;
+  }
+
+  // Değerlendirme satırları: dokunulmamış kriter "–" kalır, kaydedilmez
+  function puanKolon(kisi, d, i) {
+    const p = (d && d.puanlar) || {};
+    return `<div class="dg p${i}" data-kisi="${kisi.k}">
+      <div class="dg-h"><span class="dg-av">${esc(kisi.ad[0])}</span><b>${esc(kisi.ad)}</b><span class="dg-top"><b data-top>–</b><small>/100</small></span></div>
+      ${KRITER.map(([k, ad]) => { const v = p[k]; const has = v != null; return `<div class="dg-r${has ? "" : " bos"}" data-k="${k}">
+        <span class="dg-l">${esc(ad)}</span><input type="range" min="0" max="10" step="0.5" value="${has ? v : 5}" aria-label="${esc(kisi.ad)} · ${esc(ad)}"><output>${has ? fP(v) : "–"}</output><button type="button" class="dg-x" title="Temizle" aria-label="Temizle">×</button></div>`; }).join("")}
+      <label class="field" style="margin:14px 0 0"><span>${esc(kisi.ad)}'in yorumu <small>(sayfada görünür)</small></span><textarea name="yorum_${kisi.k}" rows="5" maxlength="4000" placeholder="Neyi sevdin, neyi sevmedin? Tavuk, ekmek, sos, usta…">${esc((d && d.yorum) || "")}</textarea></label>
+    </div>`;
+  }
+  function puanTopla(root) {
+    const sonuc = {};
+    $$(".dg", root).forEach(col => {
+      const vals = {}; $$(".dg-r:not(.bos)", col).forEach(r => vals[r.dataset.k] = Number($("input", r).value));
+      const n = Object.keys(vals).length, t = n ? Math.round(Object.values(vals).reduce((a, b) => a + b, 0) / n * 100) / 10 : null;
+      $("[data-top]", col).textContent = fP(t); sonuc[col.dataset.kisi] = { puanlar: vals, toplam: t };
+    });
+    const ts = Object.values(sonuc).map(x => x.toplam).filter(x => x != null);
+    const ort = ts.length ? Math.round(ts.reduce((a, b) => a + b, 0) / ts.length * 10) / 10 : null;
+    const o = $("[data-ort]", root); if (o) o.textContent = fP(ort);
+    return sonuc;
+  }
+
+  async function mekanForm(m, kaynak) {
     const isNew = !m.id;
-    openModal(isNew ? "Yeni mekân" : "Mekânı düzenle", `<form id="mf" novalidate>
-      <label class="field"><span>Mekân adı</span><input name="ad" required maxlength="120" value="${esc(m.ad || "")}"></label>
-      <div class="row2"><label class="field"><span>İl</span><select name="il" required>${ilOpts(m.il || "", true)}</select></label>
-        <label class="field"><span>İlçe</span><select name="ilce"${(window.ILCELER || {})[m.il] ? "" : " disabled"}>${ilceOpts(m.il, m.ilce)}</select></label></div>
-      <label class="field"><span>Adres <small>(sitede görünür)</small></span><input name="adres" maxlength="200" value="${esc(m.adres || "")}"></label>
-      <div class="row3">
-        <label class="field"><span>Genel puan (0–10)</span><input name="puan" type="number" min="0" max="10" step="0.1" value="${m.puan ?? ""}"></label>
-        <label class="field" style="grid-column:span 2"><span>Etiketler <small>(virgülle)</small></span><input name="etiketler" value="${esc((m.etiketler || []).join(", "))}" placeholder="Lavaş, Sulu tavuk, Uygun fiyat"></label>
-      </div>
-      <div class="field"><span>Altı kriter <small>(0–10; puanı boş bırakırsan ortalaması alınır)</small></span>
-        <div class="row3 krit">${KRITER.map(([k, ad]) => `<label><small>${ad}</small><input name="k_${k}" type="number" min="0" max="10" step="0.1" inputmode="decimal" value="${(m.kriterler || {})[k] ?? ""}"></label>`).join("")}</div></div>
-      <label class="field"><span>Puan notu <small>(haritada ve sayfanın başında tırnak içinde)</small></span><textarea name="puan_notu" rows="2" maxlength="300">${esc(m.puan_notu || "")}</textarea></label>
-      <label class="field"><span>Detay sayfası yazısı <small>(paragrafları boş satırla ayır)</small></span><textarea name="aciklama" rows="7" maxlength="6000" placeholder="Ustanın hikâyesi, döneri nasıl hazırladığı, neyi sevdik, neyi sevmedik…">${esc(m.aciklama || "")}</textarea></label>
-      <div class="row2">
-        <label class="field"><span>Bölüm linki (YouTube)</span><input name="bolum_url" type="url" value="${esc(m.bolum_url || "")}"></label>
-        <label class="field"><span>Google Maps linki</span><input name="maps_url" type="url" value="${esc(m.maps_url || "")}"></label>
-      </div>
-      <div class="field"><span>Konum <small>(ara, haritaya tıkla ya da Maps linkini yapıştır)</small></span>${kpHtml([m.ad, m.ilce, m.il].filter(Boolean).join(" "))}
-        <div class="mini-map" id="mini-map"></div>
-        <div class="row2"><input name="lat" inputmode="decimal" placeholder="Enlem" value="${m.lat ?? ""}"><input name="lng" inputmode="decimal" placeholder="Boylam" value="${m.lng ?? ""}"></div></div>
-      <label class="check"><input type="checkbox" name="yayinda"${m.yayinda ? " checked" : ""}><span><b>Haritada yayınla</b> · işaretlemezsen taslak olarak kaydedilir.</span></label>
-      <div class="m-foot"><button type="button" class="btn btn-line btn-sm" data-close>Vazgeç</button><button class="btn btn-o btn-sm">${isNew ? "Mekânı kaydet" : "Değişiklikleri kaydet"}</button></div></form>`);
+    if (!isNew && !DEG.has(m.id)) await degYukle([m.id]);
+    const dg = DEG.get(m.id) || {};
+    const yurt = m.il === "Yurt dışı";
+    openModal(isNew ? "Yeni mekân" : "Mekânı düzenle", `<form id="mf" class="mf" novalidate>
+      <section class="mf-s">
+        <label class="field"><span>Google Maps linki <small>yapıştırınca ad, adres, il, ilçe, konum ve Google bilgileri gelir</small></span>
+          <input name="maps_url" type="url" value="${esc(m.maps_url || "")}" placeholder="https://maps.app.goo.gl/…" autocomplete="off"></label>
+        <div data-gnote class="sm" style="margin:-8px 0 10px"></div>
+        <input type="hidden" name="gid" value="${esc(m.google_place_id || "")}">
+        <div id="g-detay"></div>
+      </section>
+      <section class="mf-s">
+        <h4 class="mf-t">Mekân</h4>
+        <label class="field"><span>Mekân adı</span><input name="ad" required maxlength="160" value="${esc(m.ad || "")}"></label>
+        <div class="row2"><label class="field"><span>İl</span><select name="il" required>${ilOpts(m.il || "", true)}</select></label>
+          <label class="field" data-ilce-w${yurt ? " hidden" : ""}><span>İlçe</span><select name="ilce"${(window.ILCELER || {})[m.il] ? "" : " disabled"}>${ilceOpts(m.il, m.ilce)}</select></label>
+          <label class="field" data-ulke-w${yurt ? "" : " hidden"}><span>Ülke / şehir</span><input name="ulke" maxlength="60" value="${esc(m.ulke || "")}"></label></div>
+        <label class="field"><span>Adres <small>(sayfada görünür)</small></span><input name="adres" maxlength="200" value="${esc(m.adres || "")}"></label>
+        <div class="row3">
+          <label class="field"><span>Instagram</span><input name="instagram" maxlength="200" value="${esc(m.instagram || "")}" placeholder="@hesap ya da link"></label>
+          <label class="field"><span>Ziyaret tarihi</span><input name="ziyaret_tarihi" type="date" value="${esc(m.ziyaret_tarihi || "")}"></label>
+          <label class="field"><span>Bölüm linki (YouTube)</span><input name="bolum_url" type="url" value="${esc(m.bolum_url || "")}"></label>
+        </div>
+        <label class="field"><span>Etiketler <small>(virgülle)</small></span><input name="etiketler" value="${esc((m.etiketler || []).join(", "))}" placeholder="Lavaş, Sulu tavuk, Uygun fiyat"></label>
+      </section>
+      <section class="mf-s">
+        <div class="mf-th"><h4 class="mf-t">Değerlendirme</h4><span class="mf-ort">Mekân puanı <b data-ort>–</b><small>/100</small></span></div>
+        <p class="sm" style="margin:-4px 0 12px">Her kriteri 0–10 arası kaydırarak puanlayın. Dokunmadığınız kriter boş kalır, toplam girilenlerin ortalamasıyla 100'e ölçeklenir.</p>
+        <div class="dg-grid">${KISI.map((k, i) => puanKolon(k, dg[k.k], i)).join("")}</div>
+      </section>
+      <section class="mf-s">
+        <h4 class="mf-t">Sayfa yazısı</h4>
+        <label class="field"><span>Kısa özet <small>(sayfanın başında, tırnak içinde)</small></span><textarea name="puan_notu" rows="2" maxlength="400">${esc(m.puan_notu || "")}</textarea></label>
+        <label class="field"><span>Detay yazısı <small>(paragrafları boş satırla ayır)</small></span><textarea name="aciklama" rows="6" maxlength="6000" placeholder="Ustanın hikâyesi, döneri nasıl hazırladığı…">${esc(m.aciklama || "")}</textarea></label>
+      </section>
+      <section class="mf-s">
+        <div class="field"><span>Konum <small>(linkten gelir; ara, haritaya tıkla ya da pini sürükle)</small></span>${kpHtml([m.ad, m.ilce, m.il].filter(Boolean).join(" "))}
+          <div class="mini-map" id="mini-map"></div>
+          <div class="row2"><input name="lat" inputmode="decimal" placeholder="Enlem" value="${m.lat ?? ""}"><input name="lng" inputmode="decimal" placeholder="Boylam" value="${m.lng ?? ""}"></div></div>
+        <label class="check"><input type="checkbox" name="yayinda"${m.yayinda ? " checked" : ""}><span><b>Sitede yayınla</b> · işaretlemezsen taslak olarak kaydedilir.</span></label>
+      </section>
+      <div class="m-foot mf-foot"><button type="button" class="btn btn-line btn-sm" data-close>Vazgeç</button><button class="btn btn-o btn-sm">${isNew ? "Mekânı kaydet" : "Değişiklikleri kaydet"}</button></div></form>`);
+    $(".modal-card").classList.add("wide");
     const f = $("#mf"); wireIlIlce(f);
-    let mk = null, mp = null;
-    const setPt = (lat, lng, fly) => {
-      f.lat.value = lat.toFixed(6); f.lng.value = lng.toFixed(6);
-      if (!mp) return; if (!mk) mk = new maplibregl.Marker({ color: "#FF6A00", draggable: true }).setLngLat([lng, lat]).addTo(mp).on("dragend", () => { const p = mk.getLngLat(); f.lat.value = p.lat.toFixed(6); f.lng.value = p.lng.toFixed(6); });
-      else mk.setLngLat([lng, lat]); if (fly) mp.flyTo({ center: [lng, lat], zoom: 15 });
+    const ilceW = $("[data-ilce-w]", f), ulkeW = $("[data-ulke-w]", f);
+    f.il.addEventListener("change", () => { const y = f.il.value === "Yurt dışı"; ilceW.hidden = y; ulkeW.hidden = !y; });
+    const set = miniMap("mini-map", m.lat != null ? +m.lat : null, m.lng != null ? +m.lng : null, "#FF6A00", f);
+
+    // değerlendirme etkileşimi
+    const dgRoot = $(".dg-grid", f);
+    dgRoot.addEventListener("input", e => { const r = e.target.closest(".dg-r"); if (!r) return; r.classList.remove("bos"); $("output", r).textContent = fP(e.target.value); puanTopla(f); });
+    dgRoot.addEventListener("click", e => { const x = e.target.closest(".dg-x"); if (!x) return; const r = x.closest(".dg-r"); r.classList.add("bos"); $("output", r).textContent = "–"; puanTopla(f); });
+    puanTopla(f);
+
+    // Google
+    const gBox = $("#g-detay", f), note = $("[data-gnote]", f);
+    const detayGoster = async (pid, zorla) => {
+      if (!pid) { gBox.innerHTML = ""; return; }
+      gBox.innerHTML = `<div class="gd sm">Google bilgileri getiriliyor…</div>`;
+      const d = await gDetayGetir(pid, zorla);
+      if (d.error) { gBox.innerHTML = `<div class="gd sm">${esc(G_OFF ? "Google anahtarı eklenmemiş." : d.error)}</div>`; return; }
+      gBox.innerHTML = gDetayHtml(d.detay) + `<button type="button" class="linkish" data-gyenile style="margin-top:6px">Google bilgilerini yenile</button>`;
+      const ig = d.detay && d.detay.instagram; if (ig && !f.instagram.value) f.instagram.value = ig;
     };
-    if (window.maplibregl) {
-      const has = m.lat && m.lng;
-      mp = new maplibregl.Map({ container: "mini-map", style: "https://tiles.openfreemap.org/styles/liberty", center: has ? [m.lng, m.lat] : [35.2, 39], zoom: has ? 15 : 4.6, attributionControl: { compact: true } });
-      mp.addControl(new maplibregl.NavigationControl({ showCompass: false }));
-      mp.on("click", e => setPt(e.lngLat.lat, e.lngLat.lng));
-      mp.on("load", () => { if (has) setPt(+m.lat, +m.lng); });
-    }
-    kpWire(f, (la, ln) => setPt(la, ln, true));
-    const kAvg = () => { const v = KRITER.map(([k]) => parseFloat(f["k_" + k].value)).filter(x => !isNaN(x)); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length * 10) / 10 : null; };
-    const kUpd = () => { const a = kAvg(); f.puan.placeholder = a != null ? "Ortalama: " + a.toFixed(1) : ""; };
-    KRITER.forEach(([k]) => f["k_" + k].addEventListener("input", kUpd)); kUpd();
-    f.maps_url.addEventListener("input", () => { const p = parseMaps(f.maps_url.value); if (p) setPt(p[0], p[1], true); else if (/goo\.gl|maps\.app/.test(f.maps_url.value)) toast("Kısa linkten konum okunamıyor; linki tarayıcıda açıp adres çubuğundaki uzun linki yapıştır ya da haritaya tıkla."); });
-    ["lat", "lng"].forEach(n => f[n].addEventListener("change", () => { const a = parseFloat(f.lat.value), b = parseFloat(f.lng.value); if (!isNaN(a) && !isNaN(b)) setPt(a, b, true); }));
-    f.il.addEventListener("change", () => { if (mp && !f.lat.value) { const c = { "İstanbul": [28.98, 41.01], "Ankara": [32.86, 39.93], "İzmir": [27.14, 38.42] }[f.il.value]; if (c) mp.flyTo({ center: c, zoom: 10 }); } });
+    gBox.addEventListener("click", e => { if (e.target.closest("[data-gyenile]")) detayGoster(f.gid.value, true); });
+    const yerYaz = g => {
+      f.gid.value = g.place_id || g.id || "";
+      if (!f.ad.value || isNew) f.ad.value = g.ad || f.ad.value;
+      if (g.il === "Yurt dışı") { f.il.value = "Yurt dışı"; f.il.dispatchEvent(new Event("change")); f.ulke.value = g.ulke || ""; }
+      else { const il = eslesen(ILLER, g.il); if (il) { f.il.value = il; f.il.dispatchEvent(new Event("change")); const ic = eslesen((window.ILCELER || {})[il] || [], g.ilce); if (ic) f.ilce.value = ic; } }
+      if (!f.adres.value && g.adres) f.adres.value = String(g.adres).split(",").slice(0, 2).join(",").trim().slice(0, 200);
+      if (g.url && !/goo\.gl|share\.google/.test(f.maps_url.value)) f.maps_url.value = g.url;
+      if (g.lat != null) set(g.lat, g.lng, true);
+      note.innerHTML = `Google: <b>${esc(g.ad)}</b>${g.tur ? " · " + esc(g.tur) : ""}${g.kapali ? ` · <b style="color:var(--err)">KALICI KAPALI</b>` : ""} · ${esc(temizAd(g.adres))}`;
+      detayGoster(f.gid.value);
+    };
+    let lt;
+    f.maps_url.addEventListener("input", () => {
+      const u = f.maps_url.value.trim(), p = parseMaps(u); if (p) set(p[0], p[1], true);
+      clearTimeout(lt); if (!/^https?:\/\//i.test(u)) return;
+      lt = setTimeout(async () => {
+        note.textContent = "Google'da tanınıyor…";
+        const d = await gfn("link", { url: u });
+        if (d.error) { note.textContent = G_OFF ? "Google anahtarı eklenince link otomatik tanınacak." : d.error; return; }
+        if (d.sonuc && d.sonuc[0]) yerYaz(d.sonuc[0]);
+        else if (d.konum && d.konum.lat != null) { set(d.konum.lat, d.konum.lng, true); note.textContent = "Konum linkten alındı; mekân Google'da bulunamadı."; }
+        else note.textContent = "Linkten mekân okunamadı.";
+      }, 450);
+    });
+    kpWire(f, (la, ln, g) => g ? yerYaz(g) : set(la, ln, true));
+    if (m.google_place_id) detayGoster(m.google_place_id);
+    else if (isNew && m.maps_url) f.maps_url.dispatchEvent(new Event("input"));
+
     f.addEventListener("submit", async e => {
       e.preventDefault(); const v = n => (f[n].value || "").trim();
       const lat = parseFloat(v("lat")), lng = parseFloat(v("lng"));
-      let puan = parseFloat(v("puan")); if (isNaN(puan)) puan = kAvg() ?? NaN;
-      const kriterler = {}; KRITER.forEach(([k]) => { const x = parseFloat(f["k_" + k].value); if (!isNaN(x)) kriterler[k] = Math.min(10, Math.max(0, Math.round(x * 10) / 10)); });
       if (!v("ad") || !v("il")) return toast("Mekân adı ve il gerekli.");
-      if (isNaN(puan) || puan < 0 || puan > 10) return toast("Genel puanı ya da kriter puanlarını gir (0–10).");
-      if (isNaN(lat) || isNaN(lng)) return toast("Konumu seç: haritaya tıkla ya da Maps linki yapıştır.");
-      const row = { ad: v("ad"), il: v("il"), ilce: v("ilce") || null, adres: v("adres") || null, puan: Math.round(puan * 10) / 10, puan_notu: v("puan_notu") || null,
-        etiketler: v("etiketler") ? v("etiketler").split(",").map(s => s.trim()).filter(Boolean) : [], bolum_url: v("bolum_url") || null, maps_url: v("maps_url") || null,
-        lat, lng, yayinda: f.yayinda.checked, kriterler, aciklama: v("aciklama") || null };
+      if (isNaN(lat) || isNaN(lng)) return toast("Konumu seç: Maps linki yapıştır, ara ya da haritaya tıkla.");
+      const sonuc = puanTopla(f);
+      const herhangi = KISI.some(k => sonuc[k.k].toplam != null);
+      if (f.yayinda.checked && !herhangi) return toast("Yayınlamak için en az bir kişinin puanını girin.");
+      const yurtd = v("il") === "Yurt dışı";
+      const row = { ad: v("ad"), il: v("il"), ilce: yurtd ? null : (v("ilce") || null), ulke: yurtd ? (v("ulke") || null) : null, adres: v("adres") || null,
+        puan_notu: v("puan_notu") || null, etiketler: v("etiketler") ? v("etiketler").split(",").map(s => s.trim()).filter(Boolean).slice(0, 12) : [],
+        bolum_url: guvenli(v("bolum_url")) || null, maps_url: guvenli(v("maps_url")) || null, instagram: v("instagram") || null,
+        ziyaret_tarihi: v("ziyaret_tarihi") || null, google_place_id: v("gid") || null, lat, lng, yayinda: f.yayinda.checked, aciklama: v("aciklama") || null };
       if (m.oneri_id) row.oneri_id = m.oneri_id;
-      const q = isNew ? db.from("mekanlar").insert(row).select().single() : db.from("mekanlar").update(row).eq("id", m.id).select().single();
-      const { data, error } = await q;
-      if (error) return toast("Kaydedilemedi: " + error.message);
+      const btn = $(".mf-foot .btn-o", f); btn.disabled = true;
+      const q = isNew ? db.from("mekanlar").insert({ ...row, yayinda: false }).select().single() : db.from("mekanlar").update(row).eq("id", m.id).select().single();
+      let { data, error } = await q;
+      if (error) { btn.disabled = false; return toast("Kaydedilemedi: " + error.message); }
+      const id = data.id;
+      // değerlendirmeler
+      const up = [], sil = [];
+      KISI.forEach(k => { const s = sonuc[k.k], yorum = (f["yorum_" + k.k].value || "").trim() || null;
+        if (Object.keys(s.puanlar).length || yorum) up.push({ mekan_id: id, kisi: k.k, puanlar: s.puanlar, yorum }); else sil.push(k.k); });
+      if (up.length) { const r = await db.from("degerlendirmeler").upsert(up, { onConflict: "mekan_id,kisi" }); if (r.error) toast("Puanlar kaydedilemedi: " + r.error.message); }
+      if (sil.length && !isNew) await db.from("degerlendirmeler").delete().eq("mekan_id", id).in("kisi", sil);
+      if (isNew && row.yayinda) await db.from("mekanlar").update({ yayinda: true }).eq("id", id);
+      ({ data } = await db.from("mekanlar").select("*").eq("id", id).single());
+      DEG.delete(id); await degYukle([id]);
       if (isNew) D.mekan.unshift(data); else D.mekan[D.mekan.findIndex(x => x.id === m.id)] = data;
       if (m.oneri_id) { await db.from("mekan_onerileri").update({ durum: "gidildi" }).eq("id", m.oneri_id); const o = D.oneri.find(x => x.id === m.oneri_id); if (o) o.durum = "gidildi"; }
-      closeModal(); renderAll(); if (m.oneri_id) goTab("mekan"); toast(row.yayinda ? "Kaydedildi, haritada yayında" : "Taslak olarak kaydedildi");
+      closeModal(); renderAll(); if (m.oneri_id) goTab("mekan");
+      toast(data.yayinda ? `Kaydedildi, sitede yayında · ${fP(data.puan)}/100` : "Taslak olarak kaydedildi");
+    });
+  }
+
+  // Rotaya Google Maps linkiyle hızlı ekleme
+  function rotaLinkForm() {
+    openModal("Link ile rotaya ekle", `<form id="rl" novalidate>
+      <label class="field"><span>Google Maps linki</span><input name="url" type="url" required placeholder="https://maps.app.goo.gl/…" autocomplete="off"></label>
+      <div id="rl-sonuc" class="rl-sonuc"><p class="sm">Linki yapıştırınca mekân Google'dan tanınır: ad, adres, il, ilçe, konum, puan ve yorumlar.</p></div>
+      <label class="field"><span>Rota puanın (0–10) <small>rotadaki sıralama buna göre</small></span>
+        <div class="rp-row"><input type="range" name="rp" min="0" max="10" step="0.5" value="7"><output>7,0</output></div></label>
+      <label class="field"><span>Not <small>(sadece panelde)</small></span><textarea name="not" rows="2" placeholder="Örn: Mart rotası, ustanın adı Mehmet"></textarea></label>
+      <label class="check"><input type="checkbox" name="hg" checked><span>Sitedeki haritada <b>“Rotamızda”</b> olarak göster</span></label>
+      <div class="m-foot"><button type="button" class="btn btn-line btn-sm" data-close>Vazgeç</button><button class="btn btn-y btn-sm" disabled data-kaydet>Rotaya ekle</button></div></form>`);
+    const f = $("#rl"), box = $("#rl-sonuc"), kb = $("[data-kaydet]", f); let SEC = null, LISTE = [], t;
+    f.rp.addEventListener("input", () => $("output", f).textContent = Number(f.rp.value).toFixed(1).replace(".", ","));
+    const ciz = () => {
+      if (!LISTE.length) return;
+      box.innerHTML = LISTE.map((g, i) => `<button type="button" class="kp-item${g === SEC ? " on" : ""}" data-i="${i}"><b>${esc(g.ad)}${g.tur ? ` <em>${esc(g.tur)}</em>` : ""}${g.kapali ? ` <em class="kapali">Kalıcı kapalı</em>` : ""}</b><small>${esc(temizAd(g.adres))}</small></button>`).join("") + `<div id="rl-gd"></div>`;
+    };
+    box.addEventListener("click", async e => { const b = e.target.closest("[data-i]"); if (!b) return; SEC = LISTE[+b.dataset.i]; ciz(); detay(); });
+    const detay = async () => { const el = $("#rl-gd"); if (!el || !SEC) return; el.innerHTML = `<div class="gd sm">Google bilgileri getiriliyor…</div>`; const d = await gDetayGetir(SEC.place_id || SEC.id); el.innerHTML = d.error ? `<div class="gd sm">${esc(d.error)}</div>` : gDetayHtml(d.detay); };
+    f.url.addEventListener("input", () => {
+      clearTimeout(t); const u = f.url.value.trim(); if (!/^https?:\/\//i.test(u)) return;
+      t = setTimeout(async () => {
+        box.innerHTML = `<p class="sm">Google'da tanınıyor…</p>`; kb.disabled = true;
+        const d = await gfn("link", { url: u });
+        if (d.error) { box.innerHTML = `<p class="sm" style="color:var(--err)">${esc(d.error)}</p>`; return; }
+        LISTE = d.sonuc || []; SEC = LISTE[0] || null;
+        if (!SEC) { box.innerHTML = `<p class="sm" style="color:var(--err)">Bu linkten mekân bulunamadı. Öneriler sekmesinden elle ekleyebilirsin.</p>`; return; }
+        const ayni = D.oneri.find(r => r.google_place_id === (SEC.place_id || SEC.id) && (r.durum === "listede" || r.durum === "gidildi"));
+        ciz(); detay(); kb.disabled = false;
+        if (ayni) box.insertAdjacentHTML("afterbegin", `<p class="sm" style="color:var(--warn,#B86400);font-weight:600;margin-bottom:8px">Bu mekân zaten rotada (${esc(DURUM[ayni.durum])}).</p>`);
+      }, 400);
+    });
+    f.addEventListener("submit", async e => {
+      e.preventDefault(); if (!SEC) return;
+      const g = SEC, yurtd = g.il === "Yurt dışı";
+      const il = yurtd ? "Yurt dışı" : (eslesen(ILLER, g.il) || temizAd(g.il) || null);
+      const ilce = yurtd ? null : (eslesen((window.ILCELER || {})[il] || [], g.ilce) || temizAd(g.ilce) || null);
+      const row = { mekan_adi: String(g.ad || "").slice(0, 120), il: il ? String(il).slice(0, 40) : null, ilce: ilce ? String(ilce).slice(0, 60) : null, ulke: yurtd ? (g.ulke || null) : null,
+        adres: f.url.value.trim().slice(0, 400), neden: null, takma_ad: "Panel", kvkk_onay: true, durum: "listede", kaynak: "panel",
+        rota_puani: Number(f.rp.value), yonetici_notu: f.not.value.trim() || null, haritada_goster: f.hg.checked,
+        google_place_id: g.place_id || g.id, google_ad: g.ad, google_adres: g.adres, google_url: g.url || null, google_tur: g.tur || null,
+        google_eslesme: g.kapali ? "kapali" : "elle", lat: g.lat, lng: g.lng };
+      const y = await db.from("google_yerler").select("puan,yorum_sayisi,detay_tarih").eq("place_id", row.google_place_id).maybeSingle();
+      if (y.data && y.data.puan != null) Object.assign(row, { google_puan: y.data.puan, google_yorum: y.data.yorum_sayisi, google_puan_tarih: y.data.detay_tarih });
+      const { data, error } = await db.from("mekan_onerileri").insert(row).select().single();
+      if (error) return toast("Kaydedilemedi: " + error.message);
+      D.oneri.unshift(data); closeModal(); renderAll(); goTab("rota"); toast(`${g.ad} rotaya eklendi`);
     });
   }
 
@@ -691,5 +861,7 @@
   });
 
   /* ---------- boot ---------- */
+  if (window.top !== window.self) { document.body.innerHTML = ""; return; }
+  $("#add-rota-link").addEventListener("click", rotaLinkForm);
   start().then(() => { const h = location.hash.slice(1); if (["oneri", "rota", "bekleme", "mekan", "recete"].includes(h)) goTab(h); });
 })();

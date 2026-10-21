@@ -1,4 +1,4 @@
-/* eniyitavukdoner.com — v6 */
+/* eniyitavukdoner.com — v7 */
 (function () {
   "use strict";
   const C = window.SITE_CONFIG || {};
@@ -157,8 +157,9 @@
   const F = { tur: "", il: "", q: "" };
   let LIMIT = 40;
   const trNorm = s => String(s || "").toLocaleLowerCase(TR).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i").replace(/[^a-z0-9]+/g, " ").trim();
+  const fmtP = p => { const n = Math.round(Number(p) * 10) / 10; return Number.isInteger(n) ? String(n) : n.toFixed(1).replace(".", ","); };
   const yerAd = m => m.il === "Yurt dışı" ? (m.ulke || "Yurt dışı") : m.il;
-  const mapsLink = m => m.maps_url || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([m.ad, m.ilce, m.il === "Yurt dışı" ? m.ulke : m.il].filter(Boolean).join(" "));
+  const mapsLink = m => (/^https:\/\/[^\s"'<>]+$/i.test(m.maps_url || "") ? m.maps_url : "") || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([m.ad, m.ilce, m.il === "Yurt dışı" ? m.ulke : m.il].filter(Boolean).join(" "));
   function km(a, b) {
     const R = 6371, r = x => x * Math.PI / 180, dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng);
     const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2;
@@ -174,7 +175,7 @@
     try {
       const [hr, mek] = await Promise.all([
         d.rpc("harita_mekanlari"),
-        d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan,puan_notu,etiketler,bolum_url,maps_url").eq("yayinda", true).order("puan", { ascending: false })
+        d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan,puan_notu,bolum_url,maps_url").eq("yayinda", true).order("puan", { ascending: false })
       ]);
       const den = (mek.data || []).map(m => ({ ...m, key: "d" + m.id, tur: "denedik", adet: 0 }));
       const diger = (hr.data || []).map(m => ({ ...m, key: m.tur[0] + m.anahtar, adet: m.adet || 1 }));
@@ -193,7 +194,7 @@
   }
   const FLAG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg>';
   function badge(m) {
-    if (m.tur === "denedik") return `<span class="dh-b b-den">${Number(m.puan).toFixed(1)}</span>`;
+    if (m.tur === "denedik") return `<span class="dh-b b-den">${m.puan != null ? fmtP(m.puan) : "–"}</span>`;
     if (m.tur === "rota") return `<span class="dh-b b-rota">${FLAG}</span>`;
     return `<span class="dh-b b-oneri">${m.adet > 1 ? m.adet : ""}</span>`;
   }
@@ -227,7 +228,7 @@
   }
   function popHtml(m) {
     return `<div class="dh-pop"><span class="tag ${m.tur === "denedik" ? "blue" : m.tur === "rota" ? "yel" : ""}">${TUR_AD[m.tur]}</span>
-      ${m.tur === "denedik" ? `<div class="place-score"><b>${Number(m.puan).toFixed(1)}</b><small>/ 10</small></div>` : ""}
+      ${m.tur === "denedik" && m.puan != null ? `<div class="place-score"><b>${fmtP(m.puan)}</b><small>/ 100</small></div>` : ""}
       <b class="nm">${esc(m.ad)}</b><span class="yer">${esc([m.ilce, yerAd(m)].filter(Boolean).join(", "))}</span>
       ${m.tur === "oneri" ? `<span class="yer">${m.adet > 1 ? m.adet + " kişi önerdi" : "1 kişi önerdi"}</span>` : ""}
       ${m.tur === "rota" ? `<span class="yer">Yakında gidip deniyoruz.</span>` : ""}
@@ -296,7 +297,7 @@
   });
   document.addEventListener("click", e => {
     const a = e.target.closest("[data-oner-il]"); if (!a) return;
-    const f = $("#oner-form"); setIl(f.il, f.ilce, a.dataset.onerIl);
+    const f = $("#oner-form"); setIl(f.il, f.ilce, a.dataset.onerIl); $("#oner-manual").hidden = false; $("[data-elle]", f).hidden = true;
   });
 
   function tintStyle(map) {
@@ -323,8 +324,8 @@
     const load = $("#map-loading");
     try {
       await Promise.all([
-        loadAsset("link", { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" }),
-        loadAsset("script", { src: "https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" }),
+        loadAsset("link", { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css", integrity: "sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK", crossOrigin: "anonymous" }),
+        loadAsset("script", { src: "https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js", integrity: "sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp", crossOrigin: "anonymous" }),
         DATA_READY
       ]);
     } catch (e) { load.textContent = "Harita şu an yüklenemedi."; return; }
@@ -365,8 +366,8 @@
         MAP.on("click", id, e => { hover.remove(); const m = ITEMS.find(x => x.key === e.features[0].properties.key); if (m) { focusItem(m, false); const li = $(`.dh-item[data-key="${m.key}"]`); if (li) li.scrollIntoView({ block: "nearest", behavior: "smooth" }); } });
       });
       ITEMS.filter(m => m.tur === "denedik").forEach(m => {
-        const el = document.createElement("button"); el.type = "button"; el.className = "pin"; el.textContent = Number(m.puan).toFixed(1);
-        el.setAttribute("aria-label", `${m.ad}, Denedik puanı ${Number(m.puan).toFixed(1)}`);
+        const el = document.createElement("button"); el.type = "button"; el.className = "pin"; el.textContent = m.puan != null ? fmtP(m.puan) : "–";
+        el.setAttribute("aria-label", `${m.ad}, Denedik puanı ${m.puan != null ? fmtP(m.puan) : "yok"} / 100`);
         el.addEventListener("click", ev => { ev.stopPropagation(); focusItem(m, false); });
         new maplibregl.Marker({ element: el }).setLngLat([m.lng, m.lat]).addTo(MAP);
         MARKERS.set(m.key, el);
@@ -628,31 +629,94 @@
     const { error } = await d.from(table).insert(row); return error;
   }
 
-  // Mekân öner
+  // Mekân öner: önce Google Maps linki, alanlar kendiliğinden dolar
   const of = $("#oner-form");
   bindIlIlce(of.il, of.ilce);
+  const lnkCard = $("#lnk-card"), manual = $("#oner-manual"), elleBtn = $("[data-elle]", of);
+  const anahtar = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLocaleLowerCase(TR).replace(/[^a-z0-9]/g, "");
+  const eslesen = (list, ad) => { const k = anahtar(ad); return k ? list.find(x => anahtar(x) === k) || null : null; };
+  let YER = null, lnkT = null, lnkSon = "";
+  const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  function elle(acik, odak) {
+    manual.hidden = !acik; elleBtn.hidden = acik;
+    if (acik && odak) setTimeout(() => (of.mekan_adi.value ? of.il : of.mekan_adi).focus(), 30);
+  }
+  function kart(durum, html) { lnkCard.hidden = !durum; lnkCard.className = "lnk-card" + (durum ? " " + durum : ""); lnkCard.innerHTML = html || ""; }
+  function yerYaz(y) {
+    YER = y;
+    of.mekan_adi.value = y.ad || "";
+    if (y.il === "Yurt dışı") { of.il.value = "Yurt dışı"; fillIlce(of.ilce, "Yurt dışı"); const u = eslesen(ULKELER, y.ulke); if (u) of.ilce.value = u; }
+    else {
+      const il = eslesen(ILLER(), y.il);
+      if (il) { of.il.value = il; fillIlce(of.ilce, il); const ic = eslesen((window.ILCELER || {})[il] || [], y.ilce); if (ic) of.ilce.value = ic; }
+    }
+    [of.mekan_adi, of.il, of.ilce].forEach(clearErr);
+    const yer = [y.ilce && y.il !== "Yurt dışı" ? y.ilce.normalize("NFC").replace(/̇/g, "") : "", y.il === "Yurt dışı" ? y.ulke : y.il].filter(Boolean).join(", ");
+    kart("ok", `<span class="lc-ico">${PIN}</span><div class="lc-txt"><b>${esc(y.ad)}</b><span>${esc(yer)}</span>${y.kapali ? `<em class="lc-warn">Google'a göre kalıcı olarak kapanmış</em>` : ""}</div><button type="button" class="linkish" data-duzelt>Düzelt</button>`);
+    elle(false); elleBtn.hidden = true;
+  }
+  async function linkTani(url) {
+    if (url === lnkSon) return; lnkSon = url; YER = null;
+    if (!url) { kart(null); if (manual.hidden) elleBtn.hidden = false; return; }
+    if (!/^https?:\/\/\S+\.\S+/i.test(url)) { kart("err", `<div class="lc-txt"><span>Bu bir link gibi görünmüyor. Google Maps'ten “Bağlantıyı kopyala” ile aldığın linki yapıştır.</span></div>`); return; }
+    kart("load", `<span class="lc-spin" aria-hidden="true"></span><div class="lc-txt"><span>Mekân Google Maps'te tanınıyor…</span></div>`);
+    const d = getDb(); let r = null;
+    try { const res = await d.functions.invoke("google-mekan", { body: { islem: "link_genel", url } }); r = res.data || null; } catch (e) { r = null; }
+    if (url !== lnkSon) return;
+    if (r && r.yer) return yerYaz(r.yer);
+    if (r && r.ad && !of.mekan_adi.value) of.mekan_adi.value = r.ad;
+    kart("info", `<div class="lc-txt"><span>${r && r.error ? esc(r.error) : "Linki kaydettik. Mekânın adını ve ilini aşağıya yazar mısın?"}</span></div>`);
+    elle(true, true);
+  }
+  of.link.addEventListener("input", () => { clearTimeout(lnkT); const u = of.link.value.trim(); lnkT = setTimeout(() => linkTani(u), u ? 450 : 0); });
+  of.link.addEventListener("paste", () => setTimeout(() => { clearTimeout(lnkT); linkTani(of.link.value.trim()); }, 0));
+  const pasteBtn = $("[data-paste]", of);
+  if (navigator.clipboard && navigator.clipboard.readText && matchMedia("(pointer:coarse)").matches) {
+    pasteBtn.hidden = false;
+    pasteBtn.addEventListener("click", async () => { try { const t = (await navigator.clipboard.readText()).trim(); if (t) { of.link.value = t; linkTani(t); } } catch (e) { of.link.focus(); } });
+  }
+  elleBtn.addEventListener("click", () => elle(true, true));
+  lnkCard.addEventListener("click", e => { if (e.target.closest("[data-duzelt]")) { YER = null; elle(true, true); kart(null); } });
+  function onerSifirla() { of.reset(); fillIlce(of.ilce, ""); YER = null; lnkSon = ""; kart(null); elle(false); }
+
   of.addEventListener("submit", async e => {
     e.preventDefault(); if (of.web.value) return;
     const v = n => (of[n].value || "").trim(); let bad = null;
     const need = (el, ok, msg) => { if (!ok) { fieldErr(el, msg); bad = bad || el; } else clearErr(el); };
-    need(of.mekan_adi, v("mekan_adi").length >= 2, "Mekânın adını yazar mısın?");
-    need(of.il, !!v("il"), "İl seç.");
-    need(of.ilce, of.ilce.disabled || !!v("ilce"), v("il") === "Yurt dışı" ? "Ülke seç." : "İlçe seç.");
+    if (!YER) {
+      if (manual.hidden && !v("link")) { elle(true); }
+      need(of.mekan_adi, v("mekan_adi").length >= 2, "Mekânın adını yazar mısın?");
+      need(of.il, !!v("il"), "İl seç.");
+      need(of.ilce, of.ilce.disabled || !!v("ilce"), v("il") === "Yurt dışı" ? "Ülke seç." : "İlçe seç.");
+    }
     need(of.kvkk_onay, of.kvkk_onay.checked, "Devam etmek için onaylaman gerekiyor.");
     if (bad) { bad.focus(); return; }
-    const btn = $("button[type=submit]", of); btn.disabled = true; btn.textContent = "Gönderiliyor…";
-    const err = await insert("mekan_onerileri", { mekan_adi: v("mekan_adi"), ...konum(v("il"), v("ilce")), adres: v("adres") || null,
-      neden: v("neden") || null, takma_ad: v("takma_ad") || null, yayin_izni: of.yayin_izni.checked, kvkk_onay: true });
+    const btn = $("button[type=submit]", of), msgEl = $(".form-msg", of);
+    btn.disabled = true; btn.textContent = "Gönderiliyor…"; msgEl.textContent = "";
+    let hata = null;
+    if (YER) {
+      const k = konum(v("il"), v("ilce"));
+      const body = { islem: "oner", place_id: YER.place_id, link: v("link"), mekan_adi: v("mekan_adi") || YER.ad,
+        il: k.il || YER.il, ilce: k.ilce || (YER.ilce ? YER.ilce.replace(/̇/g, "") : null), ulke: k.ulke || YER.ulke,
+        neden: v("neden") || null, takma_ad: v("takma_ad") || null, yayin_izni: of.yayin_izni.checked, kvkk_onay: true, web: of.web.value };
+      try { const { data, error } = await getDb().functions.invoke("google-mekan", { body }); hata = error ? "ag" : (data && data.error) || null; }
+      catch (err) { hata = "ag"; }
+    } else {
+      const err = await insert("mekan_onerileri", { mekan_adi: v("mekan_adi"), ...konum(v("il"), v("ilce")), adres: v("link") || null,
+        neden: v("neden") || null, takma_ad: v("takma_ad") || null, yayin_izni: of.yayin_izni.checked, kvkk_onay: true });
+      if (err) { console.warn(err); hata = /Çok fazla|yoğun/.test(err.message || "") ? err.message : "ag"; }
+    }
     btn.disabled = false; btn.textContent = "Önerimi gönder";
-    if (err) { console.warn(err); $(".form-msg", of).className = "form-msg err"; $(".form-msg", of).textContent = "Bir sorun oldu, birazdan tekrar dener misin?"; return; }
-    const il = v("il"), ad = v("mekan_adi");
+    if (hata) { msgEl.className = "form-msg err"; msgEl.textContent = hata === "ag" ? "Bir sorun oldu, birazdan tekrar dener misin?" : hata; return; }
+    const il = YER ? (YER.il === "Yurt dışı" ? YER.ulke : YER.il) : (v("il") === "Yurt dışı" ? v("ilce") : v("il"));
+    const ad = YER ? (v("mekan_adi") || YER.ad) : v("mekan_adi");
     of.hidden = true;
     const done = document.createElement("div"); done.className = "done";
     done.innerHTML = `<div class="ok-ico">${OK_ICO}</div><h3>Önerin bize ulaştı!</h3>
-      <p>${esc(ad)} (${esc(il)}) listemizde. İnceledikten sonra Türkiye Tavuk Dönerci Haritası'na ekleyeceğiz; belki bir sonraki bölüm orada.</p>
+      <p>${esc(ad)}${il ? ` (${esc(il)})` : ""} listemizde. İnceledikten sonra Türkiye Tavuk Dönerci Haritası'na ekleyeceğiz; belki bir sonraki bölüm orada.</p>
       <div class="cta"><button class="btn" type="button" data-again>Bir mekân daha öner</button><a class="btn btn-line" href="#harita">Haritaya bak</a></div>`;
     $("#oner-kart").appendChild(done);
-    done.querySelector("[data-again]").addEventListener("click", () => { done.remove(); of.reset(); fillIlce(of.ilce, ""); of.hidden = false; of.mekan_adi.focus(); });
+    done.querySelector("[data-again]").addEventListener("click", () => { done.remove(); onerSifirla(); of.hidden = false; of.link.focus(); });
     toast("Önerin alındı, teşekkürler!");
   });
 

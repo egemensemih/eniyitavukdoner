@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=8">
 <style>
   .doc-wrap{display:grid;grid-template-columns:240px 1fr;gap:56px;max-width:1120px;margin:0 auto;padding:56px 24px 110px}
   .toc{position:sticky;top:calc(var(--nav-h) + 24px);align-self:start}
@@ -39,7 +39,7 @@
   .callout{background:var(--cobalt-l);border-radius:var(--r);padding:18px 22px;margin:18px 0}
   .callout p{margin:0;color:var(--navy)}
   .quote{background:#fff;border-left:4px solid var(--orange);border-radius:0 14px 14px 0;padding:16px 20px;margin:14px 0;font-weight:500;color:var(--navy)}
-  @media(max-width:900px){.doc-wrap{grid-template-columns:1fr;gap:24px;padding:36px 16px 80px}.toc{position:static;display:flex;flex-wrap:wrap;gap:6px}.toc h4{width:100%;margin-bottom:4px}.toc a{background:#fff;border:1px solid var(--line);padding:7px 12px}.vs dl{grid-template-columns:1fr;gap:2px}.vs dd{margin-bottom:10px}}
+  @media(max-width:900px){.doc-wrap{grid-template-columns:1fr;gap:24px;padding:36px 16px 80px}.doc-wrap>*{min-width:0}.toc{position:static;display:flex;flex-wrap:wrap;gap:6px}.toc h4{width:100%;margin-bottom:4px}.toc a{background:#fff;border:1px solid var(--line);padding:7px 12px}.vs dl{grid-template-columns:1fr;gap:2px}.vs dd{margin-bottom:10px}}
 </style>
 </head>
 <body>
@@ -107,7 +107,7 @@
             <td>Anonim istatistik olarak süresiz saklanabilir.</td></tr>
           <tr><td>Siteyi ziyaret</td>
             <td>IP adresi, tarayıcı ve cihaz bilgisi, ziyaret zamanı (sunucu kayıtları).</td>
-            <td>Siteyi çalıştırmak, güvenliğini sağlamak, kötüye kullanımı (ör. otomatik spam) önlemek.</td>
+            <td>Siteyi çalıştırmak, güvenliğini sağlamak, kötüye kullanımı (ör. otomatik spam) önlemek. Formlarda kısa süreli gönderim sınırı için IP adresin geri döndürülemez biçimde özetlenerek (hash) birkaç gün tutulur; açık IP adresi saklanmaz.</td>
             <td><b>Meşru menfaat</b> (md. 5/2-f).</td>
             <td>Altyapı sağlayıcılarının kendi politikalarında belirtilen süreler kadar.</td></tr>
         </tbody>
@@ -120,7 +120,7 @@
       <h2>3. Verilerin kimlere aktarılır?</h2>
       <p>Kişisel verilerini <b>satmıyoruz</b> ve reklam amacıyla üçüncü kişilere vermiyoruz. Veriler yalnızca aşağıdaki durumlarda ve gerektiği kadar paylaşılır:</p>
       <ul>
-        <li><b>Altyapı hizmet sağlayıcıları:</b> Veritabanı ve form altyapısı (Supabase), sitenin barındırılması (GitHub Pages), yazı tipi (Google Fonts), kütüphane dağıtımı (jsDelivr) ve harita altlığı (OpenFreeMap). Bu hizmetler verileri bizim adımıza ve talimatımızla işler.</li>
+        <li><b>Altyapı hizmet sağlayıcıları:</b> Veritabanı ve form altyapısı (Supabase), sitenin barındırılması (GitHub Pages), yazı tipi (Google Fonts), kütüphane dağıtımı (jsDelivr) ve harita altlığı (OpenFreeMap) ve mekân önerisine eklediğin Google Maps linkinden mekân bilgisini (ad, adres, konum) almak için Google Maps Platform. Google'a yalnızca link ve mekân adı gönderilir; senin ad, e-posta ya da telefon bilgin gönderilmez. Bu hizmetler verileri bizim adımıza ve talimatımızla işler.</li>
         <li><b>İleti gönderim hizmetleri ve İleti Yönetim Sistemi (İYS):</b> Onay verdiysen, sana e-posta/SMS göndermek için kullanılacak aracı hizmet sağlayıcı ile 6563 sayılı Kanun gereği onay kayıtlarının işlendiği İYS.</li>
         <li><b>Yetkili kamu kurum ve kuruluşları:</b> Kanunen yetkili bir merci talep ettiğinde, hukuki yükümlülüğümüz kapsamında.</li>
       </ul>
@@ -202,7 +202,7 @@
   </div>
 </footer>
 
-<script src="config.js?v=4"></script>
+<script src="config.js?v=8"></script>
 <script>
 (function () {
   var C = window.SITE_CONFIG || {}, V = C.VERI_SORUMLUSU || {}, $ = function (s) { return document.getElementById(s); };

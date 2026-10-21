@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://glonoumtcfrzjybuslnw.supabase.co https://tiles.openfreemap.org; frame-src https://www.youtube-nocookie.com https://www.youtube.com; worker-src 'self' blob:; child-src blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Türkiye'nin En İyi Tavuk Dönerini Arıyoruz | eniyitavukdoner.com</title>
 <meta name="description" content="Şehir şehir, usta usta Türkiye'nin en iyi tavuk dönerini arıyoruz. Hayalindeki döneri tasarla, story kartını paylaş, favori dönercini bize öner.">
 <link rel="canonical" href="https://eniyitavukdoner.com/">
@@ -19,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -111,21 +113,25 @@
   <div class="wrap">
     <div class="sec-head rv">
       <div><span class="eyebrow">Nasıl işliyor?</span><h2>Sen öner, biz gidip deneyelim.</h2></div>
-      <p class="lede">Rotamızı sizden gelen öneriler belirliyor. Her mekânı aynı altı kriterle puanlıyor, sonucu haritaya işliyoruz.</p>
+      <p class="lede">Rotamızı sizden gelen öneriler belirliyor. Her mekânı aynı on kriterle 100 üzerinden puanlıyor, sonucu haritaya işliyoruz.</p>
     </div>
     <div class="how">
-      <div class="how-step rv"><span class="n">1</span><h3>Sen öner</h3><p>Favori dönercini, ilini ve ilçesini seçerek bize bildir. Neden gitmemiz gerektiğini bir cümleyle anlat.</p></div>
+      <div class="how-step rv"><span class="n">1</span><h3>Sen öner</h3><p>Google Maps linkini yapıştır, gerisini biz dolduralım. İstersen neden gitmemiz gerektiğini bir cümleyle anlat.</p></div>
       <div class="how-step rv"><span class="n">2</span><h3>Biz gidip deneriz</h3><p>En çok önerilen şehirler rotamıza girer. Hesabı biz öderiz, kimseden hediye almayız.</p></div>
-      <div class="how-step rv"><span class="n">3</span><h3>Puan haritaya düşer</h3><p>Her bölümün ardından mekânın puanı ve notu bu sitedeki haritaya eklenir.</p></div>
+      <div class="how-step rv"><span class="n">3</span><h3>Puan haritaya düşer</h3><p>Her bölümün ardından ikimizin puanı ve yorumu mekânın sayfasında, puanı haritada yer alır.</p></div>
     </div>
-    <h3 class="rv" style="font-size:clamp(24px,2.6vw,30px);margin-bottom:20px">Her mekân, aynı altı kriter.</h3>
+    <div class="crit-head rv"><h3>On kriter, iki kişi, 100 puan.</h3><p>Tahsin ve Egemen her mekânı ayrı ayrı, aynı on kriterle 10 üzerinden puanlıyor. Mekânın puanı ikisinin ortalaması: 100 üzerinden tek bir sayı.</p></div>
     <div class="criteria">
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 7L12 17.8 5.8 21.2l1.3-7L2 9.4l7-.9z"/></svg></span><div><h3>Lezzet</h3><p>İlk lokmadan son lokmaya genel tat.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.4 15.4a6 6 0 10-6.8-6.8c-.6 1.3-.4 2.9.4 4l-4.2 4.2a2 2 0 102.8 2.8l4.2-4.2c1.1.8 2.7 1 4 .4z"/></svg></span><div><h3>Tavuk</h3><p>Etin kalitesi, pişmesi, suyu.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a4 4 0 014-4h8a4 4 0 014 4v0a2 2 0 01-2 2v6a1 1 0 01-1 1H7a1 1 0 01-1-1v-6a2 2 0 01-2-2z"/></svg></span><div><h3>Ekmek</h3><p>Lavaş, pide ya da somun; tazeliği ve dokusu.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><div><h3>Hijyen</h3><p>Tezgâh, mutfak ve servis.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.4 15.4a6 6 0 10-6.8-6.8c-.6 1.3-.4 2.9.4 4l-4.2 4.2a2 2 0 102.8 2.8l4.2-4.2c1.1.8 2.7 1 4 .4z"/></svg></span><div><h3>Et lezzeti</h3><p>Tavuğun tadı, suyu, pişmesi.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7c3 3.6 6 7 6 10.3a6 6 0 01-12 0c0-3.3 3-6.7 6-10.3z"/></svg></span><div><h3>Marinasyon</h3><p>Baharat dengesi, işlenmişlik.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a4 4 0 014-4h8a4 4 0 014 4 2 2 0 01-2 2v6a1 1 0 01-1 1H7a1 1 0 01-1-1v-6a2 2 0 01-2-2z"/></svg></span><div><h3>Ekmek / lavaş</h3><p>Tazeliği, dokusu, sıcaklığı.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v4l-3 4v9a1 1 0 001 1h8a1 1 0 001-1v-9l-3-4V3"/></svg></span><div><h3>Sos</h3><p>Lezzeti ve dönere uyumu.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/></svg></span><div><h3>Garnitür ve çeşit</h3><p>Yanındakiler, seçenekler.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></svg></span><div><h3>Porsiyon</h3><p>Doyuruyor mu, et oranı.</p></div></div>
       <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L2 12V2h10l8.6 8.6a2 2 0 010 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg></span><div><h3>Fiyat / performans</h3><p>Ödediğine değiyor mu?</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></span><div><h3>Hizmet</h3><p>Güler yüz, hız, samimiyet.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><div><h3>Hijyen ve temizlik</h3><p>Tezgâh, mutfak, salon.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></span><div><h3>Hizmet</h3><p>Güler yüz, hız, ilgi.</p></div></div>
+      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></span><div><h3>Ortam</h3><p>Oturma yeri, rahatlık.</p></div></div>
     </div>
   </div>
 </section>
@@ -216,12 +222,22 @@
     </div>
     <div class="card rv" id="oner-kart">
       <form id="oner-form" novalidate>
-        <label class="field"><span>Mekân / usta adı</span><input name="mekan_adi" maxlength="120" placeholder="Örn: Kardeşler Tavuk Döner" required></label>
-        <div class="row2">
-          <label class="field"><span>İl</span><select name="il" required></select></label>
-          <label class="field"><span>İlçe</span><select name="ilce" required disabled></select></label>
+        <label class="field" for="oner-link"><span>Google Maps linki</span></label>
+        <div class="lnk-in">
+          <svg class="lnk-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 007.5.5l3-3a5 5 0 00-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 00-7.5-.5l-3 3a5 5 0 007 7l1.7-1.7"/></svg>
+          <input id="oner-link" name="link" type="url" inputmode="url" maxlength="600" autocomplete="off" spellcheck="false" placeholder="maps.app.goo.gl/…">
+          <button type="button" class="lnk-paste" data-paste hidden>Yapıştır</button>
         </div>
-        <label class="field"><span>Google Maps linki veya adres <small>(isteğe bağlı)</small></span><input name="adres" maxlength="400" placeholder="maps.app.goo.gl/… veya mahalle, cadde"></label>
+        <p class="lnk-help">Google Maps'te mekânı aç, <b>Paylaş › Bağlantıyı kopyala</b> de, buraya yapıştır. Adı, ili, ilçesi kendiliğinden dolar.</p>
+        <div class="lnk-card" id="lnk-card" hidden aria-live="polite"></div>
+        <button type="button" class="linkish lnk-elle" data-elle>Linkim yok, elle yazacağım</button>
+        <div class="manual" id="oner-manual" hidden>
+          <label class="field"><span>Mekân / usta adı</span><input name="mekan_adi" maxlength="120" placeholder="Örn: Kardeşler Tavuk Döner"></label>
+          <div class="row2">
+            <label class="field"><span>İl</span><select name="il"></select></label>
+            <label class="field"><span>İlçe</span><select name="ilce" disabled></select></label>
+          </div>
+        </div>
         <label class="field"><span>Neden gitmeliyiz? <small>(isteğe bağlı)</small></span><textarea name="neden" rows="3" maxlength="1000" placeholder="Örn: Tavuğu sulu, lavaşı ateşte çıtırtıyorlar…"></textarea></label>
         <label class="field"><span>Takma adın <small>(isteğe bağlı)</small></span><input name="takma_ad" maxlength="60" placeholder="Örn: @donersever"></label>
         <input class="hp" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -268,7 +284,7 @@
     <h2 class="rv">Merak edilenler</h2>
     <details class="rv"><summary>Mekânlar bu puanlar için para ödüyor mu?</summary><p>Hayır. Gittiğimiz her yerde hesabı biz ödüyoruz; hiçbir mekândan ücret, hediye ya da indirim kabul etmiyoruz. Puanlar sadece yediğimiz dönere göre veriliyor.</p></details>
     <details class="rv"><summary>Önerdiğim mekâna gerçekten gidiyor musunuz?</summary><p>Her öneriyi tek tek okuyoruz. En çok önerilen şehirler ve mekânlar rotamızı belirliyor. Önerine gittiğimizde, izin verdiysen bölümde takma adınla teşekkür ediyoruz.</p></details>
-    <details class="rv"><summary>Puanlar nasıl veriliyor?</summary><p>Her mekân aynı altı kriterle (lezzet, tavuk, ekmek, hijyen, fiyat/performans, hizmet) 10 üzerinden puanlanıyor. Puan kartı çekim sırasında dolduruluyor ve sonradan değiştirilmiyor.</p></details>
+    <details class="rv"><summary>Puanlar nasıl veriliyor?</summary><p>Tahsin ve Egemen her mekânı ayrı ayrı, aynı on kriterle (et lezzeti, marinasyon, ekmek, sos, garnitür ve çeşit, porsiyon, fiyat/performans, hijyen, hizmet, ortam) 10 üzerinden puanlıyor. Mekânın puanı ikisinin ortalaması, 100 üzerinden. Puanlar çekim sırasında veriliyor, sonradan değiştirilmiyor.</p></details>
     <details class="rv"><summary>Bilgilerim ne için kullanılıyor?</summary><p>Sadece bu proje için: önerini değerlendirmek ve onay verdiysen sana haber vermek için. Bilgilerini kimseye satmıyoruz; istediğin an silinmesini isteyebilirsin. Ayrıntılar <a href="kvkk.html" style="color:var(--cobalt);font-weight:600">KVKK aydınlatma metninde</a>.</p></details>
   </div>
 </section>
@@ -295,9 +311,9 @@
   </div>
 </footer>
 
-<script src="config.js?v=6"></script>
-<script src="ilceler.js?v=6" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<script src="app.js?v=6" defer></script>
+<script src="config.js?v=8"></script>
+<script src="ilceler.js?v=8" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous" defer></script>
+<script src="app.js?v=8" defer></script>
 </body>
 </html>

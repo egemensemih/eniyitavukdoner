@@ -24,6 +24,13 @@ window.SITE_CONFIG = {
   // Şahıs işletmesiyse ad soyad, şirketse ticaret unvanı yazılır.
   VERI_SORUMLUSU: { unvan: "Denedik YouTube Kanalı adına Egemen Semih Sönmez", adres: "Bereketzade Mah. Camekan Sok. No:4J, Beyoğlu / İstanbul, Türkiye", kep: "" },
 
+  // Puanlama: her kişi on kriteri 10 üzerinden puanlar, toplam 100. Mekânın puanı kişilerin ortalaması.
+  KISILER: [{ k: "tahsin", ad: "Tahsin" }, { k: "egemen", ad: "Egemen" }],
+  KRITERLER: [
+    ["et", "Et lezzeti"], ["marinasyon", "Marinasyon"], ["ekmek", "Ekmek / lavaş"], ["sos", "Sos"], ["garnitur", "Garnitür ve çeşit"],
+    ["porsiyon", "Porsiyon"], ["fiyat", "Fiyat / performans"], ["hijyen", "Hijyen ve temizlik"], ["hizmet", "Hizmet"], ["ortam", "Ortam"]
+  ],
+
   // Sayaç eşiği: gerçek sayı bu eşiğe ulaşana kadar eşiğin altında, zamanla
   // artan bir sayı gösterilir; eşik geçilince gerçek sayı görünür. Kapatmak için 0 yap.
   SAYAC_ESIK: { recete: 300, bekleyen: 200 }

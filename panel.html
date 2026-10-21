@@ -4,14 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://glonoumtcfrzjybuslnw.supabase.co wss://glonoumtcfrzjybuslnw.supabase.co https://tiles.openfreemap.org https://photon.komoot.io; worker-src 'self' blob:; child-src blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="no-referrer">
 <title>Yönetim Paneli | eniyitavukdoner.com</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=7">
-<link rel="stylesheet" href="panel.css?v=7">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="panel.css?v=8">
 </head>
 <body class="pnl">
 
@@ -86,8 +88,8 @@
 
     <!-- ROTA -->
     <section data-pane="rota" hidden>
-      <div class="p-head"><h2>Rota</h2></div>
-      <p class="hint">Rotaya eklediğin mekânlar bölge ve il bazında, senin rota puanına göre sıralanır. Düğme açıksa mekân sitedeki haritada “Rotamızda” olarak görünür.</p>
+      <div class="p-head"><h2>Rota</h2><div class="acts"><button class="btn btn-y btn-sm" id="add-rota-link">+ Google Maps linkiyle ekle</button></div></div>
+      <p class="hint">Linki yapıştır, mekân Google'dan tanınsın, rotaya eklensin. Rotadaki mekânlar bölge ve il bazında, senin rota puanına göre sıralanır. Düğme açıksa mekân sitedeki haritada “Rotamızda” olarak görünür. Gittiğinizde <b>Gidildi</b> deyip Tahsin ve Egemen'in puanlarını girin.</p>
       <div class="toolbar">
         <select id="f-rota-bolge"><option value="">Tüm bölgeler</option></select>
         <select id="f-rota-sira"><option value="rota">Sırala: rota puanım</option><option value="google">Sırala: Google puanı</option><option value="yorum">Sırala: Google yorum sayısı</option><option value="oneri">Sırala: öneri sayısı</option></select>
@@ -111,7 +113,7 @@
     <section data-pane="mekan" hidden>
       <div class="p-head"><h2>Haritadaki mekânlar</h2>
         <div class="acts"><button class="btn btn-o btn-sm" id="add-mekan">+ Yeni mekân</button></div></div>
-      <p class="hint">“Yayında” olan mekânlar sitedeki haritada puanıyla görünür. Taslak olarak kaydedip bölüm yayınlanınca açabilirsin.</p>
+      <p class="hint">Gidip denediğiniz mekânlar. Tahsin ve Egemen on kriteri ayrı ayrı 10 üzerinden puanlar; mekânın puanı ikisinin ortalaması (100 üzerinden). “Yayında” olanlar sitede kendi sayfası ve haritada puanıyla görünür.</p>
       <div class="tbl-wrap"><table class="tbl" id="t-mekan"></table></div>
     </section>
 
@@ -136,10 +138,10 @@
 </div>
 <div class="tip" id="tip" hidden></div>
 
-<script src="config.js?v=7"></script>
-<script src="ilceler.js?v=7"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" defer></script>
-<script src="panel.js?v=7" defer></script>
+<script src="config.js?v=8"></script>
+<script src="ilceler.js?v=8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous" defer></script>
+<script src="panel.js?v=8" defer></script>
 </body>
 </html>
