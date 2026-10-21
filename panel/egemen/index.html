@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://glonoumtcfrzjybuslnw.supabase.co wss://glonoumtcfrzjybuslnw.supabase.co; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#F4F1EA">
+<title>Egemen paneli | eniyitavukdoner.com</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css?v=10">
+<link rel="stylesheet" href="/panel.css?v=10">
+</head>
+<body class="pnl ekp" data-kisi="egemen">
+
+<section class="login" id="login" hidden>
+  <div class="login-card">
+    <a class="brand" href="/"><img src="/favicon.svg" alt="" width="34" height="34"><span>eniyitavukdoner<b>.com</b></span></a>
+    <h1>Egemen paneli</h1>
+    <form id="login-form" novalidate>
+      <label class="field"><span>E-posta</span><input name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" required></label>
+      <label class="field"><span>Şifre</span><input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn full" type="submit">Giriş yap</button>
+      <p class="form-msg" role="status" aria-live="polite"></p>
+      <button type="button" class="linkish" id="forgot">Şifremi unuttum</button>
+    </form>
+    <form id="newpass-form" hidden novalidate>
+      <p class="muted" id="np-title" style="margin-bottom:16px;font-weight:600;color:var(--navy)">Yeni şifreni belirle</p>
+      <label class="field"><span>Yeni şifre <small>(en az 10 karakter)</small></span><input name="password" type="password" autocomplete="new-password" minlength="10" required></label>
+      <label class="field"><span>Yeni şifre (tekrar)</span><input name="password2" type="password" autocomplete="new-password" minlength="10" required></label>
+      <button class="btn full" type="submit">Şifreyi kaydet</button>
+      <p class="form-msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<div class="app" id="app" hidden>
+  <header class="top ek-top">
+    <a class="brand" href="/" target="_blank" rel="noopener"><img src="/favicon.svg" alt="" width="30" height="30"><span>eniyitavukdoner<b>.com</b></span></a>
+    <span class="top-tag" id="ek-ad">Egemen</span>
+    <div class="me"><span id="me-mail"></span><button class="btn btn-line btn-sm" id="logout">Çıkış</button></div>
+  </header>
+  <main class="pmain ek-main">
+    <div id="ek-ust">
+      <nav class="ek-sekme" id="ek-sekme" role="tablist" aria-label="Bölümler">
+        <button type="button" role="tab" data-s="deg" aria-selected="true">Değerlendir <em id="cnt-deg"></em></button>
+        <button type="button" role="tab" data-s="ekle" aria-selected="false">Mekân ekle</button>
+        <button type="button" class="ek-yenile" id="ek-yenile" aria-label="Yenile" title="Yenile">↻</button>
+      </nav>
+    </div>
+    <section data-pane="deg">
+      <div id="ek-liste"></div>
+      <div id="ek-duz" class="ek-duz" hidden></div>
+    </section>
+    <section data-pane="ekle" hidden>
+      <form id="ekle-form" class="ek-kutu" novalidate>
+        <div class="ek-kh"><div><h3>Rotaya mekân ekle</h3><small>Google Maps'te mekânı aç → Paylaş → Bağlantıyı kopyala → buraya yapıştır</small></div></div>
+        <label class="field"><span>Google Maps linki</span><input name="url" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/…" autocomplete="off" autocapitalize="off" required></label>
+        <div id="ekle-sonuc" class="rl-sonuc" aria-live="polite"></div>
+        <label class="field"><span>Neden gidelim? <small>(isteğe bağlı · sadece panelde)</small></span><textarea name="neden" rows="3" maxlength="1000" placeholder="Kim önerdi, neyi meşhur…"></textarea></label>
+        <button class="btn btn-o full" type="submit" data-ekle disabled>Rotaya ekle</button>
+        <p class="sm" style="margin-top:10px">Eklediğin mekân yöneticinin rota listesine düşer; sitede görünüp görünmeyeceğine yönetici karar verir.</p>
+      </form>
+      <section class="ek-kutu"><div class="ek-kh"><div><h3>Eklediklerin</h3></div></div><ul class="ek-eklenen" id="ekle-liste"></ul></section>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card sm" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-h"><h3 id="modal-title"></h3><button class="x" data-close aria-label="Kapat">×</button></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="/config.js?v=10"></script>
+<script src="/ilceler.js?v=10"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
+<script src="/ortak-panel.js?v=10"></script>
+<script src="/ekip.js?v=10"></script>
+</body>
+</html>
