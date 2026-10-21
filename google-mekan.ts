@@ -1,4 +1,4 @@
-// Supabase Edge Function: google-mekan  (v3)
+// Supabase Edge Function: google-mekan  (v4)
 // Google anahtarı: Edge Functions > Secrets > GOOGLE_MAPS_KEY
 //
 // Ziyaretçiye açık işlemler (giriş gerekmez, IP başına ve günlük sınırlı):
@@ -12,11 +12,16 @@
 //   detay    {place_id | id, zorla?}  Puan, yorum sayısı, son yorumlar, telefon, site,
 //                             çalışma saatleri. 30 gün önbellek.                              (Place Details Enterprise + Atmosphere)
 //   puan     {id}             (eski ad) detay ile aynı.
+//   davet    {email, kisi}    Tahsin/Egemen'e panel daveti gönderir ve rolünü atar.
+//   ekip     {}               Ekip hesaplarının durumu.
+//
+// Tahsin ve Egemen (değerlendirici): link, detay.
+// Herkese açık: google_genel {mekan_id}  Yayındaki mekânın Google puanı ve son yorumları (3 gün önbellek).
 //
 // Maliyet emniyeti: günlük üst sınırlar ücretsiz aylık kotaların altında tutulur.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
-const GUNLUK = { ara: 60, genel: 100, detay: 30 };        // Text Search Pro: 5.000/ay ücretsiz · Details: 1.000/ay
+const GUNLUK = { ara: 60, genel: 100, detay: 30, ekip: 40, genel_detay: 60 };        // Text Search Pro: 5.000/ay ücretsiz · Details: 1.000/ay
 const IP_GUNLUK = 15;                                     // bir kişi günde en çok 15 link tanıtabilir
 const IP_ONERI_SAAT = 8;                                  // bir kişi saatte en çok 8 öneri gönderebilir
 const IZINLI_KAYNAK = ["https://eniyitavukdoner.com", "https://www.eniyitavukdoner.com", "https://egemensemih.github.io"];
@@ -123,6 +128,28 @@ Deno.serve(async (req) => {
       if (!list.length) return;
       await servis.from("google_yerler").upsert(list.map(y => ({ ...y, temel_tarih: new Date().toISOString() })), { onConflict: "place_id" });
     };
+    const detayCek = async (pid: string, once: any) => {
+      const g = await fetch(`https://places.googleapis.com/v1/places/${encodeURIComponent(pid)}?languageCode=tr`, {
+        headers: { "X-Goog-Api-Key": key!, "X-Goog-FieldMask": DETAY_ALANLARI }, signal: AbortSignal.timeout(8000),
+      });
+      const d = await g.json();
+      if (!g.ok) return { error: d?.error?.message ?? "Google hatası" };
+      const web = d.websiteUri ?? null;
+      const det = {
+        place_id: pid, puan: d.rating ?? null, yorum_sayisi: d.userRatingCount ?? 0, web,
+        instagram: web && /instagram\.com/i.test(web) ? web : (once?.instagram ?? null),
+        telefon: d.nationalPhoneNumber ?? null, saatler: d.regularOpeningHours?.weekdayDescriptions ?? null,
+        fiyat: d.priceLevel ?? null, detay_tarih: new Date().toISOString(),
+        url: d.googleMapsUri ?? once?.url ?? null,
+        yorumlar: (d.reviews ?? []).slice(0, 5).map((r: any) => ({
+          yazar: r.authorAttribution?.displayName ?? "", yazar_url: r.authorAttribution?.uri ?? null, yazar_foto: r.authorAttribution?.photoUri ?? null,
+          puan: r.rating ?? null, zaman: r.relativePublishTimeDescription ?? "",
+          metin: (r.text?.text ?? r.originalText?.text ?? "").slice(0, 1200), link: r.googleMapsUri ?? null,
+        })),
+      };
+      await servis.from("google_yerler").upsert(det, { onConflict: "place_id" });
+      return { detay: { ...(once ?? {}), ...det } };
+    };
     // Link çözümü, önbellekli. sinir: Google'a sormadan önce çağrılır, false dönerse sorulmaz.
     const linktenYer = async (url: string, sinir: () => Promise<boolean>): Promise<any> => {
       const anahtar = url.trim().slice(0, 600);
@@ -184,17 +211,72 @@ Deno.serve(async (req) => {
       return json({ ok: true });
     }
 
+    if (islem === "google_genel") {
+      const id = Number(body.mekan_id);
+      if (!Number.isInteger(id) || id <= 0) return json({ yok: true });
+      const { data: m } = await servis.from("mekanlar").select("id,yayinda,google_place_id").eq("id", id).maybeSingle();
+      if (!m || !m.yayinda || !m.google_place_id) return json({ yok: true });
+      let { data: y } = await servis.from("google_yerler").select("*").eq("place_id", m.google_place_id).maybeSingle();
+      const taze = y?.detay_tarih && Date.now() - new Date(y.detay_tarih).getTime() < 3 * 864e5;
+      if (!taze && key && (await sayac(`google:genel_detay:${istGun()}`, GUNLUK.genel_detay))) {
+        const d = await detayCek(m.google_place_id, y);
+        if (!d.error) y = d.detay;
+      }
+      if (!y || y.puan == null) return json({ yok: true });
+      return json({ google: { puan: y.puan, yorum_sayisi: y.yorum_sayisi, url: y.url, tarih: y.detay_tarih,
+        yorumlar: (y.yorumlar || []).map((r: any) => ({ yazar: r.yazar, yazar_url: r.yazar_url ?? null, yazar_foto: r.yazar_foto ?? null, puan: r.puan, zaman: r.zaman, metin: r.metin, link: r.link })) } });
+    }
+
     // =================== yönetici işlemleri ===================
     const kul = createClient(URL_, Deno.env.get("SUPABASE_ANON_KEY") ?? req.headers.get("apikey") ?? "", {
       global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } }, auth: { persistSession: false },
     });
     const { data: ok } = await kul.rpc("is_admin");
-    if (!ok) return json({ error: "Bu işlem için yönetici girişi gerekli." }, 403);
-    if (!key) return json({ error: "GOOGLE_MAPS_KEY eklenmemiş." });
+    let kisi: string | null = null;
+    if (!ok) {
+      const { data: k } = await kul.rpc("kisi_rol");
+      kisi = typeof k === "string" ? k : null;
+      if (!kisi || !["link", "detay"].includes(islem)) return json({ error: "Bu işlem için yetkin yok." }, 403);
+    }
+    if (!key && islem !== "davet" && islem !== "ekip") return json({ error: "GOOGLE_MAPS_KEY eklenmemiş." });
     const hak = async (tur: "ara" | "detay") => {
+      if (!ok) return await sayac(`google:ekip:${istGun()}`, GUNLUK.ekip);
       const { data } = await kul.rpc("google_hak", { p_tur: tur, p_limit: GUNLUK[tur] });
       return data === true;
     };
+
+    if (islem === "davet") {
+      const email = String(body.email || "").trim().toLowerCase();
+      const k = String(body.kisi || "");
+      if (!/^[^\s@]{1,64}@[^\s@]{1,120}\.[a-z]{2,}$/i.test(email)) return json({ error: "Geçerli bir e-posta yaz." });
+      if (!["tahsin", "egemen"].includes(k)) return json({ error: "Kişi tahsin ya da egemen olmalı." });
+      const { data: diger } = await servis.from("yoneticiler").select("email").eq("email", email).maybeSingle();
+      if (diger) return json({ error: "Bu e-posta yönetici hesabı; başka bir e-posta kullan." });
+      await servis.from("degerlendiriciler").delete().eq("kisi", k);
+      await servis.from("degerlendiriciler").delete().eq("email", email);
+      const { error: e1 } = await servis.from("degerlendiriciler").insert({ email, kisi: k });
+      if (e1) return json({ error: "Rol kaydedilemedi: " + e1.message });
+      const { error: e2 } = await servis.auth.admin.inviteUserByEmail(email, { redirectTo: `https://eniyitavukdoner.com/panel/${k}/` });
+      if (e2) {
+        if (/already|registered|exists/i.test(e2.message)) return json({ ok: true, mevcut: true });
+        return json({ error: "Davet gönderilemedi: " + e2.message });
+      }
+      return json({ ok: true });
+    }
+
+    if (islem === "ekip") {
+      const { data: rows } = await servis.from("degerlendiriciler").select("email,kisi");
+      const out: any[] = [];
+      const { data: lst } = await servis.auth.admin.listUsers({ page: 1, perPage: 200 });
+      for (const r of rows ?? []) {
+        let durum = "davet bekliyor", son: string | null = null;
+        const u = lst?.users?.find((x: any) => (x.email || "").toLowerCase() === r.email);
+        if (u) { son = u.last_sign_in_at ?? null; durum = u.last_sign_in_at ? "aktif" : (u.email_confirmed_at || u.invited_at ? "davet gönderildi" : "kayıtlı"); }
+        else durum = "hesap yok";
+        out.push({ ...r, durum, son });
+      }
+      return json({ ekip: out });
+    }
 
     if (islem === "ara") {
       const q = String(body.q || "").trim();
@@ -247,29 +329,13 @@ Deno.serve(async (req) => {
       const { data: once } = await servis.from("google_yerler").select("*").eq("place_id", pid).maybeSingle();
       const taze = once?.detay_tarih && Date.now() - new Date(once.detay_tarih).getTime() < 30 * 864e5;
       let y = once;
-      if (!taze || body.zorla) {
+      if (!taze || (body.zorla && ok)) {
         if (!(await hak("detay"))) {
           if (once?.detay_tarih) y = once; else return json({ error: "Bugünkü Google detay sorgusu sınırı doldu (ücretsiz kullanım koruması)." });
         } else {
-          const g = await fetch(`https://places.googleapis.com/v1/places/${encodeURIComponent(pid)}?languageCode=tr`, {
-            headers: { "X-Goog-Api-Key": key, "X-Goog-FieldMask": DETAY_ALANLARI }, signal: AbortSignal.timeout(8000),
-          });
-          const d = await g.json();
-          if (!g.ok) return json({ error: d?.error?.message ?? "Google hatası" });
-          const web = d.websiteUri ?? null;
-          const det = {
-            place_id: pid, puan: d.rating ?? null, yorum_sayisi: d.userRatingCount ?? 0, web,
-            instagram: web && /instagram\.com/i.test(web) ? web : (once?.instagram ?? null),
-            telefon: d.nationalPhoneNumber ?? null, saatler: d.regularOpeningHours?.weekdayDescriptions ?? null,
-            fiyat: d.priceLevel ?? null, detay_tarih: new Date().toISOString(),
-            url: d.googleMapsUri ?? once?.url ?? null,
-            yorumlar: (d.reviews ?? []).slice(0, 5).map((r: any) => ({
-              yazar: r.authorAttribution?.displayName ?? "", puan: r.rating ?? null, zaman: r.relativePublishTimeDescription ?? "",
-              metin: (r.text?.text ?? r.originalText?.text ?? "").slice(0, 1200), link: r.googleMapsUri ?? null,
-            })),
-          };
-          await servis.from("google_yerler").upsert(det, { onConflict: "place_id" });
-          y = { ...(once ?? {}), ...det };
+          const d = await detayCek(pid, once);
+          if (d.error) return json({ error: d.error });
+          y = d.detay;
         }
       }
       const puan = { google_puan: y?.puan ?? null, google_yorum: y?.yorum_sayisi ?? null, google_puan_tarih: y?.detay_tarih ?? null };

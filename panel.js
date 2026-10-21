@@ -8,6 +8,7 @@
   const TR = "tr-TR";
   const db = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY, { auth: { persistSession: true, storageKey: "etd-panel", detectSessionInUrl: true } });
   const D = { oneri: [], bekleme: [], mekan: [], recete: [] };
+  const KISI_AD = { tahsin: "Tahsin", egemen: "Egemen" };
   const DURUM = { yeni: "Yeni", incelendi: "İncelendi", listede: "Rotada", gidildi: "Gidildi", uygun_degil: "Uygun değil" };
   const ILLER = Object.keys(window.ILCELER || {}).sort((a, b) => a.localeCompare(b, TR));
   const fmtD = s => new Date(s).toLocaleDateString(TR, { day: "2-digit", month: "short", year: "numeric" });
@@ -105,6 +106,7 @@
     $$("#tabs [data-tab]").forEach(x => x.setAttribute("aria-selected", x === b));
     $$("[data-pane]").forEach(p => p.hidden = p.dataset.pane !== b.dataset.tab);
     history.replaceState(null, "", "#" + b.dataset.tab);
+    if (b.dataset.tab === "ekip") renderEkip();
   });
   function goTab(t) { const b = $(`#tabs [data-tab="${t}"]`); if (b) b.click(); }
 
@@ -439,7 +441,7 @@
         return `<div class="ril"><h4>${esc(il)} <small>${list.length}</small></h4>` + list.map((r, i) => `<div class="rrow">
           <span class="rk">${i + 1}</span>
           <span class="rp" data-tip="Senin rota puanın">${r.rota_puani != null ? Number(r.rota_puani).toFixed(1) : "–"}</span>
-          <div class="rn"><b>${esc(r.google_ad || r.mekan_adi)}</b><div class="sm">${esc([r.ilce, r.ulke].filter(Boolean).join(" · "))}${same.get(norm(r.mekan_adi) + "|" + yerOf(r)) > 1 ? ` · <span class="badge b-dup">×${same.get(norm(r.mekan_adi) + "|" + yerOf(r))} öneri</span>` : ""}${r.yonetici_notu ? ` · ${esc(r.yonetici_notu)}` : ""}</div></div>
+          <div class="rn"><b>${esc(r.google_ad || r.mekan_adi)}</b>${r.kaynak === "tahsin" || r.kaynak === "egemen" ? ` <span class="badge b-kisi-${r.kaynak}" data-tip="${esc(KISI_AD[r.kaynak])} panelinden ekledi${r.neden ? ": " + esc(r.neden) : ""}">${esc(KISI_AD[r.kaynak])} ekledi</span>` : ""}<div class="sm">${esc([r.ilce, r.ulke].filter(Boolean).join(" · "))}${same.get(norm(r.mekan_adi) + "|" + yerOf(r)) > 1 ? ` · <span class="badge b-dup">×${same.get(norm(r.mekan_adi) + "|" + yerOf(r))} öneri</span>` : ""}${r.yonetici_notu ? ` · ${esc(r.yonetici_notu)}` : ""}</div></div>
           <div class="rg">${gCell(r)}</div>
           <label class="sw" data-tip="Sitedeki haritada 'Rotamızda' olarak göster"><input type="checkbox" data-hg="${r.id}"${r.haritada_goster ? " checked" : ""}${r.lat == null ? " disabled" : ""}><i></i></label>
           <div class="ra"><button class="icon-btn" data-rota="${r.id}">Düzenle</button><button class="icon-btn" data-tomap2="${r.id}">Gidildi</button><button class="icon-btn danger" data-cikar="${r.id}">Çıkar</button></div>
@@ -573,13 +575,20 @@
     (data || []).forEach(d => { if (!DEG.has(d.mekan_id)) DEG.set(d.mekan_id, {}); DEG.get(d.mekan_id)[d.kisi] = d; });
   }
 
+  function degDurum(m, k) {
+    const d = (DEG.get(m.id) || {})[k], n = d && d.puanlar ? Object.keys(d.puanlar).length : 0;
+    if (!m.degerlendirme_acik) return `<div class="sm">kapalı</div>`;
+    if (!d || (!n && !d.yorum)) return `<div class="sm" style="color:var(--orange-d)">bekliyor</div>`;
+    if (n < KRITER.length || !d.yorum) return `<div class="sm" style="color:#8A6D00">${n}/${KRITER.length}${d.yorum ? "" : " · yorumsuz"}</div>`;
+    return `<div class="sm" style="color:var(--ok)">tamam</div>`;
+  }
   function renderMekan() {
     const rows = D.mekan;
     $("#t-mekan").innerHTML = `<thead><tr><th>Puan</th><th>Mekân</th><th>İl / ilçe</th>${KISI.map(k => `<th class="num">${esc(k.ad)}</th>`).join("")}<th>Bölüm</th><th>Yayında</th><th></th></tr></thead><tbody>` +
       (rows.length ? rows.map(m => `<tr><td><span class="score-b">${fP(m.puan)}</span></td>
         <td><span class="nm">${esc(m.ad)}</span><div class="sm">${esc(m.puan_notu || "")}</div></td>
         <td>${esc(m.il === "Yurt dışı" ? (m.ulke || m.il) : m.il)}<div class="sm">${esc(m.ilce || "")}</div></td>
-        ${KISI.map(k => `<td class="num"><b>${fP(m["puan_" + k.k])}</b></td>`).join("")}
+        ${KISI.map(k => `<td class="num">${(m.atananlar || []).includes(k.k) ? `<b>${fP(m["puan_" + k.k])}</b>${degDurum(m, k.k)}` : `<span class="sm" data-tip="Atanmadı">—</span>`}</td>`).join("")}
         <td>${guvenli(m.bolum_url) ? `<a href="${esc(m.bolum_url)}" target="_blank" rel="noopener" style="color:var(--cobalt);font-weight:600">İzle ↗</a>` : `<span class="sm">—</span>`}</td>
         <td><label class="sw"><input type="checkbox" data-yayin="${m.id}"${m.yayinda ? " checked" : ""}><i></i></label></td>
         <td class="num" style="white-space:nowrap">${m.yayinda ? `<a class="icon-btn" href="mekan.html?id=${m.id}" target="_blank" rel="noopener">Sayfa ↗</a>` : ""}<button class="icon-btn" data-edit="${m.id}">Düzenle</button><button class="icon-btn danger" data-del-mek="${m.id}">Sil</button></td></tr>`).join("")
@@ -607,7 +616,7 @@
     return m ? [parseFloat(m[1]), parseFloat(m[2])] : null;
   }
 
-  // Google bilgileri kutusu (sadece panelde; sitede gösterilmez)
+  // Google bilgileri kutusu
   function gDetayHtml(y) {
     if (!y) return "";
     const saat = Array.isArray(y.saatler) && y.saatler.length ? `<details class="gd-saat"><summary>Çalışma saatleri</summary>${y.saatler.map(t => `<div>${esc(t)}</div>`).join("")}</details>` : "";
@@ -616,7 +625,7 @@
       <div class="gd-top">${y.puan != null ? `<span class="gd-p">★ ${Number(y.puan).toFixed(1)}</span><span class="sm">${nf(y.yorum_sayisi || 0)} Google yorumu</span>` : `<span class="sm">Google puanı henüz çekilmedi.</span>`}
         ${y.detay_tarih ? `<span class="sm">· ${fmtD(y.detay_tarih)}</span>` : ""}</div>
       <div class="gd-info">${y.telefon ? `<span>☎ ${esc(y.telefon)}</span>` : ""}${guvenli(y.web) ? `<a href="${esc(y.web)}" target="_blank" rel="noopener">${esc(y.web.replace(/^https?:\/\/(www\.)?/, "").slice(0, 40))} ↗</a>` : ""}${guvenli(y.url) ? `<a href="${esc(y.url)}" target="_blank" rel="noopener">Google sayfası ↗</a>` : ""}</div>
-      ${saat}${yor}${yor ? `<p class="sm" style="margin-top:6px">Google yorumları sadece panelde görünür; sitede yayınlanmaz.</p>` : ""}</div>`;
+      ${saat}${yor}${yor ? `<p class="sm" style="margin-top:6px">Yayındaki mekânın sayfasında Google puanı ve son yorumlar kaynağıyla birlikte gösterilir.</p>` : ""}</div>`;
   }
   async function gDetayGetir(place_id, zorla) {
     const d = await gfn("detay", { place_id, zorla: !!zorla });
@@ -677,7 +686,14 @@
       <section class="mf-s">
         <div class="mf-th"><h4 class="mf-t">Değerlendirme</h4><span class="mf-ort">Mekân puanı <b data-ort>–</b><small>/100</small></span></div>
         <p class="sm" style="margin:-4px 0 12px">Her kriteri 0–10 arası kaydırarak puanlayın. Dokunmadığınız kriter boş kalır, toplam girilenlerin ortalamasıyla 100'e ölçeklenir.</p>
+        <div class="atama"><span class="sm" style="font-weight:600;color:var(--navy)">Değerlendirecekler:</span>${KISI.map(k => `<label class="check"><input type="checkbox" name="ata_${k.k}"${(m.atananlar || ["tahsin", "egemen"]).includes(k.k) ? " checked" : ""}><span>${esc(k.ad)}</span></label>`).join("")}
+          <label class="check" data-tip="Kapatınca Tahsin ve Egemen puanlarını değiştiremez"><input type="checkbox" name="degerlendirme_acik"${m.degerlendirme_acik === false ? "" : " checked"}><span>Değerlendirme açık</span></label></div>
+        <p class="sm" style="margin:-2px 0 12px">Atanan kişi bu mekânı kendi panelinde (/panel/tahsin, /panel/egemen) görür ve puanlar. Burada değiştirdiğin sütun da kaydedilir; dokunmadığın sütun olduğu gibi kalır.</p>
         <div class="dg-grid">${KISI.map((k, i) => puanKolon(k, dg[k.k], i)).join("")}</div>
+      </section>
+      <section class="mf-s">
+        <h4 class="mf-t">Fotoğraflar</h4>
+        ${isNew ? `<p class="sm">Fotoğrafları mekânı kaydettikten sonra ekleyebilirsin (Egemen de kendi panelinden ekleyebilir).</p>` : `<div id="mf-foto"></div>`}
       </section>
       <section class="mf-s">
         <h4 class="mf-t">Sayfa yazısı</h4>
@@ -699,9 +715,11 @@
 
     // değerlendirme etkileşimi
     const dgRoot = $(".dg-grid", f);
-    dgRoot.addEventListener("input", e => { const r = e.target.closest(".dg-r"); if (!r) return; r.classList.remove("bos"); $("output", r).textContent = fP(e.target.value); puanTopla(f); });
-    dgRoot.addEventListener("click", e => { const x = e.target.closest(".dg-x"); if (!x) return; const r = x.closest(".dg-r"); r.classList.add("bos"); $("output", r).textContent = "–"; puanTopla(f); });
+    const kirli = new Set();
+    dgRoot.addEventListener("input", e => { const c = e.target.closest(".dg"); if (c) kirli.add(c.dataset.kisi); const r = e.target.closest(".dg-r"); if (!r) return; r.classList.remove("bos"); $("output", r).textContent = fP(e.target.value); puanTopla(f); });
+    dgRoot.addEventListener("click", e => { const x = e.target.closest(".dg-x"); if (!x) return; kirli.add(x.closest(".dg").dataset.kisi); const r = x.closest(".dg-r"); r.classList.add("bos"); $("output", r).textContent = "–"; puanTopla(f); });
     puanTopla(f);
+    if (!isNew) window.ETDP.fotoYoneticisi($("#mf-foto", f), db, m.id, { toast, onay: msg => confirmFoto(msg), url: C.SUPABASE_URL });
 
     // Google
     const gBox = $("#g-detay", f), note = $("[data-gnote]", f);
@@ -754,7 +772,9 @@
       const row = { ad: v("ad"), il: v("il"), ilce: yurtd ? null : (v("ilce") || null), ulke: yurtd ? (v("ulke") || null) : null, adres: v("adres") || null,
         puan_notu: v("puan_notu") || null, etiketler: v("etiketler") ? v("etiketler").split(",").map(s => s.trim()).filter(Boolean).slice(0, 12) : [],
         bolum_url: guvenli(v("bolum_url")) || null, maps_url: guvenli(v("maps_url")) || null, instagram: v("instagram") || null,
-        ziyaret_tarihi: v("ziyaret_tarihi") || null, google_place_id: v("gid") || null, lat, lng, yayinda: f.yayinda.checked, aciklama: v("aciklama") || null };
+        ziyaret_tarihi: v("ziyaret_tarihi") || null, google_place_id: v("gid") || null, lat, lng, yayinda: f.yayinda.checked, aciklama: v("aciklama") || null,
+        atananlar: KISI.filter(k => f["ata_" + k.k].checked).map(k => k.k), degerlendirme_acik: f.degerlendirme_acik.checked };
+      if (row.instagram) { const ig = window.ETDP.instaTemiz(row.instagram); if (ig === null) return toast("Instagram: @kullanici ya da instagram.com/kullanici yaz."); row.instagram = ig; }
       if (m.oneri_id) row.oneri_id = m.oneri_id;
       const btn = $(".mf-foot .btn-o", f); btn.disabled = true;
       const q = isNew ? db.from("mekanlar").insert({ ...row, yayinda: false }).select().single() : db.from("mekanlar").update(row).eq("id", m.id).select().single();
@@ -763,10 +783,11 @@
       const id = data.id;
       // değerlendirmeler
       const up = [], sil = [];
-      KISI.forEach(k => { const s = sonuc[k.k], yorum = (f["yorum_" + k.k].value || "").trim() || null;
+      KISI.forEach(k => { if (!isNew && !kirli.has(k.k)) return; const s = sonuc[k.k], yorum = (f["yorum_" + k.k].value || "").trim() || null;
         if (Object.keys(s.puanlar).length || yorum) up.push({ mekan_id: id, kisi: k.k, puanlar: s.puanlar, yorum }); else sil.push(k.k); });
       if (up.length) { const r = await db.from("degerlendirmeler").upsert(up, { onConflict: "mekan_id,kisi" }); if (r.error) toast("Puanlar kaydedilemedi: " + r.error.message); }
       if (sil.length && !isNew) await db.from("degerlendirmeler").delete().eq("mekan_id", id).in("kisi", sil);
+      if (!isNew && kirli.size) DEG.delete(id);
       if (isNew && row.yayinda) await db.from("mekanlar").update({ yayinda: true }).eq("id", id);
       ({ data } = await db.from("mekanlar").select("*").eq("id", id).single());
       DEG.delete(id); await degYukle([id]);
@@ -826,6 +847,31 @@
     });
   }
 
+  // Form modalı açıkken onay: modalı kapatmadan satır içi sor
+  function confirmFoto(msg) { return Promise.resolve(window.confirm(msg)); }
+
+  /* ---------- ekip (Tahsin / Egemen hesapları) ---------- */
+  async function renderEkip() {
+    const box = $("#ekip-list"); box.innerHTML = `<div class="empty">Yükleniyor…</div>`;
+    const d = await gfn("ekip", {});
+    const ekip = d.ekip || [];
+    box.innerHTML = `<table class="tbl ekip-tbl"><thead><tr><th>Kişi</th><th>E-posta</th><th>Durum</th><th>Son giriş</th><th>Panel</th></tr></thead><tbody>` +
+      KISI.map(k => { const r = ekip.find(x => x.kisi === k.k);
+        return `<tr><td><b>${esc(k.ad)}</b></td><td>${r ? esc(r.email) : `<span class="sm">tanımlı değil</span>`}</td>
+          <td>${r ? `<span class="badge ${r.durum === "aktif" ? "b-ok" : "b-yeni"}">${esc(r.durum)}</span>` : "—"}</td>
+          <td class="sm">${r && r.son ? fmtDT(r.son) : "—"}</td><td><a class="icon-btn" href="/panel/${k.k}/" target="_blank" rel="noopener">/panel/${k.k} ↗</a></td></tr>`; }).join("") + `</tbody></table>` +
+      (d.error ? `<p class="sm" style="color:var(--err);margin-top:8px">${esc(d.error)}</p>` : "");
+  }
+  $("#davet-form").addEventListener("submit", async e => {
+    e.preventDefault(); const f = e.currentTarget, b = $("button[type=submit]", f);
+    const email = f.email.value.trim(), kisi = f.kisi.value;
+    if (!email || !kisi) return toast("Kişi ve e-posta seç.");
+    if (!(await confirmBox(`${esc(KISI_AD[kisi])} için <b>${esc(email)}</b> adresine panel daveti gönderilecek. Varsa ${esc(KISI_AD[kisi])}'in eski e-postasının yetkisi kalkar.`, "Daveti gönder"))) return;
+    b.disabled = true; const d = await gfn("davet", { email, kisi }); b.disabled = false;
+    if (d.error) return toast(d.error);
+    f.reset(); toast(d.mevcut ? "Hesap zaten var; rol atandı. Şifresini bilmiyorsa panelde “Şifremi unuttum” desin." : "Davet e-postası gönderildi"); renderEkip();
+  });
+
   /* ---------- reçeteler ---------- */
   const STEP_AD = { ekmek: "Ekmek", sos: "İç sos", peynir: "Peynir", aci: "Acı", garnitur: "Garnitür", tavuk: "Tavuk", pisme: "Pişme", icecek: "İçecek", patates: "Patates", yansos: "Yan sos" };
   $("#f-recete-il").addEventListener("input", renderRecete);
@@ -863,5 +909,5 @@
   /* ---------- boot ---------- */
   if (window.top !== window.self) { document.body.innerHTML = ""; return; }
   $("#add-rota-link").addEventListener("click", rotaLinkForm);
-  start().then(() => { const h = location.hash.slice(1); if (["oneri", "rota", "bekleme", "mekan", "recete"].includes(h)) goTab(h); });
+  start().then(() => { const h = location.hash.slice(1); if (["oneri", "rota", "bekleme", "mekan", "recete", "ekip"].includes(h)) goTab(h); });
 })();

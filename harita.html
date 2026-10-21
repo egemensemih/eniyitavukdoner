@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://glonoumtcfrzjybuslnw.supabase.co https://tiles.openfreemap.org; worker-src 'self' blob:; child-src blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Türkiye Tavuk Dönerci Haritası | eniyitavukdoner.com</title>
+<meta name="description" content="Denedik'in gidip denediği, rotasındaki ve sizin önerdiğiniz tavuk dönercileri tek haritada. Yakınındaki dönerciyi bul, Google Maps'te aç.">
+<link rel="canonical" href="https://eniyitavukdoner.com/harita.html">
+<meta property="og:site_name" content="eniyitavukdoner.com">
+<meta property="og:title" content="Türkiye Tavuk Dönerci Haritası">
+<meta property="og:image" content="https://eniyitavukdoner.com/og.png">
+<meta name="theme-color" content="#FBF7F0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=10">
+</head>
+<body class="hp-sayfa" data-sayfa="harita">
+
+<header class="nav scrolled hp-nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="eniyitavukdoner.com ana sayfa">
+      <img src="favicon.svg" alt="" width="34" height="34">
+      <span>eniyitavukdoner<b>.com</b></span>
+    </a>
+    <h1 class="hp-baslik">Türkiye Tavuk Dönerci Haritası</h1>
+    <a class="btn btn-o btn-sm hp-oner" href="./#oner">Mekân öner</a>
+  </div>
+</header>
+
+<main class="hp-main">
+  <div class="dh-bar hp-bar">
+    <div class="dh-chips" id="dh-chips" role="tablist" aria-label="Mekân türü">
+      <button type="button" role="tab" data-tur="" aria-selected="true">Tümü <em id="dc-all">0</em></button>
+      <button type="button" role="tab" data-tur="denedik" aria-selected="false"><i class="lg-pin"></i>Denedik <em id="dc-denedik">0</em></button>
+      <button type="button" role="tab" data-tur="rota" aria-selected="false"><i class="lg-rota"></i>Rotamızda <em id="dc-rota">0</em></button>
+      <button type="button" role="tab" data-tur="oneri" aria-selected="false"><i class="lg-dot"></i>Önerilenler <em id="dc-oneri">0</em></button>
+    </div>
+    <div class="dh-tools">
+      <label class="dh-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span class="sr">Mekân ara</span><input type="search" id="dh-q" placeholder="Mekân ya da ilçe ara"></label>
+      <label class="dh-il"><span class="sr">İl</span><select id="dh-il"><option value="">Tüm iller</option></select></label>
+      <button type="button" class="btn btn-sm dh-near" id="dh-near"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></svg>Yakınımdakiler</button>
+    </div>
+  </div>
+  <div class="hp-grid">
+    <div class="map-box hp-map">
+      <div id="map" role="region" aria-label="Türkiye Tavuk Dönerci Haritası"></div>
+      <div class="map-loading" id="map-loading">Harita yükleniyor…</div>
+      <div class="map-legend">
+        <span><i class="lg-pin"></i>Denedik puanı</span>
+        <span><i class="lg-rota"></i>Rotamızda</span>
+        <span><i class="lg-dot"></i>Sizin önerdikleriniz</span>
+      </div>
+    </div>
+    <aside class="dh-list hp-list" id="hp-list" aria-live="polite">
+      <button type="button" class="hp-tutamac" id="hp-tutamac" aria-expanded="false" aria-controls="hp-list"><span></span><b id="dh-count">Mekânlar</b><small>Listeyi aç</small></button>
+      <div class="dh-head"><small id="dh-sub">Denedik puanına ve öneri sayısına göre</small></div>
+      <ol class="dh-items" id="dh-items"></ol>
+      <div class="dh-foot"><span>Favori dönercin haritada yok mu?</span><a class="btn btn-o btn-sm" href="./#oner">Mekân öner</a></div>
+    </aside>
+  </div>
+</main>
+
+<script src="config.js?v=10"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous" defer></script>
+<script src="harita.js?v=10" defer></script>
+</body>
+</html>
