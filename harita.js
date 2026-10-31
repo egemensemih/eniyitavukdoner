@@ -45,8 +45,14 @@
     return new Promise((res, rej) => { const el = document.createElement(tag); Object.assign(el, attrs); el.onload = res; el.onerror = rej; document.head.appendChild(el); });
   }
   // Harita verisi: tarayıcıda 2 dakika saklanır (yoğunlukta veritabanını korur); hata olursa bir kez daha denenir
+  // Google'dan TAMAMI BÜYÜK HARFLE gelen adlar okunur hâle getirilir (KÖNİG DÖNER → König Döner)
+  function adDuzelt(s) {
+    s = String(s || "").trim();
+    if (!/[A-ZÇĞİÖŞÜ]{3}/.test(s) || s !== s.toLocaleUpperCase("tr-TR")) return s;
+    return s.toLocaleLowerCase("tr-TR").replace(/(^|[\s\-\/(&.])(\p{L})/gu, (_, a, h) => a + h.toLocaleUpperCase("tr-TR"));
+  }
   async function fetchMapData() {
-    const KEY = "etd-harita-v2", TTL = 120000;
+    const KEY = "etd-harita-v3", TTL = 120000;
     try { const c = JSON.parse(sessionStorage.getItem(KEY) || "null"); if (c && Date.now() - c.t < TTL && Array.isArray(c.i)) { ITEMS = c.i; return; } } catch (e) { /* gizli mod */ }
     const d = getDb(); if (!d) return;
     for (let deneme = 0; deneme < 2; deneme++) {
@@ -59,7 +65,7 @@
         const den = (mek.data || []).map(m => ({ ...m, key: "d" + m.id, tur: "denedik", adet: 0 }));
         const diger = (hr.data || []).map(m => ({ ...m, key: m.tur[0] + m.anahtar, adet: m.adet || 1 }));
         ITEMS = [...den, ...diger].filter(m => m.lat != null && m.lng != null && Math.abs(m.lat) <= 90 && Math.abs(m.lng) <= 180);
-        ITEMS.forEach(m => m.ara = trNorm([m.ad, m.ilce, m.il, m.ulke].join(" ")));
+        ITEMS.forEach(m => { m.ad = adDuzelt(m.ad); m.ara = trNorm([m.ad, m.ilce, m.il, m.ulke].join(" ")); });
         try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), i: ITEMS })); } catch (e) { /* */ }
         return;
       } catch (e) { console.warn(e); if (!deneme) await new Promise(r => setTimeout(r, 1500)); }
@@ -89,6 +95,8 @@
     const base = ITEMS.filter(m => (!F.il || yerAd(m) === F.il));
     $("#dc-all").textContent = base.length;
     ["denedik", "rota", "oneri"].forEach(t => $("#dc-" + t).textContent = base.filter(m => m.tur === t).length);
+    // Hiç kaydı olmayan tür sekmesi gösterilmez ("Denedik 0" boş görünmesin)
+    ["denedik", "rota", "oneri"].forEach(t => { const b = $('#dh-chips [data-tur="' + t + '"]'); if (b) b.hidden = !ITEMS.some(m => m.tur === t) && F.tur !== t; });
     const sel = $("#dh-il"), cur = sel.value;
     const yerler = [...new Set(ITEMS.map(yerAd))].sort((a, b) => a.localeCompare(b, TR));
     sel.innerHTML = `<option value="">Tüm iller</option>` + yerler.map(y => `<option${y === cur ? " selected" : ""}>${esc(y)}</option>`).join("");
