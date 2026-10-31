@@ -668,3 +668,61 @@ textarea{resize:vertical;min-height:96px}
 @media(max-width:900px){.gy{grid-template-columns:1fr}.gy-ozet{position:static;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px 14px}.gy-ozet>b{font-size:44px}.gy-ozet>span{margin:0}.gy-list{grid-template-columns:1fr}}
 .mk-map iframe{width:100%;height:100%;border:0;display:block}
 .gy-y header .gy-av{display:grid;place-items:center;gap:0}
+
+/* ===== v11: mobil öncelikli akış ===== */
+.hero-map{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:16px;text-decoration:none;color:var(--navy);box-shadow:var(--sh-1);max-width:440px;transition:border-color .15s,transform .15s}
+.hero-map:hover{border-color:var(--cobalt)}
+.hero-map:active{transform:scale(.99)}
+.hero-map>svg:first-child{width:40px;height:40px;padding:9px;border-radius:12px;background:var(--orange-l);color:var(--orange);flex:none}
+.hero-map span{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.hero-map b{font-size:15px;line-height:1.25}
+.hero-map small{font-size:12.5px;color:var(--muted)}
+.hero-map>svg:last-child{width:18px;height:18px;color:var(--cobalt);flex:none}
+@media(max-width:760px){
+  .hero{padding:22px 0 36px}
+  .hero::before{width:280px;height:280px;right:-150px;top:-110px}
+  .hero h1{font-size:clamp(33px,9.4vw,44px);margin:14px 0 12px}
+  .hero .lede{font-size:16px;line-height:1.55;margin-bottom:20px}
+  .hero-grid{gap:0}
+  .phone-stage{display:none}
+  .stats{margin-top:24px}
+  .sec{padding:56px 0}
+  .map-sec{padding-top:36px}
+  .hero-map{max-width:none}
+}
+/* adım adım tasarım (mobil) */
+.steps.wiz .step{display:none}
+.steps.wiz .step.cur{display:block;animation:wizIn .26s ease}
+@keyframes wizIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.wiz-nav{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px;box-shadow:var(--sh-1)}
+.wiz-prog{height:6px;border-radius:6px;background:var(--cobalt-l);overflow:hidden;margin-bottom:12px}
+.wiz-prog i{display:block;height:100%;width:0;background:var(--orange);border-radius:6px;transition:width .3s ease}
+.wiz-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.wiz-row .btn{min-width:108px;justify-content:center}
+.wiz-row .btn:disabled{opacity:.35;pointer-events:none}
+.wiz-say{font-size:13.5px;font-weight:700;color:var(--muted);white-space:nowrap}
+/* bağlantıdan mekân seçimi */
+.lnk-card.pick{display:block;background:#fff;border-color:var(--cobalt)}
+.lc-pick>b{display:block;font-size:15px;color:var(--navy)}
+.lc-pick>span{display:block;color:var(--muted);font-size:13px;margin:2px 0 10px}
+.lc-list{display:grid;gap:8px;margin-bottom:10px}
+.lc-opt{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;width:100%;border:1.5px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 12px;font:inherit;color:var(--navy);cursor:pointer}
+.lc-opt:hover,.lc-opt:focus-visible{border-color:var(--cobalt);background:var(--cobalt-l)}
+.lc-opt b{font-size:14.5px;line-height:1.3}
+.lc-opt span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.lc-ipucu{display:flex;gap:8px;margin-bottom:8px}
+.lc-ipucu input{flex:1;min-width:0;font-size:16px;padding:10px 12px}
+.lnk-card.pick .linkish{font-size:13.5px;margin:0}
+/* mobil hızlı geçiş çubuğu */
+.dock{display:none}
+@media(max-width:760px){
+  .dock{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:54;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:6px;background:rgba(20,39,90,.96);border-radius:20px;box-shadow:0 14px 40px rgba(20,39,90,.35);transform:translateY(160%);transition:transform .3s ease}
+  .dock.show{transform:none}
+  .dock a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:14px;color:rgba(255,255,255,.78);text-decoration:none;font-size:12px;font-weight:700;white-space:nowrap}
+  .dock a svg{width:21px;height:21px}
+  .dock a.on{background:rgba(255,255,255,.15);color:#fff}
+  .mbar{bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+  .foot{padding-bottom:96px}
+}
+/* mobil: istatistikler tek satır */
+@media(max-width:760px){.stats,.stats.two-up{display:flex;grid-template-columns:none}.stat{flex:1;min-width:0;padding:14px 12px}.stat+.stat{border-top:0;border-left:1px solid var(--line)}.stat .ico{display:none}.stat b{font-size:24px}.stat small{font-size:12px;line-height:1.3}}

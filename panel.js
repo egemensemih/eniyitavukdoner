@@ -366,6 +366,13 @@
     if (g.lat != null) set(g.lat, g.lng, true);
     const n = $("[data-gnote]", f); if (n) n.textContent = `Google: ${g.ad}${g.tur ? " · " + g.tur : ""}${g.kapali ? " · KALICI KAPALI" : ""} — kaydedince eşleşir, puanı panelden çekebilirsin.`;
   }
+  // Link kesin değilse adayları göster; yönetici adresine bakıp doğru olanı seçer (ilk sonuç asla kendiliğinden seçilmez)
+  function adayGoster(el, list, sec) {
+    if (!el) return;
+    el.innerHTML = `<b style="color:var(--warn,#B86400)">Bu linkte mekânın tam yeri yok. Adresine bakarak doğru olanı seç:</b>` +
+      list.map((g, i) => `<button type="button" class="kp-item" data-gsec="${i}" style="margin-top:6px;width:100%"><b>${esc(g.ad)}</b><small>${esc(temizAd(g.adres))}</small></button>`).join("");
+    el.onclick = e => { const b = e.target.closest("[data-gsec]"); if (!b) return; el.onclick = null; sec(list[+b.dataset.gsec]); };
+  }
   function gWire(f, set) {
     let t;
     f.gurl.addEventListener("input", () => {
@@ -375,7 +382,8 @@
         const n = $("[data-gnote]", f); if (n) n.textContent = "Google'da tanınıyor…";
         const d = await gfn("link", { url: u });
         if (d.error) { if (n) n.textContent = G_OFF ? "Google anahtarı eklenince link otomatik tanınacak." : d.error; return; }
-        if (d.sonuc && d.sonuc[0]) { const url = f.gurl.value; gSec(f, d.sonuc[0], set); f.gurl.value = url; }
+        if (d.sonuc && d.sonuc[0] && d.emin !== false) { const url = f.gurl.value; gSec(f, d.sonuc[0], set); f.gurl.value = url; }
+        else if (d.sonuc && d.sonuc.length) adayGoster(n, d.sonuc, g => { const url = f.gurl.value; gSec(f, g, set); f.gurl.value = url; });
         else if (d.konum && d.konum.lat != null) { set(d.konum.lat, d.konum.lng, true); if (n) n.textContent = "Konum linkten alındı."; }
       }, 500);
     });
@@ -751,7 +759,8 @@
         note.textContent = "Google'da tanınıyor…";
         const d = await gfn("link", { url: u });
         if (d.error) { note.textContent = G_OFF ? "Google anahtarı eklenince link otomatik tanınacak." : d.error; return; }
-        if (d.sonuc && d.sonuc[0]) yerYaz(d.sonuc[0]);
+        if (d.sonuc && d.sonuc[0] && d.emin !== false) yerYaz(d.sonuc[0]);
+        else if (d.sonuc && d.sonuc.length) adayGoster(note, d.sonuc, yerYaz);
         else if (d.konum && d.konum.lat != null) { set(d.konum.lat, d.konum.lng, true); note.textContent = "Konum linkten alındı; mekân Google'da bulunamadı."; }
         else note.textContent = "Linkten mekân okunamadı.";
       }, 450);
@@ -814,7 +823,7 @@
       if (!LISTE.length) return;
       box.innerHTML = LISTE.map((g, i) => `<button type="button" class="kp-item${g === SEC ? " on" : ""}" data-i="${i}"><b>${esc(g.ad)}${g.tur ? ` <em>${esc(g.tur)}</em>` : ""}${g.kapali ? ` <em class="kapali">Kalıcı kapalı</em>` : ""}</b><small>${esc(temizAd(g.adres))}</small></button>`).join("") + `<div id="rl-gd"></div>`;
     };
-    box.addEventListener("click", async e => { const b = e.target.closest("[data-i]"); if (!b) return; SEC = LISTE[+b.dataset.i]; ciz(); detay(); });
+    box.addEventListener("click", async e => { const b = e.target.closest("[data-i]"); if (!b) return; SEC = LISTE[+b.dataset.i]; ciz(); detay(); kb.disabled = false; });
     const detay = async () => { const el = $("#rl-gd"); if (!el || !SEC) return; el.innerHTML = `<div class="gd sm">Google bilgileri getiriliyor…</div>`; const d = await gDetayGetir(SEC.place_id || SEC.id); el.innerHTML = d.error ? `<div class="gd sm">${esc(d.error)}</div>` : gDetayHtml(d.detay); };
     f.url.addEventListener("input", () => {
       clearTimeout(t); const u = f.url.value.trim(); if (!/^https?:\/\//i.test(u)) return;
@@ -822,7 +831,8 @@
         box.innerHTML = `<p class="sm">Google'da tanınıyor…</p>`; kb.disabled = true;
         const d = await gfn("link", { url: u });
         if (d.error) { box.innerHTML = `<p class="sm" style="color:var(--err)">${esc(d.error)}</p>`; return; }
-        LISTE = d.sonuc || []; SEC = LISTE[0] || null;
+        LISTE = d.sonuc || []; SEC = d.emin === false ? null : (LISTE[0] || null);
+        if (!SEC && LISTE.length) { ciz(); box.insertAdjacentHTML("afterbegin", `<p class="sm" style="color:var(--warn,#B86400);font-weight:600;margin-bottom:8px">Bu linkte mekânın tam yeri yok. Adresine bakarak doğru mekânı seç.</p>`); kb.disabled = true; return; }
         if (!SEC) { box.innerHTML = `<p class="sm" style="color:var(--err)">Bu linkten mekân bulunamadı. Öneriler sekmesinden elle ekleyebilirsin.</p>`; return; }
         const ayni = D.oneri.find(r => r.google_place_id === (SEC.place_id || SEC.id) && (r.durum === "listede" || r.durum === "gidildi"));
         ciz(); detay(); kb.disabled = false;

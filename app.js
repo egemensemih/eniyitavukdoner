@@ -1,4 +1,4 @@
-/* eniyitavukdoner.com — v10 */
+/* eniyitavukdoner.com — v11 */
 (function () {
   "use strict";
   // Panel davet / şifre bağlantısı ana sayfaya düşerse doğru panele aktar
@@ -180,6 +180,42 @@
   html += `<div class="step"><div class="step-h"><h4><em>${n + 1}</em>Ek notlar</h4><small>İsteğe bağlı</small></div><textarea id="r-not" rows="2" maxlength="200" placeholder="Örn: Lavaş sacda çıtırlasın…" aria-label="Ek notlar"></textarea></div>`;
   form.innerHTML = html;
 
+  // Mobil: adım adım tasarım. Tek seçimli adımda seçim yapılınca bir sonraki adıma geçilir.
+  const WIZ = { i: 0, on: false, t: 0 };
+  const wizSteps = () => $$(".step", form);
+  const wizNav = document.createElement("div");
+  wizNav.className = "wiz-nav"; wizNav.hidden = true;
+  wizNav.innerHTML = `<div class="wiz-prog" aria-hidden="true"><i></i></div><div class="wiz-row"><button type="button" class="btn btn-line btn-sm" data-wiz="-1">Geri</button><span class="wiz-say" aria-live="polite"></span><button type="button" class="btn btn-o btn-sm" data-wiz="1">İleri</button></div>`;
+  form.after(wizNav);
+  function wizGoster(kaydir) {
+    const st = wizSteps(), n = st.length;
+    WIZ.i = Math.max(0, Math.min(n - 1, WIZ.i));
+    st.forEach((s, i) => s.classList.toggle("cur", i === WIZ.i));
+    $(".wiz-prog i", wizNav).style.width = ((WIZ.i + 1) / n * 100) + "%";
+    $(".wiz-say", wizNav).textContent = `Adım ${WIZ.i + 1} / ${n}`;
+    $('[data-wiz="-1"]', wizNav).disabled = WIZ.i === 0;
+    $('[data-wiz="1"]', wizNav).textContent = WIZ.i === n - 1 ? "Fişini gör" : "İleri";
+    if (kaydir) {
+      const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--nav-h"), 10) || 68;
+      const top = form.getBoundingClientRect().top + scrollY - navH - 12;
+      if (Math.abs(scrollY - top) > 40) scrollTo({ top, behavior: "smooth" });
+    }
+  }
+  function wizGit(d) {
+    clearTimeout(WIZ.t);
+    const n = wizSteps().length;
+    if (WIZ.i + d >= n) { $("#fis").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    WIZ.i += d; wizGoster(true);
+  }
+  wizNav.addEventListener("click", e => { const b = e.target.closest("[data-wiz]"); if (b && !b.disabled) wizGit(+b.dataset.wiz); });
+  const wizMQ = matchMedia("(max-width: 760px)");
+  function wizAyar() {
+    WIZ.on = wizMQ.matches; form.classList.toggle("wiz", WIZ.on); wizNav.hidden = !WIZ.on;
+    if (WIZ.on) wizGoster(false); else wizSteps().forEach(s => s.classList.remove("cur"));
+  }
+  if (wizMQ.addEventListener) wizMQ.addEventListener("change", wizAyar); else wizMQ.addListener(wizAyar);
+  wizAyar();
+
   function syncButtons() {
     STEPS.forEach(s => $$(`.opts[data-k="${s.k}"] .opt[data-v]`).forEach(b => {
       const v = b.dataset.v;
@@ -198,12 +234,17 @@
         if (k === "garnitur" && v !== "Sadece Et") { const j = a.indexOf("Sadece Et"); if (j > -1) a.splice(j, 1); }
         a.push(v);
       }
-    } else state[k] = state[k] === v ? "" : v;
+    } else state[k] = state[k] === v && !WIZ.on ? "" : v;   // adım adım modda seçili olana dokunmak seçimi kaldırmaz
     syncButtons();
   }
   form.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
-    if (b.dataset.v) return pick(b.closest(".opts").dataset.k, b.dataset.v);
+    if (b.dataset.v) {
+      const k = b.closest(".opts").dataset.k; pick(k, b.dataset.v);
+      const s = STEPS.find(x => x.k === k), adim = b.closest(".step");
+      if (WIZ.on && !s.multi && state[k] && $$(".opts", adim).length === 1) { clearTimeout(WIZ.t); WIZ.t = setTimeout(() => wizGit(1), 320); }
+      return;
+    }
     if (b.dataset.add) { const c = $(`.custom[data-custom="${b.dataset.add}"]`); c.hidden = !c.hidden; if (!c.hidden) $("input", c).focus(); return; }
     const c = b.closest(".custom"); if (c) addCustom(c);
   });
@@ -399,7 +440,13 @@
   }
   async function insert(table, row) {
     const d = getDb(); if (!d) return { message: "no-db" };
-    const { error } = await d.from(table).insert(row); return error;
+    for (let deneme = 0; ; deneme++) {
+      let error = null;
+      try { ({ error } = await d.from(table).insert(row)); } catch (e) { error = { message: String(e && e.message || e) }; }
+      const kalici = !error || error.code === "23505" || /Çok fazla|yoğun|violates|invalid|check/i.test(error.message || "");
+      if (kalici || deneme >= 1) return error;
+      await new Promise(r => setTimeout(r, 1500));
+    }
   }
 
   // Mekân öner: önce Google Maps linki, alanlar kendiliğinden dolar
@@ -416,12 +463,14 @@
   }
   function kart(durum, html) { lnkCard.hidden = !durum; lnkCard.className = "lnk-card" + (durum ? " " + durum : ""); lnkCard.innerHTML = html || ""; }
   function yerYaz(y) {
+    y = { ...y, il: y.il ? String(y.il).replace(/\s*-\s*(Avrupa|Anadolu)\s*$/i, "") : y.il };
     YER = y;
     of.mekan_adi.value = y.ad || "";
     if (y.il === "Yurt dışı") { of.il.value = "Yurt dışı"; fillIlce(of.ilce, "Yurt dışı"); const u = eslesen(ULKELER, y.ulke); if (u) of.ilce.value = u; }
     else {
       const il = eslesen(ILLER(), y.il);
       if (il) { of.il.value = il; fillIlce(of.ilce, il); const ic = eslesen((window.ILCELER || {})[il] || [], y.ilce); if (ic) of.ilce.value = ic; }
+      else { of.il.value = ""; fillIlce(of.ilce, ""); }
     }
     [of.mekan_adi, of.il, of.ilce].forEach(clearErr);
     const yer = [y.ilce && y.il !== "Yurt dışı" ? y.ilce.normalize("NFC").replace(/̇/g, "") : "", y.il === "Yurt dışı" ? y.ulke : y.il].filter(Boolean).join(", ");
@@ -436,9 +485,31 @@
     const d = getDb(); let r = null;
     try { const res = await d.functions.invoke("google-mekan", { body: { islem: "link_genel", url } }); r = res.data || null; } catch (e) { r = null; }
     if (url !== lnkSon) return;
-    if (r && r.yer) return yerYaz(r.yer);
+    if (r && r.yer && r.emin !== false) return yerYaz(r.yer);
+    if (r && Array.isArray(r.adaylar) && r.adaylar.length) return adaySec(r.adaylar);
     if (r && r.ad && !of.mekan_adi.value) of.mekan_adi.value = r.ad;
-    kart("info", `<div class="lc-txt"><span>${r && r.error ? esc(r.error) : "Linki kaydettik. Mekânın adını ve ilini aşağıya yazar mısın?"}</span></div>`);
+    kart("info", `<div class="lc-txt"><span>${r && r.error ? esc(r.error) : r && r.sinir ? "Şu an çok yoğunuz, mekânı kendiliğinden tanıyamadık. Adını ve ilini aşağıya yazar mısın? Linkini de kaydediyoruz." : "Linki kaydettik. Mekânın adını ve ilini aşağıya yazar mısın?"}</span></div>`);
+    elle(true, true);
+  }
+  let ADAY = [];
+  const adayYer = y => [y.ilce && y.il !== "Yurt dışı" ? y.ilce : "", y.il === "Yurt dışı" ? y.ulke : y.il].filter(Boolean).join(", ");
+  function adaySec(list) {
+    ADAY = list; YER = null;
+    kart("pick", `<div class="lc-pick"><b>Bu linkte mekânın tam yeri yok. Hangisi?</b><span>Aynı adda birden çok yer olabilir, adresine bakarak seç.</span>
+      <div class="lc-list">${list.map((y, i) => `<button type="button" class="lc-opt" data-aday="${i}"><b>${esc(y.ad)}</b><span>${esc(y.adres || adayYer(y))}</span></button>`).join("")}</div>
+      <div class="lc-ipucu"><input data-ipucu-q maxlength="60" enterkeyhint="search" placeholder="Listede yok mu? Şehir ya da ilçe yaz" aria-label="Şehir ya da ilçe"><button type="button" class="btn btn-sm" data-ipucu-ara>Ara</button></div>
+      <button type="button" class="linkish" data-elle2>Hiçbiri değil, elle yazacağım</button></div>`);
+    elleBtn.hidden = true;
+  }
+  async function ipucuAra(q) {
+    const url = lnkSon; if (!url || q.length < 2) return;
+    kart("load", `<span class="lc-spin" aria-hidden="true"></span><div class="lc-txt"><span>${esc(q)} içinde aranıyor…</span></div>`);
+    let r = null;
+    try { const res = await getDb().functions.invoke("google-mekan", { body: { islem: "link_genel", url, ipucu: q } }); r = res.data || null; } catch (e) { r = null; }
+    if (url !== lnkSon) return;
+    const list = r ? (r.adaylar && r.adaylar.length ? r.adaylar : (r.yer ? [r.yer] : [])) : [];
+    if (list.length) return adaySec(list);
+    kart("info", `<div class="lc-txt"><span>${r && r.error ? esc(r.error) : "Bulamadık. Mekânın adını ve ilini aşağıya yazar mısın? Linkini de kaydediyoruz."}</span></div>`);
     elle(true, true);
   }
   of.link.addEventListener("input", () => { clearTimeout(lnkT); const u = of.link.value.trim(); lnkT = setTimeout(() => linkTani(u), u ? 450 : 0); });
@@ -449,7 +520,13 @@
     pasteBtn.addEventListener("click", async () => { try { const t = (await navigator.clipboard.readText()).trim(); if (t) { of.link.value = t; linkTani(t); } } catch (e) { of.link.focus(); } });
   }
   elleBtn.addEventListener("click", () => elle(true, true));
-  lnkCard.addEventListener("click", e => { if (e.target.closest("[data-duzelt]")) { YER = null; elle(true, true); kart(null); } });
+  lnkCard.addEventListener("click", e => {
+    if (e.target.closest("[data-duzelt]")) { YER = null; elle(true, true); kart(null); return; }
+    const a = e.target.closest("[data-aday]"); if (a) { const y = ADAY[+a.dataset.aday]; if (y) yerYaz(y); return; }
+    if (e.target.closest("[data-elle2]")) { YER = null; kart(null); elle(true, true); return; }
+    if (e.target.closest("[data-ipucu-ara]")) { const i = $("[data-ipucu-q]", lnkCard); ipucuAra((i.value || "").trim()); }
+  });
+  lnkCard.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("[data-ipucu-q]")) { e.preventDefault(); ipucuAra(e.target.value.trim()); } });
   function onerSifirla() { of.reset(); fillIlce(of.ilce, ""); YER = null; lnkSon = ""; kart(null); elle(false); }
 
   of.addEventListener("submit", async e => {
@@ -474,6 +551,12 @@
         neden: v("neden") || null, takma_ad: v("takma_ad") || null, yayin_izni: of.yayin_izni.checked, kvkk_onay: true, web: of.web.value };
       try { const { data, error } = await getDb().functions.invoke("google-mekan", { body }); hata = error ? "ag" : (data && data.error) || null; }
       catch (err) { hata = "ag"; }
+      if (hata === "ag") {
+        const yedek = await insert("mekan_onerileri", { mekan_adi: (v("mekan_adi") || YER.ad || "").slice(0, 120),
+          ...konum(v("il") || YER.il, v("ilce") || (YER.il === "Yurt dışı" ? YER.ulke : YER.ilce) || ""), adres: v("link") || null,
+          neden: v("neden") || null, takma_ad: v("takma_ad") || null, yayin_izni: of.yayin_izni.checked, kvkk_onay: true });
+        hata = yedek ? (/Çok fazla|yoğun/.test(yedek.message || "") ? yedek.message : "ag") : null;
+      }
     } else {
       const err = await insert("mekan_onerileri", { mekan_adi: v("mekan_adi"), ...konum(v("il"), v("ilce")), adres: v("link") || null,
         neden: v("neden") || null, takma_ad: v("takma_ad") || null, yayin_izni: of.yayin_izni.checked, kvkk_onay: true });
@@ -536,6 +619,22 @@
     const upd = () => mbar.classList.toggle("show", inB && !fisV);
     new IntersectionObserver(e => { inB = e[0].isIntersecting; upd(); }, { rootMargin: "-30% 0px -30% 0px" }).observe($("#recete-form"));
     new IntersectionObserver(e => { fisV = e[0].isIntersecting; upd(); }).observe($("#fis"));
+  }
+
+  // Mobil hızlı geçiş çubuğu: kahraman alanı geçilince görünür; reçete çubuğu, alt bilgi ya da klavye açıkken gizlenir
+  const dock = $("#dock");
+  if (dock && "IntersectionObserver" in window) {
+    let heroV = true, footV = false;
+    const dUpd = () => {
+      const ae = document.activeElement, yaziyor = ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName);
+      dock.classList.toggle("show", !heroV && !footV && !yaziyor && !$("#mbar").classList.contains("show"));
+    };
+    new IntersectionObserver(e => { heroV = e[0].isIntersecting; dUpd(); }).observe($(".hero"));
+    new IntersectionObserver(e => { footV = e[0].isIntersecting; dUpd(); }).observe($(".foot"));
+    document.addEventListener("focusin", dUpd); document.addEventListener("focusout", () => setTimeout(dUpd, 60));
+    new MutationObserver(dUpd).observe($("#mbar"), { attributes: true, attributeFilter: ["class"] });
+    const dio = new IntersectionObserver(ents => ents.forEach(en => { if (en.isIntersecting) $$("a", dock).forEach(a => a.classList.toggle("on", a.dataset.d === en.target.id)); }), { rootMargin: "-40% 0px -55% 0px" });
+    ["harita", "tasarla", "oner"].forEach(id => { const s = $("#" + id); if (s) dio.observe(s); });
   }
 
   // Reçete il/ilçe

@@ -44,18 +44,26 @@
   function loadAsset(tag, attrs) {
     return new Promise((res, rej) => { const el = document.createElement(tag); Object.assign(el, attrs); el.onload = res; el.onerror = rej; document.head.appendChild(el); });
   }
+  // Harita verisi: tarayıcıda 2 dakika saklanır (yoğunlukta veritabanını korur); hata olursa bir kez daha denenir
   async function fetchMapData() {
+    const KEY = "etd-harita-v2", TTL = 120000;
+    try { const c = JSON.parse(sessionStorage.getItem(KEY) || "null"); if (c && Date.now() - c.t < TTL && Array.isArray(c.i)) { ITEMS = c.i; return; } } catch (e) { /* gizli mod */ }
     const d = getDb(); if (!d) return;
-    try {
-      const [hr, mek] = await Promise.all([
-        d.rpc("harita_mekanlari"),
-        d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan,puan_notu,bolum_url,maps_url").eq("yayinda", true).order("puan", { ascending: false })
-      ]);
-      const den = (mek.data || []).map(m => ({ ...m, key: "d" + m.id, tur: "denedik", adet: 0 }));
-      const diger = (hr.data || []).map(m => ({ ...m, key: m.tur[0] + m.anahtar, adet: m.adet || 1 }));
-      ITEMS = [...den, ...diger].filter(m => m.lat != null && m.lng != null);
-      ITEMS.forEach(m => m.ara = trNorm([m.ad, m.ilce, m.il, m.ulke].join(" ")));
-    } catch (e) { console.warn(e); }
+    for (let deneme = 0; deneme < 2; deneme++) {
+      try {
+        const [hr, mek] = await Promise.all([
+          d.rpc("harita_mekanlari"),
+          d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan,puan_notu,bolum_url,maps_url").eq("yayinda", true).order("puan", { ascending: false })
+        ]);
+        if (hr.error || mek.error) throw hr.error || mek.error;
+        const den = (mek.data || []).map(m => ({ ...m, key: "d" + m.id, tur: "denedik", adet: 0 }));
+        const diger = (hr.data || []).map(m => ({ ...m, key: m.tur[0] + m.anahtar, adet: m.adet || 1 }));
+        ITEMS = [...den, ...diger].filter(m => m.lat != null && m.lng != null && Math.abs(m.lat) <= 90 && Math.abs(m.lng) <= 180);
+        ITEMS.forEach(m => m.ara = trNorm([m.ad, m.ilce, m.il, m.ulke].join(" ")));
+        try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), i: ITEMS })); } catch (e) { /* */ }
+        return;
+      } catch (e) { console.warn(e); if (!deneme) await new Promise(r => setTimeout(r, 1500)); }
+    }
   }
   const SIRA = { denedik: 0, rota: 1, oneri: 2 };
   function visible() {

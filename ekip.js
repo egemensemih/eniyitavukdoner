@@ -307,7 +307,8 @@
       const d = await fn("link", { url: u });
       if (ef.url.value.trim() !== u) return;
       if (d.error) { sonuc.innerHTML = `<p class="sm" style="color:var(--err)">${esc(d.error)}</p>`; return; }
-      LISTE = (d.sonuc || []).map(g => ({ ...g, place_id: g.place_id || g.id })); SEC = LISTE[0] || null;
+      LISTE = (d.sonuc || []).map(g => ({ ...g, place_id: g.place_id || g.id })); SEC = d.emin === false ? null : (LISTE[0] || null);
+      if (!SEC && LISTE.length) { adayCiz(); sonuc.insertAdjacentHTML("afterbegin", `<p class="sm" style="color:var(--warn,#B86400);font-weight:600;margin-bottom:8px">Bu linkte mekânın tam yeri yok. Adresine bakarak doğru mekânı seç.</p>`); return; }
       if (!SEC) { sonuc.innerHTML = `<p class="sm" style="color:var(--err)">Bu linkten mekân bulunamadı. Google Maps'te mekânın kendi sayfasını açıp Paylaş ile linki al.</p>`; return; }
       adayCiz();
     }, 450);
