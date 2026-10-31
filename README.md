@@ -23,3 +23,8 @@ MapLibre + OpenFreeMap (ücretsiz, API anahtarı gerektirmez). Puanlı mekânlar
 
 ## Supabase uykusu
 Ücretsiz planda 7 gün hareketsiz proje duraklatılır. GitHub Actions iki günde bir `canli_mi()` fonksiyonunu çağırır. Actions sekmesinden "Supabase uyanik tut" işini elle de çalıştırabilirsin. Kalıcı çözüm: Supabase Pro plan.
+
+
+## Kategorili döner rotası
+
+Kartlı rota, kategori ve şehir filtreleri, özel notlar ve ana liste aktarımı: [kurulum ve veri davranışı](ROTA-KURULUM.md). Veritabanı için önce `schema_v7.sql`, sonra site kodu uygulanır. `rota.html` yalnız paylaşımı açık kayıtları gösterir.
