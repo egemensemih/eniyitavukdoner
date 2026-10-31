@@ -724,3 +724,5 @@ textarea{resize:vertical;min-height:96px}
   .mbar{bottom:calc(12px + env(safe-area-inset-bottom,0px))}
   .foot{padding-bottom:96px}
 }
+/* mobil: istatistikler tek satır */
+@media(max-width:760px){.stats,.stats.two-up{display:flex;grid-template-columns:none}.stat{flex:1;min-width:0;padding:14px 12px}.stat+.stat{border-top:0;border-left:1px solid var(--line)}.stat .ico{display:none}.stat b{font-size:24px}.stat small{font-size:12px;line-height:1.3}}

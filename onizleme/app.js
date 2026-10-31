@@ -463,12 +463,14 @@
   }
   function kart(durum, html) { lnkCard.hidden = !durum; lnkCard.className = "lnk-card" + (durum ? " " + durum : ""); lnkCard.innerHTML = html || ""; }
   function yerYaz(y) {
+    y = { ...y, il: y.il ? String(y.il).replace(/\s*-\s*(Avrupa|Anadolu)\s*$/i, "") : y.il };
     YER = y;
     of.mekan_adi.value = y.ad || "";
     if (y.il === "Yurt dışı") { of.il.value = "Yurt dışı"; fillIlce(of.ilce, "Yurt dışı"); const u = eslesen(ULKELER, y.ulke); if (u) of.ilce.value = u; }
     else {
       const il = eslesen(ILLER(), y.il);
       if (il) { of.il.value = il; fillIlce(of.ilce, il); const ic = eslesen((window.ILCELER || {})[il] || [], y.ilce); if (ic) of.ilce.value = ic; }
+      else { of.il.value = ""; fillIlce(of.ilce, ""); }
     }
     [of.mekan_adi, of.il, of.ilce].forEach(clearErr);
     const yer = [y.ilce && y.il !== "Yurt dışı" ? y.ilce.normalize("NFC").replace(/̇/g, "") : "", y.il === "Yurt dışı" ? y.ulke : y.il].filter(Boolean).join(", ");
