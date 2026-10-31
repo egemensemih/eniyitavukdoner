@@ -234,7 +234,7 @@
         if (k === "garnitur" && v !== "Sadece Et") { const j = a.indexOf("Sadece Et"); if (j > -1) a.splice(j, 1); }
         a.push(v);
       }
-    } else state[k] = state[k] === v ? "" : v;
+    } else state[k] = state[k] === v && !WIZ.on ? "" : v;   // adım adım modda seçili olana dokunmak seçimi kaldırmaz
     syncButtons();
   }
   form.addEventListener("click", e => {
