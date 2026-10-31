@@ -87,7 +87,7 @@
         try{await navigator.clipboard.writeText(u.href);find('[data-count]').textContent='Görünüm bağlantısı kopyalandı.';}catch(_){find('[data-count]').textContent='Bağlantıyı adres çubuğundan kopyalayabilirsin.';}
       }
       if(e.target.closest('[data-csv]')&&edit){
-        const matrix=[['Mekân','Şehir','İlçe','Google puanı','Yorum sayısı','Google Maps','Instagram','Kategoriler','Neden listemde','Notum'],...filtered().map(r=>[r.google_ad||r.mekan_adi,r.il,r.ilce,r.google_puan,r.google_yorum,r.google_url||r.adres,instagram(r),categories(r).join('; '),r.plan_gerekcesi,r.yonetici_notu])];
+        const matrix=[['Mekân','İlçe','Google puanı','Yorum sayısı','Google Maps','Instagram','Şehir','Ülke','Kategoriler','Neden listemde','Notum'],...filtered().map(r=>[r.google_ad||r.mekan_adi,r.ilce,r.google_puan,r.google_yorum,r.google_url||r.adres,instagram(r),r.il,r.ulke,categories(r).join('; '),r.plan_gerekcesi,r.yonetici_notu])];
         const csv='\uFEFF'+matrix.map(row=>row.map(v=>{let s=String(v??'');if(typeof v==='string'&&/^[=+@\-\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}).join(',')).join('\r\n');
         const a=document.createElement('a'),href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.href=href;a.download='doner-rotasi.csv';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000);
       }
