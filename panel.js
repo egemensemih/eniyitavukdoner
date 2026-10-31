@@ -424,32 +424,45 @@
   const IL_BOLGE = {}; Object.entries(BOLGE).forEach(([b, l]) => l.split(" ").forEach(i => IL_BOLGE[i] = b));
   const bolgeOf = r => r.il === "Yurt dışı" ? "Yurt dışı" : (IL_BOLGE[r.il] || "Diğer");
   const yerOf = r => r.il === "Yurt dışı" ? (r.ulke || "Yurt dışı") : r.il;
+  let rotaCards = null;
   function renderRota() {
-    const same = new Map(); D.oneri.forEach(r => { const k = norm(r.mekan_adi) + "|" + yerOf(r); same.set(k, (same.get(k) || 0) + 1); });
-    const sel = $("#f-rota-bolge"), cur = sel.value, sirala = $("#f-rota-sira").value;
     const rows = D.oneri.filter(r => r.durum === "listede");
-    const bolgeler = [...Object.keys(BOLGE), "Yurt dışı", "Diğer"].filter(b => rows.some(r => bolgeOf(r) === b));
-    sel.innerHTML = `<option value="">Tüm bölgeler</option>` + bolgeler.map(b => `<option${b === cur ? " selected" : ""}>${esc(b)}</option>`).join("");
-    const key = r => sirala === "google" ? (r.google_puan ?? -1) : sirala === "yorum" ? (r.google_yorum ?? -1) : sirala === "oneri" ? same.get(norm(r.mekan_adi) + "|" + yerOf(r)) : (r.rota_puani ?? -1);
-    const box = $("#rota-list");
-    if (!rows.length) { box.innerHTML = `<div class="box empty">Rotada henüz mekân yok. Öneriler sekmesinde bir öneriyi açıp <b>Rotaya ekle</b> de.</div>`; return; }
-    box.innerHTML = bolgeler.filter(b => !sel.value || b === sel.value).map(b => {
-      const inB = rows.filter(r => bolgeOf(r) === b);
-      const iller = [...new Set(inB.map(yerOf))].sort((x, y) => Math.max(...inB.filter(r => yerOf(r) === y).map(key)) - Math.max(...inB.filter(r => yerOf(r) === x).map(key)) || x.localeCompare(y, TR));
-      return `<section class="rbolge"><h3>${esc(b)} <small>${inB.length} mekân</small></h3>` + iller.map(il => {
-        const list = inB.filter(r => yerOf(r) === il).sort((x, y) => key(y) - key(x));
-        return `<div class="ril"><h4>${esc(il)} <small>${list.length}</small></h4>` + list.map((r, i) => `<div class="rrow">
-          <span class="rk">${i + 1}</span>
-          <span class="rp" data-tip="Senin rota puanın">${r.rota_puani != null ? Number(r.rota_puani).toFixed(1) : "–"}</span>
-          <div class="rn"><b>${esc(r.google_ad || r.mekan_adi)}</b>${r.kaynak === "tahsin" || r.kaynak === "egemen" ? ` <span class="badge b-kisi-${r.kaynak}" data-tip="${esc(KISI_AD[r.kaynak])} panelinden ekledi${r.neden ? ": " + esc(r.neden) : ""}">${esc(KISI_AD[r.kaynak])} ekledi</span>` : ""}<div class="sm">${esc([r.ilce, r.ulke].filter(Boolean).join(" · "))}${same.get(norm(r.mekan_adi) + "|" + yerOf(r)) > 1 ? ` · <span class="badge b-dup">×${same.get(norm(r.mekan_adi) + "|" + yerOf(r))} öneri</span>` : ""}${r.yonetici_notu ? ` · ${esc(r.yonetici_notu)}` : ""}</div></div>
-          <div class="rg">${gCell(r)}</div>
-          <label class="sw" data-tip="Sitedeki haritada 'Rotamızda' olarak göster"><input type="checkbox" data-hg="${r.id}"${r.haritada_goster ? " checked" : ""}${r.lat == null ? " disabled" : ""}><i></i></label>
-          <div class="ra"><button class="icon-btn" data-rota="${r.id}">Düzenle</button><button class="icon-btn" data-tomap2="${r.id}">Gidildi</button><button class="icon-btn danger" data-cikar="${r.id}">Çıkar</button></div>
-        </div>`).join("") + `</div>`;
-      }).join("") + `</section>`;
-    }).join("");
+    if (rotaCards) { rotaCards.update(rows); return; }
+    rotaCards = window.RotaKartlari.mount($("#rota-list"), {
+      rows, routeActions: true, shareUrl: location.origin + "/rota.html",
+      onSave: async (id, change) => {
+        const { error } = await db.from("mekan_onerileri").update(change).eq("id", id);
+        if (error) throw new Error(/column|schema cache/i.test(error.message) ? "Kategori kaydı henüz etkinleşmemiş. Önce rota güncellemesinin kurulumunu tamamla." : "Kaydedilemedi: " + error.message);
+        Object.assign(D.oneri.find(r => String(r.id) === String(id)), change); toast("Mekân dosyası kaydedildi");
+      }
+    });
   }
-  ["#f-rota-bolge", "#f-rota-sira"].forEach(x => $(x).addEventListener("input", renderRota));
+  $("#rota-import").addEventListener("click", () => $("#rota-file").click());
+  $("#rota-file").addEventListener("change", async e => {
+    const file = e.target.files[0]; e.target.value = ""; if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return toast("Dosya çok büyük (en fazla 5 MB).");
+    let items;
+    try { items = window.RotaAktarim.plan(JSON.parse(await file.text()), D.oneri); }
+    catch (err) { return toast(err.message || "Dosya okunamadı."); }
+    const old = items.filter(r => r.id).length;
+    openModal("Ana listeyi rotaya aktar", `<p>${items.length} mekân: <b>${old} mevcut kayıt</b> güncellenecek, <b>${items.length-old} yeni kayıt</b> eklenecek. Kişisel notlar ve değiştirdiğin kategoriler korunur. Yeni mekânlar paylaşım kapalı olarak eklenir.</p><ul class="import-preview">${items.map(r=>`<li>${esc(r.name)} <small>${esc(r.city)} / ${esc(r.district||"")}</small></li>`).join("")}</ul><p role="status" id="import-msg"></p><div class="m-foot"><button type="button" class="btn btn-line btn-sm" data-close>Vazgeç</button><button type="button" class="btn btn-y btn-sm" id="import-apply">Rotaya aktar</button></div>`);
+    $("#import-apply").addEventListener("click", async ev => {
+      const button = ev.currentTarget; button.disabled = true;
+      // Fail before changing rows if the metadata migration has not been installed.
+      const check = await db.from("mekan_onerileri").select("id,plan_kayit_id,plan_kategorileri,plan_gerekcesi,plan_instagram").limit(1);
+      if (check.error) { button.disabled = false; $("#import-msg").textContent = "Liste aktarımı henüz etkinleşmemiş. Rota güncellemesinin kurulumu tamamlanmalı."; return; }
+      let done = 0;
+      for (const item of items) {
+        $("#import-msg").textContent = `${done+1}/${items.length}: ${item.name}`;
+        const query = item.id ? db.from("mekan_onerileri").update(item.row).eq("id", item.id) : db.from("mekan_onerileri").insert(item.row);
+        const { data, error } = await query.select().single();
+        if (error) { $("#import-msg").textContent = `${done} mekân kaydedildi. ${item.name} kaydedilemedi: ${error.message}. Pencereyi kapatıp listeyi yeniden seçtiğinde kaydedilenler tekrar oluşturulmaz.`; renderAll(); return; }
+        if (item.id) Object.assign(D.oneri.find(r => r.id === item.id), data); else D.oneri.unshift(data);
+        done++;
+      }
+      closeModal(); renderAll(); goTab("rota"); toast(`${done} mekân rotaya aktarıldı`);
+    }, { once: true });
+  });
   $("#rota-list").addEventListener("click", async e => {
     const b = e.target.closest("button"); if (!b) return;
     const r = D.oneri.find(x => x.id === +(b.dataset.rota || b.dataset.tomap2 || b.dataset.cikar || b.dataset.gfind || b.dataset.gpuan));
@@ -911,3 +924,4 @@
   $("#add-rota-link").addEventListener("click", rotaLinkForm);
   start().then(() => { const h = location.hash.slice(1); if (["oneri", "rota", "bekleme", "mekan", "recete", "ekip"].includes(h)) goTab(h); });
 })();
+

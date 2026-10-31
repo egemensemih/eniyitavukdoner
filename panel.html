@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css?v=10">
 <link rel="stylesheet" href="panel.css?v=10">
+<link rel="stylesheet" href="rota-kartlari.css?v=11">
 </head>
 <body class="pnl">
 
@@ -89,12 +90,8 @@
 
     <!-- ROTA -->
     <section data-pane="rota" hidden>
-      <div class="p-head"><h2>Rota</h2><div class="acts"><button class="btn btn-y btn-sm" id="add-rota-link">+ Google Maps linkiyle ekle</button></div></div>
+      <div class="p-head"><h2>Döner rotası</h2><div class="acts"><a class="btn btn-line btn-sm" href="rota.html" target="_blank" rel="noopener">Paylaşılan rota ↗</a><button class="btn btn-line btn-sm" id="rota-import">Liste içe aktar</button><input type="file" id="rota-file" accept=".json,application/json" hidden><button class="btn btn-y btn-sm" id="add-rota-link">+ Google Maps linkiyle ekle</button></div></div>
       <p class="hint">Linki yapıştır, mekân Google'dan tanınsın, rotaya eklensin. Rotadaki mekânlar bölge ve il bazında, senin rota puanına göre sıralanır. Düğme açıksa mekân sitedeki haritada “Rotamızda” olarak görünür. Gittiğinizde <b>Gidildi</b> deyip Tahsin ve Egemen'in puanlarını girin.</p>
-      <div class="toolbar">
-        <select id="f-rota-bolge"><option value="">Tüm bölgeler</option></select>
-        <select id="f-rota-sira"><option value="rota">Sırala: rota puanım</option><option value="google">Sırala: Google puanı</option><option value="yorum">Sırala: Google yorum sayısı</option><option value="oneri">Sırala: öneri sayısı</option></select>
-      </div>
       <div id="rota-list"></div>
     </section>
 
@@ -159,6 +156,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous" defer></script>
 <script src="ortak-panel.js?v=10" defer></script>
-<script src="panel.js?v=10" defer></script>
+<script src="rota-kartlari.js?v=11" defer></script>
+<script src="rota-aktarim.js?v=11" defer></script>
+<script src="panel.js?v=11" defer></script>
 </body>
 </html>
+

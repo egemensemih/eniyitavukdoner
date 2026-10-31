@@ -80,7 +80,7 @@
   $$("#links a").forEach(a => a.addEventListener("click", () => { nav.classList.remove("open"); menuBtn.setAttribute("aria-expanded", false); }));
   addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 8), { passive: true });
   if ("IntersectionObserver" in window) {
-    const secs = $$("#links a").map(a => $(a.getAttribute("href"))).filter(Boolean);
+    const secs = $$("#links a[href^='#']").map(a => $(a.getAttribute("href"))).filter(Boolean);
     const io = new IntersectionObserver(ents => ents.forEach(en => {
       if (en.isIntersecting) $$("#links a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + en.target.id));
     }), { rootMargin: "-45% 0px -50% 0px" });
@@ -550,3 +550,4 @@
   if (window.ILCELER && window.supabase) boot();
   else window.addEventListener("load", boot);
 })();
+
