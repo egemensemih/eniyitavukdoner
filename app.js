@@ -633,7 +633,11 @@
     new IntersectionObserver(e => { footV = e[0].isIntersecting; dUpd(); }).observe($(".foot"));
     document.addEventListener("focusin", dUpd); document.addEventListener("focusout", () => setTimeout(dUpd, 60));
     new MutationObserver(dUpd).observe($("#mbar"), { attributes: true, attributeFilter: ["class"] });
-    const dio = new IntersectionObserver(ents => ents.forEach(en => { if (en.isIntersecting) $$("a", dock).forEach(a => a.classList.toggle("on", a.dataset.d === en.target.id)); }), { rootMargin: "-40% 0px -55% 0px" });
+    const dio = new IntersectionObserver(ents => ents.forEach(en => {
+      // bölümden çıkınca vurgu da kalkar (Nasıl puanlıyoruz? gibi bölümlerde hiçbiri seçili görünmez)
+      const a = $$("a", dock).find(x => x.dataset.d === en.target.id);
+      if (en.isIntersecting) $$("a", dock).forEach(x => x.classList.toggle("on", x === a)); else if (a) a.classList.remove("on");
+    }), { rootMargin: "-40% 0px -55% 0px" });
     ["harita", "tasarla", "oner"].forEach(id => { const s = $("#" + id); if (s) dio.observe(s); });
   }
 
