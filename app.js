@@ -641,6 +641,24 @@
   bindIlIlce($("#r-il"), $("#r-ilce"));
   syncButtons();
 
+  /* ---------- paylaşım linkleri: /oner, /tasarla, /harita → doğrudan ilgili bölüm ---------- */
+  (function bolumeGit() {
+    const id = location.hash.slice(1);
+    if (!/^(harita|tasarla|oner|nasil|manifesto|haber)$/.test(id)) return;
+    const hedef = $("#" + id); if (!hedef) return;
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    let kullanici = false;
+    ["wheel", "touchstart", "keydown"].forEach(e => addEventListener(e, () => { kullanici = true; }, { once: true, passive: true }));
+    const git = () => {
+      if (kullanici) return;
+      const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--nav-h"), 10) || 68;
+      scrollTo({ top: Math.max(0, hedef.getBoundingClientRect().top + scrollY - navH - 8), behavior: "auto" });
+    };
+    requestAnimationFrame(git);
+    [400, 1200, 2500].forEach(t => setTimeout(git, t));
+    addEventListener("load", () => setTimeout(git, 50), { once: true });
+  })();
+
   /* ---------- boot ---------- */
   function boot() {
     loadStats();
