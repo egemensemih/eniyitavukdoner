@@ -15,6 +15,8 @@
   const fmtDT = s => new Date(s).toLocaleString(TR, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
   const norm = s => String(s || "").toLocaleLowerCase(TR).replace(/[^a-zçğıöşü0-9]+/g, " ").trim();
   const nf = n => Number(n).toLocaleString(TR);
+  // Google'dan TAMAMI BÜYÜK HARFLE gelen adları okunur yap (KÖZBERG DÖNER → Közberg Döner)
+  const adGoster = s => { s = String(s || "").trim(); if (!/[A-ZÇĞİÖŞÜ]{3}/.test(s) || s !== s.toLocaleUpperCase(TR)) return s; return s.toLocaleLowerCase(TR).replace(/(^|[\s\-\/(&.])(\p{L})/gu, (_, a, h) => a + h.toLocaleUpperCase(TR)); };
 
   /* ---------- toast / modal ---------- */
   function toast(msg) {
@@ -90,7 +92,7 @@
   async function loadAll() {
     [D.oneri, D.bekleme, D.mekan, D.recete] = await Promise.all([fetchAll("mekan_onerileri"), fetchAll("bekleme_listesi"), fetchAll("mekanlar"), fetchAll("receteler")]);
     DEG.clear(); await degYukle(D.mekan.map(m => m.id));
-    renderAll(); gKullanim(); otoEslestir();
+    renderAll(); gKullanim(); otoEslestir(); if (window.BOLUM) window.BOLUM.yenile();
   }
   function renderAll() {
     $("#cnt-oneri").textContent = D.oneri.length; $("#cnt-bekleme").textContent = D.bekleme.length;
@@ -449,17 +451,22 @@
         return `<div class="ril"><h4>${esc(il)} <small>${list.length}</small></h4>` + list.map((r, i) => `<div class="rrow">
           <span class="rk">${i + 1}</span>
           <span class="rp" data-tip="Senin rota puanın">${r.rota_puani != null ? Number(r.rota_puani).toFixed(1) : "–"}</span>
-          <div class="rn"><b>${esc(r.google_ad || r.mekan_adi)}</b>${r.kaynak === "tahsin" || r.kaynak === "egemen" ? ` <span class="badge b-kisi-${r.kaynak}" data-tip="${esc(KISI_AD[r.kaynak])} panelinden ekledi${r.neden ? ": " + esc(r.neden) : ""}">${esc(KISI_AD[r.kaynak])} ekledi</span>` : ""}<div class="sm">${esc([r.ilce, r.ulke].filter(Boolean).join(" · "))}${same.get(norm(r.mekan_adi) + "|" + yerOf(r)) > 1 ? ` · <span class="badge b-dup">×${same.get(norm(r.mekan_adi) + "|" + yerOf(r))} öneri</span>` : ""}${r.yonetici_notu ? ` · ${esc(r.yonetici_notu)}` : ""}</div></div>
+          <div class="rn"><b>${esc(adGoster(r.google_ad || r.mekan_adi))}</b>${r.kaynak === "tahsin" || r.kaynak === "egemen" ? ` <span class="badge b-kisi-${r.kaynak}" data-tip="${esc(KISI_AD[r.kaynak])} panelinden ekledi${r.neden ? ": " + esc(r.neden) : ""}">${esc(KISI_AD[r.kaynak])} ekledi</span>` : ""}<div class="sm">${esc([r.ilce, r.ulke].filter(Boolean).join(" · "))}${same.get(norm(r.mekan_adi) + "|" + yerOf(r)) > 1 ? ` · <span class="badge b-dup">×${same.get(norm(r.mekan_adi) + "|" + yerOf(r))} öneri</span>` : ""}${r.yonetici_notu ? ` · ${esc(r.yonetici_notu)}` : ""}</div></div>
           <div class="rg">${gCell(r)}</div>
           <label class="sw" data-tip="Sitedeki haritada 'Rotamızda' olarak göster"><input type="checkbox" data-hg="${r.id}"${r.haritada_goster ? " checked" : ""}${r.lat == null ? " disabled" : ""}><i></i></label>
-          <div class="ra"><button class="icon-btn" data-detay="${r.id}">Detay</button><button class="icon-btn" data-bolume="${r.id}">Bölüme ekle</button><button class="icon-btn" data-rota="${r.id}">Düzenle</button><button class="icon-btn" data-tomap2="${r.id}">Gidildi</button><button class="icon-btn danger" data-cikar="${r.id}">Çıkar</button></div>
+          <div class="ra">${window.BOLUM ? window.BOLUM.rozet(r) : ""}<button class="icon-btn" data-detay="${r.id}">Aç ›</button></div>
         </div>`).join("") + `</div>`;
       }).join("") + `</section>`;
     }).join("");
   }
   ["#f-rota-bolge", "#f-rota-sira"].forEach(x => $(x).addEventListener("input", renderRota));
   $("#rota-list").addEventListener("click", async e => {
-    const b = e.target.closest("button"); if (!b) return;
+    const b = e.target.closest("button");
+    if (!b) { // satırın herhangi bir yerine tıklamak detayı açar (düğme ve anahtar hariç)
+      const row = e.target.closest(".rrow"); if (!row || e.target.closest("a,label,input")) return;
+      const rr = D.oneri.find(x => x.id === +(row.querySelector("[data-detay]") || {}).dataset?.detay);
+      if (rr && window.BOLUM) window.BOLUM.detay(rr); return;
+    }
     const r = D.oneri.find(x => x.id === +(b.dataset.rota || b.dataset.tomap2 || b.dataset.cikar || b.dataset.gfind || b.dataset.gpuan || b.dataset.detay || b.dataset.bolume));
     if (b.dataset.gpuan) return puanGetir(r, b);
     if (b.dataset.detay) return window.BOLUM && window.BOLUM.detay(r);
@@ -919,7 +926,7 @@
   });
 
   // Bölümler modülü (bolumler.js) için ortak araçlar
-  window.PANEL = { db, D, esc, toast, openModal, closeModal, confirmBox, gfn, mapsAra, guvenli, fmtD, nf, DURUM, renderAll, goTab };
+  window.PANEL = { db, D, esc, toast, openModal, closeModal, confirmBox, gfn, mapsAra, guvenli, fmtD, nf, DURUM, renderAll, renderRota, goTab, adGoster, rotaForm, toMap };
 
   /* ---------- boot ---------- */
   if (window.top !== window.self) { document.body.innerHTML = ""; return; }

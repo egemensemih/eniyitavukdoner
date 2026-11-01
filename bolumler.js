@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   const P = window.PANEL; if (!P) return;
-  const { db, D, esc, toast, openModal, closeModal, confirmBox, gfn, mapsAra, guvenli, fmtD, nf, DURUM } = P;
+  const { db, D, esc, toast, openModal, closeModal, confirmBox, gfn, mapsAra, guvenli, fmtD, nf, DURUM, adGoster } = P;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const TR = "tr-TR";
@@ -12,7 +12,7 @@
   if (!root) return;
 
   /* ---------- yardımcılar ---------- */
-  const adOf = r => r.google_ad || r.mekan_adi || "";
+  const adOf = r => adGoster(r.google_ad || r.mekan_adi || "");
   const yerOf = r => [r.ilce, r.il === "Yurt dışı" ? r.ulke : r.il].filter(Boolean).join(" · ");
   const oneri = id => D.oneri.find(x => x.id === id);
   const gyOf = r => (r && r.google_place_id && B.gy.get(r.google_place_id)) || null;
@@ -22,6 +22,8 @@
     return m && !/^(p|reel|reels|explore|stories|accounts)$/i.test(m[1]) ? m[1] : null;
   };
   const igOf = r => igHandle(r.instagram) || igHandle((gyOf(r) || {}).instagram);
+  // Elle girilmediyse (Google/site ya da otomatik arama) kontrol edilmesi gerekir
+  const igKontrol = r => !!igOf(r) && (!igHandle(r.instagram) || r.instagram_otomatik === true);
   const igAra = r => "https://www.google.com/search?q=" + encodeURIComponent(`site:instagram.com "${adOf(r)}" ${[r.ilce, r.il].filter(Boolean).join(" ")}`);
   const gunAdi = () => new Date().toLocaleDateString(TR, { weekday: "long" }).toLocaleLowerCase(TR);
   const ytId = u => { const m = String(u || "").match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : null; };
@@ -81,10 +83,10 @@
       ${y.adres || r.google_adres ? `<p class="bk-adres">${esc(y.adres || r.google_adres)}</p>` : ""}
       <div class="bk-bilgi">
         ${puan != null ? `<a class="bk-chip bk-g" href="${esc(maps)}" target="_blank" rel="noopener">★ ${Number(puan).toFixed(1)} <small>${nf(yorum || 0)} yorum</small></a>` : ""}
-        ${ig ? `<a class="bk-chip bk-ig" href="https://www.instagram.com/${esc(ig)}/" target="_blank" rel="noopener">@${esc(ig)}</a>` : `<a class="bk-chip" href="${esc(igAra(r))}" target="_blank" rel="noopener">Instagram'ı ara ↗</a>`}
+        ${ig ? `<a class="bk-chip bk-ig" href="https://www.instagram.com/${esc(ig)}/" target="_blank" rel="noopener">@${esc(ig)}${igKontrol(r) ? ` <small class="bk-kontrol">kontrol et</small>` : ""}</a>` : `<a class="bk-chip" href="${esc(igAra(r))}" target="_blank" rel="noopener">Instagram'ı ara ↗</a>`}<button type="button" class="bk-mini" data-igac="${r.id}">${ig ? "değiştir" : "ekle"}</button>
         ${tel ? `<a class="bk-chip" href="tel:${esc(tel.replace(/[^\d+]/g, ""))}">☎ ${esc(tel)}</a>` : ""}
         ${web ? `<a class="bk-chip" href="${esc(web)}" target="_blank" rel="noopener">${esc(web.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "").slice(0, 32))} ↗</a>` : ""}
-        <a class="bk-chip" href="${esc(maps)}" target="_blank" rel="noopener">Google Maps ↗</a>
+        ${puan == null ? `<a class="bk-chip" href="${esc(maps)}" target="_blank" rel="noopener">Google Maps ↗</a>` : ""}
         <a class="bk-chip" href="${esc(yol)}" target="_blank" rel="noopener">Yol tarifi ↗</a>
       </div>
       ${bugunSaat ? `<p class="bk-saat"><b>Bugün:</b> ${esc(String(bugunSaat).replace(/^[^:]+:\s*/, ""))}</p>` : ""}
@@ -94,14 +96,14 @@
         ${yorumlar.length ? `<details><summary>Son Google yorumları (${yorumlar.length})</summary>${yorumlar.map(c => `<blockquote><span class="bk-yp">${"★".repeat(Math.round(c.puan || 0))}</span> ${esc(c.metin || "")}<cite>${esc(c.yazar || "Google kullanıcısı")} · ${esc(c.zaman || "")}</cite></blockquote>`).join("")}</details>` : ""}
       </div>
       ${r.yonetici_notu ? `<p class="bk-not"><b>Rota notun:</b> ${esc(r.yonetici_notu)}</p>` : ""}
-      <form class="bk-ig-form" data-ig="${r.id}">
+      <form class="bk-ig-form" data-ig="${r.id}" hidden>
         <input name="ig" placeholder="Instagram: @kullaniciadi ya da profil linki" value="${esc(ig ? "@" + ig : "")}" maxlength="200" autocomplete="off">
         <button class="btn btn-line btn-sm">Kaydet</button>
       </form>
-      ${opt.bag ? `<label class="field bk-bnot"><span>Bu bölüm için not</span><textarea rows="2" maxlength="1000" data-bnot="${opt.bag.bolum_id}:${r.id}" placeholder="Çekim notu, sipariş edilecekler, saat…">${esc(opt.bag.not_ || "")}</textarea></label>` : ""}
+      ${opt.bag ? `<label class="field bk-bnot"${opt.bag.not_ ? "" : " hidden"}><span>Bu bölüm için not</span><textarea rows="2" maxlength="1000" data-bnot="${opt.bag.bolum_id}:${r.id}" placeholder="Çekim notu, sipariş edilecekler, saat…">${esc(opt.bag.not_ || "")}</textarea></label>` : ""}
       <div class="bk-act">
-        ${r.google_place_id ? `<button type="button" class="icon-btn" data-gdet="${r.id}">${eski ? "Google bilgilerini getir" : "Google bilgilerini yenile"}</button>` : `<span class="sm warn">Google ile eşleşmemiş: Öneriler sekmesinden eşleştir.</span>`}
-        ${opt.bag ? `<button type="button" class="icon-btn" data-yukari="${r.id}" aria-label="Yukarı taşı">↑</button><button type="button" class="icon-btn" data-asagi="${r.id}" aria-label="Aşağı taşı">↓</button><button type="button" class="icon-btn danger" data-bcikar="${r.id}">Bölümden çıkar</button>` : ""}
+        ${!r.google_place_id ? `<span class="sm warn">Google ile eşleşmemiş: Öneriler sekmesinden eşleştir.</span>` : eski ? `<button type="button" class="icon-btn" data-gdet="${r.id}">Google bilgilerini getir</button>` : opt.bag ? "" : `<button type="button" class="icon-btn" data-gdet="${r.id}">Google bilgilerini yenile</button>`}
+        ${opt.bag ? `${opt.bag.not_ ? "" : `<button type="button" class="icon-btn" data-notac="${r.id}">+ Not</button>`}<span class="bk-sag"><button type="button" class="icon-btn" data-yukari="${r.id}" aria-label="Yukarı taşı">↑</button><button type="button" class="icon-btn" data-asagi="${r.id}" aria-label="Aşağı taşı">↓</button><button type="button" class="icon-btn danger" data-bcikar="${r.id}" aria-label="Bölümden çıkar">✕</button></span>` : ""}
       </div>
     </article>`;
   }
@@ -306,8 +308,19 @@
     const icinde = B.list.filter(b => bolumMekanlari(b.id).some(x => ayniMekan(x.r, r)));
     openModal(adOf(r), `<div class="bk-modal">${kartHtml(r, { ac: true })}
       ${icinde.length ? `<p class="sm" style="margin-top:10px">Bölümler: ${icinde.map(b => esc((b.no != null ? "Bölüm " + b.no + " · " : "") + b.baslik)).join(", ")}</p>` : ""}
-      <div class="m-foot"><button type="button" class="btn btn-line btn-sm" data-close>Kapat</button><button type="button" class="btn btn-y btn-sm" id="bk-bolume">Bölüme ekle</button></div></div>`);
+      <div class="m-foot bk-foot">
+        ${r.durum === "listede" ? `<button type="button" class="btn btn-line btn-sm danger-t" id="bk-cikar">Rotadan çıkar</button><button type="button" class="btn btn-line btn-sm" id="bk-duz">Rota puanı / konum</button><button type="button" class="btn btn-line btn-sm" id="bk-gidildi">Gidildi</button>` : ""}
+        <button type="button" class="btn btn-y btn-sm" id="bk-bolume">Bölüme ekle</button></div></div>`);
     $("#bk-bolume").addEventListener("click", () => bolumeEkle(r));
+    const on = (id, f) => { const el = $(id); if (el) el.addEventListener("click", f); };
+    on("#bk-duz", () => P.rotaForm(r));
+    on("#bk-gidildi", () => P.toMap(r));
+    on("#bk-cikar", async () => {
+      if (!(await confirmBox("Bu mekân rotadan çıkarılacak (öneri silinmez, durumu 'İncelendi' olur).", "Rotadan çıkar"))) return;
+      const { error } = await db.from("mekan_onerileri").update({ durum: "incelendi" }).eq("id", r.id);
+      if (error) return toast("Güncellenemedi: " + error.message);
+      r.durum = "incelendi"; P.renderAll(); toast("Rotadan çıkarıldı");
+    });
   }
 
   /* ---------- Google bilgisi ---------- */
@@ -336,6 +349,8 @@
     const by = t.closest("[data-bac]"); if (by) { B.acik = +by.dataset.bac; ciz(); window.scrollTo({ top: 0 }); return; }
     if (t.closest("[data-geri]")) { B.acik = null; ciz(); return; }
     const b = t.closest("button"); if (!b) return;
+    if (b.dataset.igac) { const f = b.closest(".bk").querySelector(".bk-ig-form"); f.hidden = !f.hidden; if (!f.hidden) f.ig.focus(); return; }
+    if (b.dataset.notac) { const l = b.closest(".bk").querySelector(".bk-bnot"); l.hidden = false; b.remove(); l.querySelector("textarea").focus(); return; }
     if (b.dataset.bduz) return bolumForm(B.list.find(x => x.id === +b.dataset.bduz));
     if (b.dataset.bekle) return mekanSec(+b.dataset.bekle);
     if (b.dataset.bsil) {
@@ -374,7 +389,7 @@
     }
   }
   root.addEventListener("click", tikla);
-  $("#modal").addEventListener("click", e => { if (e.target.closest("[data-gdet]") && e.target.closest(".bk-modal")) tikla(e); });
+  $("#modal").addEventListener("click", e => { if (e.target.closest("[data-gdet],[data-igac]") && e.target.closest(".bk-modal")) tikla(e); });
 
   async function igKaydet(e) {
     const f = e.target.closest("form[data-ig]"); if (!f) return;
@@ -384,9 +399,9 @@
     if (v && !h) return toast("Instagram kullanıcı adı ya da profil linki yaz (örn. @mekan).");
     const deger = h ? `https://www.instagram.com/${h}/` : null;
     const ids = kardesler(r).map(x => x.id);
-    const { error } = await db.from("mekan_onerileri").update({ instagram: deger }).in("id", ids);
+    const { error } = await db.from("mekan_onerileri").update({ instagram: deger, instagram_otomatik: false }).in("id", ids);
     if (error) return toast("Kaydedilemedi: " + error.message);
-    D.oneri.filter(x => ids.includes(x.id)).forEach(x => { x.instagram = deger; });
+    D.oneri.filter(x => ids.includes(x.id)).forEach(x => { x.instagram = deger; x.instagram_otomatik = false; });
     kartYenile(r); toast(h ? "Instagram kaydedildi" : "Instagram silindi");
   }
   root.addEventListener("submit", igKaydet);
@@ -405,5 +420,16 @@
   $("#add-bolum").addEventListener("click", () => { if (B.yuklendi) bolumForm(); else yukle().then(ok => ok && bolumForm()); });
   $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b && b.dataset.tab === "bolum") ac(); });
 
-  window.BOLUM = { detay, bolumeEkle };
+  // Panel verisi her yüklendiğinde bölümleri de tazele (rota satırlarındaki "Bölüm 1" rozetleri için)
+  async function yenile() {
+    if (!(await yukle())) return;
+    P.renderRota();
+    if (!$('[data-pane="bolum"]').hidden) ciz();
+  }
+  function rozet(r) {
+    if (!B.yuklendi) return "";
+    return B.list.filter(b => bolumMekanlari(b.id).some(x => ayniMekan(x.r, r)))
+      .map(b => `<span class="badge bd-${esc(b.durum)}" title="${esc(b.baslik)}">${b.no != null ? "Bölüm " + esc(b.no) : "Bölüm"}</span>`).join("");
+  }
+  window.BOLUM = { detay, bolumeEkle, yenile, rozet };
 })();
