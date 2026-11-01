@@ -29,7 +29,9 @@
   const TUR_AD = { denedik: "Denedik", rota: "Rotamızda", oneri: "Önerilen" };
   let MAP = null, ITEMS = [], MARKERS = new Map(), ME = null, MEMK = null, POP = null;
   const F = { tur: "", il: "", q: "" };
-  let LIMIT = 40;
+  // Ana sayfada telefonda liste kısa başlar (iç içe kaydırma yok), "daha göster" ile açılır
+  const ADIM = !BUYUK && matchMedia("(max-width: 760px)").matches ? 6 : 40;
+  let LIMIT = ADIM;
   const trNorm = s => String(s || "").toLocaleLowerCase(TR).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i").replace(/[^a-z0-9]+/g, " ").trim();
   const fmtP = p => { const n = Math.round(Number(p) * 10) / 10; return Number.isInteger(n) ? String(n) : n.toFixed(1).replace(".", ","); };
   const yerAd = m => m.il === "Yurt dışı" ? (m.ulke || "Yurt dışı") : m.il;
@@ -133,7 +135,7 @@
     POP.setLngLat([m.lng, m.lat]).setHTML(popHtml(m)).addTo(MAP);
   }
   $("#dh-items").addEventListener("click", e => {
-    if (e.target.closest("[data-more]")) { LIMIT += 40; return renderList(); }
+    if (e.target.closest("[data-more]")) { LIMIT += ADIM === 6 ? 10 : 40; return renderList(); }
     if (e.target.closest("a")) return;
     const li = e.target.closest(".dh-item"); if (!li) return;
     const m = ITEMS.find(x => x.key === li.dataset.key); if (m) { focusItem(m); if (BUYUK) sheet(false); else if (matchMedia("(max-width:960px)").matches) $("#map").scrollIntoView({ behavior: "smooth", block: "center" }); }

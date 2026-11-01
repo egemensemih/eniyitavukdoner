@@ -733,3 +733,34 @@ textarea{resize:vertical;min-height:96px}
 @media(max-width:760px){
   input:not([type=checkbox]):not([type=radio]),select,textarea{font-size:16px!important}
 }
+
+/* ===== v15: düzen cilası ===== */
+/* Kahraman: iki düğme eşit genişlikte, harita kartı onlarla aynı hizada */
+.hero .cta{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:560px}
+.hero .cta .btn{width:100%;justify-content:center;text-align:center;padding-left:18px;padding-right:18px}
+.hero-map{max-width:560px}
+.crit-head{align-items:flex-end}
+@media(max-width:760px){
+  .hero .cta{grid-template-columns:1fr;max-width:none;gap:10px}
+  .hero-map{max-width:none}
+  /* harita: lejant yerine üstteki sekmeler yeterli; liste sayfanın içinde akar */
+  body:not([data-sayfa=harita]) .map-legend{display:none}
+  body:not([data-sayfa=harita]) .dh-list{max-height:none}
+  body:not([data-sayfa=harita]) #dh-items{overflow:visible;max-height:none}
+  .dh-item{grid-template-columns:36px minmax(0,1fr) auto;align-items:center}
+  .dh-acts{grid-column:auto;flex-direction:column;align-items:flex-end;justify-content:center}
+  .dh-acts a{min-height:38px;padding:7px 12px}
+  /* reçete fişi: sadece seçilenler görünür, fiş adım adım dolar */
+  #fis-liste>div:has(>dd.empty){display:none}
+  /* nasıl işliyor: numara başlığın yanında, kartlar kısa */
+  .how-step{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:14px;padding:18px}
+  .how-step .n{grid-row:1/3;margin:0}
+  .how-step h3{margin:6px 0 4px;align-self:center}
+  .how-step p{grid-column:2}
+  /* kriterler: tek sütun, kısa satırlar, açıklama görünür */
+  .criteria{grid-template-columns:1fr;gap:8px}
+  .crit{flex-direction:row;align-items:center;gap:12px;padding:12px 14px}
+  .crit .ci{flex:none;margin:0}
+  .crit h3{font-size:15px;margin:0}
+  .crit p{display:block;margin:2px 0 0;font-size:13px}
+}
