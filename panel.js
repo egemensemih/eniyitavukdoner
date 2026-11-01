@@ -452,7 +452,7 @@
           <div class="rn"><b>${esc(r.google_ad || r.mekan_adi)}</b>${r.kaynak === "tahsin" || r.kaynak === "egemen" ? ` <span class="badge b-kisi-${r.kaynak}" data-tip="${esc(KISI_AD[r.kaynak])} panelinden ekledi${r.neden ? ": " + esc(r.neden) : ""}">${esc(KISI_AD[r.kaynak])} ekledi</span>` : ""}<div class="sm">${esc([r.ilce, r.ulke].filter(Boolean).join(" · "))}${same.get(norm(r.mekan_adi) + "|" + yerOf(r)) > 1 ? ` · <span class="badge b-dup">×${same.get(norm(r.mekan_adi) + "|" + yerOf(r))} öneri</span>` : ""}${r.yonetici_notu ? ` · ${esc(r.yonetici_notu)}` : ""}</div></div>
           <div class="rg">${gCell(r)}</div>
           <label class="sw" data-tip="Sitedeki haritada 'Rotamızda' olarak göster"><input type="checkbox" data-hg="${r.id}"${r.haritada_goster ? " checked" : ""}${r.lat == null ? " disabled" : ""}><i></i></label>
-          <div class="ra"><button class="icon-btn" data-rota="${r.id}">Düzenle</button><button class="icon-btn" data-tomap2="${r.id}">Gidildi</button><button class="icon-btn danger" data-cikar="${r.id}">Çıkar</button></div>
+          <div class="ra"><button class="icon-btn" data-detay="${r.id}">Detay</button><button class="icon-btn" data-bolume="${r.id}">Bölüme ekle</button><button class="icon-btn" data-rota="${r.id}">Düzenle</button><button class="icon-btn" data-tomap2="${r.id}">Gidildi</button><button class="icon-btn danger" data-cikar="${r.id}">Çıkar</button></div>
         </div>`).join("") + `</div>`;
       }).join("") + `</section>`;
     }).join("");
@@ -460,8 +460,10 @@
   ["#f-rota-bolge", "#f-rota-sira"].forEach(x => $(x).addEventListener("input", renderRota));
   $("#rota-list").addEventListener("click", async e => {
     const b = e.target.closest("button"); if (!b) return;
-    const r = D.oneri.find(x => x.id === +(b.dataset.rota || b.dataset.tomap2 || b.dataset.cikar || b.dataset.gfind || b.dataset.gpuan));
+    const r = D.oneri.find(x => x.id === +(b.dataset.rota || b.dataset.tomap2 || b.dataset.cikar || b.dataset.gfind || b.dataset.gpuan || b.dataset.detay || b.dataset.bolume));
     if (b.dataset.gpuan) return puanGetir(r, b);
+    if (b.dataset.detay) return window.BOLUM && window.BOLUM.detay(r);
+    if (b.dataset.bolume) return window.BOLUM && window.BOLUM.bolumeEkle(r);
     if (b.dataset.rota) rotaForm(r);
     if (b.dataset.gfind) googleFind(r);
     if (b.dataset.tomap2) toMap(r);
@@ -916,8 +918,11 @@
       D.recete.map(r => [dt(r.created_at), r.il, r.ilce, ...Object.keys(STEP_AD).map(k => [].concat((r.secimler || {})[k] || []).join(", ")), (r.secimler || {}).not]));
   });
 
+  // Bölümler modülü (bolumler.js) için ortak araçlar
+  window.PANEL = { db, D, esc, toast, openModal, closeModal, confirmBox, gfn, mapsAra, guvenli, fmtD, nf, DURUM, renderAll, goTab };
+
   /* ---------- boot ---------- */
   if (window.top !== window.self) { document.body.innerHTML = ""; return; }
   $("#add-rota-link").addEventListener("click", rotaLinkForm);
-  start().then(() => { const h = location.hash.slice(1); if (["oneri", "rota", "bekleme", "mekan", "recete", "ekip"].includes(h)) goTab(h); });
+  start().then(() => { const h = location.hash.slice(1); if (["oneri", "rota", "bolum", "bekleme", "mekan", "recete", "ekip"].includes(h)) goTab(h); });
 })();

@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css?v=13">
-<link rel="stylesheet" href="panel.css?v=10">
+<link rel="stylesheet" href="panel.css?v=11">
 </head>
 <body class="pnl">
 
@@ -47,6 +47,7 @@
       <button role="tab" data-tab="ozet" aria-selected="true">Özet</button>
       <button role="tab" data-tab="oneri">Öneriler <em id="cnt-oneri"></em></button>
       <button role="tab" data-tab="rota">Rota <em id="cnt-rota"></em></button>
+      <button role="tab" data-tab="bolum">Bölümler</button>
       <button role="tab" data-tab="bekleme">Bekleme listesi <em id="cnt-bekleme"></em></button>
       <button role="tab" data-tab="mekan">Mekânlar <em id="cnt-mekan"></em></button>
       <button role="tab" data-tab="recete">Reçeteler <em id="cnt-recete"></em></button>
@@ -96,6 +97,13 @@
         <select id="f-rota-sira"><option value="rota">Sırala: rota puanım</option><option value="google">Sırala: Google puanı</option><option value="yorum">Sırala: Google yorum sayısı</option><option value="oneri">Sırala: öneri sayısı</option></select>
       </div>
       <div id="rota-list"></div>
+    </section>
+
+    <!-- BÖLÜMLER -->
+    <section data-pane="bolum" hidden>
+      <div class="p-head"><h2>YouTube bölümleri</h2><div class="acts"><button class="btn btn-sm" id="add-bolum">+ Yeni bölüm</button></div></div>
+      <p class="hint">Her bölüm bir video: “Bölüm 1 · İstanbul'un Alman dönercileri” gibi. Rotadaki mekânları bölüme ekle; gitmeden önce hepsinin adresini, Google puanını ve yorumlarını, telefonunu, çalışma saatlerini, Instagram'ını ve önerenlerin ne dediğini tek ekranda gör. Bu sayfa sadece panelde görünür.</p>
+      <div id="bolum-root"></div>
     </section>
 
     <!-- BEKLEME -->
@@ -159,6 +167,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous" defer></script>
 <script src="ortak-panel.js?v=13" defer></script>
-<script src="panel.js?v=13" defer></script>
+<script src="panel.js?v=14" defer></script>
+<script src="bolumler.js?v=1" defer></script>
 </body>
 </html>
