@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /panel
+Disallow: /panel.html
+Disallow: /onizleme/
+Disallow: /game/
+
+Sitemap: https://eniyitavukdoner.com/sitemap.xml
