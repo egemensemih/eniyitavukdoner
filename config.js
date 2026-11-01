@@ -18,11 +18,11 @@ window.SITE_CONFIG = {
   ],
 
   // İletişim / KVKK başvuru adresi (sitenin altında ve KVKK sayfasında görünür)
-  ILETISIM_EPOSTA: "iletisim@eniyitavukdoner.com",
+  ILETISIM_EPOSTA: "eniyitavukdoner@gmail.com",
 
   // KVKK: veri sorumlusunun resmî bilgileri (KVKK sayfasında görünür).
   // Şahıs işletmesiyse ad soyad, şirketse ticaret unvanı yazılır.
-  VERI_SORUMLUSU: { unvan: "Denedik YouTube Kanalı adına Egemen Semih Sönmez", adres: "Bebek, Beşiktaş / İstanbul, Türkiye", kep: "" },
+  VERI_SORUMLUSU: { unvan: "Denedik YouTube Kanalı adına Egemen Semih Sönmez", adres: "Bereketzade Mah. Camekan Sok. No:4J, Beyoğlu / İstanbul, Türkiye", kep: "" },
 
   // Puanlama: her kişi on kriteri 10 üzerinden puanlar, toplam 100. Mekânın puanı kişilerin ortalaması.
   KISILER: [{ k: "tahsin", ad: "Tahsin" }, { k: "egemen", ad: "Egemen" }],
