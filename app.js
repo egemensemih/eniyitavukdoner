@@ -8,7 +8,7 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const TR = "tr-TR";
-  const ONAY_METNI = "v1 (2026-09) · Bu proje ve açılış haberleri için bana e-posta ve SMS gönderilmesine onay veriyorum. · kaynak: eniyitavukdoner.com haber formu";
+  const ONAY_METNI = "v2 (2026-11) · Bu proje ve açılış haberleri için bana e-posta (telefonumu yazdıysam SMS) gönderilmesine onay veriyorum. · kaynak: eniyitavukdoner.com haber formu";
 
   /* ---------- Supabase ---------- */
   let db = null;
@@ -587,7 +587,7 @@
     const mail = hf.eposta.value.trim().toLowerCase();
     const tel = normPhone(hf.telefon.value, hf.il.value === "Yurt dışı");
     need(hf.eposta, /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail), "Geçerli bir e-posta adresi yazar mısın?");
-    need(hf.telefon, !!tel, hf.il.value === "Yurt dışı" ? "Numaranı ülke koduyla yaz (örn. +49…)." : "05XX XXX XX XX biçiminde bir cep numarası yazar mısın?");
+    need(hf.telefon, !hf.telefon.value.trim() || !!tel, hf.il.value === "Yurt dışı" ? "Numaranı ülke koduyla yaz (örn. +49…)." : "05XX XXX XX XX biçiminde bir cep numarası yazar mısın?");
     need(hf.il, !!hf.il.value, "İl seç.");
     need(hf.ilce, hf.ilce.disabled || !!hf.ilce.value, hf.il.value === "Yurt dışı" ? "Ülke seç." : "İlçe seç.");
     need(hf.ileti_onay, hf.ileti_onay.checked, "Sana haber verebilmemiz için bu onay gerekli.");

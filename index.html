@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 
@@ -264,13 +264,13 @@
       <div class="card" id="haber-kart">
         <form id="haber-form" novalidate>
           <label class="field"><span>E-posta</span><input name="eposta" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="ornek@mail.com" required></label>
-          <label class="field"><span>Cep telefonu</span><input name="telefon" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="05XX XXX XX XX" required></label>
+          <label class="field"><span>Cep telefonu <small>(isteğe bağlı, SMS için)</small></span><input name="telefon" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="05XX XXX XX XX"></label>
           <div class="row2">
             <label class="field"><span>İl</span><select name="il" required></select></label>
             <label class="field"><span>İlçe</span><select name="ilce" required disabled></select></label>
           </div>
           <input class="hp" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <label class="check"><input type="checkbox" name="ileti_onay" required><span>Bu proje ve açılış haberleri için bana <b>e-posta ve SMS</b> gönderilmesine onay veriyorum. <a href="kvkk.html#ileti" target="_blank">Onay metni</a></span></label>
+          <label class="check"><input type="checkbox" name="ileti_onay" required><span>Bu proje ve açılış haberleri için bana <b>e-posta</b> (telefonumu yazdıysam <b>SMS</b>) gönderilmesine onay veriyorum. <a href="kvkk.html#ileti" target="_blank">Onay metni</a></span></label>
           <label class="check"><input type="checkbox" name="kvkk_onay" required><span><a href="kvkk.html#aydinlatma" target="_blank">Aydınlatma metnini</a> okudum ve anladım.</span></label>
           <button class="btn btn-o full" type="submit">Bana haber ver</button>
           <p class="form-msg" role="status"></p>
@@ -315,10 +315,10 @@
   </div>
 </footer>
 
-<script src="config.js?v=13"></script>
-<script src="ilceler.js?v=13" defer></script>
+<script src="config.js?v=14"></script>
+<script src="ilceler.js?v=14" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous" defer></script>
-<script src="app.js?v=13" defer></script>
-<script src="harita.js?v=13" defer></script>
+<script src="app.js?v=14" defer></script>
+<script src="harita.js?v=14" defer></script>
 </body>
 </html>
