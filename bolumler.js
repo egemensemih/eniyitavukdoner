@@ -49,6 +49,12 @@
     await gyYukle(B.bag.map(x => oneri(x.oneri_id)).filter(Boolean));
     return true;
   }
+  // "Bölüm 1'e", "Bölüm 3'e", "Bölüm 6'ya" … (sayının okunuşuna göre yönelme eki)
+  const ekDe = n => { const s = String(n); const son = s.slice(-1), iki = s.slice(-2);
+    const e = s.length > 1 && son === "0" ? ({ "10": "a", "20": "ye", "30": "a", "40": "a", "50": "ye", "60": "a", "70": "e", "80": "e", "90": "a", "00": "e" }[iki] || "e")
+      : ({ "1": "e", "2": "ye", "3": "e", "4": "e", "5": "e", "6": "ya", "7": "ye", "8": "e", "9": "a", "0": "a" }[son]);
+    return "'" + e; };
+  const baskaBolum = (r, haric) => B.list.filter(x => x.id !== haric && bolumMekanlari(x.id).some(y => ayniMekan(y.r, r)));
   const bolumMekanlari = id => B.bag.filter(x => x.bolum_id === id).sort((a, b) => a.sira - b.sira || a.created_at.localeCompare(b.created_at))
     .map(x => ({ bag: x, r: oneri(x.oneri_id) })).filter(x => x.r);
 
@@ -250,7 +256,7 @@
         const var_ = [...icerde].some(id => ayniMekan(oneri(id) || {}, r));
         return `<label class="ms-row${var_ ? " var" : ""}"><input type="checkbox" value="${r.id}"${var_ ? " disabled checked" : secili.has(r.id) ? " checked" : ""}>
           <span><b>${esc(adOf(r))}</b><small>${esc(yerOf(r))}${r.rota_puani != null ? " · rota " + Number(r.rota_puani).toFixed(1) : ""}${r.google_puan != null ? " · ★ " + Number(r.google_puan).toFixed(1) : ""}</small></span>
-          <span class="badge">${var_ ? "Bölümde" : esc(DURUM[r.durum] || r.durum)}</span></label>`;
+          <span class="ms-rozet">${baskaBolum(r, bolumId).map(x => `<span class="badge bd-${esc(x.durum)}" title="${esc(x.baslik)}">${x.no != null ? "Bölüm " + esc(x.no) + esc(ekDe(x.no)) + " eklendi" : esc(x.baslik) + " bölümünde"}</span>`).join("")}<span class="badge">${var_ ? "Bu bölümde" : esc(DURUM[r.durum] || r.durum)}</span></span></label>`;
       }).join("") : `<p class="sm" style="padding:14px 4px">Eşleşen mekân yok.${sadeceRota.checked ? " “Sadece rotadakiler” kutusunu kaldırıp tüm önerilerde arayabilirsin." : ""}</p>`;
       tazele();
     }
