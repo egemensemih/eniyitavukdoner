@@ -652,7 +652,7 @@
     const git = () => {
       if (kullanici) return;
       const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--nav-h"), 10) || 68;
-      scrollTo({ top: Math.max(0, hedef.getBoundingClientRect().top + scrollY - navH - 8), behavior: "auto" });
+      scrollTo({ top: Math.max(0, hedef.getBoundingClientRect().top + scrollY - navH - 8), behavior: "instant" });
     };
     requestAnimationFrame(git);
     [400, 1200, 2500].forEach(t => setTimeout(git, t));
