@@ -1,4 +1,4 @@
-/* eniyitavukdoner.com — çekim paneli (Tahsin abi + çekim ekibi) */
+/* eniyitavukdoner.com — çekim paneli (çekim ekibi, puan verenler, yöneticiler) */
 (function () {
   "use strict";
   if (window.top !== window.self) { document.documentElement.innerHTML = ""; return; }
@@ -57,8 +57,10 @@
   });
 
   /* ---------- veri ---------- */
+  const ROL_AD = { ekip: "çekim ekibi", puanci: "puan verici", yonetici: "süper yönetici" };
+  const ort = L => { const t = (L || []).filter(p => p.toplam != null); return t.length ? t.reduce((a, p) => a + Number(p.toplam), 0) / t.length : null; };
   let D = null, BEN = null, SEC = null, SON_JSON = "";
-  const SUNUCU = () => BEN && (BEN.rol === "sunucu");
+  const SUNUCU = () => !!(BEN && BEN.kullanici_adi && (BEN.rol === "puanci" || BEN.rol === "yonetici"));
   const TASLAK_VAR = () => !modal.hidden && !!modalKapat;
 
   async function basla() {
@@ -82,7 +84,8 @@
     const j = JSON.stringify(data);
     const degisti = j !== SON_JSON; SON_JSON = j;
     D = data; BEN = data.ben || {};
-    $("#ck-ben").textContent = BEN.rol === "sunucu" ? `${BEN.ad} · puan veren` : BEN.rol === "ekip" ? `${BEN.ad} · çekim ekibi` : "Yönetici önizlemesi";
+    $("#ck-ben").textContent = BEN.kullanici_adi ? `${BEN.ad} · ${ROL_AD[BEN.rol] || BEN.rol}` : "Yönetici önizlemesi";
+    if (BEN.rol === "yonetici" && !$("#ck-yonetim")) $("#ck-yenile").insertAdjacentHTML("beforebegin", `<a class="btn btn-line btn-sm" id="ck-yonetim" href="/panel.html">Yönetim</a>`);
     return ilk ? true : degisti;
   }
 
@@ -122,13 +125,13 @@
 
   function kart(m, i) {
     const bugun = bugunSaat(m.saatler), ig = igAd(m.instagram), t = tel(m.telefon);
-    const puanlar = m.puanlar || [], benim = puanlar.find(p => BEN && p.kisi === BEN.kisi);
+    const puanlar = m.puanlar || [], benim = puanlar.find(p => BEN && BEN.kullanici_adi && p.kisi === BEN.kullanici_adi);
     const taslak = SUNUCU() && ls.get(`etd-cekim-taslak-${m.oneri_id}`);
     const nedenler = (m.nedenler || []).filter(n => n && n.neden);
     const yorumlar = Array.isArray(m.yorumlar) ? m.yorumlar : [];
     return `<article class="ck-kart" id="m-${m.oneri_id}" data-id="${m.oneri_id}">
       <header class="ck-kh"><span class="ck-no">${i + 1}</span><div class="ck-kt"><h3>${esc(m.ad)}</h3><small>${esc([yer(m), m.tur].filter(Boolean).join(" · "))}</small></div>
-        ${puanlar.length ? `<span class="ck-rozet">${fP(puanlar[0].toplam)}</span>` : ""}</header>
+        ${ort(puanlar) != null ? `<span class="ck-rozet"${puanlar.length > 1 ? ` title="${puanlar.length} kişinin ortalaması"` : ""}>${fP(ort(puanlar))}</span>` : ""}</header>
       ${m.kapali ? `<p class="ck-uyari">Google'da “kalıcı olarak kapandı” görünüyor.</p>` : ""}
       ${m.not ? `<p class="ck-not">${esc(m.not)}</p>` : ""}
       ${m.adres ? `<p class="ck-adres">${esc(m.adres)}</p>` : ""}
@@ -153,23 +156,24 @@
   }
 
   function ozet(b) {
-    const L = (b.mekanlar || []).map((m, i) => ({ m, i, p: (m.puanlar || [])[0] })).filter(x => x.p && x.p.toplam != null);
+    const L = (b.mekanlar || []).map((m, i) => ({ m, i, p: ort(m.puanlar), n: (m.puanlar || []).length })).filter(x => x.p != null);
     if (!L.length) return "";
-    const s = [...L].sort((a, b) => b.p.toplam - a.p.toplam);
+    const s = [...L].sort((a, b) => b.p - a.p);
     return `<section class="ck-ozet"><div class="ck-ozet-h"><h3>Puan tablosu</h3><button type="button" class="btn btn-line btn-sm" data-kopyala>Kopyala</button></div>
-      <ol>${s.map(x => `<li><a href="#m-${x.m.oneri_id}"><span>${esc(x.m.ad)}</span><b>${fP(x.p.toplam)}</b></a></li>`).join("")}</ol>
+      <ol>${s.map(x => `<li><a href="#m-${x.m.oneri_id}"><span>${esc(x.m.ad)}</span><b>${fP(x.p)}${x.n > 1 ? `<small class="ck-ort"> · ${x.n} kişi</small>` : ""}</b></a></li>`).join("")}</ol>
       <p class="sm">${L.length}/${b.mekanlar.length} mekân puanlandı.</p></section>`;
   }
   function ozetMetni(b) {
     const satir = [];
     satir.push(`${b.no ? "Bölüm " + b.no + " — " : ""}${b.baslik}`);
     (b.mekanlar || []).forEach((m, i) => {
-      const p = (m.puanlar || [])[0];
-      satir.push("", `${i + 1}. ${m.ad}${p && p.toplam != null ? ` — ${fP(p.toplam)}/100` : " — puan yok"}`);
-      if (p) {
-        KRITER.forEach(([k, ad]) => { if (p.puanlar && p.puanlar[k] != null) satir.push(`   ${ad}: ${fP(p.puanlar[k])}`); });
-        if (p.yorum) satir.push(`   Yorum: ${p.yorum}`);
-      }
+      const L = m.puanlar || [], o = ort(L), girinti = L.length > 1 ? "      " : "   ";
+      satir.push("", `${i + 1}. ${m.ad}${o != null ? ` — ${fP(o)}/100${L.length > 1 ? " (ortalama)" : ""}` : " — puan yok"}`);
+      L.forEach(p => {
+        if (L.length > 1) satir.push(`   ${p.ad}: ${fP(p.toplam)}/100`);
+        KRITER.forEach(([k, ad]) => { if (p.puanlar && p.puanlar[k] != null) satir.push(`${girinti}${ad}: ${fP(p.puanlar[k])}`); });
+        if (p.yorum) satir.push(`${girinti}Yorum: ${p.yorum}`);
+      });
     });
     return satir.join("\n");
   }
@@ -211,11 +215,11 @@
     if (a) { e.preventDefault(); const k = $(a.getAttribute("href")); if (k) { k.scrollIntoView({ behavior: "smooth", block: "start" }); k.classList.add("vurgu"); setTimeout(() => k.classList.remove("vurgu"), 1600); } }
   });
 
-  /* ---------- puan verme (sadece Tahsin abi) ---------- */
+  /* ---------- puan verme (puan verici ve süper yönetici) ---------- */
   function puanla(id) {
     if (!SUNUCU()) return;
     const b = (D.bolumler || []).find(x => x.id === SEC), m = b && b.mekanlar.find(x => x.oneri_id === id); if (!m) return;
-    const kayit = (m.puanlar || []).find(p => p.kisi === BEN.kisi) || {};
+    const kayit = (m.puanlar || []).find(p => p.kisi === BEN.kullanici_adi) || {};
     const tk = `etd-cekim-taslak-${id}`, taslak = ls.get(tk);
     const geri = taslak && (!kayit.updated_at || taslak.t > Date.parse(kayit.updated_at));
     const P0 = geri ? taslak.puanlar || {} : kayit.puanlar || {}, Y0 = geri ? taslak.yorum || "" : kayit.yorum || "";

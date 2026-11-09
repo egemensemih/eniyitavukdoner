@@ -51,9 +51,10 @@
   function msg(f, t, ok) { const m = $(".form-msg", f); m.textContent = t; m.className = "form-msg " + (ok ? "" : "err"); m.style.color = ok ? "var(--ok)" : ""; }
   lf.addEventListener("submit", async e => {
     e.preventDefault(); const btn = $("button[type=submit]", lf); btn.disabled = true; msg(lf, "");
-    const { error } = await db.auth.signInWithPassword({ email: lf.email.value.trim(), password: lf.password.value });
+    const g = lf.email.value.trim(), email = g.includes("@") ? g : g.toLocaleLowerCase("tr-TR").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c") + "@ekip.eniyitavukdoner.com";
+    const { error } = await db.auth.signInWithPassword({ email, password: lf.password.value });
     btn.disabled = false;
-    if (error) return msg(lf, "E-posta ya da şifre hatalı.");
+    if (error) return msg(lf, /banned/i.test(error.message) ? "Bu hesabın erişimi kapatılmış." : "Giriş bilgileri hatalı.");
     start();
   });
   $("#forgot").addEventListener("click", async () => {

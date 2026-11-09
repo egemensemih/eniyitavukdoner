@@ -4,7 +4,8 @@
   const P = window.PANEL; if (!P) return;
   const $ = (s, r = document) => r.querySelector(s);
   const esc = P.esc, toast = P.toast;
-  const ROL = { sunucu: "Tahsin abi · puan verir", ekip: "Çekim ekibi" };
+  const ROL = { ekip: "Çekim ekibi", puanci: "Puan verici", yonetici: "Süper yönetici" };
+  const SITE = { tahsin: "Tahsin", egemen: "Egemen" };
   const kok = $("#ekipy"); if (!kok) return;
   const fmtDT = s => new Date(s).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 
@@ -21,10 +22,9 @@
     const r = new Uint32Array(3); crypto.getRandomValues(r);
     return `${KELIME[r[0] % KELIME.length]}-${String(1000 + r[1] % 9000)}-${KELIME[r[2] % KELIME.length]}`;
   }
-  const girisAdresi = rol => rol === "sunucu" ? "eniyitavukdoner.com/panel/tahsin" : "eniyitavukdoner.com/ekip";
 
   function bilgiKutusu(u, sifre) {
-    const metin = `Çekim paneli: https://${girisAdresi(u.rol)}\nKullanıcı adı: ${u.kullanici_adi}\nŞifre: ${sifre}`;
+    const metin = `Çekim paneli: https://eniyitavukdoner.com/ekip${u.rol === "yonetici" ? "\nYönetim paneli: https://eniyitavukdoner.com/panel.html" : ""}\nKullanıcı adı: ${u.kullanici_adi}\nŞifre: ${sifre}`;
     $("#ekipy-bilgi").innerHTML = `<div class="ekipy-bilgi"><div><b>${esc(u.ad)} için giriş bilgisi</b><pre>${esc(metin)}</pre></div>
       <div class="ekipy-bilgi-a"><button type="button" class="btn btn-o btn-sm" data-kopya>Kopyala</button><button type="button" class="btn btn-line btn-sm" data-gizle>Kapat</button></div></div>
       <p class="sm">Bu şifre bir daha gösterilmez. Kopyalayıp kişiye WhatsApp'tan gönder.</p>`;
@@ -39,13 +39,12 @@
     const d = await fn("liste", {});
     if (d.error) { box.innerHTML = `<div class="empty" style="color:var(--err)">${esc(d.error)}</div>`; return; }
     L = d.uyeler || [];
-    const sunucuVar = L.some(u => u.rol === "sunucu");
-    const sel = $("#ekipy-form").rol; if (sunucuVar && sel.value === "sunucu") sel.value = "ekip";
-    sel.querySelector('option[value="sunucu"]').disabled = sunucuVar;
-    box.innerHTML = !L.length ? `<div class="empty">Henüz kimse eklenmemiş. Aşağıdan Tahsin abiyi ve çekim ekibini ekle.</div>` :
+    const alinan = new Set(L.map(u => u.site).filter(Boolean));
+    [...$("#ekipy-form").site.options].forEach(o => { if (o.value) o.disabled = alinan.has(o.value); });
+    box.innerHTML = !L.length ? `<div class="empty">Henüz kimse eklenmemiş. Aşağıdan ekibini ekle.</div>` :
       `<table class="tbl ekipy-tbl"><thead><tr><th>Kişi</th><th>Kullanıcı adı</th><th>Rol</th><th>Son giriş</th><th></th></tr></thead><tbody>${L.map(u => `
         <tr data-k="${esc(u.kullanici_adi)}" class="${u.aktif ? "" : "pasif"}"><td><b>${esc(u.ad)}</b>${u.aktif ? "" : ` <span class="badge b-uygun_degil">erişim kapalı</span>`}</td>
-        <td><code>${esc(u.kullanici_adi)}</code></td><td>${esc(ROL[u.rol] || u.rol)}</td><td class="sm">${u.son ? fmtDT(u.son) : "henüz girmedi"}</td>
+        <td><code>${esc(u.kullanici_adi)}</code></td><td><select class="ekipy-rol" data-rol aria-label="Rol">${Object.entries(ROL).map(([k, v]) => `<option value="${k}"${k === u.rol ? " selected" : ""}>${v}</option>`).join("")}</select>${u.site ? `<small class="sm ekipy-site-n">Sitede ${esc(SITE[u.site] || u.site)} sütunu</small>` : ""}</td><td class="sm">${u.son ? fmtDT(u.son) : "henüz girmedi"}</td>
         <td class="ekipy-a"><button type="button" class="icon-btn" data-sifre>Şifre değiştir</button><button type="button" class="icon-btn" data-durum>${u.aktif ? "Erişimi kapat" : "Erişimi aç"}</button></td></tr>`).join("")}</tbody></table>`;
   }
 
@@ -69,13 +68,24 @@
     }
   });
 
+  kok.addEventListener("change", async e => {
+    const s = e.target.closest("[data-rol]"); if (!s) return;
+    const u = L.find(x => x.kullanici_adi === s.closest("tr").dataset.k); if (!u) return;
+    const ek = s.value === "yonetici" ? " Süper yönetici bu yönetim paneline de girer, kişi ekleyip çıkarabilir." : s.value === "ekip" && u.site ? " Sitedeki puan sütunu bağlantısı kalkar." : "";
+    if (!(await P.confirmBox(`<b>${esc(u.ad)}</b> artık <b>${esc(ROL[s.value])}</b> olacak.${ek}`, "Rolü değiştir"))) { s.value = u.rol; return; }
+    const d = await fn("rol", { kullanici_adi: u.kullanici_adi, rol: s.value, site: s.value === "ekip" ? null : u.site });
+    if (d.error) { s.value = u.rol; return toast(d.error); }
+    toast("Rol değiştirildi"); ciz();
+  });
+  $("#ekipy-form").rol.addEventListener("change", e => { $("#ekipy-site").hidden = e.target.value === "ekip"; if (e.target.value === "ekip") $("#ekipy-form").site.value = ""; });
+
   $("#ekipy-form").addEventListener("submit", async e => {
     e.preventDefault(); const f = e.currentTarget, b = $("button[type=submit]", f);
-    const u = { ad: f.ad.value.trim(), kullanici_adi: f.kadi.value.trim().toLowerCase(), rol: f.rol.value }, sifre = f.sifre.value;
+    const u = { ad: f.ad.value.trim(), kullanici_adi: f.kadi.value.trim().toLowerCase(), rol: f.rol.value, site: f.rol.value === "ekip" ? null : f.site.value || null }, sifre = f.sifre.value;
     if (!u.ad || !u.kullanici_adi || !sifre) return toast("Ad, kullanıcı adı ve şifre gerekli.");
     b.disabled = true; const d = await fn("ekle", { ...u, sifre }); b.disabled = false;
     if (d.error) return toast(d.error);
-    f.reset(); f.sifre.type = "password"; toast(`${u.ad} eklendi`); bilgiKutusu(u, sifre); ciz();
+    f.reset(); f.sifre.type = "password"; $("#ekipy-site").hidden = true; toast(`${u.ad} eklendi`); bilgiKutusu(u, sifre); ciz();
   });
   $("#ekipy-form").kadi.addEventListener("input", e => {
     const v = e.target.value, t = v.toLocaleLowerCase("tr-TR").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/\s+/g, "").replace(/[^a-z0-9._-]/g, "");

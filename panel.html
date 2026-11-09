@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css?v=13">
-<link rel="stylesheet" href="panel.css?v=16">
+<link rel="stylesheet" href="panel.css?v=17">
 </head>
 <body class="pnl">
 
@@ -23,7 +23,7 @@
     <a class="brand" href="./"><img src="favicon.svg" alt="" width="34" height="34"><span>eniyitavukdoner<b>.com</b></span></a>
     <h1>Yönetim paneli</h1>
     <form id="login-form" novalidate>
-      <label class="field"><span>E-posta</span><input name="email" type="email" autocomplete="username" required></label>
+      <label class="field"><span>E-posta ya da kullanıcı adı</span><input name="email" type="text" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
       <label class="field"><span>Şifre</span><input name="password" type="password" autocomplete="current-password" required></label>
       <button class="btn full" type="submit">Giriş yap</button>
       <p class="form-msg" role="status"></p>
@@ -139,19 +139,23 @@
     <section data-pane="ekip" hidden>
       <div class="p-head"><h2>Ekip</h2></div>
       <div id="ekipy">
-        <p class="hint">Çekim paneline kullanıcı adı ve şifreyle girilir, e-posta gerekmez. <b>Tahsin abi</b> <code>eniyitavukdoner.com/panel/tahsin</code> adresinden girer; bölümlerin tamamını, öneri nedenlerini ve Google yorumlarını görür, mekânlara puan verir. <b>Çekim ekibi</b> <code>eniyitavukdoner.com/ekip</code> adresinden girer; planlanan ve çekilen bölümlerin mekânlarını (adres, saat, telefon, yol tarifi, Instagram) ve verilen puanları görür. Puanlar mekân “Gidildi” olup siteye eklendiğinde sitedeki değerlendirmeye de otomatik taşınır.</p>
+        <p class="hint">İstediğin kadar kişi ekleyebilirsin. Herkes <code>eniyitavukdoner.com/ekip</code> adresinden kullanıcı adı ve şifreyle girer, e-posta gerekmez.<br>
+          <b>Çekim ekibi:</b> planlanan ve çekilen bölümlerin mekânlarını (adres, saat, telefon, yol tarifi, Instagram) ve verilen puanları görür.<br>
+          <b>Puan verici:</b> bütün bölümleri, öneri nedenlerini ve Google yorumlarını görür, mekânlara puan verir. Birden çok kişi puan verirse ortalaması alınır.<br>
+          <b>Süper yönetici:</b> puan verir; ayrıca bu yönetim paneline de kullanıcı adıyla girer, kişi ekleyip çıkarabilir.</p>
         <div class="box" style="margin-bottom:14px"><div id="ekipy-liste"></div></div>
         <div id="ekipy-bilgi"></div>
         <form class="box" id="ekipy-form" novalidate autocomplete="off">
           <h3 style="font-size:18px;margin-bottom:12px">Kişi ekle</h3>
           <div class="row2">
-            <label class="field"><span>Ad <small>(panelde görünür)</small></span><input name="ad" maxlength="60" placeholder="Tahsin abi" required></label>
-            <label class="field"><span>Rol</span><select name="rol" required><option value="sunucu">Tahsin abi · puan verir</option><option value="ekip">Çekim ekibi · görür</option></select></label>
+            <label class="field"><span>Ad <small>(panelde görünür)</small></span><input name="ad" maxlength="60" placeholder="Ad Soyad" required></label>
+            <label class="field"><span>Rol</span><select name="rol" required><option value="ekip">Çekim ekibi · görür</option><option value="puanci">Puan verici · puan verir</option><option value="yonetici">Süper yönetici · her şey</option></select></label>
           </div>
           <div class="row2">
-            <label class="field"><span>Kullanıcı adı</span><input name="kadi" maxlength="30" placeholder="tahsin" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
+            <label class="field"><span>Kullanıcı adı</span><input name="kadi" maxlength="30" placeholder="ör. ali" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
             <label class="field"><span>Şifre <small>(en az 8 karakter)</small></span><span class="ekipy-sifre"><input name="sifre" type="password" minlength="8" maxlength="72" autocomplete="new-password" required><button type="button" class="btn btn-line btn-sm" data-uret>Oluştur</button></span></label>
           </div>
+          <label class="field" id="ekipy-site" hidden><span>Puanı sitede de görünsün mü? <small>(isteğe bağlı · mekân siteye eklenince puanı bu sütuna yazılır)</small></span><select name="site"><option value="">Hayır, sadece çekim panelinde</option><option value="tahsin">Evet, sitedeki Tahsin sütununa</option><option value="egemen">Evet, sitedeki Egemen sütununa</option></select></label>
           <button class="btn btn-o btn-sm" type="submit">Kişiyi ekle</button>
         </form>
       </div>
@@ -175,8 +179,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous" defer></script>
 <script src="ortak-panel.js?v=13" defer></script>
-<script src="panel.js?v=16" defer></script>
+<script src="panel.js?v=17" defer></script>
 <script src="bolumler.js?v=4" defer></script>
-<script src="ekip-yonet.js?v=1" defer></script>
+<script src="ekip-yonet.js?v=2" defer></script>
 </body>
 </html>

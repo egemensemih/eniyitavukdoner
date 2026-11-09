@@ -403,7 +403,9 @@ td.num b{font-variant-numeric:tabular-nums}
 .ekipy-tbl tr.pasif td{opacity:.6}
 .ekipy-a{white-space:nowrap;text-align:right}
 .ekipy-a .icon-btn+.icon-btn{margin-left:6px}
-.ekipy-sifre{display:flex;gap:8px}
+.ekipy-sifre{display:flex!important;gap:8px}
+.ekipy-rol{font-size:13px;padding:6px 8px;border-radius:10px;max-width:170px}
+.ekipy-site-n{display:block;margin-top:3px}
 .ekipy-sifre input{flex:1;min-width:0}
 #ekipy-bilgi:not(:empty){margin-bottom:14px}
 .ekipy-bilgi{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;background:#FFF8E6;border:1px solid #f1d58a;border-radius:14px;padding:14px 16px;margin-bottom:6px}

@@ -108,6 +108,7 @@
   .ck-kopya,.cp-form textarea{font-size:16px}
   #cp-form textarea{font-size:16px}
 }
+.ck-ort{font-size:12px;font-weight:600;color:var(--muted)}
 
 /* v2: başlık tek satır, kaydırıcı çubuğu, yapışkan alt düğmeler */
 .ck-top{flex-wrap:nowrap}
