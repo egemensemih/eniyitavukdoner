@@ -282,6 +282,7 @@
       }
       await gyYukle([...secili].map(oneri).filter(Boolean));
       closeModal(); ciz(); toast(`${rows.length} mekân bölüme eklendi`);
+      otoDetay([...secili].map(oneri).filter(Boolean));
     });
     liste();
   }
@@ -301,6 +302,7 @@
         const { data, error } = await db.from("bolum_mekanlari").insert({ bolum_id: id, oneri_id: r.id, sira }).select().single();
         if (error) return toast(/duplicate|23505/.test(error.message + error.code) ? "Bu mekân zaten o bölümde." : "Eklenemedi: " + error.message);
         B.bag.push(data); await gyYukle([r]); closeModal(); toast("Bölüme eklendi"); if (B.acik === id) ciz();
+        otoDetay([r]);
       });
     };
     if (B.yuklendi) yap(); else yukle().then(ok => ok && yap());
@@ -338,6 +340,13 @@
     if (d.detay) B.gy.set(r.google_place_id, { ...(B.gy.get(r.google_place_id) || {}), ...d.detay });
     if (d.puan) D.oneri.filter(x => x.google_place_id === r.google_place_id).forEach(x => Object.assign(x, d.puan));
     return true;
+  }
+  // Bölüme eklenen mekânın Google bilgisi yoksa arka planda getir (telefon, saatler, site ve sitedeki Instagram)
+  async function otoDetay(rows) {
+    const eksik = rows.filter(r => r && r.google_place_id && !(gyOf(r) || {}).detay_tarih);
+    let n = 0;
+    for (const r of eksik) { if (!(await googleGetir(r))) break; n++; kartYenile(r); }
+    if (n) { P.renderAll(); toast(`${n} mekânın Google bilgileri ve Instagram'ı kontrol edildi`); }
   }
   function kartYenile(r) {
     const k = $$(`.bk[data-oid="${r.id}"]`, document);
