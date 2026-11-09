@@ -183,6 +183,8 @@
         ${guvenli(m.web) && !/instagram\.com/i.test(m.web) ? `<a class="ck-chip" href="${esc(m.web)}" target="_blank" rel="noopener noreferrer">${esc(m.web.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "").slice(0, 28))} ↗</a>` : ""}
       </div>
       ${bugun ? `<p class="ck-saat"><b>Bugün:</b> ${esc(bugun)}</p>` : ""}
+      ${cekildi(m) ? `<div class="ck-cekildi"><span>✓ Çekildi · ${esc(saatYaz(m.ziyaret.cekildi_at))}${m.ziyaret.cekildi_kim ? " · " + esc(m.ziyaret.cekildi_kim) : ""}</span><button type="button" class="linkish" data-cek="${m.oneri_id}" data-durum="0">Geri al</button></div>`
+        : `<button type="button" class="btn btn-line full ck-cek-btn" data-cek="${m.oneri_id}" data-durum="1">Burada çektik ✓</button>`}
       <div class="ck-alt">
         ${Array.isArray(m.saatler) && m.saatler.length ? `<details data-k="s${m.oneri_id}"><summary>Çalışma saatleri</summary>${m.saatler.map(x => `<div>${esc(x)}</div>`).join("")}</details>` : ""}
         ${nedenler.length ? `<details data-k="n${m.oneri_id}" ${SUNUCU() ? "open" : ""}><summary>Neden gidiyoruz? (${nedenler.length})</summary>${nedenler.map(n => `<blockquote>${esc(n.neden)}${n.kim ? `<cite>— ${esc(n.kim)}</cite>` : ""}</blockquote>`).join("")}</details>` : ""}
@@ -236,11 +238,14 @@
   }
 
   function sekmeler(aktif) {
-    $("#ck-sekme").innerHTML = EKLEYEBILIR() ? `<a href="#b/${SEC || ""}" class="${aktif === "bolum" ? "on" : ""}">Bölümler${bekleyenler().length ? ` <em>${bekleyenler().length}</em>` : ""}</a><a href="#ekle" class="${aktif === "ekle" ? "on" : ""}">Mekân ekle</a>` : "";
+    const n = bekleyenler().length;
+    $("#ck-sekme").innerHTML = `<a href="#b/${SEC || ""}" class="${aktif === "bolum" ? "on" : ""}">Bölümler${n ? ` <em>${n}</em>` : ""}</a><a href="#galeri" class="${aktif === "galeri" ? "on" : ""}">Galeri</a><a href="#ozet" class="${aktif === "ozet" ? "on" : ""}">Özet</a>${EKLEYEBILIR() ? `<a href="#ekle" class="${aktif === "ekle" ? "on" : ""}">+ Mekân</a>` : ""}`;
   }
 
   function ciz() {
     if (location.hash === "#ekle" && EKLEYEBILIR()) return ekleCiz();
+    if (location.hash === "#galeri") return galeriCiz();
+    if (location.hash === "#ozet") return ozetCiz();
     sekmeler("bolum");
     const L = D.bolumler || [];
     const h = (location.hash.match(/^#b\/(\d+)/) || [])[1];
@@ -261,9 +266,11 @@
         <h2>${b.no && !String(b.baslik).toLocaleLowerCase(TR).includes("bölüm " + b.no) ? `<small>Bölüm ${b.no}</small>` : ""}${esc(b.baslik)}</h2>
         <p class="ck-meta">${[b.cekim_tarihi ? "Çekim: " + esc(fmtD(b.cekim_tarihi)) : "", b.sehir ? esc(b.sehir) : "", `${M.length} mekân`].filter(Boolean).join(" · ")}</p>
         ${b.aciklama ? `<p class="ck-acik">${esc(b.aciklama)}</p>` : ""}
-        ${rl ? `<a class="btn btn-o btn-sm" href="${esc(rl)}" target="_blank" rel="noopener noreferrer">Bütün rotayı Google Maps'te aç ↗</a>` : ""}
+        ${M.length ? ilerlemeHtml(M) : ""}
+        <div class="ck-bh-a">${rl ? `<a class="btn btn-o btn-sm" href="${esc(rl)}" target="_blank" rel="noopener noreferrer">Bütün rotayı Google Maps'te aç ↗</a>` : ""}
+          ${BEN.admin ? `<label class="ck-durum-sec"><span>Bölüm durumu</span><select data-bdurum="${b.id}">${Object.entries(DURUM).map(([k, v]) => `<option value="${k}"${k === b.durum ? " selected" : ""}>${v}</option>`).join("")}</select></label>` : ""}</div>
       </section>
-      ${M.length > 1 ? `<nav class="ck-dizin" aria-label="Bu bölümün mekânları">${M.map((m, i) => `<a href="#m-${m.oneri_id}"><b>${i + 1}</b>${esc(m.ad)}${ort(m.puanlar) != null ? `<em>${fP(ort(m.puanlar))}</em>` : ""}</a>`).join("")}</nav>` : ""}
+      ${M.length > 1 ? `<nav class="ck-dizin" aria-label="Bu bölümün mekânları">${M.map((m, i) => `<a href="#m-${m.oneri_id}"${cekildi(m) ? ` class="ok"` : ""}><b>${cekildi(m) ? "✓" : i + 1}</b>${esc(m.ad)}${ort(m.puanlar) != null ? `<em>${fP(ort(m.puanlar))}</em>` : ""}</a>`).join("")}</nav>` : ""}
       ${ozet(b)}
       <div class="ck-liste">${M.length ? M.map(kart).join("") : `<div class="ck-bos"><p>Bu bölüme henüz mekân eklenmemiş.</p></div>`}</div>`;
   }
@@ -273,11 +280,14 @@
     $$("#ck-icerik details").forEach(d => { if (acik.has(d.dataset.k)) d.open = true; }); scrollTo(0, y);
   }
 
-  addEventListener("hashchange", () => { if (!D) return; if (!location.hash || /^#(b\/\d*|ekle)$/.test(location.hash)) { ciz(); scrollTo(0, 0); } });
+  addEventListener("hashchange", () => { if (!D) return; if (!location.hash || /^#(b\/\d*|ekle|galeri|ozet)$/.test(location.hash)) { ciz(); scrollTo(0, 0); } });
   $("#ck-icerik").addEventListener("click", async e => {
     const p = e.target.closest("[data-puanla]"); if (p) return puanla(+p.dataset.puanla);
     const fa = e.target.closest("[data-foto-ac]"); if (fa) return fotoAc(+fa.dataset.fotoAc);
     const hs = e.target.closest("[data-hesap]"); if (hs) return hesapDuzenle(+hs.dataset.hesap, hs.dataset.odak);
+    const ck = e.target.closest("[data-cek]"); if (ck) return cekIsaretle(+ck.dataset.cek, ck.dataset.durum === "1", ck);
+    const cs = e.target.closest("[data-csv]"); if (cs) return csvIndir(cs.dataset.csv);
+    if (e.target.closest("[data-ozet-kopya]")) { try { await navigator.clipboard.writeText(ozetYazi()); toast("Özet kopyalandı"); } catch (er) { modalAc("Özet", `<textarea class="ck-kopya" rows="16" readonly>${esc(ozetYazi())}</textarea>`); } return; }
     if (e.target.closest("[data-kopyala]")) {
       const b = (D.bolumler || []).find(x => x.id === SEC); if (!b) return;
       try { await navigator.clipboard.writeText(ozetMetni(b)); toast("Puanlar kopyalandı"); }
@@ -286,6 +296,15 @@
     }
     const a = e.target.closest('a[href^="#m-"]');
     if (a) { e.preventDefault(); const k = $(a.getAttribute("href")); if (k) { k.scrollIntoView({ behavior: "smooth", block: "start" }); k.classList.add("vurgu"); setTimeout(() => k.classList.remove("vurgu"), 1600); } }
+  });
+  $("#ck-icerik").addEventListener("change", async e => {
+    const bd = e.target.closest("[data-bdurum]");
+    if (bd) {
+      const { error } = await db.rpc("cekim_bolum_durum", { p_bolum: +bd.dataset.bdurum, p_durum: bd.value });
+      if (error) return toast("Değiştirilemedi: " + error.message);
+      toast(`Bölüm durumu: ${DURUM[bd.value]}`); return yenidenCiz();
+    }
+    const kp = e.target.closest("[data-kapsam]"); if (kp) { KAPSAM = kp.value; ls.set("etd-cekim-kapsam", KAPSAM); return ciz(); }
   });
   $("#ck-icerik").addEventListener("change", e => { const i = e.target.closest("[data-yukle]"); if (i) fotoYukle(+i.dataset.id, i.dataset.yukle, [...i.files]).finally(() => { i.value = ""; }); });
 
@@ -489,6 +508,124 @@
       await onerilerYukle(); listeCiz();
     });
     await onerilerYukle(); listeCiz();
+  }
+
+  /* ---------- çekildi işareti ve ilerleme ---------- */
+  const cekildi = m => !!(m.ziyaret && m.ziyaret.cekildi_at);
+  const saatYaz = s => { try { const d = new Date(s), bugun = new Date().toDateString() === d.toDateString(); return d.toLocaleString(TR, bugun ? { hour: "2-digit", minute: "2-digit" } : { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
+  function ilerlemeHtml(M) {
+    const n = M.filter(cekildi).length, sira = M.find(m => !cekildi(m));
+    return `<div class="ck-ilerle"><div class="ck-ilerle-u"><b>${n}/${M.length}</b> mekân çekildi${sira && n ? ` · Sıradaki: <a href="#m-${sira.oneri_id}">${esc(sira.ad)}</a>` : ""}</div>
+      <div class="ck-ilerle-c" role="progressbar" aria-valuemin="0" aria-valuemax="${M.length}" aria-valuenow="${n}"><i style="width:${Math.round(n / M.length * 100)}%"></i></div></div>`;
+  }
+  async function cekIsaretle(id, durum, btn) {
+    if (!durum && !confirm("“Çekildi” işareti kaldırılsın mı?")) return;
+    if (btn) btn.disabled = true;
+    const { error } = await db.rpc("cekim_cekildi", { p_oneri: id, p_durum: durum });
+    if (error) { if (btn) btn.disabled = false; return toast("Kaydedilemedi: " + error.message); }
+    await yenidenCiz(); toast(durum ? "Çekildi olarak işaretlendi" : "İşaret kaldırıldı");
+  }
+
+  /* ---------- kapsam seçici (galeri, özet) ---------- */
+  let KAPSAM = ls.get("etd-cekim-kapsam") || "tum";
+  function kapsamHtml(etiket) {
+    const L = D.bolumler || [];
+    if (KAPSAM !== "tum" && !L.some(b => String(b.id) === String(KAPSAM))) KAPSAM = "tum";
+    return `<label class="ck-kapsam"><span>${etiket}</span><select data-kapsam>${[`<option value="tum">Bütün bölümler</option>`].concat(L.filter(b => (b.mekanlar || []).length).map(b => `<option value="${b.id}"${String(b.id) === String(KAPSAM) ? " selected" : ""}>${esc(b.no ? `Bölüm ${b.no}` : b.baslik)}${b.no && !String(b.baslik).toLocaleLowerCase(TR).includes("bölüm " + b.no) ? " · " + esc(b.baslik.slice(0, 40)) : ""}</option>`)).join("")}</select></label>`;
+  }
+  const kapsamMekanlar = () => {
+    const goruldu = new Set();
+    return tumMekanlar().filter(({ b }) => KAPSAM === "tum" || String(b.id) === String(KAPSAM)).filter(({ m }) => goruldu.has(m.oneri_id) ? false : goruldu.add(m.oneri_id));
+  };
+
+  /* ---------- galeri ---------- */
+  function galeriCiz() {
+    sekmeler("galeri"); $("#ck-bolumler").hidden = true;
+    const L = kapsamMekanlar().filter(({ m }) => (m.fotolar || []).length);
+    const top = L.reduce((a, { m }) => a + m.fotolar.length, 0);
+    $("#ck-icerik").innerHTML = `<section class="ck-bh"><h2 style="margin-top:0">Galeri</h2>
+        <p class="ck-meta">Ekibin çektiği fotoğraflar ve menüler. Herkes görür; dokununca büyür, “Tam boy” ile indirilir.</p>${kapsamHtml("Bölüm")}</section>
+      ${L.length ? L.map(({ m, b }) => `<section class="ck-gal"><h3><a href="#b/${b.id}">${esc(m.ad)}</a><small>${esc(b.no ? "Bölüm " + b.no : "")} · ${m.fotolar.length} görsel</small></h3>
+        <div class="ck-gal-g">${m.fotolar.map(f => `<button type="button" class="ck-gal-i" data-foto-ac="${f.id}"><img src="${esc(fotoUrl(f.yol))}" alt="" loading="lazy" width="${f.genislik || 300}" height="${f.yukseklik || 300}">${f.tur === "menu" ? `<span>Menü</span>` : ""}</button>`).join("")}</div></section>`).join("")
+        : `<div class="ck-bos"><div aria-hidden="true">📷</div><h3>Henüz fotoğraf yok</h3><p>Mekân kartlarındaki “+ Fotoğraf” ve “+ Menü fotoğrafı” ile eklenen görseller burada toplanır.</p></div>`}
+      ${top ? `<p class="sm" style="text-align:center;margin-top:12px">${top} görsel</p>` : ""}`;
+  }
+
+  /* ---------- özet ve infografik verisi ---------- */
+  const urunAnahtar = s => String(s || "").toLocaleLowerCase(TR).replace(/\s+/g, " ").trim();
+  function ozetVeri() {
+    const L = kapsamMekanlar();
+    const R = L.map(({ m, b }) => {
+      const z = m.ziyaret || {}, S = z.siparis || [], P = m.puanlar || [];
+      return { m, b, z, S, P, puan: ort(P), harcama: z.odenen != null ? Number(z.odenen) : (siparisToplam(S) || null),
+        gitti: cekildi(m) || P.length > 0 || S.length > 0 || z.odenen != null, foto: (m.fotolar || []).filter(f => f.tur === "foto").length, menu: (m.fotolar || []).filter(f => f.tur === "menu").length };
+    });
+    const gidilen = R.filter(r => r.gitti), puanli = R.filter(r => r.puan != null), harcanan = R.filter(r => r.harcama != null);
+    const toplamHarcama = harcanan.reduce((a, r) => a + r.harcama, 0);
+    const urun = new Map();
+    R.forEach(r => r.S.forEach(x => {
+      const k = urunAnahtar(x.ad); if (!k) return;
+      const u = urun.get(k) || { ad: x.ad, adet: 0, fiyatlar: [], mekan: new Set() };
+      u.adet += x.adet || 1; if (x.fiyat != null) u.fiyatlar.push(Number(x.fiyat)); u.mekan.add(r.m.ad); urun.set(k, u);
+    }));
+    const urunler = [...urun.values()].map(u => ({ ...u, ortFiyat: u.fiyatlar.length ? u.fiyatlar.reduce((a, b) => a + b, 0) / u.fiyatlar.length : null,
+      minF: u.fiyatlar.length ? Math.min(...u.fiyatlar) : null, maxF: u.fiyatlar.length ? Math.max(...u.fiyatlar) : null, mekanSay: u.mekan.size })).sort((a, b) => b.adet - a.adet);
+    const kriter = KRITER.map(([k, ad]) => { const v = R.flatMap(r => r.P.map(p => p.puanlar && p.puanlar[k])).filter(x => x != null).map(Number); return { k, ad, ort: v.length ? v.reduce((a, b) => a + b, 0) / v.length : null, n: v.length }; }).filter(x => x.ort != null);
+    return { R, gidilen, puanli, harcanan, toplamHarcama, urunler, kriter,
+      foto: R.reduce((a, r) => a + r.foto, 0), menu: R.reduce((a, r) => a + r.menu, 0), adet: urunler.reduce((a, u) => a + u.adet, 0),
+      ortPuan: puanli.length ? puanli.reduce((a, r) => a + r.puan, 0) / puanli.length : null };
+  }
+  const cubuk = (L, deger, yazi, maks) => `<ul class="ck-cubuk">${L.map(x => { const v = deger(x); return `<li><span class="ck-cubuk-a">${x.etiket}</span><span class="ck-cubuk-c"><i style="width:${maks ? Math.max(2, Math.round(v / maks * 100)) : 0}%"></i></span><b>${yazi(x)}</b></li>`; }).join("")}</ul>`;
+  function ozetCiz() {
+    sekmeler("ozet"); $("#ck-bolumler").hidden = true;
+    const V = ozetVeri();
+    const kutu = (b, s) => `<div class="ck-kpi"><b>${b}</b><small>${s}</small></div>`;
+    const sira = [...V.puanli].sort((a, b) => b.puan - a.puan).slice(0, 15).map(r => ({ ...r, etiket: esc(r.m.ad) }));
+    const harc = [...V.harcanan].sort((a, b) => b.harcama - a.harcama).slice(0, 15).map(r => ({ ...r, etiket: esc(r.m.ad) }));
+    $("#ck-icerik").innerHTML = `<section class="ck-bh"><h2 style="margin-top:0">Özet</h2>
+        <p class="ck-meta">Ziyaretlerden, puanlardan ve hesaplardan otomatik toplanır. İnfografik ve video için hazır.</p>${kapsamHtml("Kapsam")}
+        <div class="ck-ozet-a"><button type="button" class="btn btn-o btn-sm" data-csv="mekan">Mekân tablosu (CSV)</button><button type="button" class="btn btn-line btn-sm" data-csv="urun">Ürün tablosu (CSV)</button><button type="button" class="btn btn-line btn-sm" data-ozet-kopya>Metin olarak kopyala</button></div></section>
+      <section class="ck-kpis">
+        ${kutu(V.gidilen.length, "mekân ziyaret edildi")}
+        ${kutu(V.ortPuan != null ? fP(V.ortPuan) : "–", "ortalama puan /100")}
+        ${kutu(V.toplamHarcama ? fTL(V.toplamHarcama) : "–", "toplam harcama")}
+        ${kutu(V.harcanan.length ? fTL(Math.round(V.toplamHarcama / V.harcanan.length)) : "–", "mekân başına hesap")}
+        ${kutu(V.adet || "–", "ürün yendi / içildi")}
+        ${kutu(V.foto + V.menu || "–", `görsel${V.menu ? ` · ${V.menu} menü` : ""}`)}
+      </section>
+      ${sira.length ? `<section class="ck-bh"><h3 class="ck-bas">Puan sıralaması</h3>${cubuk(sira, r => r.puan, r => fP(r.puan), 100)}</section>` : ""}
+      ${V.kriter.length ? `<section class="ck-bh"><h3 class="ck-bas">Kriter ortalamaları <small>/10</small></h3>${cubuk(V.kriter.map(k => ({ ...k, etiket: esc(k.ad) })), k => k.ort, k => fP(k.ort), 10)}</section>` : ""}
+      ${harc.length ? `<section class="ck-bh"><h3 class="ck-bas">Mekân başına hesap</h3>${cubuk(harc, r => r.harcama, r => fTL(r.harcama), harc[0].harcama)}</section>` : ""}
+      ${V.urunler.length ? `<section class="ck-bh"><h3 class="ck-bas">Ne yedik, ne içtik</h3><div class="ck-tablo"><table><thead><tr><th>Ürün</th><th>Adet</th><th>Ort. fiyat</th><th>En ucuz – en pahalı</th><th>Mekân</th></tr></thead><tbody>
+          ${V.urunler.map(u => `<tr><td>${esc(u.ad)}</td><td>${u.adet}</td><td>${u.ortFiyat != null ? fTL(Math.round(u.ortFiyat * 100) / 100) : "–"}</td><td>${u.minF != null ? (u.minF === u.maxF ? fTL(u.minF) : `${fTL(u.minF)} – ${fTL(u.maxF)}`) : "–"}</td><td>${u.mekanSay}</td></tr>`).join("")}</tbody></table></div></section>` : ""}
+      ${!V.gidilen.length ? `<div class="ck-bos"><div aria-hidden="true">📊</div><h3>Henüz veri yok</h3><p>Mekânlarda “Burada çektik”, puan ve “Ne yedik, ne ödedik” kayıtları girildikçe bu sayfa kendiliğinden dolar.</p></div>` : ""}`;
+  }
+  function ozetYazi() {
+    const V = ozetVeri(), s = [];
+    s.push(KAPSAM === "tum" ? "Bütün bölümler" : (((D.bolumler || []).find(b => String(b.id) === String(KAPSAM)) || {}).baslik || ""));
+    s.push(`Ziyaret edilen mekân: ${V.gidilen.length}`, `Ortalama puan: ${V.ortPuan != null ? fP(V.ortPuan) + "/100" : "–"}`,
+      `Toplam harcama: ${V.toplamHarcama ? fTL(V.toplamHarcama) : "–"}`, `Mekân başına hesap: ${V.harcanan.length ? fTL(Math.round(V.toplamHarcama / V.harcanan.length)) : "–"}`, `Yenen/içilen ürün: ${V.adet}`);
+    const sira = [...V.puanli].sort((a, b) => b.puan - a.puan);
+    if (sira.length) { s.push("", "Puan sıralaması:"); sira.forEach((r, i) => s.push(`${i + 1}. ${r.m.ad} — ${fP(r.puan)}/100`)); }
+    if (V.urunler.length) { s.push("", "Ne yedik:"); V.urunler.forEach(u => s.push(`${u.ad} × ${u.adet}${u.ortFiyat != null ? ` (ort. ${fTL(Math.round(u.ortFiyat * 100) / 100)})` : ""}`)); }
+    return s.join("\n");
+  }
+  function csvIndir(tur) {
+    const V = ozetVeri(), h = v => { const s = v == null ? "" : String(v); return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+    const sayi = v => v == null ? "" : String(Math.round(v * 100) / 100).replace(".", ",");
+    let rows;
+    if (tur === "urun") rows = [["Ürün", "Adet", "Ortalama fiyat (TL)", "En ucuz (TL)", "En pahalı (TL)", "Mekân sayısı", "Mekânlar"]]
+      .concat(V.urunler.map(u => [u.ad, u.adet, sayi(u.ortFiyat), sayi(u.minF), sayi(u.maxF), u.mekanSay, [...u.mekan].join(", ")]));
+    else rows = [["Bölüm", "Mekân", "İlçe", "İl", "Çekildi", "Ortalama puan", ...KRITER.map(k => k[1]), "Puan veren", "Yorumlar", "Ödenen (TL)", "Yenenler", "Fotoğraf", "Menü linki", "Google puanı"]]
+      .concat(V.R.map(r => [r.b.no ? `Bölüm ${r.b.no}` : r.b.baslik, r.m.ad, r.m.ilce || "", r.m.il || "", r.z.cekildi_at ? new Date(r.z.cekildi_at).toLocaleString(TR) : "", sayi(r.puan),
+        ...KRITER.map(([k]) => { const v = r.P.map(p => p.puanlar && p.puanlar[k]).filter(x => x != null); return v.length ? sayi(v.reduce((a, b) => a + Number(b), 0) / v.length) : ""; }),
+        r.P.map(p => p.ad).join(", "), r.P.filter(p => p.yorum).map(p => `${p.ad}: ${p.yorum}`).join(" | "), sayi(r.harcama),
+        r.S.map(x => `${x.adet > 1 ? x.adet + "x " : ""}${x.ad}${x.fiyat != null ? " " + x.fiyat + " TL" : ""}`).join(", "), r.foto + r.menu, r.z.menu_url || "", r.m.gpuan != null ? sayi(r.m.gpuan) : ""]));
+    const csv = "﻿" + rows.map(r => r.map(h).join(";")).join("\r\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = `cekim-${tur === "urun" ? "urunler" : "mekanlar"}-${new Date().toLocaleDateString("en-CA")}.csv`;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    toast("CSV indirildi · Excel ya da Google E-Tablolar ile açılır");
   }
 
   /* ---------- hesap: şifre değiştir, çıkış ---------- */
