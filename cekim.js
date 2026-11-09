@@ -108,9 +108,12 @@
   function varsayilanBolum() {
     const L = D.bolumler || []; if (!L.length) return null;
     const bugun = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
-    const plan = L.filter(b => b.durum === "planlaniyor");
+    const dolu = L.filter(b => (b.mekanlar || []).length), plan = dolu.filter(b => b.durum === "planlaniyor");
     const yakin = plan.filter(b => b.cekim_tarihi && b.cekim_tarihi >= bugun).sort((a, b) => a.cekim_tarihi.localeCompare(b.cekim_tarihi))[0];
-    return (yakin || plan[0] || L.filter(b => b.durum === "cekildi").pop() || L[L.length - 1]).id;
+    const uc = new Date(Date.now() - 3 * 864e5).toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+    const yeni = dolu.filter(b => b.durum === "cekildi" && b.cekim_tarihi && b.cekim_tarihi >= uc).sort((a, b) => b.cekim_tarihi.localeCompare(a.cekim_tarihi))[0];
+    // Bugün çekim varsa o; yoksa son 3 günde çekilen; yoksa en yakın planlanan
+    return (plan.find(b => b.cekim_tarihi === bugun) || yeni || yakin || plan[0] || dolu.filter(b => b.durum === "cekildi").pop() || dolu[0] || L[0]).id;
   }
 
   /* ---------- yardımcılar ---------- */
@@ -234,7 +237,7 @@
     const L = bekleyenler(); if (!L.length) return "";
     return `<section class="ck-bekle"><h3>Çekim puanlaman ve yorumun bekleniyor <em>${L.length}</em></h3>
       <ul>${L.map(x => `<li><span><b>${esc(x.m.ad)}</b><small>${esc(x.b.no ? "Bölüm " + x.b.no : x.b.baslik)} · ${x.p ? "yorum eksik" : "puan verilmedi"}</small></span>
-        <button type="button" class="btn btn-o btn-sm" data-puanla="${x.m.oneri_id}" data-bolum="${x.b.id}">${x.p ? "Yorum yaz" : "Puan ver"}</button></li>`).join("")}</ul></section>`;
+        <button type="button" class="btn btn-o btn-sm" data-puanla="${x.m.oneri_id}" data-bolum="${x.b.id}">${x.p ? "Yorum yaz" : "Puan ver"}</button></li>`).join("")}</ul>${L.length > 3 ? `<button type="button" class="linkish ck-bekle-ac" data-bekle-ac>Tümünü göster (${L.length})</button>` : ""}</section>`;
   }
 
   function sekmeler(aktif) {
@@ -287,6 +290,7 @@
     const hs = e.target.closest("[data-hesap]"); if (hs) return hesapDuzenle(+hs.dataset.hesap, hs.dataset.odak);
     const ck = e.target.closest("[data-cek]"); if (ck) return cekIsaretle(+ck.dataset.cek, ck.dataset.durum === "1", ck);
     const cs = e.target.closest("[data-csv]"); if (cs) return csvIndir(cs.dataset.csv);
+    const ba = e.target.closest("[data-bekle-ac]"); if (ba) { ba.closest(".ck-bekle").classList.add("acik"); ba.remove(); return; }
     if (e.target.closest("[data-ozet-kopya]")) { try { await navigator.clipboard.writeText(ozetYazi()); toast("Özet kopyalandı"); } catch (er) { modalAc("Özet", `<textarea class="ck-kopya" rows="16" readonly>${esc(ozetYazi())}</textarea>`); } return; }
     if (e.target.closest("[data-kopyala]")) {
       const b = (D.bolumler || []).find(x => x.id === SEC); if (!b) return;

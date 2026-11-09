@@ -252,3 +252,10 @@ html:has(body.ckm),body.ckm{max-width:100%;overflow-x:clip}
   .ck-cubuk li{grid-template-columns:minmax(0,42%) 1fr auto}
   .ck-gal-g{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+
+/* v5.1 */
+.ck-sekme a{white-space:nowrap;padding:10px 4px}
+.ck-sekme em{margin-left:3px;padding:1px 6px}
+.ck-bekle:not(.acik) li:nth-child(n+4){display:none}
+.ck-bekle-ac{margin-top:6px;font-size:13.5px}
+@media(max-width:520px){.ck-tablo th:nth-child(4),.ck-tablo td:nth-child(4){display:none}}
