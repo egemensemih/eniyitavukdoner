@@ -2,18 +2,25 @@
 (function () {
   "use strict";
   if (window.top !== window.self) { document.documentElement.innerHTML = ""; return; }
-  const C = window.SITE_CONFIG || {};
+  const C = window.SITE_CONFIG || {}, ETDP = window.ETDP || {};
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const TR = "tr-TR", ALAN = "ekip.eniyitavukdoner.com";
+  const TR = "tr-TR", ALAN = "ekip.eniyitavukdoner.com", BUCKET = "cekim-foto";
   const KRITER = C.KRITERLER || [];
-  const KAD = Object.fromEntries(KRITER);
+  const ILLER = Object.keys(window.ILCELER || {});
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const guvenli = u => /^https:\/\/[^\s"'<>]+$/i.test(String(u || "").trim()) ? String(u).trim() : "";
+  const guvenli = u => /^https?:\/\/[^\s"'<>]+$/i.test(String(u || "").trim()) ? String(u).trim() : "";
   const fP = p => { if (p == null || p === "") return "–"; const n = Math.round(Number(p) * 10) / 10; return Number.isInteger(n) ? String(n) : n.toFixed(1).replace(".", ","); };
+  const fTL = n => n == null || n === "" ? "" : Number(n).toLocaleString(TR, { maximumFractionDigits: 2 }) + " ₺";
   const fmtD = s => { try { return new Date(String(s).length === 10 ? s + "T12:00:00" : s).toLocaleDateString(TR, { day: "numeric", month: "long", weekday: "long" }); } catch (e) { return ""; } };
+  const fmtK = s => { try { return new Date(String(s).length === 10 ? s + "T12:00:00" : s).toLocaleDateString(TR, { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return ""; } };
   const ls = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* */ } }, del(k) { try { localStorage.removeItem(k); } catch (e) { /* */ } } };
   const kadiTemiz = s => String(s || "").trim().toLocaleLowerCase(TR).replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c");
+  const anahtar = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLocaleLowerCase(TR).replace(/[^a-z0-9]/g, "");
+  const eslesen = (list, ad) => { const k = anahtar(ad); return k ? list.find(x => anahtar(x) === k) || null : null; };
+  const temizAd = s => String(s || "").replace(/̇/g, "").normalize("NFC");
+  const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)));
+  const fotoUrl = yol => `${C.SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${String(yol).split("/").map(encodeURIComponent).join("/")}`;
 
   const db = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, storageKey: "etd-cekim", detectSessionInUrl: false } });
 
@@ -23,9 +30,10 @@
   }
   const modal = $("#modal");
   let modalKapat = null;
-  function modalAc(baslik, html, kapanirken) {
+  function modalAc(baslik, html, kapanirken, tam) {
     $("#modal-title").textContent = baslik; $("#modal-body").innerHTML = html; modal.hidden = false; document.body.classList.add("ck-kilit");
-    modalKapat = kapanirken || null;
+    $(".modal-card", modal).classList.toggle("ck-tam", !!tam);
+    modalKapat = kapanirken || null; $(".modal-card", modal).scrollTop = 0;
   }
   async function kapat(zorla) {
     if (!zorla && modalKapat && !(await modalKapat())) return;
@@ -33,13 +41,18 @@
   }
   modal.addEventListener("click", e => { if (e.target.closest("[data-close]")) kapat(); });
   addEventListener("keydown", e => { if (e.key === "Escape" && !modal.hidden) kapat(); });
-  const mesaj = (f, t) => { const m = $(".form-msg", f); m.textContent = t || ""; m.className = "form-msg" + (t ? " err" : ""); };
+  const mesaj = (f, t, ok) => { const m = $(".form-msg", f); if (!m) return; m.textContent = t || ""; m.className = "form-msg" + (t && !ok ? " err" : ""); m.style.color = ok ? "var(--ok)" : ""; };
+  async function gfn(islem, body) {
+    try {
+      const { data, error } = await db.functions.invoke("google-mekan", { body: { islem, ...body } });
+      if (error) { let m = "Google bağlantısı kurulamadı."; try { const j = await error.context.json(); if (j && j.error) m = j.error; } catch (e) { /* */ } return { error: m }; }
+      return data || {};
+    } catch (e) { return { error: "Bağlantı hatası." }; }
+  }
 
   /* ---------- giriş ---------- */
   const lf = $("#login-form");
   const ekran = ad => { $("#login").hidden = ad !== "login"; $("#app").hidden = ad !== "app"; };
-  const yolKadi = (location.pathname.match(/^\/panel\/([a-z0-9._-]+)\/?$/i) || [])[1];
-  if (yolKadi && !lf.kadi.value) lf.kadi.value = yolKadi.toLowerCase();
   lf.addEventListener("submit", async e => {
     e.preventDefault(); const b = $("button[type=submit]", lf);
     const k = lf.kadi.value.trim(), p = lf.password.value;
@@ -51,17 +64,21 @@
     if (error) return mesaj(lf, /rate|many/i.test(error.message) ? "Çok fazla deneme yapıldı, birkaç dakika sonra tekrar dene." : /banned/i.test(error.message) ? "Bu hesabın erişimi kapatılmış." : "Kullanıcı adı ya da şifre hatalı.");
     lf.password.value = ""; basla();
   });
-  $("#logout").addEventListener("click", async () => {
-    if (TASLAK_VAR() && !confirm("Kaydedilmemiş puanın var. Yine de çıkılsın mı?")) return;
+  async function cikis() {
+    if (TASLAK_VAR() && !confirm("Kaydedilmemiş değişikliğin var. Yine de çıkılsın mı?")) return;
     await db.auth.signOut(); location.replace(location.pathname);
-  });
+  }
 
   /* ---------- veri ---------- */
   const ROL_AD = { ekip: "çekim ekibi", puanci: "puan verici", yonetici: "süper yönetici" };
   const ort = L => { const t = (L || []).filter(p => p.toplam != null); return t.length ? t.reduce((a, p) => a + Number(p.toplam), 0) / t.length : null; };
   let D = null, BEN = null, SEC = null, SON_JSON = "";
   const SUNUCU = () => !!(BEN && BEN.kullanici_adi && (BEN.rol === "puanci" || BEN.rol === "yonetici"));
+  const EKLEYEBILIR = () => !!(BEN && (SUNUCU() || BEN.eposta));
+  const YONETICI = () => !!(BEN && BEN.rol === "yonetici");
   const TASLAK_VAR = () => !modal.hidden && !!modalKapat;
+  const tumMekanlar = () => (D.bolumler || []).flatMap(b => (b.mekanlar || []).map(m => ({ m, b })));
+  const mekanBul = id => { const b = (D.bolumler || []).find(x => x.id === SEC), m = b && b.mekanlar.find(x => x.oneri_id === id); return m || (tumMekanlar().find(x => x.m.oneri_id === id) || {}).m; };
 
   async function basla() {
     const { data: { session } } = await db.auth.getSession();
@@ -85,7 +102,6 @@
     const degisti = j !== SON_JSON; SON_JSON = j;
     D = data; BEN = data.ben || {};
     $("#ck-ben").textContent = BEN.kullanici_adi ? `${BEN.ad} · ${ROL_AD[BEN.rol] || BEN.rol}` : "Yönetici önizlemesi";
-    if (BEN.rol === "yonetici" && !$("#ck-yonetim")) $("#ck-yenile").insertAdjacentHTML("beforebegin", `<a class="btn btn-line btn-sm" id="ck-yonetim" href="/panel.html">Yönetim</a>`);
     return ilk ? true : degisti;
   }
 
@@ -97,8 +113,9 @@
     return (yakin || plan[0] || L.filter(b => b.durum === "cekildi").pop() || L[L.length - 1]).id;
   }
 
-  /* ---------- çizim ---------- */
+  /* ---------- yardımcılar ---------- */
   const DURUM = { planlaniyor: "Planlanıyor", cekildi: "Çekildi", yayinda: "Yayında" };
+  const ODURUM = { yeni: "Yeni", incelendi: "İncelendi", listede: "Rotada", gidildi: "Gidildi", uygun_degil: "Uygun değil" };
   const yer = m => [m.ilce, m.il === "Yurt dışı" ? m.ulke : m.il].filter(Boolean).join(" · ");
   const tel = t => { const d = String(t || "").replace(/[^\d+]/g, ""); return d.startsWith("+") ? d : d.startsWith("0") ? "+90" + d.slice(1) : d ? "+90" + d : ""; };
   const yolTarifi = m => m.lat != null ? `https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}` : guvenli(m.maps) || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([m.ad, m.ilce, m.il].filter(Boolean).join(" "))}`;
@@ -114,7 +131,10 @@
     const son = n[n.length - 1], ara = n.slice(0, -1).slice(0, 9);
     return `https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=${son.lat},${son.lng}` + (ara.length ? `&waypoints=${encodeURIComponent(ara.map(m => `${m.lat},${m.lng}`).join("|"))}` : "");
   }
+  const benimPuan = m => (m.puanlar || []).find(p => BEN && BEN.kullanici_adi && p.kisi === BEN.kullanici_adi);
+  const siparisToplam = s => (s || []).reduce((a, x) => a + (x.fiyat != null ? Number(x.fiyat) * (x.adet || 1) : 0), 0);
 
+  /* ---------- çizim ---------- */
   function puanHtml(p) {
     const k = KRITER.filter(([x]) => p.puanlar && p.puanlar[x] != null);
     return `<div class="ck-puan">
@@ -123,9 +143,29 @@
       ${p.yorum ? `<p class="ck-yorum">“${esc(p.yorum)}”</p>` : ""}</div>`;
   }
 
+  function kayitHtml(m) {
+    const F = m.fotolar || [], foto = F.filter(f => f.tur === "foto"), menu = F.filter(f => f.tur === "menu");
+    const z = m.ziyaret || {}, S = z.siparis || [], top = siparisToplam(S);
+    const kucuk = f => `<button type="button" class="ck-th" data-foto-ac="${f.id}" aria-label="Fotoğrafı aç"><img src="${esc(fotoUrl(f.yol))}" alt="" loading="lazy" width="${f.genislik || 120}" height="${f.yukseklik || 120}"></button>`;
+    const yukle = (tur, metin) => `<label class="ck-yukle"><input type="file" accept="image/*" ${tur === "foto" ? "multiple" : ""} hidden data-yukle="${tur}" data-id="${m.oneri_id}"><span>+ ${metin}</span></label>`;
+    return `<section class="ck-kayit">
+      <h4>Çekim kaydı</h4>
+      <div class="ck-ks"><div class="ck-ks-h"><b>Fotoğraflar</b>${foto.length ? `<small>${foto.length}</small>` : ""}</div>
+        <div class="ck-thumbs">${foto.map(kucuk).join("")}${yukle("foto", "Fotoğraf")}</div></div>
+      <div class="ck-ks"><div class="ck-ks-h"><b>Menü</b>${z.menu_tarih ? `<small>${esc(fmtK(z.menu_tarih))}</small>` : ""}</div>
+        <div class="ck-thumbs">${menu.map(kucuk).join("")}${guvenli(z.menu_url) ? `<a class="ck-chip ck-menu-l" href="${esc(z.menu_url)}" target="_blank" rel="noopener noreferrer">Menü linki ↗</a>` : ""}${yukle("menu", "Menü fotoğrafı")}<button type="button" class="ck-yukle" data-hesap="${m.oneri_id}" data-odak="menu_url"><span>${z.menu_url ? "Linki değiştir" : "+ Menü linki"}</span></button></div></div>
+      <div class="ck-ks"><div class="ck-ks-h"><b>Ne yedik, ne ödedik</b></div>
+        ${S.length || z.odenen != null || z.not ? `<ul class="ck-sip">${S.map(x => `<li><span>${x.adet > 1 ? `${x.adet}× ` : ""}${esc(x.ad)}</span><b>${fTL(x.fiyat != null ? x.fiyat * (x.adet || 1) : null)}</b></li>`).join("")}</ul>
+          ${z.odenen != null ? `<p class="ck-odenen"><span>Ödenen</span><b>${fTL(z.odenen)}</b></p>` : top ? `<p class="ck-odenen"><span>Toplam</span><b>${fTL(top)}</b></p>` : ""}
+          ${z.not ? `<p class="ck-knot">${esc(z.not)}</p>` : ""}
+          ${z.guncelleyen ? `<p class="sm">${esc(z.guncelleyen)} · ${esc(fmtK(z.updated_at))}</p>` : ""}` : ""}
+        <button type="button" class="btn btn-line btn-sm" data-hesap="${m.oneri_id}">${S.length || z.odenen != null ? "Düzenle" : "+ Ekle"}</button></div>
+    </section>`;
+  }
+
   function kart(m, i) {
     const bugun = bugunSaat(m.saatler), ig = igAd(m.instagram), t = tel(m.telefon);
-    const puanlar = m.puanlar || [], benim = puanlar.find(p => BEN && BEN.kullanici_adi && p.kisi === BEN.kullanici_adi);
+    const puanlar = m.puanlar || [], benim = benimPuan(m);
     const taslak = SUNUCU() && ls.get(`etd-cekim-taslak-${m.oneri_id}`);
     const nedenler = (m.nedenler || []).filter(n => n && n.neden);
     const yorumlar = Array.isArray(m.yorumlar) ? m.yorumlar : [];
@@ -152,6 +192,7 @@
         ${puanlar.length ? puanlar.map(puanHtml).join("") : `<p class="ck-bos-p">${SUNUCU() ? "Henüz puan vermedin." : "Henüz puan verilmedi."}</p>`}
         ${SUNUCU() ? `<button type="button" class="btn ${benim ? "btn-line" : "btn-o"} full ck-puanla" data-puanla="${m.oneri_id}">${taslak ? "Taslağa devam et" : benim ? "Puanı düzenle" : "Puan ver"}</button>` : ""}
       </section>
+      ${kayitHtml(m)}
     </article>`;
   }
 
@@ -174,23 +215,46 @@
         KRITER.forEach(([k, ad]) => { if (p.puanlar && p.puanlar[k] != null) satir.push(`${girinti}${ad}: ${fP(p.puanlar[k])}`); });
         if (p.yorum) satir.push(`${girinti}Yorum: ${p.yorum}`);
       });
+      const z = m.ziyaret || {};
+      if ((z.siparis || []).length) satir.push(`   Yediklerimiz: ${z.siparis.map(x => `${x.adet > 1 ? x.adet + "× " : ""}${x.ad}${x.fiyat != null ? " (" + fTL(x.fiyat * (x.adet || 1)) + ")" : ""}`).join(", ")}`);
+      if (z.odenen != null) satir.push(`   Ödenen: ${fTL(z.odenen)}`);
     });
     return satir.join("\n");
   }
 
+  // Bölüm "Çekildi" olduktan sonra puanı ya da yorumu eksik olanlar
+  function bekleyenler() {
+    if (!SUNUCU()) return [];
+    return tumMekanlar().filter(({ b }) => b.durum === "cekildi" || b.durum === "yayinda")
+      .map(({ m, b }) => ({ m, b, p: benimPuan(m) })).filter(x => !x.p || !x.p.yorum);
+  }
+  function bekleyenHtml() {
+    const L = bekleyenler(); if (!L.length) return "";
+    return `<section class="ck-bekle"><h3>Çekim puanlaman ve yorumun bekleniyor <em>${L.length}</em></h3>
+      <ul>${L.map(x => `<li><span><b>${esc(x.m.ad)}</b><small>${esc(x.b.no ? "Bölüm " + x.b.no : x.b.baslik)} · ${x.p ? "yorum eksik" : "puan verilmedi"}</small></span>
+        <button type="button" class="btn btn-o btn-sm" data-puanla="${x.m.oneri_id}" data-bolum="${x.b.id}">${x.p ? "Yorum yaz" : "Puan ver"}</button></li>`).join("")}</ul></section>`;
+  }
+
+  function sekmeler(aktif) {
+    $("#ck-sekme").innerHTML = EKLEYEBILIR() ? `<a href="#" class="${aktif === "bolum" ? "on" : ""}">Bölümler${bekleyenler().length ? ` <em>${bekleyenler().length}</em>` : ""}</a><a href="#ekle" class="${aktif === "ekle" ? "on" : ""}">Mekân ekle</a>` : "";
+  }
+
   function ciz() {
+    if (location.hash === "#ekle" && EKLEYEBILIR()) return ekleCiz();
+    sekmeler("bolum");
     const L = D.bolumler || [];
     const h = (location.hash.match(/^#b\/(\d+)/) || [])[1];
     if (h && L.some(b => b.id === +h)) SEC = +h;
     if (!SEC || !L.some(b => b.id === SEC)) SEC = varsayilanBolum();
+    $("#ck-bolumler").hidden = false;
     $("#ck-bolumler").innerHTML = L.length > 1 ? L.map(b => `<a href="#b/${b.id}" class="ck-bt${b.id === SEC ? " on" : ""}" aria-current="${b.id === SEC}"><b>${b.no ? "Bölüm " + b.no : "Bölüm"}</b><small>${esc(DURUM[b.durum] || b.durum)}${b.cekim_tarihi ? " · " + esc(new Date(b.cekim_tarihi + "T12:00:00").toLocaleDateString(TR, { day: "numeric", month: "short" })) : ""}</small></a>`).join("") : "";
     const b = L.find(x => x.id === SEC);
     if (!b) {
-      $("#ck-icerik").innerHTML = `<div class="ck-bos"><div aria-hidden="true">🎬</div><h3>Şu an planlanan bölüm yok</h3><p>Egemen yeni bir bölüm açıp mekânları eklediğinde burada görünür.</p></div>`;
+      $("#ck-icerik").innerHTML = bekleyenHtml() + `<div class="ck-bos"><div aria-hidden="true">🎬</div><h3>Şu an planlanan bölüm yok</h3><p>Yeni bir bölüm açılıp mekânlar eklendiğinde burada görünür.</p></div>`;
       return;
     }
     const M = b.mekanlar || [], rl = rotaLink(M);
-    $("#ck-icerik").innerHTML = `
+    $("#ck-icerik").innerHTML = bekleyenHtml() + `
       <section class="ck-bh">
         <span class="ck-durum d-${esc(b.durum)}">${esc(DURUM[b.durum] || b.durum)}</span>
         <h2>${b.no ? `<small>Bölüm ${b.no}</small>` : ""}${esc(b.baslik)}</h2>
@@ -201,10 +265,17 @@
       ${ozet(b)}
       <div class="ck-liste">${M.length ? M.map(kart).join("") : `<div class="ck-bos"><p>Bu bölüme henüz mekân eklenmemiş.</p></div>`}</div>`;
   }
+  async function yenidenCiz() {
+    const acik = new Set($$("#ck-icerik details[open]").map(d => d.dataset.k)), y = scrollY;
+    await yukle(false); ciz();
+    $$("#ck-icerik details").forEach(d => { if (acik.has(d.dataset.k)) d.open = true; }); scrollTo(0, y);
+  }
 
-  addEventListener("hashchange", () => { if (/^#b\/\d+/.test(location.hash) && D) { ciz(); scrollTo(0, 0); } });
+  addEventListener("hashchange", () => { if (!D) return; if (/^#(b\/\d+|ekle)?$/.test(location.hash)) { ciz(); scrollTo(0, 0); } });
   $("#ck-icerik").addEventListener("click", async e => {
     const p = e.target.closest("[data-puanla]"); if (p) return puanla(+p.dataset.puanla);
+    const fa = e.target.closest("[data-foto-ac]"); if (fa) return fotoAc(+fa.dataset.fotoAc);
+    const hs = e.target.closest("[data-hesap]"); if (hs) return hesapDuzenle(+hs.dataset.hesap, hs.dataset.odak);
     if (e.target.closest("[data-kopyala]")) {
       const b = (D.bolumler || []).find(x => x.id === SEC); if (!b) return;
       try { await navigator.clipboard.writeText(ozetMetni(b)); toast("Puanlar kopyalandı"); }
@@ -214,12 +285,13 @@
     const a = e.target.closest('a[href^="#m-"]');
     if (a) { e.preventDefault(); const k = $(a.getAttribute("href")); if (k) { k.scrollIntoView({ behavior: "smooth", block: "start" }); k.classList.add("vurgu"); setTimeout(() => k.classList.remove("vurgu"), 1600); } }
   });
+  $("#ck-icerik").addEventListener("change", e => { const i = e.target.closest("[data-yukle]"); if (i) fotoYukle(+i.dataset.id, i.dataset.yukle, [...i.files]).finally(() => { i.value = ""; }); });
 
   /* ---------- puan verme (puan verici ve süper yönetici) ---------- */
   function puanla(id) {
     if (!SUNUCU()) return;
-    const b = (D.bolumler || []).find(x => x.id === SEC), m = b && b.mekanlar.find(x => x.oneri_id === id); if (!m) return;
-    const kayit = (m.puanlar || []).find(p => p.kisi === BEN.kullanici_adi) || {};
+    const m = mekanBul(id); if (!m) return;
+    const kayit = benimPuan(m) || {};
     const tk = `etd-cekim-taslak-${id}`, taslak = ls.get(tk);
     const geri = taslak && (!kayit.updated_at || taslak.t > Date.parse(kayit.updated_at));
     const P0 = geri ? taslak.puanlar || {} : kayit.puanlar || {}, Y0 = geri ? taslak.yorum || "" : kayit.yorum || "";
@@ -232,9 +304,9 @@
         <div class="cp-list">${KRITER.map(([k, ad]) => { const v = P0[k], has = v != null;
           return `<div class="cp-r${has ? "" : " bos"}" data-k="${k}"><label for="cp-${k}">${esc(ad)}</label><output>${has ? fP(v) : "–"}</output>
             <input id="cp-${k}" type="range" min="0" max="10" step="0.5" value="${has ? v : 5}"><button type="button" class="cp-x" aria-label="${esc(ad)} puanını temizle">×</button></div>`; }).join("")}</div>
-        <label class="field" style="margin-top:14px"><span>Yorumun <small>(isteğe bağlı)</small></span><textarea name="yorum" rows="4" maxlength="4000" placeholder="Tavuk, ekmek, sos, usta… Neyi sevdin, neyi sevmedin?">${esc(Y0)}</textarea></label>
+        <label class="field" style="margin-top:14px"><span>Yorumun</span><textarea name="yorum" rows="4" maxlength="4000" placeholder="Tavuk, ekmek, sos, usta… Neyi sevdin, neyi sevmedin?">${esc(Y0)}</textarea></label>
         <div class="cp-alt"><button type="button" class="btn btn-line" data-close>Vazgeç</button><button class="btn btn-o" type="submit">Kaydet</button></div>
-      </form>`, async () => !kirli || confirm("Kaydetmeden kapatılsın mı? (Taslağın bu telefonda saklanıyor.)"));
+      </form>`, async () => !kirli || confirm("Kaydetmeden kapatılsın mı? (Taslağın bu telefonda saklanıyor.)"), true);
     const f = $("#cp-form");
     const topla = () => {
       const v = {}; $$(".cp-r:not(.bos)", f).forEach(r => v[r.dataset.k] = Number($("input", r).value));
@@ -262,24 +334,207 @@
       btn.disabled = false; btn.textContent = "Kaydet";
       if (error) return toast(/fetch|network/i.test(error.message) ? "İnternet yok gibi. Taslağın saklandı, bağlanınca tekrar Kaydet'e bas." : "Kaydedilemedi: " + error.message);
       ls.del(tk); kirli = false; await kapat(true);
-      await yukle(false); ciz();
+      await yenidenCiz();
       toast(data && data.toplam != null ? `Kaydedildi · ${fP(data.toplam)}/100` : "Kaydedildi");
-      const k = $(`#m-${id}`); if (k) k.scrollIntoView({ block: "center" });
     });
   }
 
+  /* ---------- fotoğraf ve menü ---------- */
+  let YUKLENIYOR = false;
+  async function fotoYukle(id, tur, files) {
+    if (!files.length) return;
+    if (YUKLENIYOR) return toast("Önceki yükleme bitsin, sonra tekrar dene.");
+    if (!ETDP.kucult) return toast("Fotoğraf aracı yüklenemedi, sayfayı yenile.");
+    YUKLENIYOR = true; let ok = 0;
+    for (let i = 0; i < files.length; i++) {
+      toast(files.length > 1 ? `Yükleniyor ${i + 1}/${files.length}…` : "Yükleniyor…");
+      try {
+        const { blob, w, h } = await ETDP.kucult(files[i]);
+        const yol = `${id}/${uuid()}.jpg`;
+        const up = await db.storage.from(BUCKET).upload(yol, blob, { contentType: "image/jpeg", cacheControl: "31536000", upsert: false });
+        if (up.error) throw new Error(up.error.message);
+        const { error } = await db.rpc("cekim_foto_ekle", { p_oneri: id, p_yol: yol, p_tur: tur, p_genislik: w, p_yukseklik: h, p_aciklama: null });
+        if (error) throw new Error(error.message);
+        ok++;
+      } catch (e) { toast(`${files[i].name || "Fotoğraf"}: ${e.message || "yüklenemedi"}`); await new Promise(r => setTimeout(r, 1500)); }
+    }
+    YUKLENIYOR = false;
+    if (ok) { await yenidenCiz(); toast(tur === "menu" ? `Menü kaydedildi · ${fmtK(new Date())}` : `${ok} fotoğraf eklendi`); }
+  }
+  function fotoAc(fid) {
+    let f = null, m = null;
+    for (const x of tumMekanlar()) { const y = (x.m.fotolar || []).find(z => z.id === fid); if (y) { f = y; m = x.m; break; } }
+    if (!f) return;
+    const ayni = (m.fotolar || []).filter(z => z.tur === f.tur), i = ayni.indexOf(f);
+    const silebilir = f.benim || YONETICI() || (BEN && BEN.eposta);
+    modalAc(`${m.ad} · ${f.tur === "menu" ? "Menü" : "Fotoğraf"}`, `<figure class="ck-buyuk"><img src="${esc(fotoUrl(f.yol))}" alt="">
+      <figcaption>${esc(f.ekleyen_ad || "")} · ${esc(fmtK(f.created_at))}${ayni.length > 1 ? ` · ${i + 1}/${ayni.length}` : ""}</figcaption></figure>
+      <div class="cp-alt ck-foto-alt">${ayni.length > 1 ? `<button type="button" class="btn btn-line" data-git="${ayni[(i - 1 + ayni.length) % ayni.length].id}" aria-label="Önceki">←</button><button type="button" class="btn btn-line" data-git="${ayni[(i + 1) % ayni.length].id}" aria-label="Sonraki">→</button>` : ""}
+        <a class="btn btn-line" href="${esc(fotoUrl(f.yol))}" target="_blank" rel="noopener">Tam boy ↗</a>
+        ${silebilir ? `<button type="button" class="btn btn-danger" data-kaldir>Kaldır</button>` : ""}</div>`, null, true);
+    $("#modal-body").onclick = async e => {
+      const g = e.target.closest("[data-git]"); if (g) return fotoAc(+g.dataset.git);
+      if (e.target.closest("[data-kaldir]")) {
+        if (!confirm("Bu fotoğraf kaldırılsın mı?")) return;
+        const { error } = await db.rpc("cekim_foto_gizle", { p_id: f.id });
+        if (error) return toast("Kaldırılamadı: " + error.message);
+        $("#modal-body").onclick = null; await kapat(true); await yenidenCiz(); toast("Fotoğraf kaldırıldı");
+      }
+    };
+  }
+
+  /* ---------- ne yedik, ne ödedik ---------- */
+  function hesapDuzenle(id, odak) {
+    const m = mekanBul(id); if (!m) return;
+    const z = m.ziyaret || {}, S = (z.siparis || []).length ? z.siparis : [{ ad: "", adet: 1, fiyat: null }];
+    let kirli = false;
+    const satir = x => `<div class="hs-r"><input name="ad" maxlength="80" placeholder="Ör. Tavuk dürüm" value="${esc(x.ad || "")}" aria-label="Ne yedik">
+      <input name="adet" type="number" inputmode="numeric" min="1" max="99" value="${esc(x.adet || 1)}" aria-label="Adet">
+      <input name="fiyat" type="number" inputmode="decimal" min="0" step="0.5" placeholder="₺" value="${x.fiyat != null ? esc(x.fiyat) : ""}" aria-label="Birim fiyat (₺)">
+      <button type="button" class="cp-x" data-sil aria-label="Satırı sil">×</button></div>`;
+    modalAc(`${m.ad} · Çekim kaydı`, `<form id="hs-form" novalidate>
+      <div class="hs-bas"><span>Ne yedik</span><span>Adet</span><span>Fiyat ₺</span><span></span></div>
+      <div id="hs-list">${S.map(satir).join("")}</div>
+      <button type="button" class="btn btn-line btn-sm" data-ekle>+ Satır ekle</button>
+      <p class="hs-top">Satırların toplamı: <b data-top></b></p>
+      <label class="field"><span>Ödenen toplam ₺ <small>(fiş/hesap)</small></span><input name="odenen" type="number" inputmode="decimal" min="0" step="0.5" value="${z.odenen != null ? esc(z.odenen) : ""}" placeholder="Boş bırakırsan satırların toplamı yazılır"></label>
+      <label class="field"><span>Menü linki <small>(QR menü vb. · kaydedildiği günün tarihiyle saklanır)</small></span><input name="menu_url" type="url" inputmode="url" value="${esc(z.menu_url || "")}" placeholder="https://…" autocomplete="off" autocapitalize="off"></label>
+      <label class="field"><span>Not <small>(isteğe bağlı)</small></span><textarea name="not" rows="2" maxlength="2000" placeholder="Ör. kartla ödendi, porsiyon büyüktü…">${esc(z.not || "")}</textarea></label>
+      <div class="cp-alt"><button type="button" class="btn btn-line" data-close>Vazgeç</button><button class="btn btn-o" type="submit">Kaydet</button></div>
+    </form>`, async () => !kirli || confirm("Kaydetmeden kapatılsın mı?"), true);
+    const f = $("#hs-form"), list = $("#hs-list", f);
+    const oku = () => $$(".hs-r", list).map(r => ({ ad: $("[name=ad]", r).value.trim(), adet: +$("[name=adet]", r).value || 1, fiyat: $("[name=fiyat]", r).value === "" ? null : +$("[name=fiyat]", r).value })).filter(x => x.ad);
+    const top = () => { const t = siparisToplam(oku()); $("[data-top]", f).textContent = t ? fTL(t) : "–"; return t; };
+    f.addEventListener("input", () => { kirli = true; top(); });
+    f.addEventListener("click", e => {
+      if (e.target.closest("[data-ekle]")) { list.insertAdjacentHTML("beforeend", satir({ ad: "", adet: 1, fiyat: null })); $(".hs-r:last-child [name=ad]", list).focus(); }
+      const s = e.target.closest("[data-sil]"); if (s) { s.closest(".hs-r").remove(); if (!$(".hs-r", list)) list.insertAdjacentHTML("beforeend", satir({ ad: "", adet: 1, fiyat: null })); kirli = true; top(); }
+    });
+    top();
+    if (odak && f[odak]) setTimeout(() => f[odak].focus(), 60);
+    f.addEventListener("submit", async e => {
+      e.preventDefault();
+      const u = f.menu_url.value.trim();
+      if (u && !/^https?:\/\//i.test(u)) return toast("Menü linki https:// ile başlamalı.");
+      const S2 = oku(), od = f.odenen.value === "" ? (siparisToplam(S2) || null) : +f.odenen.value;
+      const b = $("button[type=submit]", f); b.disabled = true;
+      const { error } = await db.rpc("cekim_ziyaret_kaydet", { p_oneri: id, p_siparis: S2, p_odenen: od, p_menu_url: u || null, p_not: f.not.value.trim() || null });
+      b.disabled = false;
+      if (error) return toast("Kaydedilemedi: " + error.message);
+      kirli = false; await kapat(true); await yenidenCiz(); toast("Çekim kaydı kaydedildi");
+    });
+  }
+
+  /* ---------- mekân ekle (puan verici, süper yönetici) ---------- */
+  let SECG = null, LISTEG = [], ltG, ONERI = [];
+  async function onerilerYukle() {
+    if (!BEN.kaynak) { ONERI = []; return; }
+    const { data } = await db.from("mekan_onerileri").select("id,mekan_adi,google_ad,il,ilce,ulke,durum,created_at,google_place_id").eq("kaynak", BEN.kaynak).order("created_at", { ascending: false }).limit(100);
+    ONERI = data || [];
+  }
+  async function ekleCiz() {
+    sekmeler("ekle"); $("#ck-bolumler").hidden = true;
+    $("#ck-icerik").innerHTML = `<form id="ekle-form" class="ck-bh" novalidate>
+        <h2 style="margin-top:0">Rotaya mekân ekle</h2>
+        <p class="ck-meta">Google Maps'te mekânı aç → Paylaş → Bağlantıyı kopyala → buraya yapıştır.</p>
+        <label class="field"><span>Google Maps linki</span><input name="url" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/…" autocomplete="off" autocapitalize="off" required></label>
+        <div id="ekle-sonuc" class="ck-aday" aria-live="polite"></div>
+        <label class="field"><span>Neden gidelim? <small>(isteğe bağlı)</small></span><textarea name="neden" rows="3" maxlength="1000" placeholder="Neyi meşhur, kim önerdi…"></textarea></label>
+        <button class="btn btn-o full" type="submit" data-ekle disabled>Rotaya ekle</button>
+        <p class="sm" style="margin-top:10px">Eklediğin mekân rota listesine düşer; bölüme alınıp alınmayacağına yönetici karar verir.</p>
+      </form>
+      <section class="ck-bh"><h3 style="margin:0 0 8px">Eklediklerin</h3><ul class="ck-eklenen" id="ekle-liste"><li class="sm">Yükleniyor…</li></ul></section>`;
+    SECG = null; LISTEG = [];
+    const ef = $("#ekle-form"), sonuc = $("#ekle-sonuc"), btn = $("[data-ekle]", ef);
+    const listeCiz = () => { $("#ekle-liste").innerHTML = ONERI.length ? ONERI.map(r => `<li><span><b>${esc(r.google_ad || r.mekan_adi)}</b><small>${esc(yer(r))} · ${esc(fmtK(r.created_at))}</small></span><span class="badge b-${esc(r.durum)}">${esc(ODURUM[r.durum] || r.durum)}</span></li>`).join("") : `<li class="sm">Henüz eklediğin mekân yok.</li>`; };
+    const adayCiz = () => {
+      sonuc.innerHTML = LISTEG.map((g, i) => `<button type="button" class="ck-aday-i${g === SECG ? " on" : ""}" data-i="${i}" aria-pressed="${g === SECG}"><b>${esc(g.ad)}${g.tur ? ` <em>${esc(g.tur)}</em>` : ""}${g.kapali ? ` <em class="kapali">Kalıcı kapalı</em>` : ""}</b><small>${esc(temizAd(g.adres))}</small></button>`).join("") + (LISTEG.length > 1 ? `<p class="sm">Doğru mekân değilse listeden seç.</p>` : "");
+      const ayni = SECG && ONERI.find(r => r.google_place_id === SECG.place_id);
+      if (ayni) sonuc.insertAdjacentHTML("afterbegin", `<p class="ck-uyari" style="margin-bottom:8px">Bunu ${esc(fmtK(ayni.created_at))} tarihinde zaten eklemişsin (${esc(ODURUM[ayni.durum] || ayni.durum)}).</p>`);
+      btn.disabled = !SECG || !!ayni;
+    };
+    sonuc.addEventListener("click", e => { const b = e.target.closest("[data-i]"); if (!b) return; SECG = LISTEG[+b.dataset.i]; adayCiz(); });
+    ef.url.addEventListener("input", () => {
+      clearTimeout(ltG); const u = ef.url.value.trim(); SECG = null; btn.disabled = true;
+      if (!u) { sonuc.innerHTML = ""; return; }
+      if (!/^https?:\/\//i.test(u)) { sonuc.innerHTML = `<p class="sm">Linki tam yapıştır (https:// ile başlar).</p>`; return; }
+      ltG = setTimeout(async () => {
+        sonuc.innerHTML = `<p class="sm"><span class="lc-spin sm-spin" aria-hidden="true"></span> Google'da tanınıyor…</p>`;
+        const d = await gfn("link", { url: u });
+        if (ef.url.value.trim() !== u) return;
+        if (d.error) { sonuc.innerHTML = `<p class="sm" style="color:var(--err)">${esc(d.error)}</p>`; return; }
+        LISTEG = (d.sonuc || []).map(g => ({ ...g, place_id: g.place_id || g.id })); SECG = d.emin === false ? null : (LISTEG[0] || null);
+        if (!SECG && LISTEG.length) { adayCiz(); sonuc.insertAdjacentHTML("afterbegin", `<p class="sm" style="color:#B86400;font-weight:600;margin-bottom:8px">Bu linkte mekânın tam yeri yok. Adresine bakarak doğru mekânı seç.</p>`); return; }
+        if (!SECG) { sonuc.innerHTML = `<p class="sm" style="color:var(--err)">Bu linkten mekân bulunamadı. Google Maps'te mekânın kendi sayfasını açıp Paylaş ile linki al.</p>`; return; }
+        adayCiz();
+      }, 450);
+    });
+    ef.addEventListener("submit", async e => {
+      e.preventDefault(); if (!SECG || btn.disabled) return;
+      const g = SECG, yurtd = g.il === "Yurt dışı";
+      const il = yurtd ? "Yurt dışı" : (eslesen(ILLER, g.il) || temizAd(g.il) || null);
+      const ilce = yurtd ? null : (eslesen((window.ILCELER || {})[il] || [], g.ilce) || temizAd(g.ilce) || null);
+      const row = { mekan_adi: String(g.ad || "").slice(0, 120), il: il ? String(il).slice(0, 40) : "Belirsiz", ilce: ilce ? String(ilce).slice(0, 60) : null, ulke: yurtd ? (g.ulke || "").slice(0, 60) || null : null,
+        adres: ef.url.value.trim().slice(0, 400), neden: ef.neden.value.trim().slice(0, 1000) || null, takma_ad: String(BEN.ad || "").slice(0, 60), kvkk_onay: true, yayin_izni: false,
+        durum: "listede", onayli: false, haritada_goster: false, kaynak: BEN.kaynak || "panel",
+        google_place_id: g.place_id, google_ad: g.ad, google_adres: g.adres, google_url: g.url || null, google_tur: g.tur || null,
+        google_eslesme: g.kapali ? "kapali" : "elle", lat: g.lat, lng: g.lng };
+      if (row.mekan_adi.length < 2) return toast("Mekân adı okunamadı.");
+      btn.disabled = true;
+      const { error } = await db.from("mekan_onerileri").insert(row);
+      if (error) { btn.disabled = false; return toast("Eklenemedi: " + error.message); }
+      toast(`${g.ad} rotaya eklendi`); ef.reset(); sonuc.innerHTML = ""; SECG = null; LISTEG = [];
+      await onerilerYukle(); listeCiz();
+    });
+    await onerilerYukle(); listeCiz();
+  }
+
+  /* ---------- hesap: şifre değiştir, çıkış ---------- */
+  function hesap() {
+    modalAc("Hesabım", `<p class="ck-hesap-b"><b>${esc(BEN.ad || "")}</b><small>${BEN.kullanici_adi ? `Kullanıcı adı: ${esc(BEN.kullanici_adi)} · ${esc(ROL_AD[BEN.rol] || BEN.rol)}` : "Yönetici"}</small></p>
+      ${YONETICI() || BEN.eposta ? `<a class="btn btn-line full" href="/panel.html" style="margin-bottom:10px">Yönetim paneline git</a>` : ""}
+      <form id="sf-form" novalidate class="ck-sf">
+        <h4>Şifremi değiştir</h4>
+        <label class="field"><span>Şu anki şifren</span><input name="eski" type="password" autocomplete="current-password" required></label>
+        <label class="field"><span>Yeni şifre <small>(en az 8 karakter)</small></span><input name="yeni" type="password" autocomplete="new-password" minlength="8" required></label>
+        <label class="field"><span>Yeni şifre (tekrar)</span><input name="yeni2" type="password" autocomplete="new-password" minlength="8" required></label>
+        <p class="form-msg" role="status" aria-live="polite"></p>
+        <button class="btn btn-o full" type="submit">Şifreyi değiştir</button>
+      </form>
+      <button type="button" class="btn btn-line full" data-cikis style="margin-top:12px">Çıkış yap</button>`);
+    const f = $("#sf-form");
+    $("[data-cikis]").addEventListener("click", cikis);
+    f.addEventListener("submit", async e => {
+      e.preventDefault();
+      const eski = f.eski.value, yeni = f.yeni.value;
+      if (!eski) return mesaj(f, "Şu anki şifreni yaz.");
+      if (yeni.length < 8) return mesaj(f, "Yeni şifre en az 8 karakter olmalı.");
+      if (yeni !== f.yeni2.value) return mesaj(f, "Yeni şifreler aynı değil.");
+      if (yeni === eski) return mesaj(f, "Yeni şifre eskisinden farklı olmalı.");
+      const b = $("button[type=submit]", f); b.disabled = true; mesaj(f, "");
+      const { data: { session } } = await db.auth.getSession();
+      const g = await db.auth.signInWithPassword({ email: session.user.email, password: eski });
+      if (g.error) { b.disabled = false; return mesaj(f, /rate|many/i.test(g.error.message) ? "Çok fazla deneme, biraz sonra tekrar dene." : "Şu anki şifren hatalı."); }
+      const { error } = await db.auth.updateUser({ password: yeni });
+      b.disabled = false;
+      if (error) return mesaj(f, /weak|pwned|leak/i.test(error.message) ? "Bu şifre çok bilinen/zayıf, başka bir şifre seç." : /same|different/i.test(error.message) ? "Yeni şifre eskisinden farklı olmalı." : "Değiştirilemedi: " + error.message);
+      f.reset(); mesaj(f, "Şifren değiştirildi.", true); toast("Şifren değiştirildi");
+    });
+  }
+  $("#ck-hesap").addEventListener("click", hesap);
+
   /* ---------- yenileme ---------- */
   async function tazele(elle) {
-    if (!D || !modal.hidden) return;
+    if (!D || !modal.hidden || location.hash === "#ekle") return;
     const acik = new Set($$("#ck-icerik details[open]").map(d => d.dataset.k)), y = scrollY;
     const degisti = await yukle(false);
     if (degisti || elle) {
       ciz(); $$("#ck-icerik details").forEach(d => { if (acik.has(d.dataset.k)) d.open = true; }); scrollTo(0, y);
     }
   }
-  $("#ck-yenile").addEventListener("click", async e => { const b = e.currentTarget; b.disabled = true; await tazele(true); b.disabled = false; toast("Güncellendi"); });
-  setInterval(() => { if (document.visibilityState === "visible") tazele(false); }, 45000);
-  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") tazele(false); });
+  $("#ck-yenile").addEventListener("click", async e => { const b = e.currentTarget; b.disabled = true; if (location.hash === "#ekle") { await yukle(false); await ekleCiz(); } else await tazele(true); b.disabled = false; toast("Güncellendi"); });
+  setInterval(() => { if (document.visibilityState === "visible" && !YUKLENIYOR) tazele(false); }, 45000);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && !YUKLENIYOR) tazele(false); });
   db.auth.onAuthStateChange(ev => { if (ev === "SIGNED_OUT") ekran("login"); });
 
   basla();
