@@ -185,6 +185,14 @@
 .ck-hesap-b small{color:var(--muted)}
 .ck-sf{border-top:1px solid var(--line);padding-top:14px}
 .ck-sf h4{margin:0 0 10px}
+html:has(body.ckm),body.ckm{max-width:100%;overflow-x:clip}
+.ckm input,.ckm select,.ckm textarea{font-size:16px}
+.ck-main,.ck-liste,.ck-kart,.ck-bh{min-width:0}
+.ck-dizin{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 10px;margin:-4px 0 6px;scrollbar-width:none}
+.ck-dizin::-webkit-scrollbar{display:none}
+.ck-dizin a{flex:none;display:inline-flex;align-items:center;gap:6px;max-width:220px;padding:7px 12px 7px 7px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--navy);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ck-dizin b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:11.5px}
+.ck-dizin em{font-style:normal;font-weight:800;color:var(--orange)}
 @media(max-width:760px){
   .modal:has(.ck-modal){padding:0;place-items:stretch}
   .ck-modal,.ck-modal.ck-tam{--p:16px;max-width:none;width:100%;height:100%;height:100dvh;max-height:none;border-radius:0;padding:var(--p);padding-top:calc(var(--p) + env(safe-area-inset-top,0px))}

@@ -236,7 +236,7 @@
   }
 
   function sekmeler(aktif) {
-    $("#ck-sekme").innerHTML = EKLEYEBILIR() ? `<a href="#" class="${aktif === "bolum" ? "on" : ""}">Bölümler${bekleyenler().length ? ` <em>${bekleyenler().length}</em>` : ""}</a><a href="#ekle" class="${aktif === "ekle" ? "on" : ""}">Mekân ekle</a>` : "";
+    $("#ck-sekme").innerHTML = EKLEYEBILIR() ? `<a href="#b/${SEC || ""}" class="${aktif === "bolum" ? "on" : ""}">Bölümler${bekleyenler().length ? ` <em>${bekleyenler().length}</em>` : ""}</a><a href="#ekle" class="${aktif === "ekle" ? "on" : ""}">Mekân ekle</a>` : "";
   }
 
   function ciz() {
@@ -247,7 +247,8 @@
     if (h && L.some(b => b.id === +h)) SEC = +h;
     if (!SEC || !L.some(b => b.id === SEC)) SEC = varsayilanBolum();
     $("#ck-bolumler").hidden = false;
-    $("#ck-bolumler").innerHTML = L.length > 1 ? L.map(b => `<a href="#b/${b.id}" class="ck-bt${b.id === SEC ? " on" : ""}" aria-current="${b.id === SEC}"><b>${b.no ? "Bölüm " + b.no : "Bölüm"}</b><small>${esc(DURUM[b.durum] || b.durum)}${b.cekim_tarihi ? " · " + esc(new Date(b.cekim_tarihi + "T12:00:00").toLocaleDateString(TR, { day: "numeric", month: "short" })) : ""}</small></a>`).join("") : "";
+    $("#ck-bolumler").innerHTML = L.length > 1 ? L.map(b => `<a href="#b/${b.id}" class="ck-bt${b.id === SEC ? " on" : ""}" aria-current="${b.id === SEC}"><b>${b.no ? "Bölüm " + b.no : "Bölüm"}</b><small>${b.cekim_tarihi ? esc(new Date(b.cekim_tarihi + "T12:00:00").toLocaleDateString(TR, { day: "numeric", month: "short" })) + " · " : esc(DURUM[b.durum] || b.durum) + " · "}${(b.mekanlar || []).length} mekân</small></a>`).join("") : "";
+    const nav = $("#ck-bolumler"), on = $(".ck-bt.on", nav); if (on) nav.scrollLeft = on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2;
     const b = L.find(x => x.id === SEC);
     if (!b) {
       $("#ck-icerik").innerHTML = bekleyenHtml() + `<div class="ck-bos"><div aria-hidden="true">🎬</div><h3>Şu an planlanan bölüm yok</h3><p>Yeni bir bölüm açılıp mekânlar eklendiğinde burada görünür.</p></div>`;
@@ -257,11 +258,12 @@
     $("#ck-icerik").innerHTML = bekleyenHtml() + `
       <section class="ck-bh">
         <span class="ck-durum d-${esc(b.durum)}">${esc(DURUM[b.durum] || b.durum)}</span>
-        <h2>${b.no ? `<small>Bölüm ${b.no}</small>` : ""}${esc(b.baslik)}</h2>
+        <h2>${b.no && !String(b.baslik).toLocaleLowerCase(TR).includes("bölüm " + b.no) ? `<small>Bölüm ${b.no}</small>` : ""}${esc(b.baslik)}</h2>
         <p class="ck-meta">${[b.cekim_tarihi ? "Çekim: " + esc(fmtD(b.cekim_tarihi)) : "", b.sehir ? esc(b.sehir) : "", `${M.length} mekân`].filter(Boolean).join(" · ")}</p>
         ${b.aciklama ? `<p class="ck-acik">${esc(b.aciklama)}</p>` : ""}
         ${rl ? `<a class="btn btn-o btn-sm" href="${esc(rl)}" target="_blank" rel="noopener noreferrer">Bütün rotayı Google Maps'te aç ↗</a>` : ""}
       </section>
+      ${M.length > 1 ? `<nav class="ck-dizin" aria-label="Bu bölümün mekânları">${M.map((m, i) => `<a href="#m-${m.oneri_id}"><b>${i + 1}</b>${esc(m.ad)}${ort(m.puanlar) != null ? `<em>${fP(ort(m.puanlar))}</em>` : ""}</a>`).join("")}</nav>` : ""}
       ${ozet(b)}
       <div class="ck-liste">${M.length ? M.map(kart).join("") : `<div class="ck-bos"><p>Bu bölüme henüz mekân eklenmemiş.</p></div>`}</div>`;
   }
@@ -271,7 +273,7 @@
     $$("#ck-icerik details").forEach(d => { if (acik.has(d.dataset.k)) d.open = true; }); scrollTo(0, y);
   }
 
-  addEventListener("hashchange", () => { if (!D) return; if (/^#(b\/\d+|ekle)?$/.test(location.hash)) { ciz(); scrollTo(0, 0); } });
+  addEventListener("hashchange", () => { if (!D) return; if (!location.hash || /^#(b\/\d*|ekle)$/.test(location.hash)) { ciz(); scrollTo(0, 0); } });
   $("#ck-icerik").addEventListener("click", async e => {
     const p = e.target.closest("[data-puanla]"); if (p) return puanla(+p.dataset.puanla);
     const fa = e.target.closest("[data-foto-ac]"); if (fa) return fotoAc(+fa.dataset.fotoAc);

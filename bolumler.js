@@ -154,6 +154,7 @@
         <div class="acts">
           <button class="btn btn-line btn-sm" data-bduz="${b.id}">Düzenle</button>
           <button class="btn btn-y btn-sm" data-bekle="${b.id}">+ Mekân ekle</button>
+          <a class="btn btn-line btn-sm" href="/ekip/#b/${b.id}" target="_blank" rel="noopener">Çekim paneli ↗</a>
         </div>
       </div>
       ${b.aciklama ? `<p class="bd-acik">${esc(b.aciklama)}</p>` : ""}
