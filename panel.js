@@ -870,7 +870,7 @@
   function confirmFoto(msg) { return Promise.resolve(window.confirm(msg)); }
 
   /* ---------- ekip (Tahsin / Egemen hesapları) ---------- */
-  async function renderEkip() {
+  async function renderEkip() { if (window.EKIPY) return window.EKIPY.ciz();
     const box = $("#ekip-list"); box.innerHTML = `<div class="empty">Yükleniyor…</div>`;
     const d = await gfn("ekip", {});
     const ekip = d.ekip || [];

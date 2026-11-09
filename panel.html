@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css?v=13">
-<link rel="stylesheet" href="panel.css?v=15">
+<link rel="stylesheet" href="panel.css?v=16">
 </head>
 <body class="pnl">
 
@@ -138,17 +138,24 @@
       <!-- EKİP -->
     <section data-pane="ekip" hidden>
       <div class="p-head"><h2>Ekip</h2></div>
-      <p class="hint">Tahsin ve Egemen kendi panellerinden (<b>/panel/tahsin</b>, <b>/panel/egemen</b>) sadece kendilerine atanan mekânları puanlar ve rotaya mekân ekler. Sayfa yazısı, Instagram ve fotoğraflar sadece Egemen'in panelinde açıktır.</p>
-      <div class="box" style="margin-bottom:14px"><div id="ekip-list"></div></div>
-      <form class="box" id="davet-form" novalidate>
-        <h3 style="font-size:18px;margin-bottom:12px">Panel daveti gönder</h3>
-        <div class="row3" style="align-items:end">
-          <label class="field"><span>Kişi</span><select name="kisi" required><option value="">Seç</option><option value="tahsin">Tahsin</option><option value="egemen">Egemen</option></select></label>
-          <label class="field"><span>E-posta</span><input name="email" type="email" autocomplete="off" required></label>
-          <button class="btn btn-o btn-sm" type="submit" style="margin-bottom:18px">Daveti gönder</button>
-        </div>
-        <p class="sm">Davet e-postasındaki bağlantıyla kişi kendi şifresini belirler. Bir kişiye yeni e-posta atarsan eskisinin yetkisi kalkar.</p>
-      </form>
+      <div id="ekipy">
+        <p class="hint">Çekim paneline kullanıcı adı ve şifreyle girilir, e-posta gerekmez. <b>Tahsin abi</b> <code>eniyitavukdoner.com/panel/tahsin</code> adresinden girer; bölümlerin tamamını, öneri nedenlerini ve Google yorumlarını görür, mekânlara puan verir. <b>Çekim ekibi</b> <code>eniyitavukdoner.com/ekip</code> adresinden girer; planlanan ve çekilen bölümlerin mekânlarını (adres, saat, telefon, yol tarifi, Instagram) ve verilen puanları görür. Puanlar mekân “Gidildi” olup siteye eklendiğinde sitedeki değerlendirmeye de otomatik taşınır.</p>
+        <div class="box" style="margin-bottom:14px"><div id="ekipy-liste"></div></div>
+        <div id="ekipy-bilgi"></div>
+        <form class="box" id="ekipy-form" novalidate autocomplete="off">
+          <h3 style="font-size:18px;margin-bottom:12px">Kişi ekle</h3>
+          <div class="row2">
+            <label class="field"><span>Ad <small>(panelde görünür)</small></span><input name="ad" maxlength="60" placeholder="Tahsin abi" required></label>
+            <label class="field"><span>Rol</span><select name="rol" required><option value="sunucu">Tahsin abi · puan verir</option><option value="ekip">Çekim ekibi · görür</option></select></label>
+          </div>
+          <div class="row2">
+            <label class="field"><span>Kullanıcı adı</span><input name="kadi" maxlength="30" placeholder="tahsin" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
+            <label class="field"><span>Şifre <small>(en az 8 karakter)</small></span><span class="ekipy-sifre"><input name="sifre" type="password" minlength="8" maxlength="72" autocomplete="new-password" required><button type="button" class="btn btn-line btn-sm" data-uret>Oluştur</button></span></label>
+          </div>
+          <button class="btn btn-o btn-sm" type="submit">Kişiyi ekle</button>
+        </form>
+      </div>
+      <div hidden><div id="ekip-list"></div><form id="davet-form"><select name="kisi"></select><input name="email"><button type="submit"></button></form></div>
     </section>
 </main>
 </div>
@@ -168,7 +175,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous" defer></script>
 <script src="ortak-panel.js?v=13" defer></script>
-<script src="panel.js?v=15" defer></script>
+<script src="panel.js?v=16" defer></script>
 <script src="bolumler.js?v=4" defer></script>
+<script src="ekip-yonet.js?v=1" defer></script>
 </body>
 </html>
