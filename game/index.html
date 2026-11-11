@@ -403,7 +403,7 @@ html.full .caption { display: none; }
 
 /* --- başlık ve iflas ekranı --- */
 .screen { position: absolute; inset: 0; z-index: 50; color: #fff; display: grid; place-items: center; padding: calc(24px + var(--st)) calc(28px + var(--sr)) calc(24px + var(--sb)) calc(28px + var(--sl)); overflow-y: auto; background: radial-gradient(120% 100% at 88% 8%, #3558DA 0%, var(--cobalt) 46%, var(--cobalt-d) 100%); }
-.screen .in { width: min(940px, 100%); display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: center; container-type: inline-size; }
+.screen .in { width: min(1080px, 100%); display: grid; grid-template-columns: 1.05fr 1fr; gap: 32px; align-items: center; container-type: inline-size; }
 .screen .tcol { min-width: 0; }
 .screen .kicker { font-size: 12px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--yellow); }
 .brand { display: flex; align-items: center; gap: 14px; margin: 10px 0 0; }
@@ -671,6 +671,108 @@ html.full .caption { display: none; }
 .kal b { color: var(--cobalt); }
 .kal span { display: inline-block; margin-top: 4px; font-size: 13px; color: var(--ink-2); }
 
+/* ---------- gökyüzü: bulut gölgeleri, mevsim ışığı, yağış ---------- */
+.sky { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
+.sky .cl { position: absolute; left: -45%; width: 46%; height: 34%; border-radius: 50%; background: radial-gradient(closest-side, rgba(20, 39, 90, .10), rgba(20, 39, 90, .05) 55%, rgba(20, 39, 90, 0) 100%); animation: cloud 95s linear infinite; will-change: transform; }
+.sky .c1 { top: 4%; }
+.sky .c2 { top: 46%; width: 36%; height: 26%; animation-duration: 130s; animation-delay: -50s; }
+.sky .c3 { top: 70%; width: 52%; height: 38%; animation-duration: 160s; animation-delay: -105s; }
+@keyframes cloud { to { transform: translate3d(330%, -18%, 0); } }
+.sky .vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgba(255, 255, 255, 0) 58%, rgba(20, 39, 90, .13) 100%); }
+.sky.sz-sonbahar .vig { background: radial-gradient(ellipse at 50% 46%, rgba(255, 190, 90, .05) 0%, rgba(255, 190, 90, .03) 58%, rgba(90, 50, 10, .16) 100%); }
+.sky.sz-kis .vig { background: radial-gradient(ellipse at 50% 46%, rgba(190, 215, 255, .07) 0%, rgba(190, 215, 255, .05) 58%, rgba(40, 70, 130, .17) 100%); }
+.sky.sz-ilkbahar .vig { background: radial-gradient(ellipse at 50% 46%, rgba(255, 255, 255, 0) 58%, rgba(30, 80, 40, .11) 100%); }
+.wx { position: absolute; inset: 0; }
+.wx i { position: absolute; top: -4%; width: 7px; height: 7px; border-radius: 50%; background: var(--c, #fff); opacity: .9; animation: fall 10s linear infinite; will-change: transform; }
+.sky.sz-kis .wx i { box-shadow: 0 0 0 1px rgba(160, 185, 215, .35); }
+.sky.sz-sonbahar .wx i { border-radius: 60% 0 60% 0; width: 9px; height: 9px; animation-name: fallLeaf; }
+.sky.sz-ilkbahar .wx i { border-radius: 60% 0 60% 0; width: 6px; height: 6px; animation-name: fallLeaf; opacity: .85; }
+@keyframes fall { to { transform: translate3d(var(--dx, 30px), 720px, 0) scale(var(--sc, 1)); } }
+@keyframes fallLeaf { 0% { transform: translate3d(0, 0, 0) rotate(0) scale(var(--sc, 1)); } 50% { transform: translate3d(calc(var(--dx, 30px) * .2), 360px, 0) rotate(200deg) scale(var(--sc, 1)); } 100% { transform: translate3d(var(--dx, 30px), 720px, 0) rotate(420deg) scale(var(--sc, 1)); } }
+@media (prefers-reduced-motion: reduce) { .sky .cl, .wx { display: none; } }
+
+/* ---------- sürüm 10: hikâye arayüzü ---------- */
+.pzrow { display: flex; flex-wrap: wrap; gap: 5px; margin: 3px 0 0 34px; }
+.pzrow .pz { margin: 0; }
+.money .cash, .money .meta, .money .due { cursor: pointer; }
+.pz.uz { background: #FFF6CC; color: #7A5A00; max-width: 100%; }
+.pz.uz .uic { width: 13px; height: 13px; display: grid; } .pz.uz .uic svg { width: 13px; height: 13px; stroke: #B88A00; }
+.pz.uz .ut { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+.pz.uz .up { display: inline-flex; gap: 2px; } .pz.uz .up i { width: 5px; height: 5px; border-radius: 50%; background: #E2CF86; } .pz.uz .up i.on { background: #B88A00; }
+.pz.uz.top { background: linear-gradient(90deg, #FFE27A, #FFD500); color: #5C4300; }
+.game[data-mode="short"] .pzrow, .game[data-mode="tall"] .pzrow { margin-left: 30px; gap: 4px; }
+.game[data-mode="short"] .pz.uz .ut, .game[data-mode="tall"] .pz.uz .ut { max-width: 96px; }
+.act.sure { background: var(--bad) !important; color: #fff !important; } .act.sure .lb, .act.sure .sb { color: #fff !important; }
+.btn small { display: block; font: 500 11.5px/1.3 var(--f); opacity: .8; margin-top: 3px; }
+
+.confetti { position: absolute; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.confetti i { position: absolute; top: -3%; border-radius: 2px; animation: conf 2.6s cubic-bezier(.2, .6, .4, 1) forwards; }
+@keyframes conf { to { transform: translate3d(var(--dx, 0), 115vh, 0) rotate(var(--rot, 720deg)); opacity: .9; } }
+
+.intro { position: absolute; inset: 0; z-index: 80; background: linear-gradient(160deg, #1B2F86, #0E1D45); display: grid; place-items: center; padding: calc(14px + var(--st)) calc(14px + var(--sr)) calc(14px + var(--sb)) calc(14px + var(--sl)); }
+.intro[hidden] { display: none; }
+.intro-in { width: min(560px, 100%); max-height: 100%; background: var(--surface); border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 30px 80px rgba(0, 0, 0, .35); animation: sheetin .35s var(--ease); }
+.iart { flex: 1 1 auto; min-height: 0; aspect-ratio: 320 / 170; } .iart svg { display: block; width: 100%; height: 100%; }
+.itx { padding: 16px 22px 20px; }
+.itx h2 { margin: 8px 0 6px; font-size: 22px; line-height: 1.2; letter-spacing: -.3px; color: var(--navy); }
+.itx p { margin: 0; line-height: 1.55; color: var(--ink-2); font-size: 14.5px; }
+.idots { display: flex; gap: 5px; } .idots i { width: 18px; height: 4px; border-radius: 2px; background: var(--fill-2); } .idots i.on { background: var(--orange); }
+.irow { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; } .irow .btn.o { flex: 1; }
+.game[data-mode="short"] .intro-in { flex-direction: row; width: min(760px, 100%); } .game[data-mode="short"] .iart { flex: 0 0 44%; aspect-ratio: auto; } .game[data-mode="short"] .itx { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 14px 18px; } .game[data-mode="short"] .itx h2 { font-size: 18px; } .game[data-mode="short"] .itx p { font-size: 13px; }
+
+.sheet.hiksheet { width: min(520px, 100%); }
+.tabs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; padding: 4px; background: var(--fill); border-radius: 14px; margin: 4px 0 12px; }
+.tabs button { border: 0; background: transparent; padding: 9px 4px; border-radius: 10px; font: 600 13px var(--f); color: var(--ink-2); cursor: pointer; }
+.tabs button.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 4px rgba(20, 39, 90, .14); }
+.lad { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lad > li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; padding: 11px 12px; border-radius: 14px; background: var(--fill); align-items: start; }
+.lad .ln { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: var(--fill-2); color: var(--ink-2); } .lad .ln svg { width: 16px; height: 16px; }
+.lad li.done .ln { background: var(--good); } .lad li.next { background: #FFF8DC; box-shadow: inset 0 0 0 1.5px #F0D060; } .lad li.next .ln { background: #F5B400; color: #fff; } .lad li.lock b { color: var(--ink-2); }
+.lad b { display: block; font-size: 14.5px; } .lad .lw { font-size: 12px; color: var(--ink-2); }
+.req { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 5px; }
+.req li { display: grid; grid-template-columns: 18px 1fr auto; gap: 8px; align-items: center; font-size: 13px; }
+.req li i { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #C9B25A; display: grid; place-items: center; font-style: normal; font-size: 11px; font-weight: 800; color: #fff; }
+.req li.ok i { background: var(--good); border-color: var(--good); } .req li.ok span { color: var(--ink-2); }
+.req li em { font-style: normal; font-size: 11.5px; color: var(--ink-2); white-space: nowrap; }
+.rzg { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.rz { background: var(--fill); border-radius: 14px; padding: 10px; display: grid; gap: 2px; font-size: 11.5px; color: var(--ink-2); opacity: .6; }
+.rz b { font-size: 13px; color: var(--ink); } .rz em { font-style: normal; font-size: 11px; color: #9A7400; font-weight: 600; }
+.rz .ric { width: 30px; height: 30px; border-radius: 10px; background: var(--fill-2); display: grid; place-items: center; color: var(--ink-2); margin-bottom: 4px; } .rz .ric svg { width: 16px; height: 16px; }
+.rz.got { opacity: 1; background: #FFF8DC; } .rz.got .ric { background: #FFD500; color: #5C4300; }
+.logl { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.logl li { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 8px 2px 8px 12px; border-left: 3px solid var(--fill-2); font-size: 13px; line-height: 1.4; }
+.logl li time { color: var(--ink-2); font-size: 12px; padding-top: 1px; }
+.logl li.good { border-left-color: var(--good); } .logl li.bad { border-left-color: var(--bad); } .logl li.gold { border-left-color: #F5B400; font-weight: 600; }
+.tbl.yt td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+.uup { text-align: center; padding: 6px 0 4px; } .uup h3 { margin: 4px 0 2px; font-size: 22px; letter-spacing: -.3px; } .uup p { margin: 0 0 10px; color: var(--ink-2); }
+.uup .ulv { font-size: 12px; font-weight: 700; color: #9A7400; text-transform: uppercase; letter-spacing: .6px; }
+.ucup, .ecup { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 8px; display: grid; place-items: center; background: linear-gradient(145deg, #FFE27A, #F5B400); box-shadow: 0 8px 22px rgba(245, 180, 0, .4); animation: cupin .6s var(--ease); }
+.ucup svg { width: 36px; height: 36px; } .ucup.lv4, .ecup.lv4 { background: linear-gradient(145deg, #FF9A4A, #FF6A00); box-shadow: 0 8px 22px rgba(255, 106, 0, .45); } .ecup.lv0 { background: linear-gradient(145deg, #C9D2EA, #9AA6C4); box-shadow: none; }
+@keyframes cupin { from { transform: scale(.4) rotate(-20deg); opacity: 0; } 60% { transform: scale(1.12) rotate(6deg); } to { transform: none; opacity: 1; } }
+.dec .prt { flex: none; border-radius: 50%; } .dwho { display: block; font-size: 12px; font-weight: 700; color: var(--cobalt); margin-bottom: -4px; }
+.dnd { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; }
+.dsc { width: 96px; height: 96px; border-radius: 50%; display: grid; place-content: center; text-align: center; color: #fff; background: var(--cobalt); } .dsc b { font-size: 32px; line-height: 1; font-weight: 800; } .dsc span { font-size: 12px; opacity: .85; }
+.dsc.g { background: linear-gradient(145deg, #2BAA62, #1F8F4E); } .dsc.m { background: linear-gradient(145deg, #F7B733, #E08A00); } .dsc.b { background: linear-gradient(145deg, #E8554A, #D93025); }
+.dq { font-weight: 600; color: var(--navy); }
+.dbars { list-style: none; margin: 10px 0; padding: 10px 12px; background: var(--fill); border-radius: 12px; display: grid; gap: 7px; }
+.dbars li { display: grid; grid-template-columns: 118px 1fr 30px; gap: 10px; align-items: center; font-size: 13px; } .dbars b { text-align: right; font-variant-numeric: tabular-nums; }
+.dbar { height: 8px; border-radius: 4px; background: var(--fill-2); overflow: hidden; } .dbar i { display: block; height: 100%; border-radius: 4px; background: var(--cobalt); } .dbar i.g { background: var(--good); } .dbar i.m { background: #F5A300; } .dbar i.b { background: var(--bad); }
+.ybar { display: block; width: 100%; height: 64px; margin: 6px 0 10px; }
+.ayg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0; }
+.ayg > div { background: var(--fill); border-radius: 12px; padding: 9px 10px; display: grid; gap: 2px; } .ayg span { font-size: 11.5px; color: var(--ink-2); } .ayg b { font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ayg .p { background: var(--good-l, #E3F5EA); } .ayg .p b, .pos { color: var(--good); } .ayg .n { background: var(--bad-l); } .ayg .n b { color: var(--bad); }
+.spark { display: block; width: 100%; height: 60px; margin-top: 6px; } .spk { margin: 0 0 8px !important; text-align: center; }
+.sheet .tbl + .kv, .sheet .kv + .tbl { margin-top: 8px; }
+.estory { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; text-align: left; background: rgba(255, 255, 255, .08); border-radius: 16px; padding: 12px 14px; margin: 10px 0; }
+.estory .ecup { width: 52px; height: 52px; margin: 0; animation: none; } .estory .ecup svg { width: 26px; height: 26px; }
+.estory b { display: block; font-size: 16px; } .estory span { display: block; font-size: 13px; opacity: .85; line-height: 1.4; } .estory em { display: block; font-style: normal; font-size: 12px; opacity: .65; margin-top: 2px; }
+@media (max-width: 460px) { .ayg b { font-size: 13px; } .dbars li { grid-template-columns: 96px 1fr 28px; } .logl li { grid-template-columns: 76px 1fr; } }
+
+.mill { animation: millspin 11s linear infinite; }
+@keyframes millspin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .mill { animation: none; } }
+
 </style>
 </head>
 <body>
@@ -686,13 +788,16 @@ html.full .caption { display: none; }
     </svg>
   </div>
 
+  <!-- gökyüzü: bulut gölgeleri, mevsim ışığı, kar / yaprak -->
+  <div class="sky" id="sky" aria-hidden="true"><i class="cl c1"></i><i class="cl c2"></i><i class="cl c3"></i><div class="wx" id="wx"></div><div class="vig"></div></div>
+
   <!-- sol: para, tarih, akış zinciri -->
   <div class="hud-l" id="hudL">
     <div class="panel money" id="moneyCard">
       <div class="cash"><span class="coin" aria-hidden="true">₺</span><b id="cash">0</b></div>
       <div class="meta"><span id="date">Mayıs 2027</span><span class="weeks" id="weeks" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
       <div class="due" id="due"><span class="dl">Ay sonu gider</span><span class="ds">Gider</span> <b id="dueV">₺0</b></div>
-      <button class="pz" id="puanBtn" aria-label="Müşteri puanı"><span class="pst" id="puanSt" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><b id="puanV">3,7</b><span class="pk" id="puanK"></span></button>
+      <div class="pzrow"><button class="pz" id="puanBtn" aria-label="Müşteri puanı"><span class="pst" id="puanSt" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><b id="puanV">3,7</b><span class="pk" id="puanK"></span></button><button class="pz uz" id="unvanBtn" aria-label="Unvan ve hikâye"></button></div>
       <div class="warn" id="bankrupt" hidden></div>
     </div>
     <div class="panel chain" id="chain" aria-label="Akış"></div>
@@ -718,14 +823,16 @@ html.full .caption { display: none; }
   <div class="tip" id="tip" hidden></div>
   <div class="talk" id="talk" hidden></div>
   <div class="card" id="card" hidden></div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="intro" id="intro" hidden></div>
   <div class="modal" id="modal" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 
   <div class="screen title" id="titleScreen">
     <div class="in">
       <div class="tcol">
-        <div class="kicker">Bir tavuk döner işletme oyunu</div>
+        <div class="kicker">Tarladan tezgâha bir döner hikâyesi</div>
         <h1 class="brand"><svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#2340B8"/><rect x="30.5" y="8" width="3" height="48" rx="1.5" fill="#FFD500"/><path d="M19 16 h26 l-6 32 h-14z" fill="#fff"/><path d="M20.2 22 h23.6 M21.4 29 h21.2 M22.6 36 h18.8 M23.8 43 h16.4" stroke="#FF6A00" stroke-width="3" stroke-linecap="round"/></svg><span class="wm">eniyitavukdoner<b>.com</b></span></h1>
-        <p class="lead">Tarlada yem ek, kümeste piliç büyüt, mutfakta şişe çevir, dükkânda sat. Zincir kopmasın, kasa batmasın.</p>
+        <p class="lead">Yemi kendin yetiştir, tavuğu kendin büyüt, şişi kendin diz. Köşedeki küçük dükkândan başla; Türkiye’nin en iyi tavuk döneri ol.</p>
         <label for="inName">Dükkânının adı</label>
         <input id="inName" maxlength="22" value="Benim Dönerim" autocomplete="off" spellcheck="false" placeholder="Dükkânının adı" enterkeyhint="go">
         <label class="tsw" for="inGuide"><input type="checkbox" id="inGuide" checked><span class="sw" aria-hidden="true"></span><span class="tl"><b>Yardımlı oyna</b><small>Ne yapacağını adım adım gösterir</small></span></label>
@@ -737,17 +844,7 @@ html.full .caption { display: none; }
         </div>
         <button class="fsbtn" id="btnFsTitle" hidden><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Tam ekran oyna</button>
       </div>
-      <div class="tray" aria-hidden="true">
-        <svg viewBox="0 0 400 320">
-          <path d="M40 200 L210 115 L380 200 L210 285 Z" fill="#8B5A3C"/><path d="M40 200 L210 285 L210 297 L40 212 Z" fill="#6E4630"/><path d="M380 200 L210 285 L210 297 L380 212 Z" fill="#5A3A28"/>
-          <path d="M62 200 L210 126 L358 200 L210 274 Z" fill="#F5ECDD"/>
-          <path d="M150 160 L250 110 L300 135 L200 185 Z" fill="#E9E1CF"/>
-          <g transform="translate(160,190) rotate(-26)"><rect x="-70" y="-24" width="150" height="48" rx="24" fill="#F2D9A8"/><rect x="-70" y="-24" width="150" height="20" rx="10" fill="#F7E6C2"/><path d="M45 -24 h35 a24 24 0 0 1 0 48 h-35 z" fill="#C8792D"/><path d="M52 -16 h20 M50 -4 h26 M52 8 h20" stroke="#7BB661" stroke-width="5" stroke-linecap="round"/><path d="M58 -10 h14 M56 2 h18" stroke="#E53935" stroke-width="4" stroke-linecap="round"/><rect x="-70" y="-24" width="70" height="48" rx="12" fill="#FFFFFF" opacity=".9"/><path d="M-60 -8 h40 M-60 6 h40" stroke="#2340B8" stroke-width="5"/></g>
-          <g transform="translate(300,150)"><path d="M-26 -70 h52 l-6 78 h-40z" fill="#fff"/><path d="M-26 -70 h52 l-1 12 h-50z" fill="#2340B8"/><ellipse cx="0" cy="-70" rx="26" ry="8" fill="#F4F7FB"/><path d="M-20 -30 h40" stroke="#2340B8" stroke-width="4"/><text x="0" y="-12" font-size="12" font-weight="700" text-anchor="middle" fill="#2340B8" font-family="Poppins, sans-serif">AYRAN</text><rect x="8" y="-112" width="5" height="46" rx="2" fill="#FF6A00" transform="rotate(12)"/></g>
-          <g transform="translate(95,150)"><path d="M-28 0 l6 -48 h44 l6 48z" fill="#FF6A00"/><path d="M-22 -48 h44 l-2 10 h-40z" fill="#DB5A00"/><g fill="#FFD24A" stroke="#E2A82A" stroke-width="1.2"><rect x="-18" y="-80" width="7" height="40" rx="2" transform="rotate(-8)"/><rect x="-8" y="-86" width="7" height="44" rx="2" transform="rotate(-2)"/><rect x="2" y="-82" width="7" height="42" rx="2" transform="rotate(5)"/><rect x="11" y="-76" width="7" height="36" rx="2" transform="rotate(11)"/></g></g>
-          <g transform="translate(250,230)"><ellipse cx="0" cy="0" rx="26" ry="12" fill="#fff"/><path d="M-16 -2 q6 -10 12 0 q6 -10 12 0" stroke="#7BB661" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="12" cy="-4" r="5" fill="#E53935"/></g>
-        </svg>
-      </div>
+      <div class="tray" id="tray" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -763,14 +860,14 @@ html.full .caption { display: none; }
     </div>
   </div>
 </div>
-<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 9</span><span>Oyun kendiliğinden kaydedilir</span></div>
+<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 10</span><span>Oyun kendiliğinden kaydedilir</span></div>
 </div>
 
 <script>(function(){var e=window.self!==window.top,m=!!(window.matchMedia&&matchMedia('(pointer: coarse)').matches&&Math.min(screen.width,screen.height)<820);if(e)document.body.classList.add('embed');if(e||m)document.documentElement.classList.add('full');})();</script>
 <script>
 'use strict';
 /* ============================================================
-   eniyitavukdoner oyunu — motor (sürüm 9)
+   eniyitavukdoner oyunu — motor (sürüm 10)
    Gerçek zamanlı; her şey tek tek akar.
    Zincir: yem tarlası + kümes alanı → merkez mutfak (silo, besi, kesim) → dükkân dolabı → usta → tezgâh → kasa / paket → müşteri
    Ölçek: ekrandaki bir müşteri, bir porsiyon ya da bir tavuk figürü 100 gerçek müşteriyi, porsiyonu, tavuğu temsil eder.
@@ -784,8 +881,8 @@ const px = v => { if (typeof S === 'undefined' || !S) return v; const x = v * S.
 const C = {
   month: 60,                            // 1 oyun ayı = 60 sn (1× hızda)
   startCash: 1500000,
-  price: { def: 200, min: 150, max: 300, step: 10, elastic: 2.0 },
-  malzeme: 45,                          // porsiyon başına lavaş, sebze, sos, ambalaj, gaz (₺, enflasyonla artar)
+  price: { def: 200, min: 150, max: 300, step: 10, elastic: 1.8 },
+  malzeme: 42,                          // porsiyon başına lavaş, sebze, sos, ambalaj, gaz (₺, enflasyonla artar)
   ayran: 40,
   fixed: { kira: 90000, get fatura() { return px(30000); } },
   bank: { base: 480000, trust: 5000, assets: 0.15, faiz: 0.03 },   // kasa eksideyken aylık faiz
@@ -851,7 +948,7 @@ const C = {
     sigorta: 25000,                                              // aylık sigorta primi (yangın, su baskını)
   },
   // müşteri puanı (yıldız): müşterinin dükkânımız hakkındaki fikri; kalabalığı belirler
-  puan: { base: 3.3, start: 3.6, slope: 0.4, min: 0.35, max: 1.55, tasarim: [0.3, -0.4, 48], hijyen: 0.3, vet: 0.15, bakim: -0.3, rakip: -0.06, rakipMax: -0.42, robot: -0.08, kiosk: -0.04 },
+  puan: { base: 3.3, start: 3.6, slope: 0.5, min: 0.3, max: 1.7, tasarim: [0.3, -0.4, 48], hijyen: 0.3, vet: 0.15, bakim: -0.3, rakip: -0.06, rakipMax: -0.42, robot: -0.08, kiosk: -0.04 },
   // sağlıklı ve kaliteli ürün için aylık ödenen seçenekler: puanı artırır, bazı riskleri azaltır
   ek: {
     yem: { label: 'Antibiyotiksiz organik yem', cuval: 300, puan: 0.15, risk: 0.7 },          // yenen her çuval için fark
@@ -862,18 +959,24 @@ const C = {
   inc: {
     infl: { every: 6, pct: [5, 9] },                                         // enflasyon: kira dışında her şey; maaşlar ocakta, kira yıl dönümünde yetişir
     bakim: { first: 6, every: [5, 8], base: 40000, rev: 0.05, pen: 0.85 },   // dükkân bakımı; ertelenirse müşteri azalır
-    zam: { first: 15, every: [12, 18], pct: 6, strike: 0.6, dur: 0.25 },     // zam isteği; reddedilirse çoğu zaman grev
+    zam: { first: 15, every: [16, 24], pct: 5, strike: 0.6, dur: 0.25 },     // zam isteği; reddedilirse çoğu zaman grev
     rakip: { first: [9, 14], every: [12, 18], later: [9, 14], mult: 0.82, dur: 3 },  // karşıya rakip dönerci açılır; gidince de biraz müşteri götürür
     ariza: { base: 0.015, age: 0.0015, max: 0.2, repair: 0.12, repairAge: 0.005, life: [96, 132], old: 12 },   // makine arızası: ay başına olasılık, yaşla artar; ömrü dolan makine yenilenmeli
     ciftlik: { first: [3, 5], every: [4, 8], bocek: 40000, cati: 70000, cit: 90000, sulama: 300000, kurak: 0.5 },   // çiftlik sorunları: böcek, fırtına, tilki; yazın kuraklık
     denetim: { first: [3, 5], every: [4, 7], p: 0.3, pMuh: 0.04, pBakim: 0.15, kapat: 3, gun: 3 },   // gıda ve belediye denetimi
-    asgari: [2, 5], refPay: 0.8,                                             // ocakta asgari ücret: yıllık enflasyonun üstüne gerçek artış (%); müşterinin cebi de bunun bir kısmı kadar genişler
-    kira: [2, 4], kiraYogun: 3,                                              // yıl dönümünde kira: enflasyonun üstüne (%), dükkân çok kalabalıksa fazlası
+    asgari: [1.5, 3.5], refPay: 0.9,                                             // ocakta asgari ücret: yıllık enflasyonun üstüne gerçek artış (%); müşterinin cebi de bunun bir kısmı kadar genişler
+    kira: [2, 4], kiraYogun: 2,                                              // yıl dönümünde kira: enflasyonun üstüne (%), dükkân çok kalabalıksa fazlası
     vergi: 0.25,                                                             // yıllık kârın vergisi; nisanda ödenir
-    tasarim: { ask: 36, base: 2000000, grow: 0.15, gun: 5 },                 // dükkân tasarımı eskir; yenisi pahalı ve birkaç gün kapalı
+    tasarim: { ask: 36, base: 1600000, grow: 0.12, gun: 5 },                 // dükkân tasarımı eskir; yenisi pahalı ve birkaç gün kapalı
     kriz: { first: [18, 26], every: [22, 34], iyi: 1.4 },                    // büyük kriz: işler iyi giderken daha çabuk gelir
+    firsat: { first: [4, 7], every: [5, 9] },                                // fırsatlar ve teklifler: toplu sipariş, festival, gazete, ucuz tedarikçi, usta transferi
+    denedik: { first: [9, 13], every: [11, 16] },                            // Denedik ekibinin habersiz ziyareti: 10 üzerinden puan
     wait: 25,                                                                // karar beklenirken geçen süre (sn); sonra kendiliğinden "hayır"
   },
+  // mevsim: yazın sokak kalabalık, kışın paket siparişi çok (takvim ayına göre; ocak = 0)
+  sezon: { musteri: [0.93, 0.93, 0.97, 1.02, 1.05, 1.08, 1.08, 1.05, 1.04, 1.0, 0.96, 0.93], paket: [1.15, 1.15, 1.08, 1.0, 0.95, 0.92, 0.92, 0.95, 1.0, 1.05, 1.1, 1.15] },
+  // unvan: her basamak biraz ün (müşteri) ve bir ödül getirir
+  unvan: { fame: 0.06, odul: [0, 150000, 300000, 600000, 1500000] },
   // yeni teknoloji: herkes için bu aydan sonra (0 = ilk ay)
   tech: { kiosk: 12, robot: 18, dbot: 12, drone: 24 },
   // yardımlı oyunda özelliklerin açıldığı ay (0 = ilk ay)
@@ -906,7 +1009,7 @@ const SHOP = {
 
 let S = null;
 let EV = [];                               // görünüm için olaylar (kaydedilmez)
-const ev = (type, o = {}) => { EV.push(Object.assign({ type, t: S.t }, o)); if (EV.length > 300) EV.splice(0, 150); };
+const ev = (type, o = {}) => { EV.push(Object.assign({ type, t: S.t }, o)); if (EV.length > 300) EV.splice(0, 150); storyLog(type, o); };
 
 /* ---------- rastgelelik ---------- */
 function rand() {
@@ -938,7 +1041,7 @@ function newGame(name, seed, opts = {}) {
     fines: { next: C.month * 7, turned: [], lastQueue: -1e9, fired: [], lastSuit: -1e9 },
     m: newMonth(),
     hist: [],
-    totals: { sold: 0, paket: 0, rev: 0, cost: 0, buy: 0, months: 0, hires: 0, maxStaff: 0, pilic: 0, kesim: 0, olum: 0, lost: 0, campaigns: 0, support: 0, bestSold: 0, peak: C.startCash, kalite: 0, ceza: 0, vergi: 0, kriz: 0, denetim: 0, tamNot: 0 },
+    totals: { sold: 0, paket: 0, rev: 0, cost: 0, buy: 0, months: 0, hires: 0, maxStaff: 0, pilic: 0, kesim: 0, olum: 0, lost: 0, campaigns: 0, support: 0, bestSold: 0, peak: C.startCash, kalite: 0, ceza: 0, vergi: 0, kriz: 0, denetim: 0, tamNot: 0, karAy: 0 },
     best: 0,
     board: { trust: 60, goals: [], qStart: 0, base: null, results: [] },
     seenHelp: {}, over: null,
@@ -951,7 +1054,11 @@ function newGame(name, seed, opts = {}) {
     wageIdx: 1, wageReal: 1, kiraIdx: 1, kiraReal: 1, refReal: 1,
     yil: { kar: 0, buy: 0 }, vergiDue: 0, denetim: null,
     ek: { yem: false, zincir: false, marine: false }, sulama: false, kurak: 0,
+    // sürüm 10: hikâye
+    unvan: 0, unvanAt: [0], rozet: {}, log: [], yillar: [], denedik: { best: 0, n: 0, last: null }, buzz: null, ucuz: null, flags: {}, krizAt: null, lastFirsat: '',
   };
+  S.inc.firsat = C.month * between(C.inc.firsat.first);
+  S.inc.denedik = C.month * between(C.inc.denedik.first);
   S.inc.ciftlik = C.month * between(C.inc.ciftlik.first);
   S.inc.rakip = C.month * (C.inc.rakip.first[0] + rand() * (C.inc.rakip.first[1] - C.inc.rakip.first[0]));
   S.inc.denetim = C.month * between(C.inc.denetim.first);
@@ -969,6 +1076,7 @@ function newGame(name, seed, opts = {}) {
   [1.35, 1.6, 1.9, 2.15, 2.4].forEach(w => S.chickens.push(newChicken(w)));
   for (const k of Object.keys(C.hq.camps)) { S.camps[k] = false; S.campLv[k] = 0; }
   newGoals();
+  logEv('acilis', `${S.name} kapılarını açtı. Bir tarla, bir kümes, küçük bir mutfak ve köşede bir dükkân.`, 'gold');
   return S;
 }
 function newMonth() { return { rev: 0, sold: 0, paket: 0, lost: 0, angry: 0, harvest: 0, pilic: 0, kesim: 0, buy: 0, olum: 0, disYem: 0, ceza: 0, nosis: 0 }; }
@@ -1004,6 +1112,7 @@ const working = k => S.shop[k].filter(works);
 const r10 = v => Math.round(v / 10) * 10;
 // maaşlar enflasyonu her ay değil, ocaktaki asgari ücret zammıyla yakalar
 const wageOf = role => Math.round(C.shop.wage[role] * S.wageIdx * S.wageMult / 1000) * 1000;
+const wageOfW = w => Math.round(wageOf(w.role) * (w.raise || 1) / 1000) * 1000;      // transfer teklifinde zam alan usta
 const vetCost = () => Math.round(C.kitchen.vet.cost * S.wageIdx / 1000) * 1000;
 const muhCost = () => Math.round(C.kitchen.muh.cost * S.wageIdx / 1000) * 1000;
 const sigortaCost = () => px(C.hq.sigorta);
@@ -1011,7 +1120,8 @@ const kiraNow = () => Math.round(C.fixed.kira * S.kiraIdx / 1000) * 1000;
 const priceRef = () => C.price.def * S.infl * (S.refReal || 1);
 const priceMin = () => r10(priceRef() * C.price.min / C.price.def), priceMax = () => r10(priceRef() * C.price.max / C.price.def);
 // malzeme fiyatı hem enflasyonla hem de piyasadaki gerçek fiyat artışıyla yükselir
-const unitCost = () => Math.round((C.malzeme + (marineSpec().malz || 0) + (S.ek && S.ek.marine ? C.ek.marine.malz : 0)) * S.infl * (S.refReal || 1));
+const ucuzOn = () => !!(S.ucuz && S.t < S.ucuz.until);
+const unitCost = () => Math.round((C.malzeme * (ucuzOn() ? 0.7 : 1) + (marineSpec().malz || 0) + (S.ek && S.ek.marine ? C.ek.marine.malz : 0)) * S.infl * (S.refReal || 1));
 // porsiyon başına tavuk maliyeti: çiftlik, kesim, veteriner ve sağlıklı ürün giderleri / ayda çıkan porsiyon
 function tavukCost() {
   const r = monthCostRate(), pors = forecast().pors * KQ;
@@ -1077,9 +1187,13 @@ const fmtPuan = v => v.toLocaleString('tr-TR', { minimumFractionDigits: 1, maxim
 function puanEv(k, v, months, decay = true) { S.puanEv = S.puanEv.filter(e => S.t < e.until && e.k !== k); S.puanEv.push({ k, v, t0: S.t, until: S.t + C.month * months, decay }); }
 const itibarMult = () => puanMult();
 const krizMult = () => (S.kriz && S.t < S.kriz.until ? S.kriz.mult : 1);
-const shopMult = () => rivalMult() * krizMult();
-function arrivalRate() { return working('kasa').length && !isClosed() ? (C.shop.base + campaignAdd()) * puanMult() * priceMult() * boostMult() * shopMult() : 0; }
-function orderRate() { return S.shop.paket && working('kurye').length && !isClosed() ? (C.shop.paket.base + campaignAdd('paket')) * puanMult() * priceMult() * shopMult() : 0; }
+const sezonMult = (k = 'musteri') => C.sezon[k][dateOf(monthIdx()).m];
+const fameMult = () => 1 + C.unvan.fame * (S.unvan || 0);
+function buzzMult() { const b = S.buzz; if (!b || S.t >= b.until) return 1; const left = b.until - S.t; return 1 + (b.mult - 1) * Math.min(1, (S.t - b.t0) / 3, left / 6); }
+function setBuzz(k, mult, months) { if (S.buzz && S.t < S.buzz.until && S.buzz.mult > mult) return; S.buzz = { k, mult, t0: S.t, until: S.t + C.month * months }; }
+const shopMult = () => rivalMult() * krizMult() * fameMult() * buzzMult();
+function arrivalRate() { return working('kasa').length && !isClosed() ? (C.shop.base + campaignAdd()) * puanMult() * priceMult() * boostMult() * shopMult() * sezonMult() : 0; }
+function orderRate() { return S.shop.paket && working('kurye').length && !isClosed() ? (C.shop.paket.base + campaignAdd('paket')) * puanMult() * priceMult() * shopMult() * sezonMult('paket') : 0; }
 function stationSpeed(kind, w) {
   if (!w) return 0;
   if (w.robot) return C.month / C.shop.tRobot;
@@ -1108,7 +1222,7 @@ function monthCostRate() {
   const F = C.farm, K = C.kitchen, SH = C.shop;
   let maas = 0, bakim = 0;
   for (const k of ['ocak', 'kasa', 'kurye']) for (const w of staffed(k)) {
-    if (w.robot) bakim += SH.robot.bakim; else if (w.kiosk) bakim += SH.kiosk.bakim; else if (w.dbot) bakim += SH.paket.robot.bakim; else if (w.drone) bakim += SH.paket.drone.bakim; else maas += wageOf(w.role);
+    if (w.robot) bakim += SH.robot.bakim; else if (w.kiosk) bakim += SH.kiosk.bakim; else if (w.dbot) bakim += SH.paket.robot.bakim; else if (w.drone) bakim += SH.paket.drone.bakim; else maas += wageOfW(w);
   }
   if (S.shop.pmut) bakim += SH.paket.mutfak.bakim;
   // çiftlik: tarla bakımı; kümeste civciv, aşı, ısıtma ve kesim (piliç sayısıyla artar)
@@ -1150,6 +1264,7 @@ function step(dt) {
   accrue(dt);
   S.puan += (puanTarget() - S.puan) * Math.min(1, dt / (C.month * 0.6));
   if (S.cash > S.totals.peak) S.totals.peak = S.cash;
+  if (Math.floor(S.t) !== Math.floor(S.t - dt)) storyTick();
   if (monthIdx() !== m0) monthEnd(m0);
 }
 function accrue(dt) {
@@ -1559,12 +1674,14 @@ function incStep() {
   if (S.t >= N.denetim) { N.denetim = S.t + C.month * between(I.denetim.every); denetim(); return; }
   if (N.ciftlik && S.t >= N.ciftlik) { N.ciftlik = S.t + C.month * between(I.ciftlik.every); farmEvent(); }
   if (S.t >= N.kriz) { N.kriz = S.t + C.month * between(I.kriz.every); bigKriz(); return; }
+  if (N.denedik && S.t >= N.denedik) { if (isClosed()) N.denedik = S.t + C.month; else { N.denedik = S.t + C.month * between(I.denedik.every); denedikZiyaret(); return; } }
   if (S.t >= N.bakim && !S.bakimDue) { S.decision = { k: 'bakim', cost: bakimCost(), until: S.t + I.wait }; ev('decision', { k: 'bakim' }); return; }
   if (!S.design.asked && designAge() >= I.tasarim.ask && !isClosed()) { S.design.asked = true; S.decision = { k: 'tasarim', cost: tasarimCost(), until: S.t + I.wait }; ev('decision', { k: 'tasarim' }); return; }
   if (S.t >= N.zam && !S.strike) {
     if (people().length < 3) { N.zam = S.t + C.month; return; }
-    S.decision = { k: 'zam', pct: I.zam.pct, until: S.t + I.wait }; ev('decision', { k: 'zam' });
+    S.decision = { k: 'zam', pct: I.zam.pct, until: S.t + I.wait }; ev('decision', { k: 'zam' }); return;
   }
+  if (N.firsat && S.t >= N.firsat) { N.firsat = S.t + C.month * between(I.firsat.every); firsat(); }
 }
 
 /* ---------- denetim: gıda, belediye, ticaret ----------
@@ -1606,7 +1723,7 @@ const KRIZ_K = ['kusgribi', 'ekonomi', 'zehir', 'yangin', 'ev'];
 function bigKriz(force) {
   const opts = [];
   if (S.chickens.length >= 6) opts.push(['kusgribi', 1]);
-  opts.push(['ekonomi', 1], ['zehir', S.muh ? 0.6 : S.ek && S.ek.zincir ? 1.0 : 1.4], ['yangin', 0.8]);
+  opts.push(['ekonomi', 1], ['zehir', (S.muh ? 0.6 : S.ek && S.ek.zincir ? 1.0 : 1.4) * (ucuzOn() ? 2.5 : 1)], ['yangin', 0.8]);
   if (monthIdx() >= 24) opts.push(['ev', 0.8]);
   const list = opts.filter(o => o[0] !== S.lastKriz), tot = sum(list, o => o[1]);
   let r = rand() * tot, k = list[0][0];
@@ -1779,16 +1896,17 @@ function monthEnd(mi) {
   S.hist.push(rec); if (S.hist.length > 48) S.hist.shift();
   S.totals.months++; S.totals.cost += cost; S.totals.buy += S.m.buy;
   S.totals.kalite += (a.vet || 0) + (a.muh || 0) + (a.ek || 0);
-  S.best = Math.max(S.best, rec.profit);
+  S.best = Math.max(S.best, rec.profit); if (rec.profit > 0) S.totals.karAy = (S.totals.karAy || 0) + 1;
   S.totals.bestSold = Math.max(S.totals.bestSold, rec.sold + rec.paket);
   // vergi için yılın kârı (vergiyi ve yatırımın bir kısmını düşerek)
   S.yil.kar += rec.profit + (a.vergi || 0); S.yil.buy += S.m.buy;
   for (const k in a) a[k] = 0;
   S.m = newMonth();
   ev('month', { rec });
-  if (S.cash < -creditLimit()) { S.over = { reason: 'iflas', month: mi + 1, limit: creditLimit() }; return; }
+  if (S.cash < -creditLimit()) { S.over = { reason: 'iflas', month: mi + 1, limit: creditLimit() }; logEv('iflas', 'Kasa kredi sınırını aştı; banka kepengi indirdi.', 'bad'); return; }
   calendar(mi + 1);
   if ((mi + 1) % 3 === 0) quarterEnd();
+  if ((mi + 1) % 12 === 0) yilSonu(mi + 1);
 }
 // takvim: ocakta asgari ücret ve vergi hesabı, nisanda vergi ödemesi, mayısta kira yenilemesi
 function calendar(mi) {
@@ -2004,12 +2122,12 @@ const A = {
       // ev sahibi binayı sattı: yeni kirayı kabul et ya da taşın
       if (yes) { S.kiraReal *= 1 + D.pct / 100; S.kiraIdx = S.infl * S.kiraReal; ev('inc', { k: 'evkabul', pct: D.pct }); }
       else { spend(D.cost); closeShop(D.gun, 'tasinma'); S.design = { gen: S.design.gen, t0: S.t + D.gun * DAY, asked: false }; ev('inc', { k: 'tasindi', cost: D.cost }); }
-    }
+    } else firsatDecide(D, yes);
     return true;
   },
   payBakim() { if (!S.bakimDue) return false; const c = S.bakimCost || bakimCost(); spend(c); S.totals.kalite += c; S.bakimDue = false; S.inc.bakim = S.t + C.month * between(C.inc.bakim.every); ev('inc', { k: 'bakimyapildi', cost: c }); return true; },
   // dükkânı devret: oyunu bitir, skoru sıralamaya yaz
-  retire() { if (S.over) return false; S.over = { reason: 'devir', month: S.totals.months, limit: creditLimit() }; return true; },
+  retire() { if (S.over) return false; S.over = { reason: 'devir', month: S.totals.months, limit: creditLimit() }; logEv('devir', 'Dükkân devredildi; önlük çıkarıldı.', 'gold'); return true; },
   toggleCamp(k) { if (!(k in C.hq.camps) || (!S.camps[k] && !isOpen('kampanya'))) return false; S.camps[k] = !S.camps[k]; if (S.camps[k]) S.totals.campaigns++; return true; },
   instant(k) {
     const c = C.hq.instant[k]; if (!c || !isOpen('anlik') || (S.cool[k] && S.t < S.cool[k])) return false;
@@ -2123,6 +2241,212 @@ function issues() {
   return out;
 }
 
+/* ============================================================
+   HİKÂYE (sürüm 10): günlük, unvan merdiveni, rozetler, Denedik ekibi, fırsatlar, yıl karnesi
+   ============================================================ */
+// günlük: oyunun kendi yazdığı hikâye (ilk satır, yani açılış günü hep kalır)
+function logEv(k, text, tone) { if (!S.log) S.log = []; S.log.push({ t: S.t, m: monthIdx(), k, text, tone: tone || '' }); if (S.log.length > 140) S.log.splice(1, S.log.length - 140); }
+const KRIZ_LOG = {
+  kusgribi: e => `Kuş gribi: ${fmtK(e.lost)} tavuk kaybedildi${e.vet ? '; veteriner salgını yarıda durdurdu' : ''}.`,
+  ekonomi: e => `Ekonomik kriz: fiyatlar bir gecede %${e.pct} arttı, sokak boşaldı.`,
+  zehir: e => e.muh ? 'Zehirlenme iddiası çıktı; gıda mühendisinin kayıtları bizi akladı.' : `Zehirlenme şikâyeti: ${fmtTL(e.cost)} ceza, dükkân ${e.gun} gün kapalı kaldı.`,
+  yangin: e => `Mutfakta yangın çıktı: ${fmtTL(e.dmg)} hasar${e.cover ? `, sigorta ${fmtTL(e.cover)} ödedi` : ', sigorta yoktu'}.`,
+};
+const CIFTLIK_LOG = { bocek: 'Bir tarlaya böcek düştü.', cati: 'Fırtına bir kümesin çatısını uçurdu.', tilki: 'Tilki bir kümese girdi.', kurak: 'Kuraklık başladı; tarlalar yarı ürün veriyor.', kuraksulama: 'Kuraklık geldi ama damla sulama tarlaları korudu.' };
+function storyLog(type, o) {
+  if (!S || !S.log) return;
+  const L = (text, tone) => logEv(type + (o.k ? ':' + o.k : ''), text, tone);
+  if (type === 'denetim') L(o.n ? `Denetim: ${o.n} eksik bulundu, ${fmtTL(o.total)} ceza${o.kapat ? '; dükkân mühürlendi' : ''}.` : 'Denetimden tam not aldık: altı kuralın altısı da eksiksiz.', o.n ? 'bad' : 'good');
+  else if (type === 'kriz') { S.krizAt = S.t; if (KRIZ_LOG[o.k]) L(KRIZ_LOG[o.k](o), 'bad'); }
+  else if (type === 'marine') L(`Yeni tarif: ${C.kitchen.marine[o.k].label}.`, 'good');
+  else if (type === 'staff' && o.k === 'vet') L(o.on ? 'Kadrolu veteriner işe başladı; tavuklar artık her gün muayene ediliyor.' : 'Veterinerle yollar ayrıldı.', o.on ? 'good' : 'bad');
+  else if (type === 'staff' && o.k === 'muh') L(o.on ? 'Gıda mühendisi işe başladı; mutfakta her şey kayıt altında.' : 'Gıda mühendisiyle yollar ayrıldı.', o.on ? 'good' : 'bad');
+  else if (type === 'ek') L(`${C.ek[o.k].label}: ${o.on ? 'başladı' : 'bırakıldı'}.`, o.on ? 'good' : 'bad');
+  else if (type === 'build' && o.paket) L('Paket servis başladı.', 'good');
+  else if (type === 'build' && o.pmut) L('Paket mutfağı kuruldu.', 'good');
+  else if (type === 'machine' && !o.renew && !S.flags.makine) { S.flags.makine = 1; L('Dükkâna ilk makine geldi.', ''); }
+  else if (type === 'quit') L(`${o.name} işi bıraktı.`, 'bad');
+  else if (type === 'omur') L(`${o.name} ömrünü doldurdu.`, 'bad');
+  else if (type === 'ciftlik' && CIFTLIK_LOG[o.k]) L(CIFTLIK_LOG[o.k], o.k === 'kuraksulama' ? 'good' : 'bad');
+  else if (type === 'board' && o.res.length && o.res.every(r => r.ok)) L(`Yönetim kurulunun iki hedefi de tuttu: ${fmtTL(o.pay)} destek.`, 'good');
+  else if (type === 'fine' && o.kind === 'dava') L(`İşten çıkarılanlar dava açtı: ${fmtTL(o.amount)}.`, 'bad');
+  else if (type === 'inc') {
+    const k = o.k;
+    if (k === 'rakip') L(`Karşıya yeni bir dönerci açıldı (${o.n}. rakip).`, 'bad');
+    else if (k === 'grev') L('Zam verilmeyince çalışanlar greve çıktı.', 'bad');
+    else if (k === 'zamverildi') L(`Ekibe %${o.pct} zam verildi.`, 'good');
+    else if (k === 'tadilat') L(`Dükkân yeni tasarım diline geçti (${fmtTL(o.cost)}).`, 'good');
+    else if (k === 'tasarimertelendi') L('Yeni tasarım ertelendi; dükkân sıradanlaşıyor.', 'bad');
+    else if (k === 'tasindi') L(`Dükkân yeni yerine taşındı (${fmtTL(o.cost)}).`, '');
+    else if (k === 'evkabul') L(`Yeni ev sahibinin %${o.pct} kira zammı kabul edildi.`, 'bad');
+    else if (k === 'vergi') L(`Yıllık vergi ödendi: ${fmtTL(o.due)}.`, '');
+    else if (k === 'bakimertelendi') L('Dükkânın bakımı ertelendi.', 'bad');
+  }
+}
+
+/* ---------- unvan merdiveni: "Türkiye'nin en iyi tavuk döneri" olana kadar ---------- */
+const UNVAN = [
+  { ad: 'Köşedeki dönerci', soz: 'Daha yolun başındayız.' },
+  { ad: 'Mahallenin dönercisi', soz: 'Mahalleli artık adımızı biliyor.' },
+  { ad: 'Semtin gözdesi', soz: 'Öğle arası kuyruk köşeyi dönüyor.' },
+  { ad: 'Şehrin en iyilerinden', soz: 'Şehrin öbür ucundan gelen var.' },
+  { ad: 'Türkiye’nin en iyi tavuk döneri', soz: 'Aradığımız döner artık bizim döner.' },
+];
+function unvanReqs(lv) {
+  const T = S.totals, tot = T.sold + T.paket, D = S.denedik, r = (t, ok, txt) => ({ t, ok: !!ok, txt });
+  const star = n => r(`Müşteri puanı ★${fmtPuan(n)} olsun`, S.puan >= n - 0.005, `şimdi ★${fmtPuan(S.puan)}`);
+  const best = n => r(`Bir ayda ${fmtK(n)} porsiyon sat`, T.bestSold >= n, `en iyi ay ${fmtK(T.bestSold)}`);
+  const den = n => r(`Denedik ekibinden ${fmtPuan(n)} puan al`, D.best >= n, D.n ? `en iyi ${fmtPuan(D.best)}` : 'ekip henüz gelmedi');
+  switch (lv) {
+    case 1: return [r('Dükkânı üç ay açık tut', T.months >= 3, `${Math.min(3, T.months)} / 3 ay`), r(`Toplam ${fmtK(40)} porsiyon sat`, tot >= 40, `${fmtK(Math.min(40, tot))} / ${fmtK(40)}`), r('Bir ayı kârla kapat', T.karAy >= 1, T.karAy ? 'oldu' : 'henüz değil')];
+    case 2: return [r('Bir yılı doldur', T.months >= 12, `${Math.min(12, T.months)} / 12 ay`), star(4.0), best(50), r('Bir denetimden tam not al', T.tamNot >= 1, T.tamNot ? 'alındı' : T.denetim ? 'henüz değil' : 'denetim gelmedi')];
+    case 3: return [star(4.4), r('Veteriner ve gıda mühendisi çalıştır', S.vet && S.muh, S.vet && S.muh ? 'ikisi de var' : S.vet ? 'mühendis yok' : S.muh ? 'veteriner yok' : 'ikisi de yok'), best(75), den(7.5), r('Üç yılı doldur', T.months >= 36, `${Math.floor(T.months / 12)} / 3 yıl`)];
+    case 4: return [star(4.7), r('Tarifi “Ustanın sırrı”na çıkar', S.marine === 'sir', C.kitchen.marine[S.marine].label), r('Üç sağlıklı ürün seçeneğini de aç', S.ek.yem && S.ek.zincir && S.ek.marine, `${['yem', 'zincir', 'marine'].filter(k => S.ek[k]).length} / 3`), den(9), r('Beş yılı doldur', T.months >= 60, `${Math.floor(T.months / 12)} / 5 yıl`)];
+  }
+  return [];
+}
+const unvanOdul = lv => px(C.unvan.odul[lv] || 0);
+
+/* ---------- rozetler ---------- */
+const ROZET = [
+  { k: 'ilksatis', ad: 'İlk porsiyon', ne: 'İlk dönerini sattın.', ic: 'doner', ok: () => S.totals.sold + S.totals.paket >= 1 },
+  { k: 'ilkkar', ad: 'Siftah bereket', ne: 'Bir ayı kârla kapattın.', ic: 'para', ok: () => S.totals.karAy >= 1 },
+  { k: 'p10k', ad: 'On bin porsiyon', ne: 'Toplam 10.000 porsiyon sattın.', ic: 'doner', ok: () => S.totals.sold + S.totals.paket >= 100 },
+  { k: 'p100k', ad: 'Yüz bin porsiyon', ne: 'Toplam 100.000 porsiyon sattın.', ic: 'doner', ok: () => S.totals.sold + S.totals.paket >= 1000 },
+  { k: 'p1m', ad: 'Bir milyon porsiyon', ne: 'Toplam 1.000.000 porsiyon sattın.', ic: 'doner', ok: () => S.totals.sold + S.totals.paket >= 10000 },
+  { k: 'tamnot', ad: 'Tam not', ne: 'Bir denetimden eksiksiz çıktın.', ic: 'tik', ok: () => S.totals.tamNot >= 1 },
+  { k: 'tamnot5', ad: 'Kuralına göre', ne: 'Beş denetimden tam not aldın.', ic: 'tik', ok: () => S.totals.tamNot >= 5 },
+  { k: 'ekip', ad: 'Kalite ekibi', ne: 'Veteriner ve gıda mühendisi birlikte çalışıyor.', ic: 'kalp', ok: () => S.vet && S.muh },
+  { k: 'uclu', ad: 'Üçü bir arada', ne: 'Organik yem, soğuk zincir ve katkısız marine aynı anda açık.', ic: 'yaprak', ok: () => S.ek.yem && S.ek.zincir && S.ek.marine },
+  { k: 'sir', ad: 'Ustanın sırrı', ne: 'Tarifin son basamağına çıktın.', ic: 'yildiz', ok: () => S.marine === 'sir' },
+  { k: 'ucuz', ad: 'Ucuza kaçmadık', ne: 'Ucuz dondurulmuş tavuğu geri çevirdin.', ic: 'kalkan', ok: () => S.flags.ucuzRed >= 1 },
+  { k: 'tasarim', ad: 'Yepyeni dükkân', ne: 'Dükkânı yeni tasarım diline geçirdin.', ic: 'firca', ok: () => S.design.gen >= 1 },
+  { k: 'paket', ad: 'Kapıya kadar', ne: 'Paket servisi başlattın.', ic: 'moto', ok: () => S.shop.paket },
+  { k: 'denedik8', ad: 'Denedik: çok iyi', ne: 'Denedik ekibinden 8 ve üstü puan aldın.', ic: 'yildiz', ok: () => S.denedik.best >= 8 },
+  { k: 'denedik9', ad: 'Denedik: en iyisi', ne: 'Denedik ekibinden 9 ve üstü puan aldın.', ic: 'kupa', ok: () => S.denedik.best >= 9 },
+  { k: 'bes', ad: 'Beş yıldıza yakın', ne: 'Müşteri puanı ★4,8’i gördü.', ic: 'yildiz', ok: () => S.puan >= 4.8 },
+  { k: 'kriz', ad: 'Fırtınadan sonra', ne: 'Büyük bir krizi atlattın ve altı ay sonra hâlâ ayaktasın.', ic: 'kalkan', ok: () => S.krizAt != null && S.t > S.krizAt + C.month * 6 },
+  { k: 'kul', ad: 'Küllerinden', ne: 'İflasın eşiğinden dönüp kasayı yeniden doldurdun.', ic: 'alev', ok: () => S.flags.dip && S.cash > px(1000000) },
+  { k: 'toplu', ad: 'Büyük sofra', ne: 'Üç toplu siparişi zamanında yetiştirdin.', ic: 'tabak', ok: () => (S.flags.toplu || 0) >= 3 },
+  { k: 'yil1', ad: 'Birinci yıl', ne: 'Dükkân bir yaşında.', ic: 'takvim', ok: () => S.totals.months >= 12 },
+  { k: 'yil5', ad: 'Beşinci yıl', ne: 'Beş yıldır açıksın.', ic: 'takvim', ok: () => S.totals.months >= 60 },
+  { k: 'yil10', ad: 'Onuncu yıl', ne: 'On yıldır açıksın.', ic: 'takvim', ok: () => S.totals.months >= 120 },
+  { k: 'yil20', ad: 'Yirminci yıl', ne: 'Yirmi yıl: artık bir efsanesin.', ic: 'kupa', ok: () => S.totals.months >= 240 },
+  { k: 'zirve', ad: 'Zirve', ne: 'Türkiye’nin en iyi tavuk döneri unvanını aldın.', ic: 'kupa', ok: () => S.unvan >= 4 },
+];
+
+/* ---------- Denedik ekibi: habersiz gelir, beş başlıkta 10 üzerinden puan verir ---------- */
+function denedikPuan() {
+  const r1 = v => Math.round(clamp(v, 0, 10) * 10) / 10;
+  const son = S.denetim, temiz = son && !son.n && S.t - son.t < C.month * 12;
+  const parts = [
+    { k: 'lezzet', ad: 'Lezzet', v: r1(5.5 + MARINE_ORDER.indexOf(S.marine) + (S.ek.marine ? 1 : 0) + (S.kesimHassas ? 0.5 : 0) - (ucuzOn() ? 2 : 0)) },
+    { k: 'hijyen', ad: 'Hijyen', v: r1(4.5 + (S.muh ? 3 : 0) + (S.ek.zincir ? 2 : 0) + (temiz ? 0.5 : 0) - (S.bakimDue ? 2 : 0)) },
+    { k: 'tavuk', ad: 'Tavuğun kalitesi', v: r1(5 + (S.vet ? 2.5 : 0) + (S.ek.yem ? 2.5 : 0) - (ucuzOn() ? 4 : 0) - (sickCount() ? 1 : 0)) },
+    { k: 'servis', ad: 'Servis', v: r1(4 + S.itibar / 100 * 6) },
+    { k: 'mekan', ad: 'Mekân', v: r1(10 - clamp(designAge() / 48, 0, 1.15) * 5 - (S.bakimDue ? 1.5 : 0)) },
+  ];
+  return { parts, puan: Math.round(sum(parts, p => p.v) / parts.length * 10) / 10 };
+}
+function denedikZiyaret() {
+  const d = denedikPuan(), D = S.denedik, first = !D.n, rekor = d.puan > D.best;
+  D.n++; D.last = { t: S.t, m: monthIdx(), puan: d.puan, parts: d.parts }; if (rekor) D.best = d.puan;
+  puanEv('denedik', clamp((d.puan - 6.5) * 0.08, -0.2, 0.25), 6);
+  if (d.puan >= 8) setBuzz('denedik', d.puan >= 9 ? 1.3 : 1.2, 2);
+  logEv('denedik', `Denedik ekibi geldi ve ${fmtPuan(d.puan)} puan verdi${rekor && !first ? ' (yeni rekor)' : ''}.`, d.puan >= 7.5 ? 'gold' : d.puan >= 6 ? '' : 'bad');
+  ev('denedik', { puan: d.puan, parts: d.parts, rekor, first });
+}
+
+/* ---------- fırsatlar ve teklifler ---------- */
+const TOPLU_KIM = ['Bir düğün salonu', 'Yakındaki fabrika', 'Belediyenin bahar şenliği', 'Bir lisenin mezuniyet günü', 'Bir şirketin yıl sonu yemeği', 'Mahallenin hayır yemeği'];
+function ustaAday() { return S.shop.ocak.filter(w => w && !isMachine(w) && S.t - w.hired > C.month * 6 && !(w.raise > 1.3)).sort((a, b) => a.hired - b.hired)[0]; }
+function firsat(force) {
+  const cm = dateOf(monthIdx()).m, opts = [];
+  if (staffed('ocak').length && !isClosed()) opts.push('toplu');
+  if (!ucuzOn() && monthIdx() >= 8) opts.push('ucuz');
+  if (ustaAday() && monthIdx() >= 10) opts.push('transfer');
+  if (!isClosed()) opts.push('festival');
+  if (S.puan >= 3.9 && !isClosed()) opts.push('gazete');
+  if (cm >= 5 && cm <= 8 && !isClosed()) opts.push('turist');
+  const list = opts.filter(k => k !== S.lastFirsat);
+  let k = list.length ? list[Math.floor(rand() * list.length)] : null;
+  if (force) k = force;
+  if (!k) return;
+  S.lastFirsat = k;
+  const until = S.t + C.inc.wait;
+  if (k === 'toplu') {
+    const n = clamp(Math.round(forecast().pors * 0.22), 6, 48), fiyat = r10(S.price * 1.1);
+    S.decision = { k, n, kim: TOPLU_KIM[Math.floor(rand() * TOPLU_KIM.length)], fiyat, pay: n * KQ * fiyat, gun: 10, cezai: px(60000), until };
+  } else if (k === 'ucuz') S.decision = { k, ay: 6, pct: 30, until };
+  else if (k === 'transfer') { const w = ustaAday(); S.decision = { k, id: w.id, name: w.name, pct: 20, until }; }
+  else if (k === 'festival') S.decision = { k, cost: px(180000), until };
+  else if (k === 'gazete') { setBuzz('gazete', 1.2, 2); puanEv('gazete', 0.08, 4); logEv('gazete', 'Bir yemek yazarı köşesinde bizi yazdı; kapıda yeni yüzler var.', 'good'); ev('firsat', { k }); return; }
+  else if (k === 'turist') { setBuzz('turist', 1.18, 1); logEv('turist', 'Yaz geldi: tur otobüsleri sokağa uğramaya başladı.', 'good'); ev('firsat', { k }); return; }
+  ev('decision', { k });
+}
+// kabul edilen toplu sipariş: dolapta yeterince şiş olunca yola çıkar; yetişmezse cezai şart ödenir
+function topluStep() {
+  const T = S.toplu; if (!T) return;
+  if (fridgePors() >= T.n && !isClosed()) {
+    let need = T.n;
+    while (need > 0 && S.fridge.length) { const i = S.fridge.length - 1; if (S.fridge[i] <= need) need -= S.fridge.pop(); else { S.fridge[i] -= need; need = 0; } }
+    S.cash += T.pay; S.m.rev += T.pay; S.totals.rev += T.pay; S.m.sold += T.n; S.totals.sold += T.n; S.acc.malzeme += unitCost() * KQ * T.n;
+    S.flags.toplu = (S.flags.toplu || 0) + 1; puanEv('toplu', 0.06, 3); S.toplu = null;
+    logEv('toplu', `${T.kim} için ${fmtK(T.n)} porsiyon yola çıktı: ${fmtTL(T.pay)}.`, 'good');
+    ev('firsat', { k: 'topluok', n: T.n, pay: T.pay, kim: T.kim });
+  } else if (S.t >= T.until) {
+    addFine('toplu', T.cezai, `Toplu sipariş yetişmedi: ${fmtTL(T.cezai)} cezai şart.`, true); puanEv('toplu', -0.12, 3); S.toplu = null;
+    logEv('toplu', `${T.kim} için söz verilen sipariş yetişmedi: ${fmtTL(T.cezai)} cezai şart.`, 'bad');
+    ev('firsat', { k: 'toplufail', cezai: T.cezai, kim: T.kim });
+  }
+}
+function firsatDecide(D, yes) {
+  const k = D.k;
+  if (k === 'toplu') {
+    if (yes) { S.toplu = { n: D.n, kim: D.kim, pay: D.pay, cezai: D.cezai, t0: S.t, until: S.t + D.gun * DAY }; logEv('toplu', `${D.kim} ${fmtK(D.n)} porsiyon istedi; ${D.gun} gün içinde yetiştireceğiz.`, ''); ev('firsat', { k: 'toplukabul', n: D.n }); }
+    else ev('firsat', { k: 'toplured' });
+  } else if (k === 'ucuz') {
+    if (yes) { S.ucuz = { until: S.t + C.month * D.ay }; puanEv('ucuz', -0.35, D.ay, false); S.flags.ucuzKabul = (S.flags.ucuzKabul || 0) + 1; logEv('ucuz', 'Ucuz dondurulmuş tavukla anlaştık; maliyet düştü ama müşteri farkı anladı.', 'bad'); ev('firsat', { k: 'ucuzkabul' }); }
+    else { S.flags.ucuzRed = (S.flags.ucuzRed || 0) + 1; puanEv('durust', 0.08, 4); logEv('ucuz', 'Ucuz dondurulmuş tavuğu geri çevirdik: tavuğumuz kendi kümesimizden.', 'gold'); ev('firsat', { k: 'ucuzred' }); }
+  } else if (k === 'transfer') {
+    const w = S.shop.ocak.find(x => x && x.id === D.id); if (!w) return;
+    if (yes) { w.raise = (w.raise || 1) * (1 + D.pct / 100); w.mood = 3; w.yawn = 0; logEv('transfer', `${w.name} Usta’ya rakip teklif getirdi; maaşını %${D.pct} artırıp tuttuk.`, 'good'); ev('firsat', { k: 'transferkaldi', name: w.name }); }
+    else { logEv('transfer', `${w.name} Usta rakibe geçti.`, 'bad'); const i = S.shop.ocak.indexOf(w); releaseStation('ocak', i); S.shop.ocak[i] = null; for (const o of people()) if (o.mood > 0 && rand() < 0.5) o.mood--; ev('firsat', { k: 'transfergitti', name: w.name, i }); }
+  } else if (k === 'festival') {
+    if (yes) { spend(D.cost); setBuzz('festival', 1.25, 2); puanEv('festival', 0.1, 4); S.flags.festival = (S.flags.festival || 0) + 1; logEv('festival', `Şehir lezzet festivalinde stant açtık (${fmtTL(D.cost)}); kuyruk standı dolandı.`, 'good'); ev('firsat', { k: 'festivalok' }); }
+    else ev('firsat', { k: 'festivalred' });
+  }
+}
+
+/* ---------- saniyede bir: rozet, unvan, toplu sipariş ---------- */
+function storyTick() {
+  if (!S.flags) return;
+  if (S.cash < -creditLimit() * 0.5) S.flags.dip = 1;
+  if (S.toplu) topluStep();
+  if (S.ucuz && S.t >= S.ucuz.until) { S.ucuz = null; logEv('ucuz', 'Ucuz tavuk anlaşması bitti; yeniden kendi tavuğumuz.', ''); ev('firsat', { k: 'ucuzbitti' }); }
+  for (const r of ROZET) if (S.rozet[r.k] == null && r.ok()) { S.rozet[r.k] = monthIdx(); ev('rozet', { k: r.k, ad: r.ad }); }
+  const nx = S.unvan + 1;
+  if (nx < UNVAN.length && unvanReqs(nx).every(x => x.ok)) {
+    const odul = unvanOdul(nx);
+    S.unvan = nx; S.unvanAt[nx] = monthIdx(); S.cash += odul; S.totals.support += odul;
+    setBuzz('unvan', 1.15, 1);
+    logEv('unvan', `Yeni unvan: ${UNVAN[nx].ad}.`, 'gold');
+    ev('unvan', { lv: nx, odul });
+  }
+}
+
+/* ---------- yıl karnesi: her yıl dönümünde ---------- */
+function yilSonu(mi) {
+  const h = S.hist.slice(-12), T = S.totals, b = S.yilBas || { ceza: 0, kriz: 0, kalite: 0, vergi: 0, denetim: 0, tamNot: 0 };
+  const eniyi = h.reduce((a, r) => (r.profit > a.profit ? r : a), h[0]);
+  const rec = { y: Math.round(mi / 12), rev: sum(h, r => r.rev), cost: sum(h, r => r.cost), profit: sum(h, r => r.profit), sold: sum(h, r => r.sold + (r.paket || 0)), puan: Math.round(S.puan * 10) / 10, cash: Math.round(S.cash), unvan: S.unvan,
+    eniyi: { m: eniyi.m, profit: eniyi.profit }, kalite: Math.round(T.kalite - b.kalite), ceza: Math.round(T.ceza - b.ceza), kriz: Math.round(T.kriz - b.kriz), vergi: Math.round(T.vergi - b.vergi), denetim: T.denetim - b.denetim, tamNot: T.tamNot - b.tamNot, karAy: h.filter(r => r.profit > 0).length };
+  S.yilBas = { ceza: T.ceza, kriz: T.kriz, kalite: T.kalite, vergi: T.vergi, denetim: T.denetim, tamNot: T.tamNot };
+  S.yillar.push(rec); if (S.yillar.length > 40) S.yillar.shift();
+  logEv('yil', `${rec.y}. yıl bitti: ${fmtK(rec.sold)} porsiyon, ${rec.profit >= 0 ? fmtTL(rec.profit) + ' kâr' : fmtTL(-rec.profit) + ' zarar'}.`, 'gold');
+  ev('yil', { rec });
+}
+
 /* ---------- kayıt ---------- */
 const SAVE_KEY = 'eniyitavukdoner-oyun-v4';
 function saveGame() { try { if (S && !S.over) localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { } }
@@ -2158,6 +2482,13 @@ function loadGame() {
     for (const k of ['muh', 'sigorta', 'faiz', 'vergi', 'hasar', 'vet', 'ek']) if (S.acc[k] == null) S.acc[k] = 0;
     for (const k of ['kalite', 'ceza', 'vergi', 'kriz', 'denetim', 'tamNot']) if (S.totals[k] == null) S.totals[k] = 0;
     if (S.refReal == null) S.refReal = 1;
+    // sürüm 10: hikâye (unvan, rozet, günlük, Denedik, fırsatlar)
+    if (S.unvan == null) {
+      Object.assign(S, { unvan: 0, unvanAt: [0], rozet: {}, log: [], yillar: [], denedik: { best: 0, n: 0, last: null }, buzz: null, ucuz: null, toplu: null, flags: {}, krizAt: null, lastFirsat: '' });
+      S.totals.karAy = S.hist.filter(r => r.profit > 0).length;
+      S.inc.firsat = S.t + C.month * between([1, 3]); S.inc.denedik = S.t + C.month * between([2, 5]);
+      logEv('acilis', `${S.name} yoluna devam ediyor.`, 'gold');
+    }
     S.shop.cust.forEach(c => { ORDER = Math.max(ORDER, c.order || 0); });
     return true;
   } catch (e) { return false; }
@@ -2165,7 +2496,7 @@ function loadGame() {
 function hasSave() { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); return !!(s && s.v === 4 && !s.over); } catch (e) { return false; } }
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } }
 
-if (typeof module !== 'undefined') module.exports = { C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
+if (typeof module !== 'undefined') module.exports = { C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, UNVAN, ROZET, unvanReqs, denedikPuan, firsat, fridgePors, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
 
 'use strict';
 /* ============================================================
@@ -2272,24 +2603,122 @@ const wheel = (P, gx, gy, plane) => discOn(P, gx, gy, 6, plane, 0.22, 6.5, '#2B2
 
 /* ---------- çimenli dünya ---------- */
 function lcg(seed) { let a = (seed * 2654435761) >>> 0 || 1; return () => { a = (Math.imul(a, 1664525) + 1013904223) >>> 0; return a / 4294967296; }; }
+/* ---------- mevsimler: çimen, ağaçlar ve hava ---------- */
+const SEASONS = {
+  ilkbahar: { ad: 'İlkbahar', grass: '#98D052', grass2: '#84C23F', grass3: '#B3E26C', tuft: '#6FAE31', leaf: [['#55A83C', '#6CC050', '#8FD86C', '#3C8A2A']], pine: ['#378338', '#4A9E45', '#6CC064'], ol: '#24521A', flowers: ['#FFFFFF', '#FFE45C', '#FF9FC2', '#C9A7FF', '#FFFFFF'], nflow: 54, blossom: true, scene: '#D3EBB4' },
+  yaz: { ad: 'Yaz', grass: '#8DC63F', grass2: '#7DB835', grass3: '#A3D65C', tuft: '#6CA82E', leaf: [['#4A9A36', '#5EB245', '#7FCB5F', '#367A26']], pine: ['#378338', '#4A9E45', '#6CC064'], ol: '#24521A', flowers: ['#FFFFFF', '#FFE45C', '#FF9FC2', '#FFFFFF'], nflow: 28, scene: '#CFE6B0' },
+  sonbahar: { ad: 'Sonbahar', grass: '#B5C766', grass2: '#A4B856', grass3: '#C9D680', tuft: '#869A3A', leaf: [['#E08A2C', '#F0A63A', '#F8C65A', '#B8651C'], ['#CC552B', '#E06E3A', '#F0905A', '#9E3D1C'], ['#E0B02C', '#F0C846', '#F8DE78', '#B8891C']], pine: ['#356F38', '#478A45', '#66A860'], ol: '#5A3A14', flowers: ['#E8922E', '#D4602A', '#F0C040', '#B8651C'], nflow: 40, fallen: true, scene: '#DDDDA6' },
+  kis: { ad: 'Kış', grass: '#EAF0F5', grass2: '#D9E3EB', grass3: '#FFFFFF', tuft: '#B4C2CE', leaf: [['#D6E1E9', '#EDF3F7', '#FFFFFF', '#AEBECB']], pine: ['#2F6B3A', '#3F8548', '#FFFFFF'], ol: '#5E7385', flowers: [], nflow: 0, snow: true, scene: '#E6EDF2' },
+};
+let SZ = Object.assign({ k: 'yaz' }, SEASONS.yaz);
+const seasonOf = cm => (cm >= 2 && cm <= 4 ? 'ilkbahar' : cm >= 5 && cm <= 7 ? 'yaz' : cm >= 8 && cm <= 10 ? 'sonbahar' : 'kis');
+function setSeason(k) { SZ = Object.assign({ k }, SEASONS[k]); PAL.grass = SZ.grass; PAL.grass2 = SZ.grass2; PAL.grass3 = SZ.grass3; PAL.tuft = SZ.tuft; }
 function grassWorld(seed) {
   const R = lcg(seed);
   let s = `<rect x="-1200" y="-800" width="3200" height="2200" fill="${PAL.grass}"/>`;
-  for (let i = 0; i < 11; i++) s += `<ellipse cx="${r1(R() * 800)}" cy="${r1(R() * 480)}" rx="${r1(70 + R() * 100)}" ry="${r1(28 + R() * 40)}" fill="${i % 3 ? PAL.grass2 : PAL.grass3}" opacity=".38"/>`;
+  // iri, yumuşak lekeler: düz bir renk yerine derinlik
+  for (let i = 0; i < 16; i++) s += `<ellipse cx="${r1(-150 + R() * 1100)}" cy="${r1(-80 + R() * 640)}" rx="${r1(70 + R() * 130)}" ry="${r1(28 + R() * 48)}" fill="${i % 3 ? PAL.grass2 : PAL.grass3}" opacity="${SZ.snow ? '.55' : '.38'}"/>`;
   let tf = '';
-  for (let i = 0; i < 95; i++) { const x = r1(R() * 800), y = r1(R() * 470); tf += `M${x} ${y}l-2.2 -4.5M${x} ${y}l.2 -5.6M${x} ${y}l2.4 -4.2`; }
+  for (let i = 0; i < (SZ.snow ? 40 : 120); i++) { const x = r1(-60 + R() * 920), y = r1(-30 + R() * 540); tf += `M${x} ${y}l-2.2 -4.5M${x} ${y}l.2 -5.6M${x} ${y}l2.4 -4.2`; }
   s += `<path d="${tf}" stroke="${PAL.tuft}" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".75"/>`;
-  const fc = ['#FFFFFF', '#FFE45C', '#FF9FC2', '#FFFFFF'];
-  for (let i = 0; i < 28; i++) { const x = r1(R() * 800), y = r1(R() * 470); s += `<circle cx="${x}" cy="${y}" r="2.1" fill="${fc[i % 4]}"/><circle cx="${x}" cy="${y}" r=".8" fill="#E8A200"/>`; }
+  const fc = SZ.flowers;
+  for (let i = 0; i < SZ.nflow; i++) {
+    const x = r1(-40 + R() * 880), y = r1(-20 + R() * 520);
+    if (SZ.fallen) s += `<path d="M0 -3 Q3 0 0 3 Q-3 0 0 -3Z" transform="translate(${x},${y}) rotate(${Math.round(R() * 180)}) scale(${r1(0.9 + R() * 0.6)},.6)" fill="${fc[i % fc.length]}"/>`;
+    else s += `<circle cx="${x}" cy="${y}" r="2.1" fill="${fc[i % fc.length]}"/><circle cx="${x}" cy="${y}" r=".8" fill="#E8A200"/>`;
+  }
+  // taşlar
+  for (let i = 0; i < 9; i++) { const x = r1(-40 + R() * 880), y = r1(-20 + R() * 520), w = r1(3 + R() * 4); s += `<ellipse cx="${x}" cy="${y}" rx="${w}" ry="${r1(w * 0.55)}" fill="${SZ.snow ? '#C3CFD9' : '#B9B6A6'}"/><ellipse cx="${r1(x - w * 0.2)}" cy="${r1(y - w * 0.18)}" rx="${r1(w * 0.55)}" ry="${r1(w * 0.28)}" fill="#fff" opacity=".45"/>`; }
   return s;
 }
 
 function tree(x, y, s = 1, kind = 'round') {
   const T = `translate(${r1(x)},${r1(y)}) scale(${s})`;
-  const ol = 'stroke="#24521A" stroke-opacity=".55" stroke-width="1.1"';
-  if (kind === 'pine') return `<g transform="${T}"><ellipse cx="7" cy="1" rx="15" ry="6" fill="#000" opacity=".14"/><rect x="-2.5" y="-13" width="5" height="14" fill="#8A5A33" ${ol}/><path d="M0 -68 L15 -40 H8 L20 -14 H-20 L-8 -40 H-15Z" fill="#378338" ${ol} stroke-linejoin="round"/><path d="M0 -68 L-15 -40 H-8 L-20 -14 H0Z" fill="#4A9E45"/><path d="M0 -68 L-4 -60" stroke="#6CC064" stroke-width="2" stroke-linecap="round"/></g>`;
-  return `<g transform="${T}"><ellipse cx="8" cy="1" rx="19" ry="7" fill="#000" opacity=".14"/><path d="M-2.8 0 V-22 h5.6 V0z" fill="#8A5A33" ${ol}/>
-    <circle cx="0" cy="-37" r="20" fill="#4A9A36" ${ol}/><circle cx="-6" cy="-42" r="12.5" fill="#5EB245"/><circle cx="-10" cy="-47" r="4.5" fill="#7FCB5F"/><path d="M5 -19 a20 20 0 0 0 14 -11" stroke="#367A26" stroke-width="5" fill="none" opacity=".55"/></g>`;
+  const ol = `stroke="${SZ.ol}" stroke-opacity=".55" stroke-width="1.1"`;
+  const sh = `<ellipse cx="8" cy="1" rx="19" ry="7" fill="${SZ.snow ? '#5E7FA0' : '#000'}" opacity=".14"/>`;
+  if (kind === 'pine') {
+    const [a, b, c] = SZ.pine;
+    const snow = SZ.snow ? '<path d="M0 -68 L7 -55 Q3 -52 0 -56 Q-4 -51 -7 -55Z M-15 -40 L-9 -40 Q-6 -37 -3 -40 Q1 -36 5 -40 L15 -40 L11 -47 L-11 -47Z M-20 -14 L20 -14 L16 -22 Q10 -18 6 -22 Q0 -17 -6 -22 Q-11 -18 -16 -22Z" fill="#fff"/>' : '';
+    return `<g transform="${T}">${sh}<rect x="-2.5" y="-13" width="5" height="14" fill="#8A5A33" ${ol}/><path d="M0 -68 L15 -40 H8 L20 -14 H-20 L-8 -40 H-15Z" fill="${a}" ${ol} stroke-linejoin="round"/><path d="M0 -68 L-15 -40 H-8 L-20 -14 H0Z" fill="${b}"/>${snow}<path d="M0 -68 L-4 -60" stroke="${c}" stroke-width="2" stroke-linecap="round"/></g>`;
+  }
+  const L = SZ.leaf[Math.abs(Math.round(x * 7 + y * 13)) % SZ.leaf.length];
+  let extra = '';
+  if (SZ.blossom && Math.abs(Math.round(x + y)) % 2 === 0) extra = [[-9, -34], [4, -45], [10, -33], [-2, -50], [-14, -43], [1, -30], [12, -42]].map(([a, b]) => `<circle cx="${a}" cy="${b}" r="2.3" fill="#FFD0E2"/><circle cx="${a}" cy="${b}" r=".9" fill="#FF8FB6"/>`).join('');
+  if (SZ.snow) extra = '<path d="M-16 -47 Q-10 -60 2 -57 Q14 -56 17 -45 Q10 -49 4 -46 Q-3 -50 -8 -45 Q-13 -48 -16 -47Z" fill="#fff"/>';
+  return `<g transform="${T}">${sh}<path d="M-2.8 0 V-22 h5.6 V0z" fill="#8A5A33" ${ol}/>
+    <circle cx="0" cy="-37" r="20" fill="${L[0]}" ${ol}/><circle cx="-6" cy="-42" r="12.5" fill="${L[1]}"/><circle cx="-10" cy="-47" r="4.5" fill="${L[2]}"/><path d="M5 -19 a20 20 0 0 0 14 -11" stroke="${L[3]}" stroke-width="5" fill="none" opacity=".55"/>${extra}</g>`;
+}
+/* ---------- çevre: sokak lambası, bank, mutfak tezgâhı, lavabo, kasalar, paspas, yel değirmeni, korkuluk, saman ---------- */
+function lampPost(x, y, s = 1) {
+  return `<g transform="translate(${r1(x)},${r1(y)}) scale(${s})"><ellipse cx="3" cy="1" rx="8" ry="3" fill="#000" opacity=".14"/><rect x="-3.5" y="-4" width="7" height="5" rx="1.5" fill="#3A3F4C"/><rect x="-1.4" y="-56" width="2.8" height="54" fill="#4A5060"/><path d="M0 -56 q0 -8 9 -8" stroke="#4A5060" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M5 -64 h9 l-1.5 5 h-6z" fill="#2B2F3A"/><ellipse cx="9.5" cy="-58.5" rx="3.4" ry="1.8" fill="#FFE27A"/><ellipse cx="9.5" cy="-56" rx="9" ry="5" fill="#FFE27A" opacity=".22"/></g>`;
+}
+function bench(P, gx, gy) {
+  let s = shadowQ(P, gx, gy, 1.5, 0.45, 0.25);
+  s += solid(P, gx + 0.08, gy + 0.05, 0.1, 0.35, 7, '#3A3F4C') + solid(P, gx + 1.32, gy + 0.05, 0.1, 0.35, 7, '#3A3F4C');
+  s += solid(P, gx, gy, 1.5, 0.45, 2.2, '#B07A4E', { z: 7 });
+  s += solid(P, gx, gy, 1.5, 0.07, 8, '#9C6A40', { z: 10 });
+  return s;
+}
+function propPrep(P, gx, gy) {
+  // hazırlık tezgâhı: çelik masa, marine edilmiş tavuk tepsileri, kâse
+  let s = shadowQ(P, gx, gy, 1.9, 0.8, 0.3);
+  for (const [a, b] of [[0.04, 0.04], [1.76, 0.04], [0.04, 0.66], [1.76, 0.66]]) s += solid(P, gx + a, gy + b, 0.1, 0.1, 15, '#9AA2AE');
+  s += solid(P, gx + 0.05, gy + 0.05, 1.8, 0.7, 1.4, '#AEB6C2', { z: 5 });
+  s += solid(P, gx, gy, 1.9, 0.8, 2.6, '#C9CFD8', { z: 15, top: '#E8ECF1' });
+  s += solid(P, gx + 0.15, gy + 0.14, 0.62, 0.5, 2.4, '#B9C0CA', { z: 17.6, top: '#E3915A' });
+  s += solid(P, gx + 0.9, gy + 0.14, 0.62, 0.5, 2.4, '#B9C0CA', { z: 17.6, top: '#D9783F' });
+  const [bx, by] = P(gx + 1.72, gy + 0.42, 18);
+  s += `<ellipse cx="${r1(bx)}" cy="${r1(by)}" rx="5" ry="2.6" fill="#fff" stroke="#9AA2AE" stroke-width=".8"/><ellipse cx="${r1(bx)}" cy="${r1(by - 0.6)}" rx="3.6" ry="1.7" fill="#F2D7A6"/>`;
+  return s;
+}
+function propSink(P, gx, gy) {
+  // el yıkama lavabosu: hijyenin ilk kuralı
+  let s = shadowQ(P, gx, gy, 0.9, 0.6, 0.25);
+  s += solid(P, gx, gy, 0.9, 0.6, 17, '#C9CFD8', { top: '#E8ECF1' });
+  s += face(quad(P, gx + 0.14, gy + 0.12, gx + 0.76, gy + 0.48, 17), '#8FA3BA', { lo: 0.6 });
+  const [tx, ty] = P(gx + 0.45, gy + 0.08, 17);
+  s += `<path d="M${r1(tx)} ${r1(ty)} v-8 q0 -4 5 -3" stroke="#7E8794" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  const [sx, sy] = P(gx + 0.8, gy + 0.1, 17);
+  s += `<rect x="${r1(sx - 2)}" y="${r1(sy - 8)}" width="4" height="8" rx="1.4" fill="#59C3E8"/><rect x="${r1(sx - 1)}" y="${r1(sy - 10.5)}" width="2" height="3" fill="#2340B8"/>`;
+  const [px, py] = P(gx + 0.45, gy + 0.6, 12);
+  s += `<g transform="matrix(1,-.5,0,1,${r1(px)},${r1(py)})"><rect x="-8.5" y="-4" width="17" height="8" rx="1.6" fill="#2340B8"/><path d="M-4.5 1.6 v-3 a1.2 1.2 0 0 1 2.4 0 v-1 a1.2 1.2 0 0 1 2.4 0 v1 a1.2 1.2 0 0 1 2.4 0 v3z" fill="#fff"/><circle cx="5.2" cy="-.8" r="1.1" fill="#9FD8F2"/></g>`;
+  return s;
+}
+function propCrates(P, gx, gy) {
+  let s = shadowQ(P, gx, gy, 1.3, 0.7, 0.3);
+  const box = (a, b, z, c) => solid(P, gx + a, gy + b, 0.6, 0.6, 9, c, { z }) + pl([P(gx + a, gy + b + 0.6, z + 4.5), P(gx + a + 0.6, gy + b + 0.6, z + 4.5), P(gx + a + 0.6, gy + b, z + 4.5)], shade(c, -0.35), 0.8, 'opacity=".6"');
+  s += box(0, 0.05, 0, '#2E55C9') + box(0.66, 0.05, 0, '#FF8A2A') + box(0.3, 0.05, 9, '#2E55C9');
+  return s;
+}
+function propMop(P, gx, gy) {
+  // sarı kova ve "ıslak zemin" levhası
+  const [x, y] = P(gx, gy), [x2, y2] = P(gx + 0.6, gy + 0.25);
+  return `<ellipse cx="${r1(x + 2)}" cy="${r1(y + 1)}" rx="8" ry="3.4" fill="#000" opacity=".13"/><path d="M${r1(x - 6)} ${r1(y - 10)} l1.6 10 h8.8 l1.6 -10z" fill="#FFD500" stroke="#B88A00" stroke-width=".8"/><ellipse cx="${r1(x)}" cy="${r1(y - 10)}" rx="6" ry="2.4" fill="#7FCBEA" stroke="#B88A00" stroke-width=".8"/><path d="M${r1(x + 2)} ${r1(y - 10)} l5 -18" stroke="#8A5A33" stroke-width="1.8" stroke-linecap="round"/>
+    <ellipse cx="${r1(x2 + 1)}" cy="${r1(y2 + 1)}" rx="7" ry="2.6" fill="#000" opacity=".12"/><path d="M${r1(x2 - 6)} ${r1(y2)} l5 -17 h2 l5 17z" fill="#FFD500" stroke="#B88A00" stroke-width=".8" stroke-linejoin="round"/><path d="M${r1(x2)} ${r1(y2 - 12)} v5" stroke="#14275A" stroke-width="1.6" stroke-linecap="round"/><circle cx="${r1(x2)}" cy="${r1(y2 - 4)}" r="1" fill="#14275A"/>`;
+}
+function propRack(P, gx, gy) {
+  // raf: etiketli kutular, temiz ve düzenli
+  let s = shadowQ(P, gx, gy, 1.7, 0.5, 0.3);
+  for (const a of [0, 1.62]) s += solid(P, gx + a, gy, 0.08, 0.5, 38, '#8E97A4');
+  for (const z of [4, 17, 30]) {
+    s += solid(P, gx, gy, 1.7, 0.5, 1.6, '#B9C0CA', { z });
+    const cols = z === 17 ? ['#F2C94C', '#59C3E8', '#F2C94C'] : z === 30 ? ['#FFFFFF', '#FF8A2A', '#FFFFFF'] : ['#59C3E8', '#FFFFFF', '#FF8A2A'];
+    cols.forEach((c, i) => { s += solid(P, gx + 0.14 + i * 0.5, gy + 0.08, 0.38, 0.34, 8, c, { z: z + 1.6 }); });
+  }
+  return s;
+}
+function windmill(x, y, s = 1) {
+  return `<g transform="translate(${r1(x)},${r1(y)}) scale(${s})"><ellipse cx="6" cy="2" rx="22" ry="8" fill="#000" opacity=".14"/><path d="M-13 0 L-8 -58 H8 L13 0Z" fill="#F7F1E3" stroke="#8A7A5A" stroke-width="1.1" stroke-linejoin="round"/><path d="M2 0 L3 -58 H8 L13 0Z" fill="#E3D8BF"/><path d="M-10 -58 L0 -74 L10 -58Z" fill="#C9452E" stroke="#7A2A1A" stroke-width="1" stroke-linejoin="round"/><rect x="-4" y="-16" width="8" height="16" rx="4" fill="#8A5A33"/><rect x="-3" y="-44" width="6" height="7" rx="1" fill="#BFE0F5" stroke="#8A7A5A" stroke-width=".8"/>
+    <g transform="translate(0,-60)"><g class="mill"><g fill="#fff" stroke="#8A7A5A" stroke-width=".9"><path d="M-2 -2 L-5 -32 H5 L2 -2Z"/><path d="M2 -2 L32 -5 V5 L2 2Z"/><path d="M2 2 L5 32 H-5 L-2 2Z"/><path d="M-2 2 L-32 5 V-5 L-2 -2Z"/></g></g><circle r="3.4" fill="#8A5A33"/></g></g>`;
+}
+function scarecrow(x, y, s = 1) {
+  return `<g transform="translate(${r1(x)},${r1(y)}) scale(${s})"><ellipse cx="2" cy="0" rx="8" ry="3" fill="#000" opacity=".14"/><path d="M0 0 V-34 M-13 -24 H13" stroke="#8A5A33" stroke-width="2.6" stroke-linecap="round"/><path d="M-11 -27 h22 l-3 14 h-16z" fill="#C8402A" stroke="#7A2A1A" stroke-width=".8" stroke-linejoin="round"/><path d="M-13 -24 l-3 5 M13 -24 l3 5 M-4 -13 l-1 5 M4 -13 l1 5" stroke="#E8C462" stroke-width="1.6" stroke-linecap="round"/><circle cy="-33" r="5.4" fill="#F2D7A6" stroke="#9C7A1E" stroke-width=".8"/><path d="M-8 -37 h16 l-3 -3 h-2 l-2 -6 h-2 l-2 6 h-2z" fill="#8A5A1E"/><circle cx="-1.8" cy="-33.5" r=".8" fill="#2B2B33"/><circle cx="1.8" cy="-33.5" r=".8" fill="#2B2B33"/><path d="M-2 -31 q2 1.6 4 0" stroke="#2B2B33" stroke-width=".8" fill="none"/></g>`;
+}
+function hayBale(x, y, s = 1) {
+  return `<g transform="translate(${r1(x)},${r1(y)}) scale(${s})"><ellipse cx="3" cy="1" rx="12" ry="4" fill="#000" opacity=".13"/><ellipse cx="-4" cy="-8" rx="5" ry="8" fill="#D9A93A" stroke="#9C7A1E" stroke-width=".9"/><path d="M-4 -16 h10 a5 8 0 0 1 0 16 h-10" fill="#E8C462" stroke="#9C7A1E" stroke-width=".9"/><path d="M0 -15.6 a5 8 0 0 1 0 15.2 M4 -15.8 a5 8 0 0 1 0 15.6" stroke="#B88A2A" stroke-width=".8" fill="none"/><path d="M-4 -12 a2.5 4 0 0 1 0 8" stroke="#B88A2A" stroke-width=".8" fill="none"/></g>`;
+}
+function flagPole(x, y, s = 1) {
+  return `<g transform="translate(${r1(x)},${r1(y)}) scale(${s})"><ellipse cx="2" cy="1" rx="6" ry="2.4" fill="#000" opacity=".14"/><rect x="-3" y="-3" width="6" height="4" rx="1" fill="#8E97A4"/><rect x="-1" y="-78" width="2" height="76" fill="#C9CFD8"/><circle cy="-79" r="2" fill="#FFD500"/><g class="flag"><path d="M1 -76 q8 -3 14 0 t14 0 v15 q-7 3 -14 0 t-14 0z" fill="#2340B8"/><path d="M5 -70 q5 -1.6 9 0 t9 0" stroke="#FF6A00" stroke-width="2.6" fill="none"/><path d="M5 -65.5 q5 -1.6 9 0 t9 0" stroke="#FFD500" stroke-width="1.6" fill="none"/></g></g>`;
 }
 function bush(x, y, s = 1, c = '#4C9C36') {
   return `<g transform="translate(${r1(x)},${r1(y)}) scale(${s})"><ellipse cx="5" cy="1" rx="15" ry="5" fill="#000" opacity=".13"/>
@@ -2980,6 +3409,9 @@ function showSection(sec, instant) {
 }
 function renderBack() {
   const scn = VIEW.scn; if (!scn) return;
+  // mevsim değişince her şey yeni renklerle yeniden çizilir
+  const sk = typeof S !== 'undefined' && S ? seasonOf(dateOf(monthIdx()).m) : 'yaz';
+  if (sk !== SZ.k) { setSeason(sk); RV++; paintSky(); }
   const sig = (scn.backSig ? scn.backSig() : 'x') + '|' + RV;
   if (sig === VIEW.backSig) return;
   VIEW.backSig = sig;
@@ -2987,6 +3419,19 @@ function renderBack() {
   $('lyBack').innerHTML = typeof bd === 'string' ? bd : bd.back;
   $('lyFront').innerHTML = typeof bd === 'string' ? '' : (bd.front || '');
   if (VIEW.sel) setSelected(VIEW.sel);
+}
+// gökyüzü katmanı: bulut gölgeleri, mevsimin ışığı ve yağan kar / yaprak / çiçek
+function paintSky() {
+  const sky = $('sky'); if (!sky) return;
+  sky.className = 'sky sz-' + SZ.k;
+  const wx = $('wx'), n = SZ.k === 'kis' ? 34 : SZ.k === 'sonbahar' ? 16 : SZ.k === 'ilkbahar' ? 10 : 0;
+  let h = '';
+  for (let i = 0; i < n; i++) {
+    const r = lcg(i * 97 + 13), x = Math.round(r() * 100), d = (7 + r() * 9).toFixed(1), del = (-r() * 16).toFixed(1), sc = (0.6 + r() * 0.9).toFixed(2), dx = Math.round(-40 + r() * 140);
+    h += `<i style="left:${x}%;animation-duration:${d}s;animation-delay:${del}s;--sc:${sc};--dx:${dx}px;--c:${SZ.k === 'sonbahar' ? ['#E08A2C', '#CC552B', '#E0B02C'][i % 3] : SZ.k === 'ilkbahar' ? '#FFC4DA' : '#fff'}"></i>`;
+  }
+  wx.innerHTML = h;
+  const g = $('game'); if (g) g.style.setProperty('--scene', SZ.scene);
 }
 function renderFrame(dt) {
   const scn = VIEW.scn; if (!scn) return;
@@ -3441,6 +3886,7 @@ function backdrop() {
   back += poly(quad(P, ext + 0.6, 2 * STEP - GAP, ext + 6, 2 * STEP), '#D9C28E');
   for (const t of S.tiles) if (t.type === 'deco') back += decoGround(t);
   for (const [gx, gy] of [[-2.4, 3], [-2.2, 6.6], [-1.6, 9.8], [5.6, -2.2], [9.8, -2.0], [14.6, 1.2], [15.6, 9.2], [6.4, 11.4], [2.2, 11.6]]) back += tree(...P(gx, gy), 0.8, gx < 0 ? 'pine' : 'round');
+  back += windmill(...P(12.7, -2.0), 0.95) + scarecrow(...P(13.7, 3.4), 1.05) + hayBale(...P(13.6, 10.3), 1.1) + hayBale(...P(14.5, 10.9), 1.1) + hayBale(...P(14.2, 9.9), 1.1) + hayBale(...P(-1.9, 8.4), 1.1);
   return back;
 }
 // giriş tabelası: iki direk, üstte dükkânın adı, altında ÇİFTLİĞİ
@@ -3651,7 +4097,7 @@ function chickenSvg(c, s) {
 const chickScale = w => 0.75 + 0.5 * clamp((w - 1) / Math.max(0.5, kesimTarget() - 1), 0, 1.15);
 
 function backdrop() {
-  let back = `<rect x="-1200" y="-800" width="3200" height="2200" fill="#CFE6B0"/>`;
+  let back = grassWorld(11);
   back += poly(quad(P, 12.2, -4, 18, 13), PAL.asphalt) + pl([P(12.2, -4), P(12.2, 13)], '#E2DDD2', 4) + pl([P(15.6, -4), P(15.6, 13)], '#F4F1EA', 2, 'stroke-dasharray="14 10"');
   for (const [gx, gy] of [[-2.2, 4.4], [-1.8, 7.4], [4.2, -2.4], [8.2, -2.3]]) back += tree(...P(gx, gy), 0.85, 'round');
   const B = building(P, W, D, {
@@ -3682,6 +4128,9 @@ function backdrop() {
   back += B.back;
   back += pl([P(6.4, 1.6), P(W, 1.6)], PAL.yellow, 2.2, 'stroke-dasharray="10 7"') + pl([P(6.4, 3.9), P(W, 3.9)], PAL.yellow, 2.2, 'stroke-dasharray="10 7"');
   back += poly(quad(P, 12.4, 1.6, 15.2, 4.0), '#5E6574');
+  for (let y = 0.6; y < 9; y += 1.5) back += bush(...P(-1.5, y), 1.1);
+  back += flowerBed(P, -1.2, 9.6, 2.6, 0.7) + flowerBed(P, 3.0, 9.6, 2.6, 0.7);
+  back += lampPost(...P(12.25, 6.2), 0.9) + lampPost(...P(-0.9, -0.9), 0.9);
   return { back, front: B.front };
 }
 
@@ -3765,6 +4214,12 @@ function van() {
 let lastCluck = 0;
 function frame(L, dt) {
   const r = penR();
+  // hazırlık köşesi: tezgâh, raf, lavabo, kasalar, paspas
+  L.dyn.put('prPrep', { x: 0, y: 0, d: 7.5 + 7.0 + 1.6, v: 's', html: () => propPrep(P, 7.5, 7.0) });
+  L.dyn.put('prRack', { x: 0, y: 0, d: 9.9 + 8.3 + 1.2, v: 's', html: () => propRack(P, 9.9, 8.3) });
+  L.dyn.put('prSink', { x: 0, y: 0, d: 11.0 + 6.0 + 0.8, v: 's', html: () => propSink(P, 11.0, 6.0) });
+  L.dyn.put('prCrate', { x: 0, y: 0, d: 6.75 + 8.2 + 1.0, v: 's', html: () => propCrates(P, 6.75, 8.2) });
+  L.dyn.put('prMop', { x: 0, y: 0, d: 8.5 + 4.9 + 0.5, v: 's', html: () => propMop(P, 8.5, 4.9) });
   L.dyn.put('pen', { x: 0, y: 0, d: -5, v: 'p' + S.besiLv, html: penFloor, hit: 'besi' });
   L.dyn.put('penb', { x: 0, y: 0, d: -4, v: 'b' + S.besiLv, html: penBackFence });
   L.dyn.put('feed', { x: 0, y: 0, d: 1 + PEN_Y0 + 0.3, v: `${S.besiLv}|${S.silo > 0 ? 1 : 0}|${S.add.vit ? 1 : 0}`, html: feeders, hit: 'silo' });
@@ -3984,7 +4439,7 @@ const theme = () => THEMES[(S.design ? S.design.gen : 0) % THEMES.length];
 /* ---------- arka plan: bina, cadde, kaldırım ---------- */
 function backdrop() {
   let back = '';
-  back += `<rect x="-1200" y="-800" width="3200" height="2200" fill="#CFE6B0"/>`;
+  back += grassWorld(23);
   back += poly(quad(P, -2.5, -2.5, 16, 12.5), '#E4E0D7');
   let pv = '';
   for (let x = -2; x < 15; x += 1) pv += `M${pts([P(x, -2.5)])}L${pts([P(x, 12.5)])}`;
@@ -4016,6 +4471,7 @@ function backdrop() {
       return d;
     },
   });
+  back += flowerBed(P, -2.0, 1.0, 0.7, 2.6) + flowerBed(P, -2.0, 5.2, 0.7, 2.6) + bench(P, -2.05, 3.85);
   back += B.back;
   for (let i = 0; i < 4; i++) {
     const x = SHOP.kasaX[i];
@@ -4404,6 +4860,7 @@ function frame(L) {
   L.dyn.put('rt', { x: 0, y: 0, d: 11.0 + 4.6, v: 't', html: () => table(11.0, 4.6, true) });
   // dışarıdaki ağaçlar: duvarın önünde, kaldırımda
   TREES.forEach(([a, b], j) => { const [x, y] = P(a, b); L.over.put('tree' + j, { x, y, d: a + b, v: 't', html: () => tree(0, 0, 0.85) }); });
+  [[14.25, 0.7], [14.25, 7.9]].forEach(([a, b], j) => { const [x, y] = P(a, b); L.over.put('lamp' + j, { x, y, d: a + b, v: 'l', html: () => lampPost(0, 0, 0.9) }); });
   managerSprite(L, 'shop', P(0.95, 3.55), 0.95 + 3.55, { shirt: '#fff', jacket: '#14275A', tie: PAL.orange, hairStyle: 'short', hair: '#2B2B33', glasses: true, s: 0.9 });
   // müşteriler ("Çok bekledim!" en fazla iki kişide yazar: ekran kalabalıklaşmasın)
   let loud = 0;
@@ -4632,10 +5089,12 @@ const txY = (gx, z, txt, size, fill, anchor = 'middle', w = 800) => { const [x, 
 const txX = (gy, z, txt, size, fill, anchor = 'middle', w = 800) => { const [x, y] = P(0.02, gy, z); return `<text transform="matrix(1,-.5,0,1,${r1(x)},${r1(y)})" font-size="${size}" font-weight="${w}" fill="${fill}" text-anchor="${anchor}">${esc(txt)}</text>`; };
 
 function backdrop() {
-  let back = `<rect x="-1200" y="-800" width="3200" height="2200" fill="#CFE6B0"/>`;
+  let back = grassWorld(37);
   back += poly(quad(P, 12.4, -4, 18, 13), PAL.asphalt);
   for (let y = -2; y <= 12; y += 1.4) back += pl([P(13.0, y), P(15.0, y)], '#F4F1EA', 1.6);
   for (const [gx, gy, k] of [[-2.2, 3.2, 'round'], [-2.4, 6.8, 'pine'], [3.6, -2.4, 'pine'], [8.0, -2.3, 'round']]) back += tree(...P(gx, gy), 0.85, k);
+  back += car(P, 13.1, -0.45, '#D9483B') + car(P, 13.1, 0.95, '#F4F5F7') + car(P, 13.1, 7.95, '#2E55C9');
+  back += flowerBed(P, -1.4, 9.7, 3.0, 0.7) + flowerBed(P, 4.2, 9.7, 3.0, 0.7) + flagPole(...P(-1.0, 9.4), 0.95) + lampPost(...P(12.2, 9.6), 0.9) + lampPost(...P(12.2, 0.4), 0.9);
   const floors = { pazar: ['#C3D0EE', '#B8C6E8'], finans: ['#C6D3C2', '#BCCAB8'], kurul: ['#D7A894', '#CF9D88'], lobi: ['#F1EBDD', '#E7DFCD'] };
   // odalar karo sınırında ayrılır: duvarlar tam karo çizgisinde, her karo tek bir odaya ait
   const roomOf = (x, y) => y < 4 ? (x < 6 ? 'pazar' : 'finans') : (x < 6 ? 'kurul' : 'lobi');
@@ -4951,7 +5410,7 @@ async function rankSubmit(sc) {
   localAdd(sc);
   try {
     if (RANK.backend === 'remote') {
-      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: sc.ad, ay: sc.ay, butce: sc.butce, surum: '9' }) });
+      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: sc.ad, ay: sc.ay, butce: sc.butce, surum: '10' }) });
       if (r.ok) {
         const q = `or=(ay.gt.${sc.ay},and(ay.eq.${sc.ay},butce.gt.${Math.round(sc.butce)}))`;
         const c = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}?select=id&${q}`, { headers: remoteHeaders({ Prefer: 'count=exact', Range: '0-0' }) });
@@ -5273,7 +5732,7 @@ function openDecision() {
     const extra = Math.round(kiraNow() * D.pct / 100 / 1000) * 1000;
     openModal('Ev sahibi binayı sattı', decHead('key', '#B86400', `<p>Yeni ev sahibi kirayı <b>%${D.pct} artırmak</b> istiyor: ayda ${fmtTL(extra)} daha fazla.</p><p>Kabul etmezsek taşınırız: <b>${fmtTL(D.cost)}</b> masraf ve <b>${D.gun} gün kapalı</b>; ama yeni yerde dükkân yepyeni olur, kira aynı kalır.</p>`)
       + `<div class="menu"><button class="btn o" id="dYes">Kirayı kabul et · ayda +${fmtTL(extra)}</button><button class="btn w" id="dNo">Taşın · ${fmtTL(D.cost)}</button></div>`, 'decide', { lock: true });
-  } else return;
+  } else if (!storyDecision(D)) return;
   $('dYes').onclick = yes; $('dNo').onclick = no;
 }
 // denetim raporu: altı kural, tek tek ✓ / ✗
@@ -5394,6 +5853,284 @@ function flashRow(inner, ms) {
   clearTimeout(el._t); el._t = setTimeout(() => { el.hidden = true; }, ms || 6500);
 }
 
+/* ============================================================
+   HİKÂYE ARAYÜZÜ (sürüm 10)
+   Açılış hikâyesi, unvan merdiveni, rozetler, günlük, Denedik karnesi,
+   fırsat teklifleri, yıl karnesi, "bu ay" özeti, kutlama efektleri.
+   ============================================================ */
+const CAST = {
+  farm: { ad: 'Hasan', rol: 'Çiftlik', look: { shirt: '#fff', pants: '#3B4F8F', apron: '#4C66B8', hat: 'cap', hatColor: '#3FA34D', hairStyle: 'short', hair: '#5A3A2A', skin: SKINS[2] } },
+  kitchen: { ad: 'Şef Nermin', rol: 'Mutfak', look: { shirt: '#fff', apron: '#fff', hat: 'chef', pants: '#2B2B33', hair: '#7A4A24', hairStyle: 'bun', skin: SKINS[1] } },
+  shop: { ad: 'Selim', rol: 'Dükkân', look: { shirt: '#fff', jacket: '#14275A', tie: PAL.orange, hairStyle: 'short', hair: '#2B2B33', glasses: true } },
+  hq: { ad: 'Leyla', rol: 'Merkez', look: { shirt: '#fff', jacket: '#2340B8', hairStyle: 'long', hair: '#3B2416', skin: SKINS[1] } },
+};
+// yuvarlak portre: bantlarda ve pencerelerde kimin konuştuğu görülsün
+function portrait(sec, size = 44, bg = '#E8EDFF') {
+  const c = CAST[sec]; if (!c) return '';
+  return `<svg class="prt" width="${size}" height="${size}" viewBox="-17 -47 34 34" aria-hidden="true"><circle cx="0" cy="-30" r="17" fill="${bg}"/><clipPath id="pc${sec}"><circle cx="0" cy="-30" r="17"/></clipPath><g clip-path="url(#pc${sec})">${person(0, 0, Object.assign({ s: 1.05 }, c.look)).replace(/<ellipse[^>]*opacity="\.15"\/>/, '')}</g></svg>`;
+}
+const rozetIc = { doner: 'skewer', para: 'coin', tik: 'check', kalp: 'heart', yaprak: 'leaf', yildiz: 'star', kalkan: 'shield', firca: 'sparkle', moto: 'bike', kupa: 'trophy', alev: 'flame', tabak: 'bowl', takvim: 'clock' };
+
+/* ---------- açılış hikâyesi ---------- */
+function introArt(i) {
+  const W = 320, H = 170;
+  const wrap = (bg, inner) => `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="${W}" height="${H}" fill="${bg}"/>${inner}</svg>`;
+  if (i === 0) {
+    // harita: şehir şehir aranan döner
+    let s = '<path d="M-10 120 Q60 80 120 104 T250 84 T340 96 V180 H-10Z" fill="#BFD9A0"/><path d="M-10 140 Q80 108 150 130 T340 120 V180 H-10Z" fill="#A9CC84"/>';
+    s += '<path d="M38 118 Q90 60 150 92 T268 58" stroke="#2340B8" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" fill="none"/>';
+    for (const [x, y, c] of [[38, 118, '#9AA6C4'], [96, 82, '#9AA6C4'], [150, 92, '#9AA6C4'], [208, 76, '#9AA6C4'], [268, 58, '#FF6A00']]) s += `<g transform="translate(${x},${y})"><ellipse cy="2" rx="7" ry="2.5" fill="#000" opacity=".15"/><path d="M0 0 C-9 -12 -11 -18 -11 -22 a11 11 0 0 1 22 0 c0 4 -2 10 -11 22z" fill="${c}"/><circle cy="-22" r="4.6" fill="#fff"/></g>`;
+    s += donerCone(298, 66, 'intro', 0.8);
+    s += '<g transform="translate(120,44)"><circle r="20" fill="#fff" opacity=".9" stroke="#14275A" stroke-width="4"/><path d="M14 14 l15 15" stroke="#14275A" stroke-width="6" stroke-linecap="round"/><text y="8" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="800" font-size="24" fill="#2340B8">?</text></g>';
+    return wrap('#DCEBFA', s);
+  }
+  if (i === 1) {
+    // hep bir şey eksik
+    let s = '<rect y="118" width="320" height="52" fill="#E9DFCB"/><rect y="114" width="320" height="6" fill="#D4C6A8"/>';
+    const plate = (x, lab, col) => `<g transform="translate(${x},112)"><ellipse cy="6" rx="38" ry="10" fill="#000" opacity=".1"/><ellipse rx="36" ry="10" fill="#fff" stroke="#C9CED8"/><ellipse rx="24" ry="6" fill="${col}"/><path d="M-16 -1 q8 -6 16 0 t16 0" stroke="${shade(col, -0.25)}" stroke-width="2" fill="none"/><g transform="translate(0,-44)"><rect x="-49" y="-13" width="98" height="26" rx="13" fill="#fff" stroke="#E2E6EE"/><text y="4" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="600" font-size="9.6" fill="#5B6485">${lab}</text></g><path d="M0 -30 v14" stroke="#C9CED8" stroke-width="2" stroke-dasharray="2 4"/></g>`;
+    s += plate(56, 'Tavuk nereden?', '#C9A27A') + plate(160, 'Yağ ne yağı?', '#B58E63') + plate(264, 'Mutfak temiz mi?', '#A98258');
+    return wrap('#F6F1E6', s);
+  }
+  if (i === 2) {
+    // tarladan tezgâha
+    const st = [['rows', 'Tarla', '#5FA235'], ['chick', 'Kümes', '#E0763A'], ['chef', 'Mutfak', '#2340B8'], ['store', 'Dükkân', '#FF6A00']];
+    let s = '<path d="M-10 128 Q80 108 160 124 T340 112 V180 H-10Z" fill="#B6D98C"/>';
+    s += '<path d="M62 78 H258" stroke="#14275A" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round"/>';
+    st.forEach(([ic, lab, c], k) => { const x = 44 + k * 77; s += `<g transform="translate(${x},78)"><circle r="27" fill="#fff"/><circle r="27" fill="none" stroke="${c}" stroke-width="4"/><g transform="translate(-13,-13) scale(1.08)"><path d="${ICON[ic]}" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g><text y="50" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="700" font-size="13" fill="#14275A">${lab}</text></g>`; });
+    return wrap('#E3F1D2', s);
+  }
+  // ekip
+  let s = '<rect y="126" width="320" height="44" fill="#DDE4F6"/><rect y="122" width="320" height="6" fill="#C5CFEC"/>';
+  ['farm', 'kitchen', 'shop', 'hq'].forEach((k, j) => { const x = 50 + j * 73, c = CAST[k]; s += person(x, 132, Object.assign({ s: 1.7 }, c.look)); s += `<g transform="translate(${x},152)"><rect x="-33" y="-10" width="66" height="20" rx="10" fill="#14275A"/><text y="4.5" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="600" font-size="10.5" fill="#fff">${c.ad}</text></g>`; });
+  return wrap('#EEF2FF', s);
+}
+const INTRO = [
+  ['Türkiye’nin en iyi tavuk döneri nerede?', 'Yıllarca bu sorunun peşinden gittik. Şehir şehir gezdik, dükkân dükkân dolaştık; yüzlerce döner denedik, hepsine puan verdik.'],
+  ['Hep bir şey eksikti.', 'Kimi tavuğunun nereden geldiğini bilmiyordu. Kimi yağını söylemiyordu. Kiminin mutfağına girmeye izin yoktu. Anladık ki iyi döner tesadüf değil.'],
+  ['Biz de en iyisini kendimiz yapmaya karar verdik.', 'Yemi kendi tarlamızda yetiştireceğiz. Tavuğu kendi kümesimizde büyüteceğiz. Şişi kendi mutfağımızda dizeceğiz. Tarladan tezgâha her adım bizim elimizden geçecek.'],
+  ['Ekip hazır. Patron sensin.', 'Hasan çiftliğe, Şef Nermin mutfağa, Selim dükkâna, Leyla hesaba bakıyor. Köşedeki küçük dükkândan başlıyoruz. Hedef belli: Türkiye’nin en iyi tavuk döneri.'],
+];
+function showIntro(done) {
+  const el = $('intro'); let i = 0;
+  const paint = () => {
+    const [h, p] = INTRO[i], last = i === INTRO.length - 1;
+    el.innerHTML = `<div class="intro-in"><div class="iart">${introArt(i)}</div><div class="itx"><span class="idots">${INTRO.map((_, k) => `<i class="${k === i ? 'on' : ''}"></i>`).join('')}</span><h2>${h}</h2><p>${p}</p><div class="irow"><button class="btn w" id="iSkip">${last ? 'Geri' : 'Geç'}</button><button class="btn o" id="iNext">${last ? 'Dükkânı aç' : 'Devam'}</button></div></div></div>`;
+    $('iNext').onclick = () => { SND.click(); if (last) fin(); else { i++; paint(); } };
+    $('iSkip').onclick = () => { SND.click(); if (last) { i--; paint(); } else fin(); };
+  };
+  const fin = () => { el.hidden = true; el.innerHTML = ''; try { localStorage.setItem('etd-giris', '1'); } catch (e) { } done(); };
+  el.hidden = false; paint();
+}
+const introSeen = () => { try { return localStorage.getItem('etd-giris') === '1'; } catch (e) { return false; } };
+
+/* ---------- kutlama: konfeti ---------- */
+function confetti(n = 70) {
+  const box = $('confetti'); if (!box || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  const cols = ['#2340B8', '#FF6A00', '#FFD500', '#1F8F4E', '#FF8FB6', '#fff'];
+  let h = '';
+  for (let i = 0; i < n; i++) { const r = Math.random; h += `<i style="left:${Math.round(r() * 100)}%;background:${cols[i % cols.length]};animation-duration:${(1.8 + r() * 1.6).toFixed(2)}s;animation-delay:${(r() * 0.5).toFixed(2)}s;--dx:${Math.round(-120 + r() * 240)}px;--rot:${Math.round(360 + r() * 720)}deg;width:${6 + Math.round(r() * 5)}px;height:${9 + Math.round(r() * 6)}px"></i>`; }
+  box.innerHTML = h; clearTimeout(box._t); box._t = setTimeout(() => { box.innerHTML = ''; }, 4200);
+}
+
+/* ---------- unvan: üst bilgideki rozet ve kutlama ---------- */
+let lastUnvan = '';
+function paintUnvan() {
+  const b = $('unvanBtn'); if (!b || !S || S.unvan == null) return;
+  const nx = S.unvan + 1, rq = nx < UNVAN.length ? unvanReqs(nx) : [], ok = rq.filter(x => x.ok).length;
+  const key = S.unvan + '|' + ok + '/' + rq.length;
+  if (key === lastUnvan) return; lastUnvan = key;
+  b.innerHTML = `<span class="uic">${ico('trophy', 'currentColor')}</span><span class="ut">${UNVAN[S.unvan].ad}</span>${rq.length ? `<span class="up" aria-label="sonraki unvan">${rq.map(x => `<i class="${x.ok ? 'on' : ''}"></i>`).join('')}</span>` : ''}`;
+  b.classList.toggle('top', S.unvan >= UNVAN.length - 1);
+}
+function openUnvanUp(e) {
+  const u = UNVAN[e.lv], nx = e.lv + 1 < UNVAN.length ? UNVAN[e.lv + 1] : null;
+  closeCard(); hideTalk(); SND.fanfare(); confetti(e.lv >= 4 ? 140 : 80);
+  openModal('Yeni unvan', `<div class="uup"><div class="ucup lv${e.lv}">${ico('trophy', '#fff')}</div><span class="ulv">${e.lv}. basamak</span><h3>${u.ad}</h3><p>${u.soz}</p></div>
+    <dl class="kv"><dt>Ödül</dt><dd class="pos">+${fmtTL(e.odul)}</dd><dt>Ün</dt><dd>kapıya gelen müşteri +%${Math.round(C.unvan.fame * 100)}</dd></dl>
+    ${nx ? `<p class="small">Sıradaki basamak: <b>${nx.ad}</b>. Ne gerektiğini “Hikâyem” sayfasında görebilirsin.</p>` : '<p class="small">Merdivenin tepesindesin. Artık iş, zirvede kalmak.</p>'}
+    <div class="menu"><button class="btn o" data-close>Harika</button><button class="btn w" id="uHik">Hikâyemi aç</button></div>`, 'report');
+  $('uHik').onclick = () => { SND.click(); openHikaye('unvan'); };
+}
+
+/* ---------- Hikâyem: unvan, rozetler, günlük, yıllar ---------- */
+function openHikaye(tab = 'unvan') {
+  closeCard(); hideTalk();
+  const tabs = [['unvan', 'Unvan'], ['rozet', 'Rozetler'], ['gunluk', 'Günlük'], ['yil', 'Yıllar']];
+  let body = '';
+  if (tab === 'unvan') {
+    body = '<ol class="lad">' + UNVAN.map((u, i) => {
+      const done = i <= S.unvan, next = i === S.unvan + 1, rq = next ? unvanReqs(i) : [];
+      return `<li class="${done ? 'done' : next ? 'next' : 'lock'}"><span class="ln">${done ? ico('check', '#fff') : i}</span><div><b>${u.ad}</b>${done ? `<span class="lw">${i ? esc(dateLabel(S.unvanAt[i] || 0)) : 'başlangıç'}</span>` : i ? `<span class="lw">ödül ${fmtTL(unvanOdul(i))}</span>` : ''}
+        ${next ? `<ul class="req">${rq.map(x => `<li class="${x.ok ? 'ok' : ''}"><i>${x.ok ? '✓' : ''}</i><span>${esc(x.t)}</span><em>${esc(x.txt)}</em></li>`).join('')}</ul>` : ''}</div></li>`;
+    }).join('') + '</ol>';
+  } else if (tab === 'rozet') {
+    const n = ROZET.filter(r => S.rozet[r.k] != null).length;
+    body = `<p class="small">${n} / ${ROZET.length} rozet kazanıldı.</p><div class="rzg">` + ROZET.map(r => { const got = S.rozet[r.k] != null; return `<div class="rz ${got ? 'got' : ''}"><span class="ric">${ico(got ? (rozetIc[r.ic] || 'star') : 'lock', 'currentColor')}</span><b>${esc(r.ad)}</b><span>${esc(r.ne)}</span>${got ? `<em>${esc(dateLabel(S.rozet[r.k]))}</em>` : ''}</div>`; }).join('') + '</div>';
+  } else if (tab === 'gunluk') {
+    const L = S.log.slice().reverse();
+    body = L.length ? '<ul class="logl">' + L.map(l => `<li class="${l.tone}"><time>${esc(dateLabel(l.m))}</time><span>${esc(l.text)}</span></li>`).join('') + '</ul>' : '<p class="small">Günlük boş.</p>';
+  } else {
+    body = S.yillar.length ? `<table class="tbl yt"><tr class="th"><td>Yıl</td><td>Porsiyon</td><td>Kâr</td><td>★</td></tr>${S.yillar.slice().reverse().map(y => `<tr><td>${y.y}. yıl</td><td>${fmtK(y.sold)}</td><td class="${y.profit >= 0 ? 'pos' : 'neg'}">${fmtTL(y.profit)}</td><td>${fmtPuan(y.puan)}</td></tr>`).join('')}</table>`
+      : '<p class="small">İlk yıl dolunca yıl karnesi burada görünür.</p>';
+    if (S.denedik.n) body += `<p class="small">Denedik ekibi ${S.denedik.n} kez geldi; en iyi puan <b>${fmtPuan(S.denedik.best)}</b>.</p>`;
+  }
+  openModal('Hikâyem', `<div class="tabs" role="tablist">${tabs.map(([k, t]) => `<button role="tab" class="${k === tab ? 'on' : ''}" data-tab="${k}">${t}</button>`).join('')}</div><div class="hik">${body}</div>`, 'report hiksheet');
+  $('sheet').querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { SND.click(); openHikaye(b.dataset.tab); });
+}
+
+/* ---------- Denedik karnesi ---------- */
+const DENEDIK_IPUCU = {
+  lezzet: 'Tarifi bir basamak geliştir ya da katkısız doğal marineye geç.',
+  hijyen: 'Gıda mühendisi ve soğuk zincir hijyen puanını en çok artıran iki şey.',
+  tavuk: 'Kadrolu veteriner ve antibiyotiksiz organik yem tavuğun kalitesini belirler.',
+  servis: 'Kuyruk uzamasın: yeterince usta ve kasiyer olsun, yorulana prim ver.',
+  mekan: 'Bakımı erteleme; tasarım eskiyince yeni tasarım diline geç.',
+};
+function openDenedik(e) {
+  closeCard(); hideTalk();
+  const p = e.puan, iyi = p >= 8, orta = p >= 6.5;
+  if (iyi) { SND.fanfare(); if (p >= 9) confetti(90); } else if (orta) SND.month(); else SND.bad();
+  const low = e.parts.slice().sort((a, b) => a.v - b.v)[0];
+  const soz = p >= 9 ? '“Aradığımız döner bu olabilir.”' : iyi ? '“Çok iyi. Birkaç ayrıntı kaldı.”' : orta ? '“Fena değil ama en iyisi için daha yol var.”' : '“Bu hâliyle listemize giremez.”';
+  openModal('Denedik ekibi geldi', `<div class="dnd"><div class="dsc ${iyi ? 'g' : orta ? 'm' : 'b'}"><b>${fmtPuan(p)}</b><span>/ 10</span></div><div><p>Habersiz geldiler, sıraya girdiler, dönerimizi yediler ve mutfağı gezdiler.</p><p class="dq">${soz}</p></div></div>
+    <ul class="dbars">${e.parts.map(x => `<li><span>${esc(x.ad)}</span><span class="dbar"><i style="width:${x.v * 10}%" class="${x.v >= 8 ? 'g' : x.v >= 6 ? 'm' : 'b'}"></i></span><b>${fmtPuan(x.v)}</b></li>`).join('')}</ul>
+    <p class="small">${iyi ? 'Yazı yayımlandı: iki ay boyunca kapıya daha çok müşteri gelecek, puanımız da yükselecek.' : p >= 6.5 ? 'Müşteri puanına küçük bir katkısı oldu.' : 'Yazı iyi çıkmadı; müşteri puanı bir süre düşecek.'}${low.v < 9 ? ` En zayıf başlık <b>${esc(low.ad.toLocaleLowerCase('tr-TR'))}</b>: ${DENEDIK_IPUCU[low.k]}` : ''}</p>
+    <div class="menu"><button class="btn o" data-close>Tamam</button></div>`, 'report');
+}
+
+/* ---------- fırsat teklifleri (karar pencereleri) ---------- */
+function storyDecision(D) {
+  const who = (sec, html) => `<div class="dec">${portrait(sec, 52)}<div><span class="dwho">${CAST[sec].ad}</span>${html}</div></div>`;
+  const btn = (yes, no) => `<div class="menu"><button class="btn o" id="dYes">${yes}</button><button class="btn w" id="dNo">${no}</button></div>`;
+  if (D.k === 'toplu') {
+    const var_ = fridgePors();
+    openModal('Toplu sipariş', who('shop', `<p><b>${esc(D.kim)}</b> bizden <b>${fmtK(D.n)} porsiyon</b> döner istiyor; porsiyonu ₺${fmtNum(D.fiyat)} ödeyecek: toplam <b>${fmtTL(D.pay)}</b>.</p><p>Şişler dolaptan çıkacak ve <b>${D.gun} gün</b> içinde hazır olmalı. Yetişmezse ${fmtTL(D.cezai)} cezai şart öderiz.</p><p class="small">Dolapta şu an ${fmtK(var_)} porsiyon var${var_ >= D.n ? '; sipariş hemen yola çıkar ama dükkâna az şiş kalır.' : '; üretim yetişmezse söz vermeyelim.'}</p>`) + btn('Siparişi al', 'Geri çevir'), 'decide', { lock: true });
+  } else if (D.k === 'ucuz') {
+    openModal('Ucuz tavuk teklifi', who('kitchen', `<p>Bir toptancı kapıya geldi: <b>dondurulmuş ithal tavuk</b>, malzeme maliyeti <b>%${D.pct} düşer</b>, anlaşma ${D.ay} ay.</p><p>Ama tavuğun nereden geldiğini bilmiyoruz. Müşteri farkı anlar: <b>puanımız ciddi düşer</b>, Denedik ekibi gelirse rezil oluruz, zehirlenme riski de artar.</p><p class="small">Benim oyum belli şefim: bizim tavuk bizim kümesten.</p>`) + btn('Anlaşmayı kabul et', 'Geri çevir: ucuza kaçmayız'), 'decide', { lock: true });
+  } else if (D.k === 'transfer') {
+    const w = S.shop.ocak.find(x => x && x.id === D.id), ek = w ? Math.round(wageOfW(w) * D.pct / 100 / 1000) * 1000 : 0;
+    openModal('Ustaya transfer teklifi', who('shop', `<p>Karşıdaki dönerci <b>${esc(D.name)} Usta</b>’ya iş teklif etmiş. En eski ustamız; elinin ayarını müşteri bilir.</p><p>Maaşını <b>%${D.pct}</b> artırırsak kalır. Artırmazsak gider; ekibin de morali bozulur.</p>`) + btn(`Maaşını artır · ayda +${fmtTL(ek)}`, 'Gitmesine izin ver'), 'decide', { lock: true });
+  } else if (D.k === 'festival') {
+    openModal('Şehir lezzet festivali', who('hq', `<p>Bu ay şehirde lezzet festivali var; bize de stant önerdiler. Stant, ekip ve tanıtım: <b>${fmtTL(D.cost)}</b>.</p><p>Gidersek adımız duyulur: <b>iki ay boyunca daha çok müşteri</b> gelir, puanımız da biraz yükselir.</p>`) + btn(`Stant aç · ${fmtTL(D.cost)}`, 'Bu yıl katılma'), 'decide', { lock: true });
+  } else return false;
+  return true;
+}
+const FIRSAT_TXT = {
+  gazete: () => ['Gazetede bizi yazdılar', 'Bir yemek yazarı köşesinde dönerimizi övdü. İki ay boyunca kapıya daha çok müşteri gelecek.', 'book', 'green'],
+  turist: () => ['Tur otobüsleri geldi', 'Yaz kalabalığı sokağa uğruyor; bu ay müşteri daha çok.', 'globe', 'green'],
+  toplukabul: e => ['Toplu sipariş alındı', `${fmtK(e.n)} porsiyon dolapta hazır olunca yola çıkacak.`, 'box', 'amber'],
+  topluok: e => ['Toplu sipariş teslim edildi', `${esc(e.kim)}: ${fmtK(e.n)} porsiyon, ${fmtTL(e.pay)} kazandık.`, 'gift', 'green'],
+  toplufail: e => ['Toplu sipariş yetişmedi', `Dolapta yeterince şiş yoktu. ${fmtTL(e.cezai)} cezai şart ay sonunda ödenecek.`, 'receipt', 'red'],
+  ucuzkabul: () => ['Ucuz tavuğa geçtik', 'Maliyet düştü ama müşteri puanı da düşüyor.', 'down', 'red'],
+  ucuzred: () => ['Ucuza kaçmadık', 'Tavuğumuz kendi kümesimizden. Müşteri bunu duydu; puanımız biraz yükseldi.', 'shield', 'green'],
+  ucuzbitti: () => ['Ucuz tavuk anlaşması bitti', 'Yeniden kendi tavuğumuzla çalışıyoruz.', 'chick', 'green'],
+  transferkaldi: e => [`${esc(e.name)} Usta kaldı`, 'Maaşı arttı, keyfi yerinde.', 'chef', 'green'],
+  transfergitti: e => [`${esc(e.name)} Usta rakibe geçti`, 'Ocak boş kaldı; yerine yeni bir usta al.', 'userx', 'red'],
+  festivalok: () => ['Festivalde stant açtık', 'Kuyruk standı dolandı. İki ay boyunca daha çok müşteri gelecek.', 'sparkle', 'green'],
+};
+function firsatFlash(e) {
+  const f = FIRSAT_TXT[e.k]; if (!f) return;
+  const [title, sub, icon, tone] = f(e);
+  if (tone === 'red') SND.bad(); else if (tone === 'green') SND.heal(); else SND.month();
+  flashRow(`<span class="bi ${tone}">${ico(icon, 'currentColor')}</span><span class="bt"><b>${title}</b><span>${sub}</span></span>`, 7500);
+  if (e.k === 'transfergitti' && UI.sec !== 'shop') pingDock('shop');
+}
+function rozetFlash(e) {
+  const r = ROZET.find(x => x.k === e.k); if (!r) return;
+  SND.board();
+  flashRow(`<span class="bi gold">${ico(rozetIc[r.ic] || 'star', 'currentColor')}</span><span class="bt"><b>Rozet: ${esc(r.ad)}</b><span>${esc(r.ne)}</span></span>`, 6500);
+}
+
+/* ---------- yıl karnesi ---------- */
+function openYil(y) {
+  closeCard(); hideTalk(); SND.fanfare();
+  const h = S.hist.slice(-12), mx = Math.max(1, ...h.map(r => Math.abs(r.profit)));
+  const bars = h.map((r, i) => { const v = r.profit / mx, hh = Math.max(2, Math.abs(v) * 30); return `<rect x="${i * 20 + 3}" y="${v >= 0 ? 32 - hh : 32}" width="14" height="${hh.toFixed(1)}" rx="3" fill="${v >= 0 ? '#1F8F4E' : '#D93025'}"><title>${esc(dateLabel(r.m))}: ${fmtTL(r.profit)}</title></rect>`; }).join('');
+  const not = y.profit > 0 && y.puan >= 4.3 ? 'Pekiyi' : y.profit > 0 && y.puan >= 3.8 ? 'İyi' : y.profit > 0 ? 'Orta' : 'Zor bir yıl';
+  openModal(`${y.y}. yıl karnesi`, `<div class="dec">${portrait('hq', 52)}<div><span class="dwho">Leyla</span><p>${esc(S.name)} ${y.y} yaşında. ${y.profit > 0 ? `Yılı <b>${fmtTL(y.profit)} kârla</b> kapattık` : `Yılı <b>${fmtTL(-y.profit)} zararla</b> kapattık`}; ${y.karAy === 12 ? 'on iki ayın hepsi kârlıydı' : y.karAy === 0 ? 'hiçbir ay kârlı kapanmadı' : `on iki ayın ${y.karAy}’${['', 'i', 'si', 'ü', 'ü', 'i', 'sı', 'si', 'i', 'u', 'u', 'i'][y.karAy]} kârlıydı`}.</p></div></div>
+    <svg class="ybar" viewBox="0 0 240 64" role="img" aria-label="Aylık kâr"><line x1="0" y1="32" x2="240" y2="32" stroke="#C9CED8" stroke-width="1"/>${bars}</svg>
+    <dl class="kv"><dt>Karne notu</dt><dd>${not}</dd><dt>Satılan porsiyon</dt><dd>${fmtK(y.sold)}</dd><dt>Ciro</dt><dd>${fmtTL(y.rev)}</dd><dt>Müşteri puanı</dt><dd>★${fmtPuan(y.puan)}</dd><dt>Unvan</dt><dd>${UNVAN[y.unvan].ad}</dd>
+      <dt>Kalite için ödenen</dt><dd>${fmtTL(y.kalite)}</dd>${y.denetim ? `<dt>Denetim</dt><dd>${y.tamNot} / ${y.denetim} tam not</dd>` : ''}${y.ceza ? `<dt>Cezalar</dt><dd class="neg">−${fmtTL(y.ceza)}</dd>` : ''}${y.kriz ? `<dt>Kriz ve hasar</dt><dd class="neg">−${fmtTL(y.kriz)}</dd>` : ''}${y.vergi ? `<dt>Ödenen vergi</dt><dd>${fmtTL(y.vergi)}</dd>` : ''}</dl>
+    <p class="small">Veterinere, gıda mühendisine, temiz mutfağa ödenen her lira bu karnede “kalite” satırında durur. İyi döner tesadüf değildir.</p>
+    <div class="menu"><button class="btn o" data-close>Yeni yıla devam</button></div>`, 'report');
+}
+
+/* ---------- bu ay: para kartına dokununca ---------- */
+const ACC_AD = { maas: 'Maaşlar', malzeme: 'Malzeme', yem: 'Dışarıdan yem', kira: 'Kira', fatura: 'Faturalar', arazi: 'Çiftlik', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar', faiz: 'Banka faizi', vergi: 'Vergi', hasar: 'Kriz ve hasar', gubre: 'Gübre', katki: 'Katkı' };
+function openAy() {
+  if (!S || !UI.started) return;
+  closeCard(); hideTalk(); SND.click();
+  const f = monthFrac(), acc = S.acc, r = monthCostRate(), left = 1 - f;
+  const rows = Object.keys(acc).map(k => [k, acc[k], acc[k] + (r[k] || 0) * left]).filter(x => x[2] > 0.5).sort((a, b) => b[2] - a[2]);
+  // ayın başında tahmin geçen aya, sonuna doğru bu ayın gidişine dayanır
+  const last = S.hist.length ? S.hist[S.hist.length - 1].rev : 0, revNow = S.m.rev;
+  const revEnd = revNow + (f > 0.25 || !last ? (f > 0.04 ? revNow / f : 0) : last) * left, malzEnd = revNow > 0 ? acc.malzeme * revEnd / revNow : 0;
+  const costEnd = sum(rows, x => (x[0] === 'malzeme' ? malzEnd : x[2])), sonuc = revEnd - costEnd, lim = creditLimit();
+  const h = S.hist.slice(-12).map(x => x.cash).concat([S.cash]), mn = Math.min(0, ...h), mx = Math.max(1, ...h), X = i => (h.length > 1 ? i / (h.length - 1) * 236 + 2 : 120), Y = v => 54 - (v - mn) / (mx - mn || 1) * 48;
+  const line = h.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join('');
+  openModal('Bu ay', `<p class="small">${esc(dateLabel(monthIdx()))} · ayın ${Math.max(1, Math.ceil(f * 30))}. günü. Giderler ay sonunda kasadan topluca düşer.</p>
+    <div class="ayg"><div><span>Şimdiye kadar gelir</span><b class="pos">${fmtTL(revNow)}</b></div><div><span>Biriken gider</span><b>${fmtTL(accTotal())}</b></div><div class="${sonuc >= 0 ? 'p' : 'n'}"><span>Ay sonu tahmini</span><b>${sonuc >= 0 ? '+' : '−'}${fmtTL(Math.abs(sonuc))}</b></div></div>
+    <svg class="spark" viewBox="0 0 240 60" role="img" aria-label="Son bir yılda kasa">${mn < 0 ? `<line x1="0" y1="${Y(0).toFixed(1)}" x2="240" y2="${Y(0).toFixed(1)}" stroke="#D93025" stroke-width="1" stroke-dasharray="3 4"/>` : ''}<path d="${line}L${X(h.length - 1).toFixed(1)} 60L2 60Z" fill="#2340B8" opacity=".08"/><path d="${line}" fill="none" stroke="#2340B8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${X(h.length - 1).toFixed(1)}" cy="${Y(S.cash).toFixed(1)}" r="3.6" fill="#FF6A00"/></svg>
+    <p class="small spk">Son bir yılda kasa</p>
+    <table class="tbl"><tr class="th"><td>Gider kalemi</td><td>ay sonunda</td></tr>${rows.map(x => `<tr><td>${ACC_AD[x[0]] || x[0]}</td><td>${fmtTL(x[0] === 'malzeme' ? malzEnd : x[2])}</td></tr>`).join('')}<tr class="tot"><td>Toplam</td><td>${fmtTL(costEnd)}</td></tr></table>
+    <dl class="kv"><dt>Banka kredi sınırı</dt><dd>−${fmtTL(lim)}</dd>${S.vergiDue > 0 ? `<dt>Nisan’da ödenecek vergi</dt><dd>${fmtTL(S.vergiDue)}</dd>` : ''}${S.toplu ? `<dt>Bekleyen toplu sipariş</dt><dd>${fmtK(S.toplu.n)} porsiyon</dd>` : ''}</dl>
+    <div class="menu grid"><button class="btn o" data-close>Tamam</button><button class="btn w" id="ayFin">Finans odası</button><button class="btn w" id="ayHik">Hikâyem</button></div>`, 'report');
+  $('ayFin').onclick = () => { SND.click(); closeModal(); goSection('hq'); setTimeout(() => openCard('oda:finans', document.querySelector('[data-hit="oda:finans"]')), 300); };
+  $('ayHik').onclick = () => { SND.click(); openHikaye('unvan'); };
+}
+
+/* ---------- kayıt özeti (başlık ekranı) ve bitiş ekranı için hikâye ---------- */
+function saveSummary() {
+  try { const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); if (!s || s.v !== 4 || s.over) return ''; const m = Math.floor(s.t / C.month); return `${s.name} · ${dateLabel(m)} · ${(UNVAN[s.unvan || 0] || UNVAN[0]).ad}`; } catch (e) { return ''; }
+}
+const EPILOG = [
+  'Köşedeki küçük dükkân olarak kaldık. Ama her usta bir yerden başlar.',
+  'Mahalleli bizi tanıdı, adımızı andı. Yolun daha başındaydık.',
+  'Semtin gözdesi olduk; öğle arası kuyruğumuz köşeyi dönüyordu.',
+  'Şehrin en iyileri arasına girdik. Zirveye bir basamak kalmıştı.',
+  'Aradığımız döneri kendimiz yaptık: Türkiye’nin en iyi tavuk döneri.',
+];
+function endStory() {
+  const n = ROZET.filter(r => S.rozet[r.k] != null).length;
+  return `<div class="estory"><span class="ecup lv${S.unvan}">${ico('trophy', '#fff')}</span><div><b>${UNVAN[S.unvan].ad}</b><span>${EPILOG[S.unvan]}</span><em>${n} rozet${S.denedik.n ? ` · Denedik en iyi ${fmtPuan(S.denedik.best)}` : ''} · ${Math.floor(S.totals.months / 12)} yıl ${S.totals.months % 12} ay</em></div></div>`;
+}
+
+/* ---------- başlık ekranı: tarladan tezgâha küçük bir dünya ---------- */
+function titleArt() {
+  const Q = mkIso(200, 92, 23, 11.5), N = 8;
+  let s = '';
+  // ada: çimen, toprak kenar
+  s += face([Q(0, N), Q(N, N), Q(N, N, -16), Q(0, N, -16)], '#7A5233', { line: false }) + face([Q(N, 0), Q(N, N), Q(N, N, -16), Q(N, 0, -16)], '#63402A', { line: false });
+  s += face([Q(0, N), Q(N, N), Q(N, N, -5), Q(0, N, -5)], '#6FAE31', { line: false }) + face([Q(N, 0), Q(N, N), Q(N, N, -5), Q(N, 0, -5)], '#5C9A26', { line: false });
+  s += poly(quad(Q, 0, 0, N, N), '#8DC63F');
+  s += poly(quad(Q, 3.65, 0, 4.35, N), '#E3D2A6') + poly(quad(Q, 0, 3.65, N, 4.35), '#E3D2A6');
+  // 1) tarla
+  s += poly(quad(Q, 0.35, 0.35, 3.35, 3.35), '#8A5A33');
+  for (let i = 0; i < 5; i++) { const y = 0.75 + i * 0.55; s += pl([Q(0.6, y), Q(3.1, y)], '#5FA235', 3.2, 'stroke-dasharray="1 5"') + pl([Q(0.6, y, 3), Q(3.1, y, 3)], '#7CC24A', 2.4, 'stroke-dasharray="1 5"'); }
+  s += scarecrow(...Q(1.9, 2.0), 0.8);
+  // 2) kümes
+  s += poly(quad(Q, 4.65, 0.35, 7.65, 3.35), '#EBD9A8');
+  s += gableHouse(Q, 4.9, 0.5, 1.5, 1.2, { h: 15, rh: 10 });
+  s += fence(Q, [4.65, 3.35], [7.65, 3.35]) + fence(Q, [7.65, 0.35], [7.65, 3.35]);
+  s += chicken(...Q(6.6, 1.5), { s: 0.75 }) + chicken(...Q(5.6, 2.6), { s: 0.75, flip: true }) + chicken(...Q(7.0, 2.6), { s: 0.7 });
+  // 3) mutfak
+  s += poly(quad(Q, 0.35, 4.65, 3.35, 7.65), '#E6EAF0');
+  for (let i = 1; i < 4; i++) s += pl([Q(0.35 + i * 0.75, 4.65), Q(0.35 + i * 0.75, 7.65)], '#CDD4DE', 0.8) + pl([Q(0.35, 4.65 + i * 0.75), Q(3.35, 4.65 + i * 0.75)], '#CDD4DE', 0.8);
+  s += solid(Q, 0.35, 4.65, 3.0, 0.14, 26, '#F4F6FA') + face(planeY(Q, 0.35, 3.35, 4.8, 17, 21), PAL.cobalt, { line: false });
+  s += propPrep(Q, 0.9, 5.6) + person(...Q(1.3, 6.9), Object.assign({ s: 0.95 }, CAST.kitchen.look));
+  // 4) dükkân
+  s += poly(quad(Q, 4.65, 4.65, 7.65, 7.65), '#F3E6CC');
+  s += solid(Q, 4.65, 4.65, 3.0, 0.14, 26, '#FFF7EA') + face(planeY(Q, 4.65, 7.65, 4.8, 15, 22), PAL.orange, { line: false });
+  s += solid(Q, 4.9, 5.5, 2.5, 0.55, 13, PAL.cobalt, { top: '#F4F6FA' });
+  s += donerCone(...Q(5.4, 5.75, 13), 'ttl', 0.72) + person(...Q(5.9, 5.3), Object.assign({ s: 0.95 }, CAST.shop.look));
+  s += person(...Q(5.6, 6.8), { s: 0.95, shirt: '#E53935', hair: '#2B2B33', back: true }) + person(...Q(6.4, 7.1), { s: 0.95, shirt: '#3FA34D', hair: '#7A4A24', hairStyle: 'long', back: true });
+  // çevre
+  s += tree(...Q(3.95, 0.25), 0.62, 'pine') + tree(...Q(7.85, 3.95), 0.6) + tree(...Q(0.2, 3.95), 0.6) + person(...Q(3.2, 2.9), Object.assign({ s: 0.95 }, CAST.farm.look)) + person(...Q(4.0, 7.4), Object.assign({ s: 0.95, hold: 'clip' }, CAST.hq.look));
+  // rozet
+  s += `<g transform="translate(318,64)"><circle r="30" fill="#FFD500"/><circle r="30" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/><g transform="translate(-13,-20) scale(1.08)"><path d="${ICON.trophy}" fill="none" stroke="#5C4300" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g><text y="20" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="800" font-size="9.5" fill="#5C4300">EN İYİSİ</text></g>`;
+  return `<svg viewBox="0 0 400 320">${s}</svg>`;
+}
+
 'use strict';
 /* ============================================================
    Arayüz: oyun döngüsü, üst bilgi, bölümler, kartlar,
@@ -5428,12 +6165,15 @@ function boot(hot) {
   $('btnHelp').addEventListener('click', () => { SND.unlock(); SND.click(); openHelp(); });
   $('btnRank').addEventListener('click', () => { SND.unlock(); SND.click(); openRank(); });
   $('puanBtn').addEventListener('click', () => { SND.click(); openPuan(); });
+  $('unvanBtn').addEventListener('click', () => { SND.click(); openHikaye('unvan'); });
+  for (const el of $('moneyCard').querySelectorAll('.cash, .meta, .due')) el.addEventListener('click', openAy);
   try { $('inGuide').checked = localStorage.getItem('etd-yardim') !== '0'; } catch (e) { }
   $('inGuide').addEventListener('change', () => { SND.click(); try { localStorage.setItem('etd-yardim', $('inGuide').checked ? '1' : '0'); } catch (e) { } });
   $('zIn').addEventListener('click', () => { SND.click(); setZoom(VIEW.zoom * 1.45, null, null, true); });
   $('zOut').addEventListener('click', () => { SND.click(); setZoom(VIEW.zoom / 1.45, null, null, true); });
   $('coach').addEventListener('pointerdown', e => e.stopPropagation());
-  $('btnContinue').hidden = !hasSave();
+  $('tray').innerHTML = titleArt();
+  $('btnContinue').hidden = !hasSave(); { const ss = saveSummary(); $('btnContinue').innerHTML = ss ? `Devam et<small>${esc(ss)}</small>` : 'Devam et'; }
   $('spPause').addEventListener('click', () => setSpeed(0));
   $('sp1').addEventListener('click', () => setSpeed(UI.paused ? UI.speed : SPEEDS[(SPEEDS.indexOf(UI.speed) + 1) % SPEEDS.length]));
   $('btnSound').addEventListener('click', () => { SND.unlock(); SND.set(!SND.on); paintSound(); if (UI.started) SND.ambient(UI.sec); });
@@ -5486,10 +6226,10 @@ function startNew() {
   try { localStorage.setItem('etd-yardim', guide ? '1' : '0'); } catch (e) { }
   newGame($('inName').value.trim() || 'Benim Dönerim', undefined, { guide });
   if (guide) S.seenHelp.shop = 1;            // dükkânı öğretici anlatır
-  begin();
+  if (introSeen()) begin(); else { $('titleScreen').hidden = true; showIntro(() => begin()); }
 }
 function begin(sec) {
-  lastPuan = ''; VIEW.shiftY = 0;
+  lastPuan = ''; lastUnvan = ''; VIEW.shiftY = 0;
   EV.length = 0;
   UI.started = true; UI.paused = false; UI.speed = 1;
   UI.iss = new Map(); UI.talkedAt = {}; UI.pulseAct = null; GUIDE.lastKey = ''; GUIDE.hint = null; GUIDE.task = null; GUIDE.snooze = {}; setPointer(null); hideCoach(); resetZoom();
@@ -5599,6 +6339,11 @@ function dispatchEvents() {
     else if (e.type === 'boost') SND.boost();
     else if (e.type === 'marine') { SND.fanfare(); if (UI.sec === 'kitchen') talk('kitchen', `${C.kitchen.marine[e.k].label} hazır! Dönerlerimiz artık bununla marine ediliyor.`, 6000); else pingDock('kitchen'); }
     else if (e.type === 'olum' && UI.sec !== 'kitchen') pingDock('kitchen');
+    else if (e.type === 'unvan') { const ee = e; showSheet(() => openUnvanUp(ee)); }
+    else if (e.type === 'denedik') { const ee = e; showSheet(() => openDenedik(ee)); }
+    else if (e.type === 'yil') { const ee = e; showSheet(() => openYil(ee.rec)); }
+    else if (e.type === 'firsat') firsatFlash(e);
+    else if (e.type === 'rozet') rozetFlash(e);
   }
   EV.length = 0;
 }
@@ -5615,6 +6360,7 @@ function paintHud() {
     lastCash = c;
   }
   setText($('date'), dateLabel(monthIdx()));
+  paintUnvan();
   const wk = Math.floor(monthFrac() * 4);
   [...$('weeks').children].forEach((d, i) => { const cl = i < wk ? 'done' : i === wk ? 'now' : ''; if (d.className !== cl) d.className = cl; });
   const due = Math.round(accTotal());
@@ -5894,12 +6640,13 @@ function renderActions(box, acts) {
 function patchAct(b, a) {
   if (a.stepper) return patchStep(b, a);
   const st = b._st, kind = actKind(a), dis = !!a.disabled;
-  const cls = 'act' + (a.tone ? ' ' + a.tone : '') + (kind ? ' ' + kind : '') + (a.on ? ' on' : '') + (UI.pulseAct && a.label === UI.pulseAct && !a.disabled ? ' pulse' : '') + (a.lock ? ' lock' : '');
+  const sure = b.dataset.sure === '1';
+  const cls = 'act' + (sure ? ' sure' : '') + (a.tone ? ' ' + a.tone : '') + (kind ? ' ' + kind : '') + (a.on ? ' on' : '') + (UI.pulseAct && a.label === UI.pulseAct && !a.disabled ? ' pulse' : '') + (a.lock ? ' lock' : '');
   if (st.cls !== cls) { b.className = cls; st.cls = cls; }
   if (st.dis !== dis) { if (dis) b.setAttribute('aria-disabled', 'true'); else b.removeAttribute('aria-disabled'); st.dis = dis; }
   const icc = a.tone === 'primary' && !dis ? '#fff' : a.tone === 'danger' ? '#D93025' : '#2340B8', ik = (a.icon || 'check') + icc;
   if (st.ik !== ik) { b.querySelector('.ai').innerHTML = ico(a.icon || 'check', icc); st.ik = ik; }
-  setText(b.querySelector('.lb'), a.label);
+  setText(b.querySelector('.lb'), sure ? 'Emin misin? Bir daha dokun' : a.label);
   let sub = a.sub || '';
   if (kind === 'tg') { sub = sub.replace(/^(açık|kapalı) · /, ''); if (a.cost) sub = `${fmtTL(a.cost)}${a.per ? '/ay' : ''}` + (sub ? ' · ' + sub : ''); }
   setText(b.querySelector('.sb'), sub);
@@ -5942,6 +6689,13 @@ function onAct(b) {
   if (!a) return;
   const shake = () => { SND.error(); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); };
   if (a.disabled) { shake(); return; }
+  if (a.tone === 'danger' && !a.toggle && a.sound !== 'toggleOff' && b.dataset.sure !== '1') {
+    // geri dönüşü olmayan işler iki dokunuşla yapılır
+    b.dataset.sure = '1'; patchAct(b, a); SND.click();
+    clearTimeout(b._sureT); b._sureT = setTimeout(() => { if (b.isConnected && b.dataset.sure === '1') { b.dataset.sure = ''; const c = b.parentElement, x = c && c._acts && c._acts[+b.dataset.i]; if (x) patchAct(b, x); } }, 3200);
+    return;
+  }
+  if (b.dataset.sure === '1') { b.dataset.sure = ''; clearTimeout(b._sureT); }
   UI.pulseAct = null; if (GUIDE.tgtUntil) setPointer(null);
   const r = a.run();
   if (r === false) { shake(); return; }
@@ -6009,7 +6763,8 @@ function openMenu() {
     <button class="btn o" data-close>Oyuna dön</button>
     <button class="btn w" id="mGuide">${g ? 'Yardımı kapat' : 'Yardımı aç'}</button>
     <button class="btn w" id="mHelp">Nasıl oynanır?</button>
-    <button class="btn w" id="mReport">Aylık rapor</button>
+    <button class="btn w" id="mHik">Hikâyem</button>
+    <button class="btn w" id="mReport">Bu ay</button>
     <button class="btn w" id="mRank">Sıralama</button>
     ${fs ? `<button class="btn w" id="mFs">${fsEl() ? 'Tam ekrandan çık' : 'Tam ekran'}</button>` : ''}
     <button class="btn w" id="mSound">${SND.on ? 'Sesi kapat' : 'Sesi aç'}</button>
@@ -6019,7 +6774,8 @@ function openMenu() {
   $('mGuide').onclick = () => { SND.click(); setGuide(!guideOn()); if (guideOn() && S.guide.done) S.guide.tips = S.guide.tips || {}; closeModal(); };
   $('mHelp').onclick = () => { SND.click(); openHelp(); };
   $('mRank').onclick = () => { SND.click(); openRank(); };
-  $('mReport').onclick = () => { SND.click(); closeModal(); goSection('hq'); setTimeout(() => openCard('oda:finans', document.querySelector('[data-hit="oda:finans"]')), 300); };
+  $('mReport').onclick = () => openAy();
+  $('mHik').onclick = () => { SND.click(); openHikaye('unvan'); };
   if (fs) $('mFs').onclick = () => { SND.click(); closeModal(); if (fsEl()) exitFull(); else goFull(); };
   $('mSound').onclick = () => { SND.unlock(); SND.set(!SND.on); paintSound(); if (UI.started) SND.ambient(UI.sec); setText($('mSound'), SND.on ? 'Sesi kapat' : 'Sesi aç'); };
   $('mRetire').onclick = () => {
@@ -6046,7 +6802,9 @@ function openHelp() {
       <div class="st"><span class="sn">3</span><div><b>Dükkân</b><p>Boş ocağa usta, boş kasaya kasiyer al; kasada kimse yoksa müşteri girmez. Tasarım yıllar içinde eskir; yenisi pahalıdır.</p></div></div>
       <div class="st"><span class="sn">4</span><div><b>Merkez</b><p>Reklam müşteriyi artırır. Finans odasında vergi ve sigorta var. Kurul her üç ayda iki hedef koyar.</p></div></div>
     </div>
-    <p class="small"><b>Müşteri puanı (★)</b> kalabalığı belirler: tarif, hijyen, veteriner, tasarımın tazeliği ve hızlı servis puanı yükseltir.</p>
+    <p class="small">Sol üstteki <b>kasaya dokunursan</b> bu ayın gelir ve giderini görürsün. <b>Müşteri puanı (★)</b> kalabalığı belirler: tarif, hijyen, veteriner, tasarımın tazeliği ve hızlı servis puanı yükseltir.</p>
+    <p class="small"><b>Hedef:</b> beş basamaklı unvan merdivenini tırman ve “Türkiye’nin en iyi tavuk döneri” ol. Her basamağın şartları “Hikâyem” sayfasında yazar; her yeni unvan ödül ve yeni müşteri getirir. Denedik ekibi arada bir habersiz gelir ve 10 üzerinden puan verir.</p>
+    <p class="small"><b>Mevsimler:</b> yazın sokak kalabalıktır, kışın paket siparişi artar. Arada toplu sipariş, festival, transfer teklifi gibi fırsatlar çıkar; kararı sen verirsin.</p>
     <p class="small">Satış parası hemen kasaya girer; giderler ay sonunda ödenir. Ocakta maaşlar, mayısta kira artar; nisanda yıllık vergi ödenir. Denetim, kuş gribi, yangın, ekonomik kriz gibi olaylar çıkar. Ay sonunda bankanın kredi limitini aşarsan iflas edersin.</p>
     <div class="menu"><button class="btn o" data-close>Anladım</button></div>`, 'help');
 }
@@ -6061,6 +6819,7 @@ function showEnd() {
   $('endIn').innerHTML = `<div class="brand small">${brandSvg(28)}<span>eniyitavukdoner</span></div>
     <h1>${iflas ? 'İflas ettik' : 'Dükkânı devrettin'}</h1>
     <p class="lead">${iflas ? `${esc(S.name)} ${T.months} ay ayakta kaldı. Ay sonunda kasa <span class="nw">${fmtTL(S.cash)}</span> oldu ve bankanın <span class="nw">${fmtTL(o.limit)}</span> kredi limiti aşıldı.` : `${esc(S.name)} ${T.months} ay boyunca senin elindeydi. Devrederken kasada <span class="nw">${fmtTL(S.cash)}</span> vardı.`}</p>
+    ${endStory()}
     <div class="endgrid">
       ${why ? `<div class="why"><h3>Neden iflas ettik?</h3><ul>${why.items.map(x => `<li>${esc(x.t)}</li>`).join('')}</ul><p class="wtip"><b>Bir dahaki sefere:</b> ${esc(why.items[0].tip)}</p></div>` : ''}
       <div class="lbw"><h3>Sıralama</h3><div id="endRank"><p class="lbe">Skorun yazılıyor…</p></div></div>
