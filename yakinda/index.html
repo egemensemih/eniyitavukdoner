@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<script src="/bakim.js" data-sayfa="yakinda"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://glonoumtcfrzjybuslnw.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Döner pişiyor… | eniyitavukdoner.com</title>
+<meta name="description" content="Türkiye'nin en iyi tavuk dönerini arıyoruz. Site son pişirme aşamasında, çok yakında burada!">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="eniyitavukdoner.com">
+<meta property="og:title" content="Döner pişiyor… Çok yakında!">
+<meta property="og:description" content="Bir Denedik serisi. Türkiye'nin en iyi tavuk dönerini arıyoruz.">
+<meta property="og:image" content="https://eniyitavukdoner.com/og.png">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FBF7F0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#14275A;--orange:#FF6A00;--yellow:#FFD500;--red:#E52D27;--paper:#FBF7F0;--cream:#F5ECDD;--muted:#5B6485;--f:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;background:var(--paper)}
+body{min-height:100vh;min-height:100dvh;font-family:var(--f);color:var(--navy);background:var(--paper);display:flex;flex-direction:column;align-items:center;overflow-x:clip}
+main{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;padding:max(28px,env(safe-area-inset-top)) 16px 36px;flex:1}
+.marka{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-.01em;text-decoration:none;color:var(--navy)}
+.marka img{width:34px;height:34px;border-radius:9px;border:2px solid var(--navy);background:#fff}
+.marka b{color:var(--orange)}
+
+/* döner sahnesi */
+.sahne{position:relative;width:220px;height:250px;margin-top:22px}
+.isi{position:absolute;right:6px;top:52px;width:46px;height:150px;border-radius:14px;background:linear-gradient(180deg,#FFB000,var(--orange) 45%,var(--red));border:2.5px solid var(--navy);box-shadow:4px 4px 0 var(--navy)}
+.isi i{position:absolute;left:8px;right:8px;height:6px;border-radius:3px;background:rgba(255,255,255,.55);animation:isi 1.4s ease-in-out infinite}
+.isi i:nth-child(1){top:22px}.isi i:nth-child(2){top:52px;animation-delay:.2s}.isi i:nth-child(3){top:82px;animation-delay:.4s}.isi i:nth-child(4){top:112px;animation-delay:.6s}
+@keyframes isi{0%,100%{opacity:.35}50%{opacity:1}}
+.dalga{position:absolute;right:62px;top:70px;width:18px;height:110px;opacity:.55}
+.dalga path{fill:none;stroke:var(--orange);stroke-width:3;stroke-linecap:round;animation:dalga 1.6s ease-in-out infinite}
+.dalga path:nth-child(2){animation-delay:.5s}
+@keyframes dalga{0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)}}
+.doner{position:absolute;left:18px;top:0;width:150px;height:250px;overflow:visible}
+.serit-don{animation:don 1.8s linear infinite}
+@keyframes don{from{transform:translateX(0)}to{transform:translateX(-36px)}}
+.bicak{position:absolute;left:-4px;top:120px;width:66px;transform-origin:62px 6px;animation:kes 2.4s ease-in-out infinite}
+@keyframes kes{0%,60%,100%{transform:translateY(0) rotate(-8deg)}75%{transform:translateY(28px) rotate(-2deg)}}
+
+h1{margin-top:10px;font-size:34px;font-weight:800;font-style:italic;letter-spacing:-.025em;line-height:1.1;text-align:center}
+h1 span{color:var(--orange)}
+.alt{margin-top:10px;font-size:15.5px;font-weight:500;color:var(--muted);text-align:center;line-height:1.55;max-width:360px}
+.alt b{color:var(--navy)}
+
+/* ilerleme */
+.ilerleme{width:100%;margin-top:22px}
+.bar{position:relative;height:26px;background:#fff;border:2.5px solid var(--navy);border-radius:999px;overflow:hidden;box-shadow:4px 4px 0 var(--navy)}
+.dolu{position:absolute;inset:0 auto 0 0;width:0;background:repeating-linear-gradient(-45deg,var(--orange) 0 12px,#FF8A2E 12px 24px);background-size:34px 34px;border-right:2.5px solid var(--navy);transition:width 1.2s cubic-bezier(.3,.7,.3,1);animation:akis 1s linear infinite}
+@keyframes akis{from{background-position:0 0}to{background-position:34px 0}}
+.bar-alt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:10px;font-size:14px;font-weight:600}
+.durum{color:var(--navy);min-height:1.4em;transition:opacity .25s}
+.durum.gizle{opacity:0}
+.yuzde{font-weight:800;font-variant-numeric:tabular-nums;color:var(--orange);font-size:16px}
+
+/* kartlar */
+.kart{width:100%;margin-top:30px;background:#fff;border:2.5px solid var(--navy);border-radius:18px;padding:20px 18px;box-shadow:6px 6px 0 var(--orange)}
+.kart h2{font-size:20px;font-weight:800;letter-spacing:-.015em;line-height:1.25}
+.kart p.k{margin-top:6px;font-size:14px;color:var(--muted);line-height:1.5}
+form{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.satir{display:flex;gap:8px}
+input[type=email]{flex:1;min-width:0;font:500 16px var(--f);color:var(--navy);padding:12px 14px;border:2.5px solid var(--navy);border-radius:12px;background:var(--paper);outline:none}
+input[type=email]:focus{border-color:var(--orange);background:#fff}
+input[aria-invalid=true]{border-color:var(--red)}
+.gonder{flex:none;font:800 15px var(--f);color:#fff;background:var(--navy);border:2.5px solid var(--navy);border-radius:12px;padding:0 18px;min-height:50px;cursor:pointer;box-shadow:3px 3px 0 var(--orange);transition:transform .12s,box-shadow .12s}
+.gonder:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--orange)}
+.gonder:disabled{opacity:.6;cursor:wait}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--muted);cursor:pointer}
+.check input{flex:none;width:20px;height:20px;margin-top:1px;accent-color:var(--orange)}
+.check a{color:var(--navy);font-weight:600}
+.check.hata span{color:var(--red)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.mesaj:empty{display:none}
+.mesaj{font-size:13.5px;font-weight:600;min-height:1em}
+.mesaj.hata{color:var(--red)}
+.tamam{display:none;text-align:center;padding:6px 0}
+.tamam .tik{width:52px;height:52px;margin:0 auto 10px;border-radius:50%;background:var(--yellow);border:2.5px solid var(--navy);display:grid;place-items:center;font-size:26px;font-weight:800}
+.tamam h3{font-size:19px;font-weight:800}
+.tamam p{margin-top:4px;font-size:14px;color:var(--muted)}
+.kart.bitti form,.kart.bitti .bas{display:none}.kart.bitti .tamam{display:block}
+
+.abone{margin-top:30px;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:60px;background:var(--red);color:#fff;font-weight:800;font-size:17px;padding:14px 22px;border:2.5px solid var(--navy);border-radius:16px;text-decoration:none;box-shadow:6px 6px 0 var(--navy);transition:transform .12s,box-shadow .12s}
+.abone svg{width:28px;height:28px;flex:none}
+.abone:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--navy)}
+.abone:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--navy)}
+.sosyal{margin-top:22px;display:flex;gap:14px;justify-content:center}
+.sosyal a{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;color:#fff;border:2.5px solid var(--navy);box-shadow:4px 4px 0 var(--navy);transition:transform .12s,box-shadow .12s}
+.sosyal a:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--navy)}
+.sosyal svg{width:24px;height:24px}
+.s-yt{background:var(--red)}.s-ig{background:linear-gradient(135deg,#F58529,#DD2A7B 55%,#8134AF)}.s-tt{background:#111}
+.tum{margin-top:14px;font-size:14px;font-weight:700;color:var(--navy)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+footer{margin-top:30px;font-size:13px;font-weight:500;color:var(--muted);text-align:center;line-height:1.7}
+footer a{color:var(--navy);font-weight:700}
+.serit{width:100%;height:14px;display:flex;flex:none;margin-bottom:env(safe-area-inset-bottom)}
+.serit i{flex:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(min-width:700px){h1{font-size:42px}.sahne{transform:scale(1.1);margin-top:34px;margin-bottom:10px}}
+</style>
+</head>
+<body>
+<main>
+  <span class="marka"><img src="/favicon.svg" alt="" width="34" height="34"><span>eniyitavukdoner<b>.com</b></span></span>
+
+  <div class="sahne" aria-hidden="true">
+    <svg class="doner" viewBox="0 0 150 250">
+      <defs>
+        <clipPath id="koni"><path d="M22 40 Q75 30 128 40 L112 196 Q75 204 38 196 Z"/></clipPath>
+        <linearGradient id="golge" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".35" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#FF6A00" stop-opacity=".35"/></linearGradient>
+      </defs>
+      <rect x="72" y="4" width="6" height="238" rx="3" fill="#14275A"/>
+      <g clip-path="url(#koni)">
+        <rect x="0" y="0" width="150" height="250" fill="#E9A84B"/>
+        <g class="serit-don">
+          <g fill="#C9762A">
+            <path d="M0 40 l14 0 l-10 160 l-14 0z"/><path d="M36 40 l14 0 l-10 160 l-14 0z"/><path d="M72 40 l14 0 l-10 160 l-14 0z"/><path d="M108 40 l14 0 l-10 160 l-14 0z"/><path d="M144 40 l14 0 l-10 160 l-14 0z"/><path d="M180 40 l14 0 l-10 160 l-14 0z"/>
+          </g>
+          <g fill="#F6C97A">
+            <path d="M20 40 l6 0 l-10 160 l-6 0z"/><path d="M56 40 l6 0 l-10 160 l-6 0z"/><path d="M92 40 l6 0 l-10 160 l-6 0z"/><path d="M128 40 l6 0 l-10 160 l-6 0z"/><path d="M164 40 l6 0 l-10 160 l-6 0z"/>
+          </g>
+        </g>
+        <g stroke="#A85F1E" stroke-width="2" opacity=".55" fill="none">
+          <path d="M20 70 Q75 63 130 70"/><path d="M20 102 Q75 95 130 102"/><path d="M20 134 Q75 127 130 134"/><path d="M20 166 Q75 159 130 166"/>
+        </g>
+        <rect x="0" y="0" width="150" height="250" fill="url(#golge)"/>
+      </g>
+      <path d="M22 40 Q75 30 128 40 L112 196 Q75 204 38 196 Z" fill="none" stroke="#14275A" stroke-width="3" stroke-linejoin="round"/>
+      <ellipse cx="75" cy="36" rx="30" ry="7" fill="#FFD500" stroke="#14275A" stroke-width="3"/>
+      <rect x="34" y="218" width="82" height="12" rx="6" fill="#fff" stroke="#14275A" stroke-width="3"/>
+      <circle cx="75" cy="6" r="6" fill="#FF6A00" stroke="#14275A" stroke-width="2.5"/>
+    </svg>
+    <svg class="dalga" viewBox="0 0 18 110"><path d="M9 4 q6 12 0 24 q-6 12 0 24 q6 12 0 24"/><path d="M9 40 q6 12 0 24 q-6 12 0 24 q6 12 0 20"/></svg>
+    <div class="isi"><i></i><i></i><i></i><i></i></div>
+    <svg class="bicak" viewBox="0 0 66 14"><rect x="0" y="3" width="44" height="8" rx="2" fill="#E6EAF2" stroke="#14275A" stroke-width="2.5"/><rect x="42" y="1" width="22" height="12" rx="4" fill="#14275A"/></svg>
+  </div>
+
+  <h1>Döner pişiyor… <span>Çok yakında!</span></h1>
+  <p class="alt">Bir <b>Denedik</b> serisi. Şehir şehir, usta usta Türkiye'nin <b>en iyi tavuk dönerini</b> arıyoruz. Site son pişirme aşamasında, birazdan servis ediyoruz.</p>
+
+  <div class="ilerleme" role="progressbar" aria-label="Site hazırlanıyor" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="ilerleme">
+    <div class="bar"><div class="dolu" id="dolu"></div></div>
+    <div class="bar-alt"><span class="durum" id="durum">Ocak yakılıyor…</span><span class="yuzde" id="yuzde">%0</span></div>
+  </div>
+
+  <section class="kart" id="haber-kart" aria-labelledby="h-haber">
+    <div class="bas">
+      <h2 id="h-haber">Açılınca ilk sen duy</h2>
+      <p class="k">E-postanı bırak, site açıldığı gün tek bir mesajla haber verelim. Bülten yok, reklam yok.</p>
+    </div>
+    <form id="haber-form" novalidate>
+      <div class="satir">
+        <label for="eposta" class="hp">E-posta</label>
+        <input id="eposta" name="eposta" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="ornek@mail.com" required>
+        <button class="gonder" type="submit">Haber ver</button>
+      </div>
+      <input class="hp" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="check"><input type="checkbox" name="ileti_onay"><span>Bu proje ve açılış haberleri için bana <b>e-posta</b> gönderilmesine onay veriyorum. <a href="/kvkk.html#ileti" target="_blank" rel="noopener">Onay metni</a></span></label>
+      <label class="check"><input type="checkbox" name="kvkk_onay"><span><a href="/kvkk.html#aydinlatma" target="_blank" rel="noopener">Aydınlatma metnini</a> okudum ve anladım.</span></label>
+      <p class="mesaj" id="mesaj" role="status"></p>
+    </form>
+    <div class="tamam" role="status">
+      <div class="tik">✓</div>
+      <h3 id="tamam-b">Listedesin!</h3>
+      <p id="tamam-p">Site açıldığı gün ilk sen duyacaksın.</p>
+    </div>
+  </section>
+
+  <a class="abone" href="https://www.youtube.com/@denedik?sub_confirmation=1" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4.5"/><path d="M10 9v6l5-3z" fill="#E52D27"/></svg>YouTube'da abone ol</a>
+
+  <nav class="sosyal" aria-label="Sosyal medya">
+    <a class="s-yt" href="https://www.youtube.com/@denedik" target="_blank" rel="noopener" aria-label="YouTube · Denedik"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 7.5v9l7.5-4.5z"/></svg></a>
+    <a class="s-ig" href="https://www.instagram.com/denedikco/" target="_blank" rel="noopener" aria-label="Instagram · Denedik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r=".6" fill="currentColor"/></svg></a>
+    <a class="s-tt" href="https://www.tiktok.com/@denedikco" target="_blank" rel="noopener" aria-label="TikTok · Denedik"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3h-3.2v12.2a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.1 6.1 0 1 0 5.2 6V9.2a7.6 7.6 0 0 0 4.4 1.4V7.4a4.4 4.4 0 0 1-4.4-4.4z"/></svg></a>
+  </nav>
+  <a class="tum" href="/social-links/">Bütün hesaplarımız →</a>
+
+  <footer>İş birliği ve iletişim: <a href="mailto:eniyitavukdoner@gmail.com">eniyitavukdoner@gmail.com</a><br>© 2026 eniyitavukdoner.com</footer>
+</main>
+<div class="serit" aria-hidden="true"><i style="background:#14275A"></i><i style="background:#FF6A00"></i><i style="background:#FFD500"></i><i style="background:#E52D27"></i><i style="background:#F5ECDD"></i></div>
+<script src="/yakinda/yakinda.js"></script>
+</body>
+</html>
