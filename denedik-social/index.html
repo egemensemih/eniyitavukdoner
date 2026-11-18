@@ -13,75 +13,81 @@
 <meta property="og:description" content="YouTube, Instagram ve TikTok hesaplarımız tek yerde.">
 <meta property="og:locale" content="tr_TR">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#FAD700">
-<link rel="icon" href="/denedik.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f8d847">
+<link rel="icon" href="/denedik-social/d-ikon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
 <style>
-:root{--sari:#FAD700;--sari-a:#FFF480;--siyah:#0B0906;--gri:#4A4636;--f:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif}
+/* Denedik kurumsal kimlik: sarı #f8d847 · siyah #000 · mavi #3152f7 · mor #562166 · kırmızı #c92f23 · yeşil #9fe58e
+   Kurumsal font Söhne (lisanslı); web için en yakın açık muadil Inter Tight kullanılıyor. */
+:root{--sari:#f8d847;--siyah:#000;--mavi:#3152f7;--mor:#562166;--kirmizi:#c92f23;--yesil:#9fe58e;--gri:#3d3517;--f:'Söhne','Inter Tight',system-ui,-apple-system,'Segoe UI',sans-serif}
 *{box-sizing:border-box;margin:0}
-html{-webkit-text-size-adjust:100%}
-body{min-height:100vh;min-height:100dvh;font-family:var(--f);color:var(--siyah);background:var(--sari);background-image:radial-gradient(circle at 20% 0,var(--sari-a) 0,transparent 50%);background-attachment:fixed;display:flex;justify-content:center;padding:max(32px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom))}
-main{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center}
-.logo{width:150px;height:auto;border-radius:22px;filter:drop-shadow(0 10px 22px rgba(11,9,6,.18))}
-.alt{margin-top:14px;font-size:15px;font-weight:500;color:var(--gri);text-align:center;line-height:1.5;max-width:330px}
-.abone{margin-top:22px;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:320px;min-height:58px;background:var(--siyah);color:#fff;font-weight:800;font-size:16.5px;padding:14px 24px;border-radius:999px;text-decoration:none;box-shadow:0 12px 26px rgba(11,9,6,.28);transition:transform .15s,box-shadow .15s}
-.abone svg{width:28px;height:28px}
-.abone:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(11,9,6,.34)}
-.abone:focus-visible,a.bag:focus-visible,.paylas:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.abone-n{margin-top:8px;font-size:12.5px;font-weight:500;color:var(--gri)}
-.bolum{width:100%;margin-top:28px}
-.bolum h2{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--siyah);margin:0 0 10px 6px;opacity:.75}
-.liste{display:flex;flex-direction:column;gap:10px}
-a.bag{display:flex;align-items:center;gap:14px;min-height:66px;padding:10px 16px 10px 10px;background:#fff;border:2px solid var(--siyah);border-radius:18px;color:var(--siyah);text-decoration:none;box-shadow:4px 4px 0 var(--siyah);transition:transform .12s,box-shadow .12s}
-a.bag:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--siyah)}
-a.bag:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--siyah)}
-.ik{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:#fff}
+html{-webkit-text-size-adjust:100%;background:var(--sari)}
+body{min-height:100vh;min-height:100dvh;font-family:var(--f);color:var(--siyah);background:var(--sari);display:flex;flex-direction:column;align-items:center;overflow-x:clip}
+main{width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center;padding:max(40px,env(safe-area-inset-top)) 16px 36px;flex:1}
+.logo{width:184px;height:auto;color:var(--siyah);display:block}
+h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.alt{margin-top:18px;font-size:16px;font-weight:500;line-height:1.45;text-align:center;max-width:320px;letter-spacing:-.005em}
+.abone{margin-top:26px;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:62px;background:var(--siyah);color:#fff;font-weight:800;font-size:17px;letter-spacing:-.01em;padding:14px 22px;border:2.5px solid var(--siyah);border-radius:16px;text-decoration:none;box-shadow:6px 6px 0 var(--kirmizi);transition:transform .12s,box-shadow .12s}
+.abone svg{width:30px;height:30px;flex:none}
+.abone:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--kirmizi)}
+.abone:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--kirmizi)}
+.abone-n{margin-top:12px;font-size:13px;font-weight:500;color:var(--gri)}
+.bolum{width:100%;margin-top:34px}
+.bolum h2{font-size:24px;font-weight:900;font-style:italic;letter-spacing:-.02em;margin:0 0 14px 2px}
+.liste{display:flex;flex-direction:column;gap:16px}
+a.bag{--g:var(--siyah);display:flex;align-items:center;gap:14px;min-height:70px;padding:10px 18px 10px 11px;background:#fff;border:2.5px solid var(--siyah);border-radius:16px;color:var(--siyah);text-decoration:none;box-shadow:6px 6px 0 var(--g);transition:transform .12s,box-shadow .12s}
+a.bag:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--g)}
+a.bag:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--g)}
+.ik{flex:none;width:46px;height:46px;border-radius:11px;display:grid;place-items:center;color:#fff;background:var(--g)}
 .ik svg{width:24px;height:24px}
-.yt{background:#E52D27}.ig{background:linear-gradient(135deg,#F58529,#DD2A7B 55%,#8134AF)}.tt{background:var(--siyah)}
-.yz{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.yz b{font-size:15.5px;font-weight:800;line-height:1.3}
-.yz small{font-size:13px;font-weight:500;color:var(--gri);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ok{flex:none;font-size:18px;font-weight:700;transition:transform .15s}
+a.yt{--g:var(--kirmizi)}a.ig{--g:var(--mor)}a.tt{--g:var(--mavi)}
+.yz{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.yz b{font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.yz small{font-size:14px;font-weight:500;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ok{flex:none;font-size:20px;font-weight:800;transition:transform .15s}
 a.bag:hover .ok{transform:translateX(3px)}
-.alt-satir{margin-top:32px;display:flex;flex-direction:column;align-items:center;gap:12px}
-.paylas{font:700 14px var(--f);color:var(--siyah);background:transparent;border:2px solid var(--siyah);border-radius:999px;padding:10px 20px;cursor:pointer;min-height:44px}
-.paylas:hover{background:var(--siyah);color:var(--sari)}
-footer{font-size:12.5px;font-weight:500;color:var(--gri);text-align:center}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--siyah);color:var(--sari);font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:.2s}
+.paylas{margin-top:36px;font:800 15px var(--f);color:var(--siyah);background:var(--yesil);border:2.5px solid var(--siyah);border-radius:999px;padding:11px 24px;min-height:48px;cursor:pointer;box-shadow:4px 4px 0 var(--siyah);transition:transform .12s,box-shadow .12s}
+.paylas:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--siyah)}
+.paylas:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--siyah)}
+.abone:focus-visible,a.bag:focus-visible,.paylas:focus-visible{outline:3px solid var(--mavi);outline-offset:4px}
+footer{margin-top:22px;font-size:13px;font-weight:500;color:var(--gri)}
+.serit{width:100%;height:14px;display:flex;flex:none;margin-bottom:env(safe-area-inset-bottom)}
+.serit i{flex:1}
+.toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);background:var(--siyah);color:var(--sari);font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:.2s}
 .toast.on{opacity:1;transform:translateX(-50%)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <main>
-  <img class="logo" src="/denedik.svg" alt="Denedik" width="150" height="109">
+  <h1>Denedik</h1>
+  <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="73 134 302 184" role="img" aria-label="denedik"><g fill="currentColor"><path d="M 108.59 200.27 C 99.53 200.27 93.21 193.74 93.21 184.05 C 93.21 174.46 99.53 168.03 108.59 168.03 C 117.55 168.03 123.97 174.46 123.97 184.05 C 123.97 193.74 117.55 200.27 108.59 200.27 M 124.29 156.44 C 119.44 151.49 112.91 148.75 105.01 148.75 C 86.99 148.75 73.08 163.18 73.08 184.15 C 73.08 205.23 86.99 219.55 105.01 219.55 C 113.54 219.55 120.6 216.29 125.66 210.81 L 125.66 218.4 L 144.31 218.4 L 144.31 134.1 L 124.29 134.1 Z M 124.29 156.44"/><path d="M 188.13 166.24 C 195.4 166.24 200.88 170.35 203.2 176.78 L 172.86 176.88 C 175.28 170.35 180.76 166.24 188.13 166.24 M 187.92 202.38 C 180.12 202.38 173.28 197.43 171.91 189.53 L 223.54 189.53 C 226.17 166.56 211.32 148.75 188.13 148.75 C 166.95 148.75 152.2 163.08 152.2 184.26 C 152.2 205.23 166.74 219.55 187.29 219.55 C 202.91 219.55 215.2 211.61 220.86 198.6 L 198.66 198.6 C 195.82 201.02 192.03 202.38 187.92 202.38"/><path d="M 270.31 148.75 C 260.2 148.75 253.88 153.81 251.77 158.44 L 251.77 149.91 L 231.75 149.91 L 231.75 205.15 L 252.3 205.15 L 252.3 179.83 C 252.3 172.25 257.25 167.08 264.62 167.08 C 272 167.08 277.05 172.25 277.05 179.83 L 277.05 218.4 L 297.5 218.4 L 297.5 178.15 C 297.5 160.76 285.91 148.75 270.31 148.75"/><path d="M 339.21 166.24 C 346.48 166.24 351.96 170.35 354.28 176.78 L 323.94 176.88 C 326.36 170.35 331.84 166.24 339.21 166.24 M 339 202.38 C 331.21 202.38 324.36 197.43 322.99 189.53 L 374.62 189.53 C 377.25 166.56 362.39 148.75 339.21 148.75 C 318.04 148.75 303.29 163.08 303.29 184.26 C 303.29 205.23 317.82 219.55 338.37 219.55 C 339.39 219.55 340.39 219.52 341.38 219.45 L 341.38 202.22 C 340.61 202.32 339.81 202.38 339 202.38"/><path d="M 235.4 223.07 L 212.6 223.07 L 212.6 243.53 L 235.4 243.53 Z M 235.4 223.07"/><path d="M 163.38 296.5 C 153.32 296.5 146.31 289.25 146.31 278.49 C 146.31 267.85 153.32 260.72 163.38 260.72 C 173.32 260.72 180.45 267.85 180.45 278.49 C 180.45 289.25 173.32 296.5 163.38 296.5 M 180.8 247.86 C 175.43 242.36 168.18 239.32 159.41 239.32 C 139.41 239.32 123.98 255.34 123.98 278.61 C 123.98 302 139.41 317.89 159.41 317.89 C 168.88 317.89 176.71 314.27 182.32 308.19 L 182.32 316.61 L 203.02 316.61 L 203.02 223.07 L 180.8 223.07 Z M 180.8 247.86"/><path d="M 239.26 253.12 L 216.46 253.12 L 216.46 304.44 L 239.26 304.44 Z M 239.26 253.12"/><path d="M 294.91 276.62 L 324.02 240.61 L 297.83 240.61 L 275.5 268.2 L 275.5 223.07 L 252.7 223.07 L 252.7 316.61 L 275.5 316.61 L 275.5 285.86 L 295 310.52 L 310.52 296.47 Z M 294.91 276.62"/></g></svg>
   <p class="alt">Biz denedik, sen de izle. Yeni videolar, denemeler ve kamera arkası burada.</p>
   <a class="abone" href="https://www.youtube.com/@denedik?sub_confirmation=1" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4.5" fill="#E52D27"/><path d="M10 9v6l5-3z" fill="#fff"/></svg>YouTube'da abone ol</a>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#c92f23"/><path d="M10 9v6l5-3z" fill="#fff"/></svg>YouTube'da abone ol</a>
   <p class="abone-n">Yeni videoları kaçırma · @denedik</p>
 
   <section class="bolum" aria-labelledby="h-takip">
-    <h2 id="h-takip">Takip et</h2>
+    <h2 id="h-takip">Takip et:</h2>
     <div class="liste">
-      <a class="bag" href="https://www.youtube.com/@denedik" target="_blank" rel="noopener">
-        <span class="ik yt" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 7.5v9l7.5-4.5z"/></svg></span>
+      <a class="bag yt" href="https://www.youtube.com/@denedik" target="_blank" rel="noopener">
+        <span class="ik" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 7.5v9l7.5-4.5z"/></svg></span>
         <span class="yz"><b>YouTube</b><small>@denedik</small></span><span class="ok" aria-hidden="true">→</span></a>
-      <a class="bag" href="https://www.instagram.com/denedikco/" target="_blank" rel="noopener">
-        <span class="ik ig" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r=".6" fill="currentColor"/></svg></span>
+      <a class="bag ig" href="https://www.instagram.com/denedikco/" target="_blank" rel="noopener">
+        <span class="ik" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r=".6" fill="currentColor"/></svg></span>
         <span class="yz"><b>Instagram</b><small>@denedikco</small></span><span class="ok" aria-hidden="true">→</span></a>
-      <a class="bag" href="https://www.tiktok.com/@denedikco" target="_blank" rel="noopener">
-        <span class="ik tt" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h3a4 4 0 0 0 4 4v3a7 7 0 0 1-4-1.3V15a6 6 0 1 1-6-6v3.2a2.8 2.8 0 1 0 2.9 2.8z"/></svg></span>
+      <a class="bag tt" href="https://www.tiktok.com/@denedikco" target="_blank" rel="noopener">
+        <span class="ik" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3h-3.2v12.2a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.1 6.1 0 1 0 5.2 6V9.2a7.6 7.6 0 0 0 4.4 1.4V7.4a4.4 4.4 0 0 1-4.4-4.4z"/></svg></span>
         <span class="yz"><b>TikTok</b><small>@denedikco</small></span><span class="ok" aria-hidden="true">→</span></a>
     </div>
   </section>
 
-  <div class="alt-satir">
-    <button type="button" class="paylas" id="paylas">Bu sayfayı paylaş</button>
-    <footer>© 2026 Denedik</footer>
-  </div>
+  <button type="button" class="paylas" id="paylas">Bu sayfayı paylaş</button>
+  <footer>© 2026 Denedik</footer>
 </main>
+<div class="serit" aria-hidden="true"><i style="background:#000"></i><i style="background:#3152f7"></i><i style="background:#562166"></i><i style="background:#c92f23"></i><i style="background:#9fe58e"></i></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="/denedik-social/paylas.js"></script>
 </body>
