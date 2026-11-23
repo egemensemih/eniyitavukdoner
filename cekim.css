@@ -261,7 +261,9 @@ html:has(body.ckm),body.ckm{max-width:100%;overflow-x:clip}
 @media(max-width:520px){.ck-tablo th:nth-child(4),.ck-tablo td:nth-child(4){display:none}}
 
 /* v7 — karakter seçimi (puan yerine) */
-.ck-kar-mini{flex:none;width:46px;height:46px;transform:rotate(-6deg);filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.ck-kar-minis{flex:none;display:flex}
+.ck-kar-mini{flex:none;width:40px;height:40px;transform:rotate(-6deg);filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.ck-kar-mini+.ck-kar-mini{margin-left:-14px;transform:rotate(7deg)}
 .ck-karakter{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px}
 .ck-karakter h4{font-size:15px;margin:0}
 .ck-karakter .krz-l{margin-top:0}
@@ -283,7 +285,14 @@ html:has(body.ckm),body.ckm{max-width:100%;overflow-x:clip}
 .kp-k em{position:absolute;top:8px;right:8px;font-style:normal;font-size:11px;font-weight:800;background:#000;color:#fff;border-radius:999px;padding:2px 7px}
 .kp-k em:empty{display:none}
 .kp-k[aria-pressed=true]{border-color:#000;box-shadow:4px 4px 0 var(--kr);background:color-mix(in srgb,var(--kr) 18%,#fff)}
-.kp-k.ana{box-shadow:5px 5px 0 #000}
-.kp-k.ana em{background:var(--orange)}
 .kp-alt{position:sticky;bottom:0;display:flex;align-items:center;gap:10px;padding:12px 0 4px;background:#fff;border-top:1px solid var(--line)}
 .kp-alt [data-say]{margin-right:auto;font-weight:700;font-size:14px}
+.kp-h{display:flex;flex-direction:column;gap:6px}
+.kp-h .kp-k{flex:1}
+.kp-d{appearance:none;font:700 12.5px var(--f);cursor:pointer;border-radius:999px;padding:8px 10px;border:2px solid #000;background:#fff;color:#000}
+.kp-d[aria-pressed=true]{background:#000;color:#fff}
+.kp-d:disabled{opacity:.4;cursor:not-allowed}
+.kp-k.kapida{box-shadow:5px 5px 0 #000}
+.kp-kapi{display:flex;flex:none}
+.kp-kapi img{width:58px;height:58px;transform:rotate(-6deg)}
+.kp-kapi img+img{margin-left:-18px;transform:rotate(6deg)}

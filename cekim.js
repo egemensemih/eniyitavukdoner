@@ -136,7 +136,8 @@
     return `https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=${son.lat},${son.lng}` + (ara.length ? `&waypoints=${encodeURIComponent(ara.map(m => `${m.lat},${m.lng}`).join("|"))}` : "");
   }
   const KA = window.KARAKTER;
-  const KAR = m => KA ? KA.liste(m.karakterler) : [];
+  const KAR = m => KA ? KA.sirali(m) : [];
+  const KAPI = m => KA ? KA.kapi(m) : [];
   const KARYAZ = l => l.map(k => KA.bul(k).ad).join(", ");
   const benimPuan = m => (m.puanlar || []).find(p => BEN && BEN.kullanici_adi && p.kisi === BEN.kullanici_adi);
   const siparisToplam = s => (s || []).reduce((a, x) => a + (x.fiyat != null ? Number(x.fiyat) * (x.adet || 1) : 0), 0);
@@ -178,7 +179,7 @@
     const yorumlar = Array.isArray(m.yorumlar) ? m.yorumlar : [];
     return `<article class="ck-kart" id="m-${m.oneri_id}" data-id="${m.oneri_id}">
       <header class="ck-kh"><span class="ck-no">${i + 1}</span><div class="ck-kt"><h3>${esc(m.ad)}</h3><small>${esc([yer(m), m.tur].filter(Boolean).join(" · "))}</small></div>
-        ${KAR(m)[0] ? `<img class="ck-kar-mini" src="${KA.img(KAR(m)[0])}" alt="${esc(KA.bul(KAR(m)[0]).ad)}" title="${esc(KA.bul(KAR(m)[0]).ad)} Dönerci" width="46" height="46">` : ""}</header>
+        ${KAPI(m).length ? `<span class="ck-kar-minis">${KAPI(m).map(k => `<img class="ck-kar-mini" src="${KA.img(k)}" alt="${esc(KA.bul(k).ad)}" title="${esc(KA.bul(k).ad)} Dönerci" width="40" height="40">`).join("")}</span>` : ""}</header>
       ${m.kapali ? `<p class="ck-uyari">Google'da “kalıcı olarak kapandı” görünüyor.</p>` : ""}
       ${m.not ? `<p class="ck-not">${esc(m.not)}</p>` : ""}
       ${m.adres ? `<p class="ck-adres">${esc(m.adres)}</p>` : ""}
@@ -200,7 +201,7 @@
       <section class="ck-karakter">
         <h4>Karakterleri</h4>
         ${KAR(m).length ? `<div class="krz-l">${KAR(m).map(k => KA.rozet(k)).join("")}</div>
-          <p class="sm">Kapıdaki sticker: <b>${esc(KA.bul(KAR(m)[0]).ad)}</b>${m.karakterler_kim ? ` · ${esc(m.karakterler_kim)}${m.karakterler_at ? ", " + esc(fmtK(m.karakterler_at)) : ""}` : ""}</p>`
+          <p class="sm">${KAPI(m).length ? `Kapıya: <b>${esc(KARYAZ(KAPI(m)))}</b>` : "Kapı sticker'ı seçilmedi"}${m.karakterler_kim ? ` · ${esc(m.karakterler_kim)}${m.karakterler_at ? ", " + esc(fmtK(m.karakterler_at)) : ""}` : ""}</p>`
           : `<p class="ck-bos-p">${KARSEC() ? "Henüz karakter seçmedin. Yediğiniz dönere göre bu dükkâna yakışanları seç." : "Henüz karakter seçilmedi."}</p>`}
         ${KARSEC() ? `<button type="button" class="btn ${KAR(m).length ? "btn-line" : "btn-o"} full" data-karakter="${m.oneri_id}">${KAR(m).length ? "Karakterleri düzenle" : "Karakter seç"}</button>` : ""}
       </section>
@@ -221,7 +222,7 @@
     (b.mekanlar || []).forEach((m, i) => {
       const k = KAR(m);
       satir.push("", `${i + 1}. ${m.ad} — ${k.length ? KARYAZ(k) : "karakter seçilmedi"}`);
-      if (k.length) satir.push(`   Kapıdaki sticker: ${KA.bul(k[0]).ad} Dönerci`);
+      if (KAPI(m).length) satir.push(`   Kapıya yapışacak sticker'lar: ${KARYAZ(KAPI(m))}`);
       const z = m.ziyaret || {};
       if ((z.siparis || []).length) satir.push(`   Yediklerimiz: ${z.siparis.map(x => `${x.adet > 1 ? x.adet + "× " : ""}${x.ad}${x.fiyat != null ? " (" + fTL(x.fiyat * (x.adet || 1)) + ")" : ""}`).join(", ")}`);
       if (z.odenen != null) satir.push(`   Ödenen: ${fTL(z.odenen)}`);
@@ -275,7 +276,7 @@
         <div class="ck-bh-a">${rl ? `<a class="btn btn-o btn-sm" href="${esc(rl)}" target="_blank" rel="noopener noreferrer">Bütün rotayı Google Maps'te aç ↗</a>` : ""}
           ${BEN.admin ? `<label class="ck-durum-sec"><span>Bölüm durumu</span><select data-bdurum="${b.id}">${Object.entries(DURUM).map(([k, v]) => `<option value="${k}"${k === b.durum ? " selected" : ""}>${v}</option>`).join("")}</select></label>` : ""}</div>
       </section>
-      ${M.length > 1 ? `<nav class="ck-dizin" aria-label="Bu bölümün mekânları">${M.map((m, i) => `<a href="#m-${m.oneri_id}"${cekildi(m) ? ` class="ok"` : ""}><b>${cekildi(m) ? "✓" : i + 1}</b>${esc(m.ad)}${KAR(m)[0] ? `<img class="ck-dz-k" src="${KA.img(KAR(m)[0])}" alt="" width="22" height="22">` : ""}</a>`).join("")}</nav>` : ""}
+      ${M.length > 1 ? `<nav class="ck-dizin" aria-label="Bu bölümün mekânları">${M.map((m, i) => `<a href="#m-${m.oneri_id}"${cekildi(m) ? ` class="ok"` : ""}><b>${cekildi(m) ? "✓" : i + 1}</b>${esc(m.ad)}${KAPI(m)[0] || KAR(m)[0] ? `<img class="ck-dz-k" src="${KA.img(KAPI(m)[0] || KAR(m)[0])}" alt="" width="22" height="22">` : ""}</a>`).join("")}</nav>` : ""}
       ${ozet(b)}
       <div class="ck-liste">${M.length ? M.map(kart).join("") : `<div class="ck-bos"><p>Bu bölüme henüz mekân eklenmemiş.</p></div>`}</div>`;
   }
@@ -319,34 +320,37 @@
   function karakterSec(id) {
     if (!KARSEC() || !KA) return;
     const m = mekanBul(id); if (!m) return;
-    let sec = KAR(m).slice(); const ilk = sec.join(",");
+    let sec = KAR(m).slice(), kapi = KAPI(m).slice(); const ilk = sec.join(",") + "|" + kapi.join(",");
     const ciz2 = () => {
-      $$(".kp-k", modal).forEach(b => { const i = sec.indexOf(b.dataset.k); b.setAttribute("aria-pressed", String(i > -1)); b.classList.toggle("ana", i === 0);
-        $("em", b).textContent = i === 0 ? "Sticker" : i > 0 ? String(i + 1) : ""; });
-      const ana = sec[0] ? KA.bul(sec[0]) : null;
-      $("[data-ana]", modal).innerHTML = ana ? `<img src="${KA.img(ana.k)}" alt="" width="64" height="64"><span><small>Kapıya yapışacak sticker</small><b>${esc(ana.ad)} Dönerci</b><span class="sm">İlk seçtiğin ana karakter olur. Başka birini ana yapmak için ona uzun bas ya da sağ tıkla.</span></span>` : `<span class="sm">Yediğiniz dönere yakışan karakterlere dokun. İlk seçtiğin, kapıya yapışacak sticker olur.</span>`;
-      $("[data-say]", modal).textContent = sec.length ? `${sec.length} karakter` : "Seçilmedi";
+      $$(".kp-k", modal).forEach(b => { const k = b.dataset.k, on = sec.includes(k), d = kapi.includes(k);
+        b.setAttribute("aria-pressed", String(on)); b.classList.toggle("kapida", d);
+        const kb = b.nextElementSibling; kb.hidden = !on; kb.setAttribute("aria-pressed", String(d)); kb.textContent = d ? "✓ Kapıya yapışacak" : "Kapıya yapıştır";
+        kb.disabled = !d && kapi.length >= 3; });
+      $("[data-ana]", modal).innerHTML = kapi.length ? `<span class="kp-kapi">${kapi.map(k => `<img src="${KA.img(k)}" alt="" width="58" height="58">`).join("")}</span><span><small>Kapıya yapışacak (${kapi.length}/3)</small><b>${esc(KARYAZ(kapi))}</b></span>`
+        : `<span class="sm">Önce dükkâna yakışan karakterlere dokun. Sonra kapıya yapıştıracağınız en fazla 3 sticker'ı “Kapıya yapıştır” ile işaretle.</span>`;
+      $("[data-say]", modal).textContent = sec.length ? `${sec.length} karakter · ${kapi.length} kapıda` : "Seçilmedi";
     };
     modalAc(m.ad, `<div class="kp">
       <div class="kp-ana" data-ana></div>
-      <div class="kp-grid">${KA.L.map(c => `<button type="button" class="kp-k" data-k="${c.k}" aria-pressed="false" style="--kr:${c.renk}"><img src="${KA.img(c.k)}" alt="" width="96" height="96"><b>${esc(c.ad)}</b><small>${esc(c.kisa)}</small><em></em></button>`).join("")}</div>
+      <div class="kp-grid">${KA.L.map(c => `<div class="kp-h"><button type="button" class="kp-k" data-k="${c.k}" aria-pressed="false" style="--kr:${c.renk}"><img src="${KA.img(c.k)}" alt="" width="96" height="96"><b>${esc(c.ad)}</b><small>${esc(c.kisa)}</small></button><button type="button" class="kp-d" data-d="${c.k}" hidden aria-pressed="false">Kapıya yapıştır</button></div>`).join("")}</div>
       <div class="kp-alt"><span data-say></span><button type="button" class="btn btn-line btn-sm" data-temizle>Temizle</button><button type="button" class="btn btn-o" data-kaydet>Kaydet</button></div>
-    </div>`, async () => sec.join(",") === ilk || confirm("Kaydedilmemiş seçimin var. Yine de kapatılsın mı?"), true);
-    let basili = null;
-    const anaYap = k => { sec = [k, ...sec.filter(x => x !== k)]; ciz2(); };
-    $(".kp-grid", modal).addEventListener("click", e => { const b = e.target.closest(".kp-k"); if (!b || b.dataset.uzun) { if (b) delete b.dataset.uzun; return; }
-      const k = b.dataset.k; sec = sec.includes(k) ? sec.filter(x => x !== k) : [...sec, k]; ciz2(); });
-    $(".kp-grid", modal).addEventListener("contextmenu", e => { const b = e.target.closest(".kp-k"); if (!b) return; e.preventDefault(); anaYap(b.dataset.k); });
-    $(".kp-grid", modal).addEventListener("pointerdown", e => { const b = e.target.closest(".kp-k"); if (!b) return; clearTimeout(basili); basili = setTimeout(() => { b.dataset.uzun = "1"; anaYap(b.dataset.k); if (navigator.vibrate) navigator.vibrate(20); }, 550); });
-    ["pointerup", "pointerleave", "pointercancel"].forEach(t => $(".kp-grid", modal).addEventListener(t, () => clearTimeout(basili)));
-    $("[data-temizle]", modal).addEventListener("click", () => { sec = []; ciz2(); });
+    </div>`, async () => sec.join(",") + "|" + kapi.join(",") === ilk || confirm("Kaydedilmemiş seçimin var. Yine de kapatılsın mı?"), true);
+    $(".kp-grid", modal).addEventListener("click", e => {
+      const d = e.target.closest(".kp-d");
+      if (d) { const k = d.dataset.d; if (kapi.includes(k)) kapi = kapi.filter(x => x !== k); else if (kapi.length < 3) kapi = [...kapi, k]; else toast("Kapıya en fazla 3 sticker yapıştırılabilir."); return ciz2(); }
+      const b = e.target.closest(".kp-k"); if (!b) return;
+      const k = b.dataset.k;
+      if (sec.includes(k)) { sec = sec.filter(x => x !== k); kapi = kapi.filter(x => x !== k); } else sec = [...sec, k];
+      ciz2();
+    });
+    $("[data-temizle]", modal).addEventListener("click", () => { sec = []; kapi = []; ciz2(); });
     $("[data-kaydet]", modal).addEventListener("click", async e => {
       const btn = e.currentTarget; btn.disabled = true; btn.textContent = "Kaydediliyor…";
-      const { error } = await db.rpc("cekim_karakter_kaydet", { p_oneri: id, p_karakterler: sec });
+      const { error } = await db.rpc("cekim_karakter_kaydet", { p_oneri: id, p_karakterler: sec, p_kapi: kapi });
       btn.disabled = false; btn.textContent = "Kaydet";
       if (error) return toast(/fetch|network/i.test(error.message) ? "İnternet yok gibi, bağlanınca tekrar dene." : "Kaydedilemedi: " + error.message);
       await kapat(true); await yenidenCiz();
-      toast(sec.length ? `Kaydedildi · sticker: ${KA.bul(sec[0]).ad}` : "Karakterler temizlendi");
+      toast(sec.length ? `Kaydedildi · ${sec.length} karakter, ${kapi.length} kapı sticker'ı` : "Karakterler temizlendi");
     });
     ciz2();
   }
@@ -614,7 +618,7 @@
     const urunler = [...urun.values()].map(u => ({ ...u, ortFiyat: u.fiyatlar.length ? u.fiyatlar.reduce((a, b) => a + b, 0) / u.fiyatlar.length : null,
       minF: u.fiyatlar.length ? Math.min(...u.fiyatlar) : null, maxF: u.fiyatlar.length ? Math.max(...u.fiyatlar) : null, mekanSay: u.mekan.size })).sort((a, b) => b.adet - a.adet);
     const kriter = KRITER.map(([k, ad]) => { const v = R.flatMap(r => r.P.map(p => p.puanlar && p.puanlar[k])).filter(x => x != null).map(Number); return { k, ad, ort: v.length ? v.reduce((a, b) => a + b, 0) / v.length : null, n: v.length }; }).filter(x => x.ort != null);
-    const kdag = KA ? KA.L.map(c => ({ k: c.k, ad: c.ad, n: R.filter(r => KAR(r.m).includes(c.k)).length, ana: R.filter(r => KAR(r.m)[0] === c.k).length })).filter(x => x.n).sort((a, b) => b.n - a.n) : [];
+    const kdag = KA ? KA.L.map(c => ({ k: c.k, ad: c.ad, n: R.filter(r => KAR(r.m).includes(c.k)).length, ana: R.filter(r => KAPI(r.m).includes(c.k)).length })).filter(x => x.n).sort((a, b) => b.n - a.n) : [];
     const karli = R.filter(r => KAR(r.m).length);
     return { R, gidilen, puanli, harcanan, toplamHarcama, urunler, kriter, kdag, karli,
       foto: R.reduce((a, r) => a + r.foto, 0), menu: R.reduce((a, r) => a + r.menu, 0), adet: urunler.reduce((a, u) => a + u.adet, 0),
@@ -648,7 +652,7 @@
     s.push(KAPSAM === "tum" ? "Bütün bölümler" : (((D.bolumler || []).find(b => String(b.id) === String(KAPSAM)) || {}).baslik || ""));
     s.push(`Ziyaret edilen mekân: ${V.gidilen.length}`, `Karakter verilen mekân: ${V.karli.length}`,
       `Toplam harcama: ${V.toplamHarcama ? fTL(V.toplamHarcama) : "–"}`, `Mekân başına hesap: ${V.harcanan.length ? fTL(Math.round(V.toplamHarcama / V.harcanan.length)) : "–"}`, `Yenen/içilen ürün: ${V.adet}`);
-    if (V.karli.length) { s.push("", "Karakterler:"); V.karli.forEach(r => s.push(`${r.m.ad} — ${KARYAZ(KAR(r.m))} (sticker: ${KA.bul(KAR(r.m)[0]).ad})`)); }
+    if (V.karli.length) { s.push("", "Karakterler:"); V.karli.forEach(r => s.push(`${r.m.ad} — ${KARYAZ(KAR(r.m))}${KAPI(r.m).length ? ` (kapıya: ${KARYAZ(KAPI(r.m))})` : ""}`)); }
     if (V.kdag.length) { s.push("", "Karakter dağılımı:"); V.kdag.forEach(k => s.push(`${k.ad}: ${k.n} mekân${k.ana ? `, ${k.ana} sticker` : ""}`)); }
     if (V.urunler.length) { s.push("", "Ne yedik:"); V.urunler.forEach(u => s.push(`${u.ad} × ${u.adet}${u.ortFiyat != null ? ` (ort. ${fTL(Math.round(u.ortFiyat * 100) / 100)})` : ""}`)); }
     return s.join("\n");
@@ -659,9 +663,9 @@
     let rows;
     if (tur === "urun") rows = [["Ürün", "Adet", "Ortalama fiyat (TL)", "En ucuz (TL)", "En pahalı (TL)", "Mekân sayısı", "Mekânlar"]]
       .concat(V.urunler.map(u => [u.ad, u.adet, sayi(u.ortFiyat), sayi(u.minF), sayi(u.maxF), u.mekanSay, [...u.mekan].join(", ")]));
-    else rows = [["Bölüm", "Mekân", "İlçe", "İl", "Çekildi", "Sticker (ana karakter)", "Karakterler", "Ödenen (TL)", "Yenenler", "Fotoğraf", "Menü linki", "Google puanı"]]
+    else rows = [["Bölüm", "Mekân", "İlçe", "İl", "Çekildi", "Kapı sticker'ları", "Karakterler", "Ödenen (TL)", "Yenenler", "Fotoğraf", "Menü linki", "Google puanı"]]
       .concat(V.R.map(r => [r.b.no ? `Bölüm ${r.b.no}` : r.b.baslik, r.m.ad, r.m.ilce || "", r.m.il || "", r.z.cekildi_at ? new Date(r.z.cekildi_at).toLocaleString(TR) : "",
-        KAR(r.m)[0] ? KA.bul(KAR(r.m)[0]).ad : "", KARYAZ(KAR(r.m)), sayi(r.harcama),
+        KARYAZ(KAPI(r.m)), KARYAZ(KAR(r.m)), sayi(r.harcama),
         r.S.map(x => `${x.adet > 1 ? x.adet + "x " : ""}${x.ad}${x.fiyat != null ? " " + x.fiyat + " TL" : ""}`).join(", "), r.foto + r.menu, r.z.menu_url || "", r.m.gpuan != null ? sayi(r.m.gpuan) : ""]));
     const csv = "﻿" + rows.map(r => r.map(h).join(";")).join("\r\n");
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));

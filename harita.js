@@ -54,14 +54,14 @@
     return s.toLocaleLowerCase("tr-TR").replace(/(^|[\s\-\/(&.])(\p{L})/gu, (_, a, h) => a + h.toLocaleUpperCase("tr-TR"));
   }
   async function fetchMapData() {
-    const KEY = "etd-harita-v4", TTL = 120000;
+    const KEY = "etd-harita-v5", TTL = 120000;
     try { const c = JSON.parse(sessionStorage.getItem(KEY) || "null"); if (c && Date.now() - c.t < TTL && Array.isArray(c.i)) { ITEMS = c.i; return; } } catch (e) { /* gizli mod */ }
     const d = getDb(); if (!d) return;
     for (let deneme = 0; deneme < 2; deneme++) {
       try {
         const [hr, mek] = await Promise.all([
           d.rpc("harita_mekanlari"),
-          d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan_notu,bolum_url,maps_url,karakterler").eq("yayinda", true).order("ad")
+          d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan_notu,bolum_url,maps_url,karakterler,kapi").eq("yayinda", true).order("ad")
         ]);
         if (hr.error || mek.error) throw hr.error || mek.error;
         const den = (mek.data || []).map(m => ({ ...m, key: "d" + m.id, tur: "denedik", adet: 0 }));
@@ -74,7 +74,7 @@
     }
   }
   const SIRA = { denedik: 0, rota: 1, oneri: 2 };
-  const KAR = window.KARAKTER, KK = m => KAR && m.karakterler ? KAR.liste(m.karakterler)[0] || null : null;
+  const KAR = window.KARAKTER, KK = m => KAR ? KAR.ana(m) : null;
   const KAD = m => { const k = KK(m); return k ? KAR.bul(k).ad + " Dönerci" : "Denedik'te denendi"; };
   function visible() {
     const q = trNorm(F.q);
@@ -122,7 +122,7 @@
   }
   function popHtml(m) {
     return `<div class="dh-pop"><span class="tag ${m.tur === "denedik" ? "blue" : m.tur === "rota" ? "yel" : ""}">${TUR_AD[m.tur]}</span>
-      ${m.tur === "denedik" && KK(m) ? `<div class="place-k">${KAR.liste(m.karakterler).map(k => KAR.rozet(k)).join("")}</div>` : ""}
+      ${m.tur === "denedik" && KK(m) ? `<div class="place-k">${KAR.sirali(m).map(k => KAR.rozet(k)).join("")}</div>` : ""}
       <b class="nm">${esc(m.ad)}</b><span class="yer">${esc([m.ilce, yerAd(m)].filter(Boolean).join(", "))}</span>
       ${m.tur === "oneri" ? `<span class="yer">${m.adet > 1 ? m.adet + " kişi önerdi" : "1 kişi önerdi"}</span>` : ""}
       ${m.tur === "rota" ? `<span class="yer">Yakında gidip deniyoruz.</span>` : ""}

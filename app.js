@@ -393,7 +393,8 @@
     try {
       const [blob, saved] = await Promise.all([makeStory(), saveRecipe()]);
       const file = new File([blob], "en-iyi-tavuk-donerim.png", { type: "image/png" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      const dokunmatik = matchMedia("(pointer: coarse)").matches && navigator.maxTouchPoints > 0;
+      if (dokunmatik && navigator.canShare && navigator.canShare({ files: [file] })) {
         try { await navigator.share({ files: [file], title: "Benim dönerim", text: "Sen de tasarla: eniyitavukdoner.com" }); }
         catch (err) { if (err.name !== "AbortError") download(blob); }
       } else download(blob);

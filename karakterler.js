@@ -53,6 +53,10 @@
     return '<span class="krz" style="--kr:' + c.renk + ";--ky:" + c.yazi + '"><img src="' + img(c.k) + '" alt="" width="28" height="28" loading="lazy" decoding="async"><b>' + esc(c.ad) + "</b></span>";
   }
   function liste(a) { return (Array.isArray(a) ? a : []).filter(function (k) { return I[k] && I[k].k === k; }); }
+  /* Kapıya en fazla 3 sticker yapıştırılır; m.kapi bunları tutar (m.karakterler'in alt kümesi). */
+  function kapi(m) { var k = liste(m && m.karakterler); return liste(m && m.kapi).filter(function (x) { return k.indexOf(x) > -1; }).slice(0, 3); }
+  function ana(m) { return kapi(m)[0] || liste(m && m.karakterler)[0] || null; }
+  function sirali(m) { var d = kapi(m); return d.concat(liste(m && m.karakterler).filter(function (x) { return d.indexOf(x) < 0; })); }
 
-  window.KARAKTER = { L: L, bul: function (k) { return I[k] || null; }, img: img, sticker: sticker, rozet: rozet, liste: liste, testKarakteri: testKarakteri, ISIMLER: ISIMLER, esc: esc };
+  window.KARAKTER = { L: L, bul: function (k) { return I[k] || null; }, img: img, sticker: sticker, rozet: rozet, liste: liste, kapi: kapi, ana: ana, sirali: sirali, testKarakteri: testKarakteri, ISIMLER: ISIMLER, esc: esc };
 })();

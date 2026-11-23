@@ -25,11 +25,11 @@
     if (!c) { panel.hidden = true; return; }
     panel.style.setProperty("--kr", c.renk);
     var l = (MEK || []).filter(function (m) { return K.liste(m.karakterler).indexOf(c.k) > -1; })
-      .sort(function (a, b) { return (K.liste(a.karakterler)[0] === c.k ? 0 : 1) - (K.liste(b.karakterler)[0] === c.k ? 0 : 1) || a.ad.localeCompare(b.ad, TR); });
+      .sort(function (a, b) { return (K.kapi(a).indexOf(c.k) > -1 ? 0 : 1) - (K.kapi(b).indexOf(c.k) > -1 ? 0 : 1) || a.ad.localeCompare(b.ad, TR); });
     panel.innerHTML = '<div class="kar-panel-h">' + K.sticker(c.k, { w: 70, alt: "" }) + "<div><h3>" + esc(c.ad) + " Dönerci</h3><p>" + esc(c.uzun) + "</p></div></div>" +
       (MEK == null ? '<p class="kar-bos">Dükkânlar yükleniyor…</p>' :
-        l.length ? '<div class="mb-l">' + l.map(function (m) { var a = K.liste(m.karakterler)[0];
-          return '<a class="mb" href="mekan.html?id=' + m.id + '" style="--kr:' + K.bul(a).renk + '">' + K.sticker(a, { w: 52, alt: "" }) + "<span><b>" + esc(m.ad) + "</b><small>" + esc(yer(m)) + (a === c.k ? " · kapısında bu sticker var" : "") + "</small></span></a>"; }).join("") + "</div>"
+        l.length ? '<div class="mb-l">' + l.map(function (m) { var a = K.ana(m), kapida = K.kapi(m).indexOf(c.k) > -1;
+          return '<a class="mb" href="mekan.html?id=' + m.id + '" style="--kr:' + K.bul(a).renk + '">' + K.sticker(a, { w: 52, alt: "" }) + "<span><b>" + esc(m.ad) + "</b><small>" + esc(yer(m)) + (kapida ? " · kapısında bu sticker var" : "") + "</small></span></a>"; }).join("") + "</div>"
         : '<p class="kar-bos">Bu karakteri henüz hiçbir dükkâna yakıştırmadık. Bölümler yayınlandıkça burası dolacak. Aklında bir dükkân mı var? <a href="#oner">Bize öner</a>.</p>');
     panel.hidden = false;
   }
@@ -42,7 +42,7 @@
   function yukle() {
     if (!window.supabase || !C.SUPABASE_URL) { MEK = []; sayilar(); ciz(); return; }
     var db = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-    db.from("mekanlar").select("id,ad,il,ilce,ulke,karakterler").eq("yayinda", true).then(function (r) {
+    db.from("mekanlar").select("id,ad,il,ilce,ulke,karakterler,kapi").eq("yayinda", true).then(function (r) {
       MEK = (r.data || []).filter(function (m) { return K.liste(m.karakterler).length; }); sayilar(); ciz();
     }, function () { MEK = []; ciz(); });
   }

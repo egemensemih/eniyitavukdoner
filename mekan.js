@@ -73,10 +73,11 @@
 
   function karakterlerHtml(kl, m) {
     if (!kl.length) return `<div class="kk-bos"><p><b>Karakterleri yolda.</b> Bu dükkâna hangi karakterleri yakıştırdığımızı bölüm yayına girince burada göreceksin.</p></div>`;
-    return `<div class="kk-grid">${kl.map((k, i) => { const c = K.bul(k);
-      return `<article class="kk${i === 0 ? " ana" : ""}" style="--kr:${c.renk};--ky:${c.yazi}">
+    const kp = K.kapi(m);
+    return `<div class="kk-grid">${kl.map(k => { const c = K.bul(k), kapida = kp.includes(k);
+      return `<article class="kk${kapida ? " kapida" : ""}" style="--kr:${c.renk};--ky:${c.yazi}">
         ${K.sticker(k, { w: 132, cls: "kk-stk", alt: "" })}
-        <div class="kk-t">${i === 0 ? `<span class="kk-etk">Ana karakter · kapıdaki sticker</span>` : ""}
+        <div class="kk-t">${kapida ? `<span class="kk-etk">Kapıdaki sticker</span>` : ""}
           <h3>${esc(c.ad)} <span>Dönerci</span></h3>
           <p>${esc(c.uzun)}</p>
           <a class="kk-l" href="./?karakter=${encodeURIComponent(k)}#karakterler">Diğer ${esc(c.ad)} dükkânlar →</a></div>
@@ -89,16 +90,16 @@
     if (!window.supabase || !C.SUPABASE_URL || !K) return bos("Şu an yüklenemedi", "Birazdan tekrar dener misin?");
     const db = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
     const [mr, fr] = await Promise.all([
-      db.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan_notu,etiketler,bolum_url,maps_url,instagram,aciklama,ziyaret_tarihi,karakterler").eq("id", id).eq("yayinda", true).maybeSingle(),
+      db.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan_notu,etiketler,bolum_url,maps_url,instagram,aciklama,ziyaret_tarihi,karakterler,kapi").eq("id", id).eq("yayinda", true).maybeSingle(),
       db.from("mekan_fotolar").select("yol,aciklama,genislik,yukseklik").eq("mekan_id", id).order("sira").order("id").limit(40),
     ]);
     const F = fr.error ? [] : (fr.data || []);
     const m = mr.data;
     if (mr.error || !m) return bos("Mekân bulunamadı", "Bu mekân henüz yayında değil ya da kaldırılmış.");
-    const kl = K.liste(m.karakterler), ana = kl[0] ? K.bul(kl[0]) : null;
+    const kl = K.sirali(m), kp = K.kapi(m), ana = K.ana(m) ? K.bul(K.ana(m)) : null;
     const sehir = [m.ilce, m.il === "Yurt dışı" ? m.ulke : m.il].filter(Boolean).join(", ");
 
-    document.title = `${m.ad}${ana ? " · " + ana.ad + " Dönerci" : ""} | eniyitavukdoner.com`;
+    document.title = `${m.ad}${kl.length ? " · " + kl.slice(0, 3).map(k => K.bul(k).ad).join(", ") : ""} | eniyitavukdoner.com`;
     const md = document.querySelector('meta[name=description]');
     md.content = `${m.ad} (${sehir})${kl.length ? ": " + kl.map(k => K.bul(k).ad).join(", ") + " dönerci." : "."} Denedik'in gidip denediği tavuk dönerci; karakterleri, bölümü ve Google puanı.`;
     if (ana) { const r = document.querySelector('meta[name=theme-color]'); if (r) r.content = ana.renk; }
@@ -122,7 +123,8 @@
             ${bolum ? `<a class="mkl mkl-y" href="${esc(bolum)}" target="_blank" rel="noopener">${IKON.izle}Bölümü izle</a>` : ""}
           </div>
         </div>
-        ${ana ? `<figure class="mk-kapi">${K.sticker(ana.k, { w: 260, cls: "kapi-stk", eager: true, alt: ana.ad + " Dönerci sticker'ı" })}<figcaption>Kapısındaki sticker</figcaption></figure>` : ""}
+        ${kp.length ? `<figure class="mk-kapi k${kp.length}">${kp.map((k, i) => K.sticker(k, { w: 260, cls: "kapi-stk", eager: !i, alt: K.bul(k).ad + " Dönerci sticker'ı" })).join("")}<figcaption>${kp.length > 1 ? "Kapısındaki sticker'lar" : "Kapısındaki sticker"}</figcaption></figure>`
+          : ana ? `<figure class="mk-kapi k1">${K.sticker(ana.k, { w: 260, cls: "kapi-stk", eager: true, alt: ana.ad + " Dönerci" })}<figcaption>Karakteri</figcaption></figure>` : ""}
       </div>
     </div></section>
     ${F.length ? `<div class="wrap">${galeriHtml(F, m.ad)}</div>` : ""}
@@ -161,10 +163,10 @@
       const s = document.getElementById("mk-google"); s.innerHTML = googleHtml(data.google, m); s.hidden = false;
     }).catch(() => { /* Google kutusu isteğe bağlı */ });
     // Aynı ana karakterdeki diğer dükkânlar
-    if (ana) db.from("mekanlar").select("id,ad,il,ilce,ulke,karakterler").eq("yayinda", true).contains("karakterler", [ana.k]).neq("id", id).limit(8).then(({ data }) => {
+    if (ana) db.from("mekanlar").select("id,ad,il,ilce,ulke,karakterler,kapi").eq("yayinda", true).contains("karakterler", [ana.k]).neq("id", id).limit(8).then(({ data }) => {
       if (!data || !data.length) return;
       const s = document.getElementById("mk-benzer");
-      s.innerHTML = `<div class="mk-h"><h2>Başka ${esc(ana.ad)} dükkânlar</h2></div><div class="mb-l">${data.map(d => { const a = K.liste(d.karakterler)[0] || ana.k;
+      s.innerHTML = `<div class="mk-h"><h2>Başka ${esc(ana.ad)} dükkânlar</h2></div><div class="mb-l">${data.map(d => { const a = K.ana(d) || ana.k;
         return `<a class="mb" href="mekan.html?id=${d.id}" style="--kr:${K.bul(a).renk}">${K.sticker(a, { w: 56, alt: "" })}<span><b>${esc(d.ad)}</b><small>${esc([d.ilce, d.il === "Yurt dışı" ? d.ulke : d.il].filter(Boolean).join(", "))}</small></span></a>`; }).join("")}</div>`;
       s.hidden = false;
     });
