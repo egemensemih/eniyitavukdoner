@@ -27,7 +27,7 @@
 @keyframes kapi-gel{from{opacity:0;transform:rotate(-30deg) scale(.6)}to{opacity:1;transform:rotate(var(--don)) scale(1)}}
 
 /* "Biz ne dedik?" karakter kartları */
-.kk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;margin-bottom:64px}
+.kk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:22px;margin-bottom:64px}
 .kk{position:relative;display:flex;gap:16px;align-items:flex-start;padding:20px 20px 18px;border-radius:22px;background:#fff;border:2.5px solid var(--stk-ink);box-shadow:6px 6px 0 var(--kr);overflow:hidden}
 .kk::before{content:"";position:absolute;inset:0;background:var(--kr);opacity:.16;pointer-events:none}
 .kk::after{content:"";position:absolute;inset:0;background:var(--nokta);opacity:.35;pointer-events:none;-webkit-mask:linear-gradient(200deg,#000,transparent 55%);mask:linear-gradient(200deg,#000,transparent 55%)}
@@ -71,8 +71,8 @@
 .mb small{color:var(--muted);font-size:13px}
 
 /* ana sayfa: hero sticker kümesi */
-.hero-stk{position:absolute;z-index:3;pointer-events:none}
-.hero-stk .stk{position:absolute;width:var(--w,110px);animation:stk-yap .6s cubic-bezier(.2,.9,.3,1.35) both;animation-delay:var(--gec,0s)}
+.hero-stk{position:absolute;inset:0;z-index:3;pointer-events:none}
+.hero-stk .stk{position:absolute;width:clamp(64px,calc(var(--w,110px) * .62 + 4vw),var(--w,110px));animation:stk-yap .6s cubic-bezier(.2,.9,.3,1.35) both;animation-delay:var(--gec,0s)}
 @keyframes stk-yap{from{opacity:0;transform:rotate(var(--don)) scale(1.5) translateY(-20px)}to{opacity:1;transform:rotate(var(--don)) scale(1)}}
 
 /* ana sayfa: Karakterler bölümü */
@@ -107,8 +107,10 @@
 .tip-stk{position:absolute;right:-14px;top:-30px;width:84px;--don:10deg;transition:opacity .2s}
 
 /* harita: karakter mini sticker */
-.pin-k{width:38px;height:38px;border-radius:50%;padding:0;border:0;background:none;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
-.pin-k img{width:100%;height:100%;display:block}
+.pin.pin-k{width:42px;height:42px;min-width:0;border-radius:50%;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35));transition:transform .15s}
+.pin.pin-k::after,.pin.pin-k::before{display:none}
+.pin.pin-k:hover,.pin.pin-k.on{transform:scale(1.25);z-index:5}
+.pin-k img{width:100%;height:100%;display:block;border-radius:50%}
 .dh-b.b-kar{background:none;padding:0;width:40px;height:40px;box-shadow:none}
 .dh-b.b-kar img{width:40px;height:40px;display:block}
 .place-k{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}

@@ -23,6 +23,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=17">
+<link rel="stylesheet" href="karakter.css?v=1">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://eniyitavukdoner.com/#site","url":"https://eniyitavukdoner.com/","name":"eniyitavukdoner.com","alternateName":"En İyi Tavuk Döner","description":"Türkiye'nin en iyi tavuk dönerini arıyoruz: Türkiye Tavuk Dönerci Haritası, döner tasarlama ve dönerci önerme.","inLanguage":"tr-TR","publisher":{"@id":"https://eniyitavukdoner.com/#org"}},{"@type":"Organization","@id":"https://eniyitavukdoner.com/#org","name":"Denedik","url":"https://eniyitavukdoner.com/","logo":"https://eniyitavukdoner.com/apple-touch-icon.png","email":"eniyitavukdoner@gmail.com","sameAs":["https://www.youtube.com/@Denedik","https://www.youtube.com/@eniyitavukdoner","https://www.instagram.com/denedikco/","https://www.instagram.com/eniyitavukdoner/"]}]}</script>
 </head>
@@ -38,7 +39,7 @@
       <a href="#harita">Harita</a>
       <a href="#tasarla">Döneri tasarla</a>
       <a href="#oner">Mekân öner</a>
-      <a href="#nasil">Nasıl puanlıyoruz?</a>
+      <a href="#karakterler">Karakterler</a>
       <a href="#manifesto">Manifesto</a>
     </nav>
     <a class="btn btn-sm cta-nav" href="#haber">Bana haber ver</a>
@@ -55,7 +56,7 @@
       <div>
         <span class="pill">Denedik <i></i> Tavuk Döner Dosyası</span>
         <h1>Türkiye'nin en iyi tavuk dönerini <span class="hl">bulmayı deniyoruz.</span></h1>
-        <p class="lede">Şehir şehir geziyor, ustaları yerinde dinliyor, her mekânı aynı kriterlerle puanlıyoruz. Sen de hayalindeki döneri tasarla, favori dönercini bize öner.</p>
+        <p class="lede">Şehir şehir geziyor, ustaları yerinde dinliyor, her dükkâna yediğimiz dönere göre bir karakter yakıştırıyoruz. Sen de hayalindeki döneri tasarla, favori dönercini bize öner.</p>
         <div class="cta">
           <a class="btn btn-o" href="#tasarla">Hayalindeki döneri tasarla
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -73,13 +74,13 @@
         </div>
       </div>
       <div class="phone-stage" aria-hidden="true">
-        <span class="float s1">Şehir şehir</span>
-        <span class="float s2">Lavaş mı, pide mi?</span>
-        <span class="float s3">Usta usta</span>
-        <span class="float s4">Ülke ülke</span>
-        <span class="float s5">Soslu mu, sossuz mu?</span>
-        <span class="float s6">Acılı mı, acısız mı?</span>
         <div class="phone"><div class="screen"><img id="hero-story" alt="" width="1080" height="1920"></div></div>
+        <div class="hero-stk">
+          <img class="stk" src="karakter/sos-canavari.webp?v=1" alt="" width="124" height="124" style="left:-6%;top:3%;--w:124px;--don:-12deg;--gec:.15s">
+          <img class="stk" src="karakter/kitir.webp?v=1" alt="" width="112" height="112" style="right:-6%;top:10%;--w:112px;--don:11deg;--gec:.3s">
+          <img class="stk" src="karakter/ates.webp?v=1" alt="" width="104" height="104" style="left:-4%;top:55%;--w:104px;--don:8deg;--gec:.45s">
+          <img class="stk" src="karakter/almanci.webp?v=1" alt="" width="118" height="118" style="right:-5%;top:60%;--w:118px;--don:-9deg;--gec:.6s">
+        </div>
         <span class="sample-tag">Örnek story kartı</span>
       </div>
     </div>
@@ -87,7 +88,7 @@
     <div class="stats" id="istatistik" hidden>
       <div class="stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></span><div><b id="st-recete">0</b><small>döner tasarlandı</small></div></div>
       <div class="stat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></span><div><b id="st-bekleyen">0</b><small>kişi haber bekliyor</small></div></div>
-      <div class="stat" id="stat-mekan"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><b id="st-mekan">0</b><small>mekân puanlandı</small></div></div>
+      <div class="stat" id="stat-mekan"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><b id="st-mekan">0</b><small>dükkân denendi</small></div></div>
     </div>
   </div>
 </section>
@@ -120,13 +121,13 @@
         <a class="map-buyut" id="dh-buyut" href="harita.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Büyük haritada aç</a>
         <div class="map-loading" id="map-loading">Harita yükleniyor…</div>
         <div class="map-legend">
-          <span><i class="lg-pin"></i>Denedik puanı</span>
+          <span><i class="lg-pin"></i>Denedik (karakteriyle)</span>
           <span><i class="lg-rota"></i>Rotamızda</span>
           <span><i class="lg-dot"></i>Sizin önerdikleriniz</span>
         </div>
       </div>
       <aside class="dh-list" aria-live="polite">
-        <div class="dh-head"><b id="dh-count">Mekânlar</b><small id="dh-sub">Denedik puanına ve öneri sayısına göre</small></div>
+        <div class="dh-head"><b id="dh-count">Mekânlar</b><small id="dh-sub">Önce denediklerimiz, sonra en çok önerilenler</small></div>
         <ol class="dh-items" id="dh-items"></ol>
         <div class="dh-foot"><span>Favori dönercin haritada yok mu?</span><a class="btn btn-o btn-sm" href="#oner">Mekân öner</a></div>
       </aside>
@@ -209,30 +210,29 @@
   </div>
 </section>
 
+<!-- KARAKTERLER -->
+<section id="karakterler" class="sec kar-sec">
+  <div class="wrap">
+    <div class="kar-bas">
+      <div><span class="eyebrow">Karakterler</span><h2>Puan yok.<br><span class="bant">Karakter var.</span></h2></div>
+      <p class="lede">Hiçbir dükkâna puan vermiyoruz. Yediğimiz dönere bakıp her dükkâna karakterler yakıştırıyoruz; en çok yakışanı sticker olarak kapısına yapıştırıyoruz. Bir karaktere dokun, o karakterdeki dükkânları gör.</p>
+    </div>
+    <div class="kar-grid" id="kar-grid"></div>
+    <div class="kar-panel" id="kar-panel" hidden aria-live="polite"></div>
+  </div>
+</section>
+
 <!-- NASIL -->
 <section id="nasil" class="sec">
   <div class="wrap">
     <div class="sec-head rv">
       <div><span class="eyebrow">Nasıl işliyor?</span><h2>Sen öner, biz gidip deneyelim.</h2></div>
-      <p class="lede">Rotamızı sizden gelen öneriler belirliyor. Her mekânı aynı on kriterle 100 üzerinden puanlıyor, sonucu haritaya işliyoruz.</p>
+      <p class="lede">Rotamızı sizden gelen öneriler belirliyor. Gidiyor, yiyor, dükkâna karakterlerini yakıştırıp kapısına sticker'ını yapıştırıyoruz.</p>
     </div>
     <div class="how">
       <div class="how-step rv"><span class="n">1</span><h3>Sen öner</h3><p>Google Maps linkini yapıştır, gerisini biz dolduralım. İstersen neden gitmemiz gerektiğini bir cümleyle anlat.</p></div>
       <div class="how-step rv"><span class="n">2</span><h3>Biz gidip deneriz</h3><p>En çok önerilen şehirler rotamıza girer. Hesabı biz öderiz, kimseden hediye almayız.</p></div>
-      <div class="how-step rv"><span class="n">3</span><h3>Puan haritaya işlenir</h3><p>Her bölümden sonra ikimizin puanı ve yorumu mekânın sayfasına, puanı da haritaya eklenir.</p></div>
-    </div>
-    <div class="crit-head rv"><h3>On kriter, iki kişi, 100 puan.</h3><p>Tahsin ve Egemen her mekânı ayrı ayrı, aynı on kriterle 10 üzerinden puanlıyor. Mekânın puanı ikisinin ortalaması: 100 üzerinden tek bir sayı.</p></div>
-    <div class="criteria">
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.4 15.4a6 6 0 10-6.8-6.8c-.6 1.3-.4 2.9.4 4l-4.2 4.2a2 2 0 102.8 2.8l4.2-4.2c1.1.8 2.7 1 4 .4z"/></svg></span><div><h3>Et lezzeti</h3><p>Tavuğun tadı, suyu, pişmesi.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7c3 3.6 6 7 6 10.3a6 6 0 01-12 0c0-3.3 3-6.7 6-10.3z"/></svg></span><div><h3>Marinasyon</h3><p>Baharat dengesi, ete ne kadar işlediği.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a4 4 0 014-4h8a4 4 0 014 4 2 2 0 01-2 2v6a1 1 0 01-1 1H7a1 1 0 01-1-1v-6a2 2 0 01-2-2z"/></svg></span><div><h3>Ekmek / lavaş</h3><p>Tazeliği, dokusu, sıcaklığı.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v4l-3 4v9a1 1 0 001 1h8a1 1 0 001-1v-9l-3-4V3"/></svg></span><div><h3>Sos</h3><p>Lezzeti ve dönere uyumu.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/></svg></span><div><h3>Garnitür ve çeşit</h3><p>Yanındakiler, seçenekler.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></svg></span><div><h3>Porsiyon</h3><p>Doyuruyor mu, içinde ne kadar et var?</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L2 12V2h10l8.6 8.6a2 2 0 010 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg></span><div><h3>Fiyat / performans</h3><p>Ödediğine değiyor mu?</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><div><h3>Hijyen ve temizlik</h3><p>Tezgâh, mutfak, salon.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></span><div><h3>Hizmet</h3><p>Güler yüz, hız, ilgi.</p></div></div>
-      <div class="crit rv"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></span><div><h3>Ortam</h3><p>Oturma yeri, rahatlık.</p></div></div>
+      <div class="how-step rv"><span class="n">3</span><h3>Sticker kapıya yapışır</h3><p>Her bölümden sonra dükkânın karakterleri sayfasına ve haritaya eklenir. Ana karakterini de sticker olarak kapısına yapıştırırız.</p></div>
     </div>
   </div>
 </section>
@@ -246,7 +246,7 @@
     </div>
     <div class="man-body rv">
       <p>Tavuk döner bu ülkenin en samimi sokak lezzeti. Herkesin bir dönercisi var: okul çıkışı, maç sonrası, gece yarısı, ilk maaş. <b>Ve herkesin en iyisi farklı.</b></p>
-      <p>Denedik'te tek bir soruya cevap arıyoruz: Türkiye'nin en iyi tavuk döneri nerede? Şehir şehir geziyor, ustaları yerinde dinliyor, her mekânı aynı kriterlerle ve saygıyla puanlıyoruz.</p>
+      <p>Denedik'te tek bir soruya cevap arıyoruz: Türkiye'nin en iyi tavuk döneri nerede? Şehir şehir geziyor, ustaları yerinde dinliyor, her dükkânı saygıyla deniyoruz. Puan vermiyoruz; her dükkâna yediğimiz dönere göre bir karakter yakıştırıyoruz.</p>
       <p>Bu arayışı tek başımıza yapmıyoruz. Sen de favorini öner, hayalindeki döneri tasarla.</p>
       <p class="man-quote">İyi döner, onu tutkuyla arayanlarla birlikte bulunur.</p>
       <a class="btn btn-y" id="yt-link" href="#" target="_blank" rel="noopener">
@@ -287,9 +287,9 @@
 <section class="sec" style="padding-top:0">
   <div class="wrap faq">
     <h2 class="rv">Merak edilenler</h2>
-    <details class="rv"><summary>Mekânlar bu puanlar için para ödüyor mu?</summary><p>Hayır. Gittiğimiz her yerde hesabı biz ödüyoruz; hiçbir mekândan ücret, hediye ya da indirim kabul etmiyoruz. Puanlar sadece yediğimiz dönere göre veriliyor.</p></details>
+    <details class="rv"><summary>Dükkânlar karakter ya da sticker için para ödüyor mu?</summary><p>Hayır. Gittiğimiz her yerde hesabı biz ödüyoruz; hiçbir dükkândan ücret, hediye ya da indirim kabul etmiyoruz. Karakterler sadece yediğimiz dönere göre veriliyor.</p></details>
     <details class="rv"><summary>Önerdiğim mekâna gerçekten gidiyor musunuz?</summary><p>Her öneriyi tek tek okuyoruz. En çok önerilen şehirler ve mekânlar rotamızı belirliyor. Önerine gittiğimizde, izin verdiysen bölümde takma adınla teşekkür ediyoruz.</p></details>
-    <details class="rv"><summary>Puanlar nasıl veriliyor?</summary><p>Tahsin ve Egemen her mekânı ayrı ayrı, aynı on kriterle (et lezzeti, marinasyon, ekmek, sos, garnitür ve çeşit, porsiyon, fiyat/performans, hijyen, hizmet, ortam) 10 üzerinden puanlıyor. Mekânın puanı ikisinin ortalaması, 100 üzerinden. Puanlar çekim sırasında veriliyor, sonradan değiştirilmiyor.</p></details>
+    <details class="rv"><summary>Neden puan vermiyorsunuz?</summary><p>Çünkü herkesin en iyi döneri farklı: sosu bol seven de var, sossuzu arayan da. Bu yüzden dükkânlara puan vermiyoruz; yediğimiz dönere bakıp onlara karakterler yakıştırıyoruz: Sos Canavarı, Kıtır Kıtır, Klasik, Almancı… En çok yakışan karakteri sticker olarak kapısına yapıştırıyoruz. Google'daki puan ve yorumlara da her dükkânın sayfasından ulaşabilirsin.</p></details>
     <details class="rv"><summary>Bilgilerim ne için kullanılıyor?</summary><p>Sadece bu proje için: önerini değerlendirmek ve onay verdiysen sana haber vermek için. Bilgilerini kimseye satmıyoruz; istediğin an silinmesini isteyebilirsin. Ayrıntılar <a href="kvkk.html" style="color:var(--cobalt);font-weight:600">KVKK aydınlatma metninde</a>.</p></details>
   </div>
 </section>
@@ -321,7 +321,9 @@
 <script src="config.js?v=16"></script>
 <script src="ilceler.js?v=14" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous" defer></script>
-<script src="app.js?v=19" defer></script>
-<script src="harita.js?v=15" defer></script>
+<script src="karakterler.js?v=1" defer></script>
+<script src="app.js?v=20" defer></script>
+<script src="harita.js?v=16" defer></script>
+<script src="karakter-bolum.js?v=1" defer></script>
 </body>
 </html>

@@ -263,20 +263,12 @@
     if (s.multi ? !state[k].includes(v) : state[k] !== v) pick(k, v);
   }
   function doneTipi(s = state) {
-    const sos = s.sos, isim = { "Lavaş": "Dürümcü", "Pide (Tombik)": "Tombikçi", "Somun Ekmek": "Ekmek Arası Ustası" }[s.ekmek] || "Dönerci";
-    let sifat = "Klasik";
-    if (s.aci === "İnanılmaz Acılı") sifat = "Ateşten Korkmayan";
-    else if (sos.includes("Sossuz")) sifat = "Sossuz";
-    else if (sos.length >= 3) sifat = "Sos Canavarı";
-    else if (s.pisme === "Yanığa Yakın (Kıtır)") sifat = "Kıtır Kıtır";
-    else if (s.garnitur.includes("Sadece Et")) sifat = "Minimalist";
-    else if (s.aci === "Acılı") sifat = "Acı Sever";
-    else if (s.garnitur.length >= 3) sifat = "Bol Malzemeli";
-    else if (s.tavuk === "Göğüs (Yağsız)") sifat = "Formda";
-    return sifat + " " + isim;
+    return window.KARAKTER ? window.KARAKTER.testKarakteri(s).ad : "Klasik Dönerci";
   }
   function renderFis() {
     $("#fis-tip").textContent = doneTipi();
+    const KT = window.KARAKTER && window.KARAKTER.testKarakteri(state), TB = $(".tip-box");
+    if (KT && TB) { let im = TB.querySelector(".tip-stk"); if (!im) { im = document.createElement("img"); im.className = "stk tip-stk"; im.alt = ""; im.width = im.height = 84; TB.appendChild(im); } const u = window.KARAKTER.img(KT.k); if (im.getAttribute("src") !== u) im.src = u; }
     const mt = $("#mbar-tip"); if (mt) mt.textContent = doneTipi();
     $("#fis-liste").innerHTML = STEPS.map(s => ({ label: s.fis, val: s.multi ? state[s.k].join(", ") : state[s.k], or: s.or })).map(r =>
       `<div><dt>${r.label}</dt><dd class="${r.val ? (r.or ? "or" : "") : "empty"}">${r.val ? esc(r.val) : "Seçilmedi"}</dd></div>`).join("");

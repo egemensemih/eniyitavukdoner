@@ -259,3 +259,31 @@ html:has(body.ckm),body.ckm{max-width:100%;overflow-x:clip}
 .ck-bekle:not(.acik) li:nth-child(n+4){display:none}
 .ck-bekle-ac{margin-top:6px;font-size:13.5px}
 @media(max-width:520px){.ck-tablo th:nth-child(4),.ck-tablo td:nth-child(4){display:none}}
+
+/* v7 — karakter seçimi (puan yerine) */
+.ck-kar-mini{flex:none;width:46px;height:46px;transform:rotate(-6deg);filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.ck-karakter{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.ck-karakter h4{font-size:15px;margin:0}
+.ck-karakter .krz-l{margin-top:0}
+.ck-dz-k{width:22px;height:22px;flex:none}
+.ck-oz-k{display:flex;gap:2px}
+.ck-oz-k img{width:26px;height:26px}
+.ck-cb-k{width:22px;height:22px;vertical-align:middle;margin-right:6px}
+.kp{display:flex;flex-direction:column;gap:14px}
+.kp-ana{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 12px;border-radius:14px;background:var(--paper);border:2px dashed var(--line-2)}
+.kp-ana img{width:64px;height:64px;flex:none;transform:rotate(-6deg)}
+.kp-ana small{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kp-ana b{display:block;font-size:18px;font-style:italic;font-weight:800}
+.kp-ana .sm{display:block;margin-top:2px}
+.kp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.kp-k{position:relative;appearance:none;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px 12px;border-radius:16px;background:#fff;border:2px solid var(--line);color:var(--navy);text-align:center;transition:transform .12s,border-color .12s,box-shadow .12s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.kp-k img{width:82px;height:82px;pointer-events:none}
+.kp-k b{font-size:14px;font-weight:800;font-style:italic}
+.kp-k small{font-size:12px;color:var(--muted);line-height:1.3}
+.kp-k em{position:absolute;top:8px;right:8px;font-style:normal;font-size:11px;font-weight:800;background:#000;color:#fff;border-radius:999px;padding:2px 7px}
+.kp-k em:empty{display:none}
+.kp-k[aria-pressed=true]{border-color:#000;box-shadow:4px 4px 0 var(--kr);background:color-mix(in srgb,var(--kr) 18%,#fff)}
+.kp-k.ana{box-shadow:5px 5px 0 #000}
+.kp-k.ana em{background:var(--orange)}
+.kp-alt{position:sticky;bottom:0;display:flex;align-items:center;gap:10px;padding:12px 0 4px;background:#fff;border-top:1px solid var(--line)}
+.kp-alt [data-say]{margin-right:auto;font-weight:700;font-size:14px}

@@ -54,14 +54,14 @@
     return s.toLocaleLowerCase("tr-TR").replace(/(^|[\s\-\/(&.])(\p{L})/gu, (_, a, h) => a + h.toLocaleUpperCase("tr-TR"));
   }
   async function fetchMapData() {
-    const KEY = "etd-harita-v3", TTL = 120000;
+    const KEY = "etd-harita-v4", TTL = 120000;
     try { const c = JSON.parse(sessionStorage.getItem(KEY) || "null"); if (c && Date.now() - c.t < TTL && Array.isArray(c.i)) { ITEMS = c.i; return; } } catch (e) { /* gizli mod */ }
     const d = getDb(); if (!d) return;
     for (let deneme = 0; deneme < 2; deneme++) {
       try {
         const [hr, mek] = await Promise.all([
           d.rpc("harita_mekanlari"),
-          d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan,puan_notu,bolum_url,maps_url").eq("yayinda", true).order("puan", { ascending: false })
+          d.from("mekanlar").select("id,ad,il,ilce,ulke,adres,lat,lng,puan_notu,bolum_url,maps_url,karakterler").eq("yayinda", true).order("ad")
         ]);
         if (hr.error || mek.error) throw hr.error || mek.error;
         const den = (mek.data || []).map(m => ({ ...m, key: "d" + m.id, tur: "denedik", adet: 0 }));
@@ -74,22 +74,24 @@
     }
   }
   const SIRA = { denedik: 0, rota: 1, oneri: 2 };
+  const KAR = window.KARAKTER, KK = m => KAR && m.karakterler ? KAR.liste(m.karakterler)[0] || null : null;
+  const KAD = m => { const k = KK(m); return k ? KAR.bul(k).ad + " Dönerci" : "Denedik'te denendi"; };
   function visible() {
     const q = trNorm(F.q);
     return ITEMS.filter(m => (!F.tur || m.tur === F.tur) && (!F.il || yerAd(m) === F.il) && (!q || m.ara.includes(q)));
   }
   function sorted(list) {
     if (ME) return list.map(m => (m.km = km(ME, m), m)).sort((a, b) => a.km - b.km);
-    return list.sort((a, b) => SIRA[a.tur] - SIRA[b.tur] || (b.puan || 0) - (a.puan || 0) || b.adet - a.adet || a.ad.localeCompare(b.ad, TR));
+    return list.sort((a, b) => SIRA[a.tur] - SIRA[b.tur] || b.adet - a.adet || a.ad.localeCompare(b.ad, TR));
   }
   const FLAG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg>';
   function badge(m) {
-    if (m.tur === "denedik") return `<span class="dh-b b-den">${m.puan != null ? fmtP(m.puan) : "–"}</span>`;
+    if (m.tur === "denedik") return KK(m) ? `<span class="dh-b b-kar"><img src="${KAR.img(KK(m))}" alt="" width="40" height="40" loading="lazy"></span>` : `<span class="dh-b b-den">✓</span>`;
     if (m.tur === "rota") return `<span class="dh-b b-rota">${FLAG}</span>`;
     return `<span class="dh-b b-oneri">${m.adet > 1 ? m.adet : ""}</span>`;
   }
   function metaLine(m) {
-    if (m.tur === "denedik") return `<span class="t-den">Denedik puanı</span>${m.bolum_url ? " · bölümü yayında" : ""}`;
+    if (m.tur === "denedik") return `<span class="t-den">${esc(KAD(m))}</span>${m.bolum_url ? " · bölümü yayında" : ""}`;
     if (m.tur === "rota") return `<span class="t-rota">Rotamızda</span> · yakında deniyoruz`;
     return `<span class="t-oneri">Önerilen</span> · ${m.adet > 1 ? m.adet + " kişi önerdi" : "1 kişi önerdi"}`;
   }
@@ -106,7 +108,7 @@
   function renderList() {
     const list = sorted(visible()), box = $("#dh-items");
     $("#dh-count").textContent = list.length ? `${list.length.toLocaleString(TR)} mekân` : "Mekânlar";
-    $("#dh-sub").textContent = ME ? "Sana en yakından uzağa" : "Denedik puanına ve öneri sayısına göre";
+    $("#dh-sub").textContent = ME ? "Sana en yakından uzağa" : "Önce denediklerimiz, sonra en çok önerilenler";
     if (!ITEMS.length) {
       box.innerHTML = `<li class="dh-empty"><b>Harita yeni doluyor.</b><span>Sizden gelen öneriler incelendikçe, rotamız netleştikçe ve her bölümle birlikte mekânlar burada belirecek.</span><a class="btn btn-o btn-sm" href="#oner">İlk öneriyi sen yap</a></li>`;
       return;
@@ -120,7 +122,7 @@
   }
   function popHtml(m) {
     return `<div class="dh-pop"><span class="tag ${m.tur === "denedik" ? "blue" : m.tur === "rota" ? "yel" : ""}">${TUR_AD[m.tur]}</span>
-      ${m.tur === "denedik" && m.puan != null ? `<div class="place-score"><b>${fmtP(m.puan)}</b><small>/ 100</small></div>` : ""}
+      ${m.tur === "denedik" && KK(m) ? `<div class="place-k">${KAR.liste(m.karakterler).map(k => KAR.rozet(k)).join("")}</div>` : ""}
       <b class="nm">${esc(m.ad)}</b><span class="yer">${esc([m.ilce, yerAd(m)].filter(Boolean).join(", "))}</span>
       ${m.tur === "oneri" ? `<span class="yer">${m.adet > 1 ? m.adet + " kişi önerdi" : "1 kişi önerdi"}</span>` : ""}
       ${m.tur === "rota" ? `<span class="yer">Yakında gidip deniyoruz.</span>` : ""}
@@ -254,8 +256,8 @@
         MAP.on("click", id, e => { hover.remove(); const m = ITEMS.find(x => x.key === e.features[0].properties.key); if (m) { focusItem(m, false); const li = $(`.dh-item[data-key="${m.key}"]`); if (li) li.scrollIntoView({ block: "nearest", behavior: "smooth" }); } });
       });
       ITEMS.filter(m => m.tur === "denedik").forEach(m => {
-        const el = document.createElement("button"); el.type = "button"; el.className = "pin"; el.textContent = m.puan != null ? fmtP(m.puan) : "–";
-        el.setAttribute("aria-label", `${m.ad}, Denedik puanı ${m.puan != null ? fmtP(m.puan) : "yok"} / 100`);
+        const el = document.createElement("button"); el.type = "button"; if (KK(m)) { el.className = "pin pin-k"; el.innerHTML = `<img src="${KAR.img(KK(m))}" alt="" width="42" height="42">`; } else { el.className = "pin"; el.textContent = "✓"; }
+        el.setAttribute("aria-label", `${m.ad}, ${KAD(m)}`);
         el.addEventListener("click", ev => { ev.stopPropagation(); focusItem(m, false); });
         new maplibregl.Marker({ element: el }).setLngLat([m.lng, m.lat]).addTo(MAP);
         MARKERS.set(m.key, el);
