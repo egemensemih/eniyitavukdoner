@@ -49,5 +49,5 @@
   var ilk = new URLSearchParams(location.search).get("karakter");
   if (ilk && K.bul(ilk)) { SECILI = K.bul(ilk).k; ciz(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", yukle); else yukle();
-  if (ilk) addEventListener("load", function () { var s = document.getElementById("karakterler"); if (s) s.scrollIntoView(); });
+  if (ilk) addEventListener("load", function () { setTimeout(function () { var s = document.getElementById("karakterler"); if (s) s.scrollIntoView(); }, 400); });
 })();

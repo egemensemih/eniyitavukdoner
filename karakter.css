@@ -104,7 +104,8 @@
 
 /* test sonucu (fiş) sticker'ı */
 .tip-box{position:relative}
-.tip-stk{position:absolute;right:-14px;top:-30px;width:84px;--don:10deg;transition:opacity .2s}
+.tip-box:has(.tip-stk){padding-right:92px}
+.tip-stk{position:absolute;right:-10px;top:calc(50% - 42px);width:84px;--don:10deg;transition:opacity .2s}
 
 /* harita: karakter mini sticker */
 .pin.pin-k{width:42px;height:42px;min-width:0;border-radius:50%;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35));transition:transform .15s}
