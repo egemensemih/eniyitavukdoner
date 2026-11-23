@@ -1,0 +1,130 @@
+/* eniyitavukdoner.com — karakter (sticker) dili v1
+   Sticker'lardan gelen dil: kalın siyah kontur, nokta dokusu, eğik siyah bant, italik kalın yazı. */
+:root{--stk-ink:#000;--stk-krem:#FFF5DF;--nokta:radial-gradient(rgba(0,0,0,.13) 1.1px,transparent 1.3px) 0 0/9px 9px}
+
+/* sticker görseli */
+.stk{display:block;height:auto;max-width:100%;filter:drop-shadow(0 6px 10px rgba(0,0,0,.18));transform:rotate(var(--don,0deg))}
+
+/* eğik siyah bant başlık */
+.bant{display:inline-block;background:var(--stk-ink);color:#fff;font-style:italic;font-weight:800;letter-spacing:-.02em;padding:.08em .45em .12em;transform:rotate(-2deg);box-shadow:5px 5px 0 var(--orange)}
+.bant-h{align-items:center}
+.bant-h h2{margin:0}
+
+/* küçük karakter rozeti */
+.krz-l{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.krz{display:inline-flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:999px;background:var(--kr);color:var(--ky,#000);border:2px solid var(--stk-ink);font-size:13.5px;font-weight:800;font-style:italic;letter-spacing:-.01em;line-height:1;box-shadow:2px 2px 0 var(--stk-ink)}
+.krz img{width:26px;height:26px;border-radius:50%;flex:none}
+
+/* mekân sayfası: hero sticker */
+.mkk-hero{position:relative;overflow:hidden;background:var(--paper)}
+.mkk-hero::before{content:"";position:absolute;inset:0;background:var(--nokta);opacity:.55;pointer-events:none;-webkit-mask:linear-gradient(90deg,transparent 35%,#000 100%);mask:linear-gradient(90deg,transparent 35%,#000 100%)}
+.mkk-hero .wrap{position:relative}
+.mk-kapi{margin:0;justify-self:center;text-align:center;position:relative}
+.mk-kapi::before{content:"";position:absolute;inset:14% 8% 18%;border-radius:50%;background:var(--kr,var(--yellow));opacity:.35;filter:blur(30px);z-index:-1}
+.kapi-stk{width:min(260px,62vw);--don:-7deg;animation:kapi-gel .7s cubic-bezier(.2,.9,.3,1.3) both;transition:transform .25s}
+.kapi-stk:hover{transform:rotate(3deg) scale(1.03)}
+.mk-kapi figcaption{margin-top:6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+@keyframes kapi-gel{from{opacity:0;transform:rotate(-30deg) scale(.6)}to{opacity:1;transform:rotate(var(--don)) scale(1)}}
+
+/* "Biz ne dedik?" karakter kartları */
+.kk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;margin-bottom:64px}
+.kk{position:relative;display:flex;gap:16px;align-items:flex-start;padding:20px 20px 18px;border-radius:22px;background:#fff;border:2.5px solid var(--stk-ink);box-shadow:6px 6px 0 var(--kr);overflow:hidden}
+.kk::before{content:"";position:absolute;inset:0;background:var(--kr);opacity:.16;pointer-events:none}
+.kk::after{content:"";position:absolute;inset:0;background:var(--nokta);opacity:.35;pointer-events:none;-webkit-mask:linear-gradient(200deg,#000,transparent 55%);mask:linear-gradient(200deg,#000,transparent 55%)}
+.kk>*{position:relative;z-index:1}
+.kk.ana{grid-column:1/-1;padding:24px 26px;box-shadow:8px 8px 0 var(--stk-ink)}
+.kk.ana::before{opacity:.32}
+.kk-stk{width:96px;flex:none;--don:-6deg}
+.kk.ana .kk-stk{width:132px}
+.kk-t{min-width:0}
+.kk-etk{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:var(--stk-ink);color:#fff;padding:5px 9px;border-radius:6px;margin-bottom:8px}
+.kk h3{font-size:22px;font-weight:800;font-style:italic;letter-spacing:-.02em;line-height:1.15;color:var(--stk-ink)}
+.kk.ana h3{font-size:clamp(24px,3vw,32px)}
+.kk h3 span{font-style:normal;font-weight:600;font-size:.62em;opacity:.7;margin-left:2px}
+.kk p{margin-top:6px;color:#2b2b2b;font-size:15px;line-height:1.55;max-width:560px}
+.kk-l{display:inline-block;margin-top:10px;font-size:13.5px;font-weight:700;color:var(--stk-ink);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.kk-bos{margin-bottom:56px;padding:22px 24px;border-radius:20px;border:2.5px dashed var(--line-2);background:#fff;color:var(--muted)}
+.kk-bos b{color:var(--navy)}
+
+/* Google özet kutusu */
+.mk-google{margin-top:8px}
+.gk{display:grid;grid-template-columns:1fr auto;gap:14px 24px;align-items:center;background:#fff;border:2.5px solid var(--navy);border-radius:22px;padding:20px 24px;box-shadow:6px 6px 0 var(--navy)}
+.gk-l{display:flex;gap:16px;align-items:center}
+.gk-logo{width:48px;height:48px;border-radius:14px;background:#fff;border:1px solid var(--line-2);display:grid;place-items:center;flex:none}
+.gk-logo svg{width:26px;height:26px}
+.gk-l small{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.gk-p{display:flex;align-items:center;gap:10px}
+.gk-p b{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.gk-s{font-size:14px;color:var(--muted);font-weight:600}
+.gk-a{white-space:nowrap}
+.gk-n{grid-column:1/-1;font-size:12.5px;color:var(--faint);border-top:1px solid var(--line);padding-top:12px}
+.gy-st{position:relative;display:inline-block;width:92px;height:17px;background:linear-gradient(90deg,#E3E5EC 0 0);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 17'%3E%3Cg%3E%3Cpath id='s' d='M8.5 0l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L0 6.2l5.9-.9z'/%3E%3Cuse href='%23s' x='18.8'/%3E%3Cuse href='%23s' x='37.6'/%3E%3Cuse href='%23s' x='56.4'/%3E%3Cuse href='%23s' x='75.2'/%3E%3C/g%3E%3C/svg%3E") 0 0/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 17'%3E%3Cg%3E%3Cpath id='s' d='M8.5 0l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L0 6.2l5.9-.9z'/%3E%3Cuse href='%23s' x='18.8'/%3E%3Cuse href='%23s' x='37.6'/%3E%3Cuse href='%23s' x='56.4'/%3E%3Cuse href='%23s' x='75.2'/%3E%3C/g%3E%3C/svg%3E") 0 0/100% 100%}
+.gy-st i{position:absolute;inset:0 auto 0 0;background:#FBBC04}
+
+/* aynı karakterdeki diğer dükkânlar */
+.mk-benzer{margin-top:56px}
+.mb-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.mb{display:flex;align-items:center;gap:12px;padding:10px 14px 10px 10px;border-radius:16px;background:#fff;border:2px solid var(--stk-ink);box-shadow:4px 4px 0 var(--kr);color:var(--navy);text-decoration:none;transition:transform .12s,box-shadow .12s}
+.mb:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--kr)}
+.mb .stk{width:52px;filter:none}
+.mb b{display:block;font-size:15px;line-height:1.25}
+.mb small{color:var(--muted);font-size:13px}
+
+/* ana sayfa: hero sticker kümesi */
+.hero-stk{position:absolute;z-index:3;pointer-events:none}
+.hero-stk .stk{position:absolute;width:var(--w,110px);animation:stk-yap .6s cubic-bezier(.2,.9,.3,1.35) both;animation-delay:var(--gec,0s)}
+@keyframes stk-yap{from{opacity:0;transform:rotate(var(--don)) scale(1.5) translateY(-20px)}to{opacity:1;transform:rotate(var(--don)) scale(1)}}
+
+/* ana sayfa: Karakterler bölümü */
+.kar-sec{position:relative;background:var(--stk-krem);overflow:hidden}
+.kar-sec::before{content:"";position:absolute;inset:0;background:var(--nokta);opacity:.5;pointer-events:none}
+.kar-sec .wrap{position:relative}
+.kar-bas{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:end;margin-bottom:40px}
+.kar-bas h2{line-height:1.05}
+.kar-bas .lede{color:#3b3b3b}
+.kar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:22px 18px}
+.kar-k{appearance:none;border:0;background:none;padding:0;cursor:pointer;text-align:center;font:inherit;color:var(--stk-ink);display:flex;flex-direction:column;align-items:center;gap:10px}
+.kar-k .stk{width:100%;max-width:170px;--don:0deg;transition:transform .25s cubic-bezier(.2,.9,.3,1.4),filter .2s}
+.kar-k:nth-child(odd) .stk{--don:-5deg}.kar-k:nth-child(3n) .stk{--don:4deg}
+.kar-k:hover .stk,.kar-k:focus-visible .stk{transform:rotate(0deg) scale(1.07)}
+.kar-k small{font-size:13px;font-weight:600;color:#4a4a4a;line-height:1.35;max-width:180px}
+.kar-k em{font-style:normal;font-weight:800;font-size:12px;background:var(--stk-ink);color:#fff;padding:3px 9px;border-radius:999px}
+.kar-k[aria-pressed=true] .stk{transform:rotate(0) scale(1.1);filter:drop-shadow(0 0 0 #000) drop-shadow(0 10px 18px rgba(0,0,0,.3))}
+.kar-k[aria-pressed=true] em{background:var(--orange)}
+.kar-k:focus-visible{outline:none}
+.kar-k:focus-visible small{outline:3px solid var(--orange);outline-offset:3px;border-radius:4px}
+.kar-panel{margin-top:40px;background:#fff;border:2.5px solid var(--stk-ink);border-radius:24px;padding:22px;box-shadow:8px 8px 0 var(--kr,var(--orange))}
+.kar-panel-h{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.kar-panel-h .stk{width:70px}
+.kar-panel-h h3{font-size:clamp(22px,2.6vw,30px);font-weight:800;font-style:italic;letter-spacing:-.02em}
+.kar-panel-h p{color:var(--muted);font-size:14.5px}
+.kar-panel .mb-l{margin-top:4px}
+.kar-bos{color:var(--muted);font-size:15px;padding:6px 2px}
+.kar-bos a{color:var(--navy);font-weight:700}
+
+/* test sonucu (fiş) sticker'ı */
+.tip-box{position:relative}
+.tip-stk{position:absolute;right:-14px;top:-30px;width:84px;--don:10deg;transition:opacity .2s}
+
+/* harita: karakter mini sticker */
+.pin-k{width:38px;height:38px;border-radius:50%;padding:0;border:0;background:none;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+.pin-k img{width:100%;height:100%;display:block}
+.dh-b.b-kar{background:none;padding:0;width:40px;height:40px;box-shadow:none}
+.dh-b.b-kar img{width:40px;height:40px;display:block}
+.place-k{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+@media(max-width:900px){
+  .kar-grid{grid-template-columns:repeat(3,1fr)}
+  .kar-bas{grid-template-columns:1fr}
+  .gk{grid-template-columns:1fr}
+  .gk-a{justify-self:start}
+}
+@media(max-width:560px){
+  .kar-grid{grid-template-columns:repeat(2,1fr);gap:18px 12px}
+  .kk{flex-direction:column;gap:10px}
+  .kk-stk,.kk.ana .kk-stk{width:104px}
+  .kk-grid{grid-template-columns:1fr}
+  .gk{padding:18px}
+  .gk-a{white-space:normal;width:100%}
+}
+@media(prefers-reduced-motion:reduce){.kapi-stk,.hero-stk .stk{animation:none}}
