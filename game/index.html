@@ -698,7 +698,8 @@ html.full .caption { display: none; }
 .pz.uz .up { display: inline-flex; gap: 2px; } .pz.uz .up i { width: 5px; height: 5px; border-radius: 50%; background: #E2CF86; } .pz.uz .up i.on { background: #B88A00; }
 .pz.uz.top { background: linear-gradient(90deg, #FFE27A, #FFD500); color: #5C4300; }
 .game[data-mode="short"] .pzrow, .game[data-mode="tall"] .pzrow { margin-left: 30px; gap: 4px; }
-.game[data-mode="short"] .pz.uz .ut, .game[data-mode="tall"] .pz.uz .ut { max-width: 96px; }
+.game[data-mode="short"] .pz.uz .ut, .game[data-mode="tall"] .pz.uz .ut { max-width: 150px; }
+.game[data-mode="short"] .pz.uz .up, .game[data-mode="tall"] .pz.uz .up { display: none; }
 .act.sure { background: var(--bad) !important; color: #fff !important; } .act.sure .lb, .act.sure .sb { color: #fff !important; }
 .btn small { display: block; font: 500 11.5px/1.3 var(--f); opacity: .8; margin-top: 3px; }
 
@@ -786,7 +787,7 @@ html.full .caption { display: none; }
 .nextbar { position: absolute; z-index: 8; left: 50%; transform: translateX(-50%); bottom: calc(80px + var(--sb)); display: flex; align-items: center; gap: 10px; max-width: min(600px, calc(100% - 28px)); padding: 7px 12px 7px 7px; border: 0; border-radius: 999px; cursor: pointer; font: 500 13px/1.25 var(--f); color: #fff; background: rgba(13, 22, 58, .92); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1), 0 10px 30px rgba(3, 8, 28, .35); text-align: left; transition: transform .15s var(--ease); }
 .nextbar[hidden] { display: none; } .nextbar:active { transform: translateX(-50%) scale(.97); }
 .nextbar .nk { flex: none; padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; background: rgba(255, 255, 255, .14); }
-.nextbar .nt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nextbar .nt { min-width: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; text-align: left; }
 .nextbar .nc { flex: none; display: grid; opacity: .7; } .nextbar .nc svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .nextbar.bad .nk { background: #E5483C; } .nextbar.warn .nk { background: #E08A00; } .nextbar.gold .nk { background: #FFD500; color: #3D2E00; } .nextbar.ok .nk { background: #1F8F4E; }
 .game.paused.playing .nextbar, .game.gwait .nextbar { display: none; }
@@ -916,6 +917,22 @@ html.full .caption { display: none; }
 .abt.shake { animation: shake .32s; }
 @media (hover: hover) { .abt:not(.pri):not([aria-disabled="true"]):hover { background: var(--fill-2); color: var(--ink); } .abt.pri:not([aria-disabled="true"]):hover { background: var(--orange-d); } }
 .aday .anot { margin: 0; font-size: 11.5px; line-height: 1.4; color: var(--ink-2); }
+/* dönerci karakterleri */
+img.kar { display: block; flex: none; border-radius: 50%; }
+.karlar { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; margin: 2px 0 4px; }
+.karlar .krt { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 5px; background: var(--fill); border-radius: 14px; padding: 10px 8px; min-width: 0; }
+.karlar .krt b { font-size: 13px; line-height: 1.2; }
+.karlar .krt span { font-size: 11.5px; color: var(--ink-2); line-height: 1.3; }
+.sheet .karlar { margin-bottom: 12px; }
+.cb .karsat { display: flex; align-items: center; gap: 6px; background: var(--fill); border-radius: 12px; padding: 7px 10px; text-decoration: none; color: var(--ink); cursor: pointer; }
+.cb .karsat.dz { cursor: default; }
+.cb .karsat img.kar + img.kar { margin-left: -12px; box-shadow: 0 0 0 2px var(--fill); }
+.cb .karsat span { flex: 1; min-width: 0; font-size: 12.5px; line-height: 1.35; color: var(--ink-2); margin-left: 4px; }
+.cb .karsat span b { color: var(--ink); }
+.cb .karsat i { font-style: normal; color: var(--cobalt); font-weight: 800; }
+.aday .ah { position: relative; padding-right: 64px; }
+.aday .akar { position: absolute; right: 0; top: 0; display: flex; }
+.aday .akar img.kar + img.kar { margin-left: -10px; box-shadow: 0 0 0 2px var(--fill); }
 </style>
 </head>
 <body>
@@ -1004,7 +1021,7 @@ html.full .caption { display: none; }
     </div>
   </div>
 </div>
-<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 15</span><span>Oyun kendiliğinden kaydedilir</span></div>
+<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 16</span><span>Oyun kendiliğinden kaydedilir</span></div>
 </div>
 
 <script>(function(){var e=window.self!==window.top,m=!!(window.matchMedia&&matchMedia('(pointer: coarse)').matches&&Math.min(screen.width,screen.height)<820);if(e)document.body.classList.add('embed');if(e||m)document.documentElement.classList.add('full');})();</script>
@@ -1146,6 +1163,8 @@ const C = {
     // dağıtım filosu: ayda taşıyabileceği porsiyon (ekran birimi); fazlasını şube başka yerden alır
     filo: [{ n: 1, cap: 60 }, { n: 3, cap: 160, cost: 1500000 }, { n: 6, cap: 320, cost: 3000000 }, { n: 10, cap: 550, cost: 6000000 }, { n: 16, cap: 900, cost: 10000000 }],
     kamyon: 25000,          // kamyon başına aylık (yakıt, şoför)
+    kurum: { base: 120000, sube: 48000 },   // franchise merkezi kadrosu (bölge müdürleri, muhasebe, hukuk): şube sayısıyla büyür
+    darbe: { first: [5, 8], every: [4, 7] },   // franchise döneminde dışarıdan gelen büyük ödemeler (vergi, zam, kur, fiyat savaşı)
     denetim: 40000,         // şubeye denetim göndermek
     egitim: 150000,         // destek: ustaları akademide eğitmek (şehir büyüklüğüyle çarpılır)
     yenileme: 400000,       // destek: dükkân yenilemesine ortak olmak
@@ -1251,7 +1270,7 @@ function newGame(name, seed, opts = {}) {
     shop: { ocak: [null, null, null, null], kasa: [null, null, null, null], cone: [0, 0, 0, 0], tray: 0, cust: [], nextArr: 0, seatTaken: {},
       paket: false, pmut: false, ptray: 0, pocak: { cone: 0, p: 0, st: 'idle' }, kurye: [null, null, null], orders: [], nextOrd: 0 },
     camps: {}, campLv: {}, boost: null, cool: {},
-    acc: { maas: 0, malzeme: 0, yem: 0, kira: 0, fatura: 0, arazi: 0, gubre: 0, katki: 0, vet: 0, muh: 0, ek: 0, sigorta: 0, bakim: 0, kampanya: 0, ceza: 0, faiz: 0, vergi: 0, hasar: 0, frans: 0 },
+    acc: { maas: 0, malzeme: 0, yem: 0, kira: 0, fatura: 0, arazi: 0, gubre: 0, katki: 0, vet: 0, muh: 0, ek: 0, sigorta: 0, bakim: 0, kampanya: 0, ceza: 0, faiz: 0, vergi: 0, hasar: 0, frans: 0, kurum: 0, darbe: 0 },
     fines: { next: C.month * 7, turned: [], lastQueue: -1e9, fired: [], lastSuit: -1e9 },
     m: newMonth(),
     hist: [],
@@ -1365,7 +1384,7 @@ const techOpen = k => monthIdx() >= (C.tech[k] || 0);
 const techMonth = k => (C.tech[k] || 0) + 1;
 // dükkân kapalı mı (denetim mührü, yangın, tadilat)
 const isClosed = () => !!(S.closed && S.t < S.closed.until);
-const CLOSED_TXT = { denetim: 'Denetim dükkânı mühürledi', zehir: 'Zehirlenme soruşturması için dükkân kapalı', yangin: 'Yangından sonra dükkân onarılıyor', tadilat: 'Dükkân yeni tasarım için tadilatta', tasinma: 'Dükkân yeni yerine taşınıyor' };
+const CLOSED_TXT = { denetim: 'Denetimdeki eksikler gideriliyor', zehir: 'Elektrik kesintisinden sonra temizlik yapılıyor', yangin: 'Yangından sonra dükkân onarılıyor', tadilat: 'Dükkân yeni tasarım için tadilatta', tasinma: 'Dükkân yeni yerine taşınıyor' };
 // makineler: adı, fiyatı, tamir bedeli (yaşlandıkça artar; bir yerden sonra yenisi daha mantıklı)
 const machineName = w => w.robot ? 'Döner robotu' : w.kiosk ? 'Self servis kiosk' : w.dbot ? 'Teslimat robotu' : 'Teslimat dronu';
 const machineCost = w => w.robot ? C.shop.robot.cost : w.kiosk ? C.shop.kiosk.cost : w.dbot ? C.shop.paket.robot.cost : C.shop.paket.drone.cost;
@@ -1466,7 +1485,7 @@ function monthCostRate() {
   for (const k of ['fabrika', 'kulucka']) if (tesisOn(k)) ar += px(C.buyume.tesisAy);
   let kp = 0; for (const k in C.hq.camps) if (S.camps[k]) kp += C.hq.camps[k].cost;
   const kapali = isClosed() ? 0.5 : 1;                      // kapalıyken fatura yarıya iner
-  return { maas, kira: kiraNow(), fatura: C.fixed.fatura * kapali, arazi: ar, vet: S.vet ? vetCost() : 0, muh: S.muh ? muhCost() : 0, ek: S.ek && S.ek.zincir ? px(C.ek.zincir.ay) : 0, sigorta: S.sigorta ? sigortaCost() : 0, bakim, kampanya: kp, faiz: Math.max(0, -S.cash) * C.bank.faiz, frans: frGider() };
+  return { maas, kira: kiraNow(), fatura: C.fixed.fatura * kapali, arazi: ar, vet: S.vet ? vetCost() : 0, muh: S.muh ? muhCost() : 0, ek: S.ek && S.ek.zincir ? px(C.ek.zincir.ay) : 0, sigorta: S.sigorta ? sigortaCost() : 0, bakim, kampanya: kp, faiz: Math.max(0, -S.cash) * C.bank.faiz, frans: frGider(), kurum: frKurum() };
 }
 const accTotal = () => sum(Object.values(S.acc));
 function assetValue() {
@@ -1936,7 +1955,7 @@ function incStep() {
 }
 
 /* ---------- denetim: gıda, belediye, ticaret ----------
-   Her seferinde altı kural bakılır. Basit eksikler bile ciddi ceza getirir; üç ve fazlası dükkânı birkaç gün mühürletir.
+   Her seferinde altı kural bakılır. Basit eksikler bile ciddi ceza getirir; üç ve fazlasında eksikler giderilene kadar dükkân birkaç gün kapanır.
    Gıda mühendisi varsa eksik neredeyse hiç çıkmaz. */
 const RULES = [
   { t: 'Bone ve eldiven', bad: 'Bir çalışan bonesiz çalışıyordu.', f: 60000 },
@@ -1974,7 +1993,7 @@ const KRIZ_K = ['kusgribi', 'ekonomi', 'zehir', 'yangin', 'ev'];
 function bigKriz(force) {
   const opts = [];
   if (S.chickens.length >= 6) opts.push(['kusgribi', 1]);
-  opts.push(['ekonomi', 1], ['zehir', (S.muh ? 0.6 : S.ek && S.ek.zincir ? 1.0 : 1.4) * (ucuzOn() ? 2.5 : 1)], ['yangin', 0.8]);
+  opts.push(['ekonomi', 1], ['zehir', S.muh ? 0.6 : S.ek && S.ek.zincir ? 1.0 : 1.4], ['yangin', 0.8]);
   if (monthIdx() >= 24) opts.push(['ev', 0.8]);
   const list = opts.filter(o => o[0] !== S.lastKriz), tot = sum(list, o => o[1]);
   let r = rand() * tot, k = list[0][0];
@@ -1995,8 +2014,9 @@ function bigKriz(force) {
     S.kriz = { until: S.t + C.month * 6, mult: 0.8 };
   } else if (k === 'zehir') {
     e.muh = S.muh;
-    if (S.muh) { e.cost = px(40000); addHasar(e.cost); puanEv('zehir', -0.15, 2); }
-    else { e.cost = px(600000) + Math.round(rev3 * 0.25 / 1000) * 1000; addFine('zehir', e.cost, 'Gıda zehirlenmesi şikâyeti: idari para cezası.', true); closeShop(10, 'zehir'); puanEv('zehir', -1.0, 8); e.gun = 10; }
+    // uzun elektrik kesintisi soğuk odayı ısıttı: mühendis kayıtlardan riskli partiyi ayırır; yoksa bütün şişler imha edilir, dükkân temizlenir
+    if (S.muh) { e.cost = px(40000) + Math.round(fridgePors() * 0.15 * KQ * unitCost() / 1000) * 1000; addHasar(e.cost); }
+    else { e.cost = px(450000) + Math.round(rev3 * 0.2 / 1000) * 1000; addHasar(e.cost); S.fridge = []; closeShop(6, 'zehir'); puanEv('zehir', -0.4, 3); e.gun = 6; }
   } else if (k === 'yangin') {
     e.dmg = px(1300000) + Math.round(assetValue() * 0.15 / 1000) * 1000; e.cover = S.sigorta ? Math.round(e.dmg * 0.85 / 1000) * 1000 : 0; e.cost = e.dmg - e.cover; e.gun = 10;
     addHasar(e.cost); closeShop(10, 'yangin');
@@ -2499,7 +2519,7 @@ function issues() {
     cati: () => 'Fırtına bir kümesin çatısını uçurdu; yeni piliç gelmiyor. Çatıyı onar.',
     tilki: () => 'Tilki bir kümese girdi, civcivleri kaptı; çit kırık ve üretim yarıya düştü. Çiti güçlendir.',
   };
-  for (const t of S.tiles) if (t.type === 'tarla' && !t.sorun && !t.dinlen && yorgun(t) < 0.85) push('farm', 'yorgun' + t.id, `Bir tarla yıllardır aralıksız ekiliyor; verimi %${Math.round(yorgun(t) * 100)}’e düştü. Üç ay dinlendir.`, 1, { sec: 'farm', hit: 'tile:' + t.id, act: 'Toprağı dinlendir' });
+  for (const t of S.tiles) if (t.type === 'tarla' && !t.sorun && !t.dinlen && yorgun(t) < 0.85) push('farm', 'yorgun' + t.id, `Bir tarla yıllardır aralıksız ekiliyor; verimi ${sayiEk('%' + Math.round(yorgun(t) * 100), 'e')} düştü. Üç ay dinlendir.`, 1, { sec: 'farm', hit: 'tile:' + t.id, act: 'Toprağı dinlendir' });
   for (const t of S.tiles) if (t.sorun) push('farm', 'sorun' + t.id, SORUN[t.sorun.k](t), 2, { sec: 'farm', hit: 'tile:' + t.id, act: FIX[t.sorun.k][0] });
   if (S.kurak && S.t < S.kurak && !S.sulama && tarla.length) push('farm', 'kurak', 'Kuraklık var: tarlalar yarı ürün veriyor. Damla sulama kurarsak bir daha etkilenmeyiz.', 1, { sec: 'farm', hit: 'tile:' + tarla[0].id, act: 'Damla sulama kur' });
   if (kumes.some(t => t.slots.some(p => p >= 1))) push('farm', 'pilicbekle', 'Piliçler hazır ama mutfaktaki besi alanı dolu. Besi alanını büyüt.', 1, { sec: 'kitchen', hit: 'besi', act: 'Besi alanını büyüt' });
@@ -2575,10 +2595,10 @@ function issues() {
     const ilk = Object.keys(C.fr.infra).find(k => !F.infra[k]);
     if (ilk && !Object.keys(F.infra).length) push('hq', 'frbasla', 'Artık franchise verebiliriz! Önce dört altyapıyı kurmalıyız; franchise binasına bak.', 1, Object.assign({ act: `Kur: ${C.fr.infra[ilk].label}` }, fg));
     else if (frHazir() && F.adaylar.length) { const a = F.adaylar[0], n = F.adaylar.filter(x => x.city === a.city).length; push('hq', 'fraday', `${ekDen(frCity(a.city).ad)} ${n > 1 ? n + ' ' : ''}franchise başvurusu var; birini seçebilir ya da geri çevirebilirsin.`, 1, { sec: 'hq', hit: 'fr:sehir:' + a.city }); }
-    if (F.son && F.son.sube && F.son.talep > F.son.tas * 1.08) push('hq', 'frfilo', `Kamyonlar şubelerin istediği malın %${Math.round(F.son.tas / F.son.talep * 100)}’ini taşıyabildi; kalanını başka yerden aldılar. Filoyu büyütmeliyiz.`, 1, { sec: 'kitchen', hit: 'lojistik', act: 'Filoyu büyüt' });
+    if (F.son && F.son.sube && F.son.talep > F.son.tas * 1.08) push('hq', 'frfilo', `Kamyonlar şubelerin istediği malın ${sayiEk('%' + Math.round(F.son.tas / F.son.talep * 100), 'ini')} taşıyabildi; kalanını başka yerden aldılar. Filoyu büyütmeliyiz.`, 1, { sec: 'kitchen', hit: 'lojistik', act: 'Filoyu büyüt' });
     else if (F.son && F.son.sube && F.son.dis > F.son.kendi * 2 && F.son.dis > 20) push('hq', 'frsis', 'Şubelere giden şişin çoğunu anlaşmalı üreticiden alıyoruz. Çiftliği ve mutfağı büyütürsek o kâr bize kalır.', 1, { sec: 'kitchen', hit: 'kesim' });
     const kotu = frAcikSube().find(x => x.puan < 3.9);
-    if (kotu) push('hq', 'frkotu' + kotu.id, `${frCity(kotu.city).ad} şubesinin puanı ★${fmtPuan(kotu.puan)}’e düştü; markamızı aşağı çekiyor. Denetim gönder ya da destek teklif et.`, 1, { sec: 'hq', hit: 'fr:sube:' + kotu.id });
+    if (kotu) push('hq', 'frkotu' + kotu.id, `${frCity(kotu.city).ad} şubesinin puanı ${sayiEk('★' + fmtPuan(kotu.puan), 'e')} düştü; markamızı aşağı çekiyor. Denetim gönder ya da destek teklif et.`, 1, { sec: 'hq', hit: 'fr:sube:' + kotu.id });
   }
   const last = S.hist[S.hist.length - 1];
   if (last && last.profit < 0 && S.cash < 300000) push('hq', 'zarar', `Geçen ay ${fmtTL(-last.profit)} zarar ettik. Boşta duran çalışan ya da gereksiz gider var mı?`, 1, fin);
@@ -2593,14 +2613,14 @@ function logEv(k, text, tone) { if (!S.log) S.log = []; S.log.push({ t: S.t, m: 
 const KRIZ_LOG = {
   kusgribi: e => `Kuş gribi: ${fmtK(e.lost)} tavuk kaybedildi${e.vet ? '; veteriner salgını yarıda durdurdu' : ''}.`,
   ekonomi: e => `Ekonomik kriz: fiyatlar bir gecede %${e.pct} arttı, sokak boşaldı.`,
-  zehir: e => e.muh ? 'Zehirlenme iddiası çıktı; gıda mühendisinin kayıtları bizi akladı.' : `Zehirlenme şikâyeti: ${fmtTL(e.cost)} ceza, dükkân ${e.gun} gün kapalı kaldı.`,
+  zehir: e => e.muh ? 'Elektrik kesintisinde soğuk oda ısındı; gıda mühendisimiz riskli partiyi hemen ayırdı.' : `Elektrik kesintisinde soğuk oda ısındı: şişleri imha edip dükkânı ${e.gun} gün temizledik (${fmtTL(e.cost)}).`,
   yangin: e => `Mutfakta yangın çıktı: ${fmtTL(e.dmg)} hasar${e.cover ? `, sigorta ${fmtTL(e.cover)} ödedi` : ', sigorta yoktu'}.`,
 };
 const CIFTLIK_LOG = { bocek: 'Bir tarlaya böcek düştü.', cati: 'Fırtına bir kümesin çatısını uçurdu.', tilki: 'Tilki bir kümese girdi.', kurak: 'Kuraklık başladı; tarlalar yarı ürün veriyor.', kuraksulama: 'Kuraklık geldi ama damla sulama tarlaları korudu.' };
 function storyLog(type, o) {
   if (!S || !S.log) return;
   const L = (text, tone) => logEv(type + (o.k ? ':' + o.k : ''), text, tone);
-  if (type === 'denetim') L(o.n ? `Denetim: ${o.n} eksik bulundu, ${fmtTL(o.total)} ceza${o.kapat ? '; dükkân mühürlendi' : ''}.` : 'Denetimden tam not aldık: altı kuralın altısı da eksiksiz.', o.n ? 'bad' : 'good');
+  if (type === 'denetim') L(o.n ? `Denetim: ${o.n} eksik bulundu, ${fmtTL(o.total)} ceza${o.kapat ? '; eksikler giderilene kadar dükkân kapalı' : ''}.` : 'Denetimden tam not aldık: altı kuralın altısı da eksiksiz.', o.n ? 'bad' : 'good');
   else if (type === 'kriz') { S.krizAt = S.t; if (KRIZ_LOG[o.k]) L(KRIZ_LOG[o.k](o), 'bad'); }
   else if (type === 'marine') L(`Yeni tarif: ${C.kitchen.marine[o.k].label}.`, 'good');
   else if (type === 'staff' && o.k === 'vet') L(o.on ? 'Kadrolu veteriner işe başladı; tavuklar artık her gün muayene ediliyor.' : 'Veterinerle yollar ayrıldı.', o.on ? 'good' : 'bad');
@@ -2683,6 +2703,47 @@ const ROZET = [
 ];
 
 /* ---------- Denedik ekibi: habersiz gelir, beş başlıkta 10 üzerinden puan verir ---------- */
+/* ---------- dönerci karakterleri: dükkânın nasıl bir dönerci olduğu (eniyitavukdoner.com testindeki rozetler) ---------- */
+const KAR = {
+  klasik: { ad: 'Klasik', ne: 'Bildiğimiz lezzet, hiç şaşmaz' },
+  aci: { ad: 'Acı Sever', ne: 'Acısı olmazsa olmaz' },
+  sos: { ad: 'Sos Canavarı', ne: 'Sosuyla meşhur, sulu sulu' },
+  sossuz: { ad: 'Sossuz', ne: 'Eti öyle iyi ki sosa gerek yok' },
+  kitir: { ad: 'Kıtır Kıtır', ne: 'İnce kesim, kenarı çıtır' },
+  bol: { ad: 'Bol Malzemeli', ne: 'Yanında her şey var' },
+  minimal: { ad: 'Minimalist', ne: 'Az ama öz bir menü' },
+  yeni: { ad: 'Yeni Nesil', ne: 'Teknolojiyle iç içe' },
+  ates: { ad: 'Ateşten Korkmayan', ne: 'Büyük işlere cesurca girer' },
+  almanci: { ad: 'Almancı', ne: 'Avrupa usulü, bol salatalı' },
+};
+// dükkânın şu anki karakteri: kararlarından en belirgin iki ya da üçü; her birinin nedeni de yazılır
+function karakterler() {
+  const yan = S.yan || {}, ms = ['ocak', 'kasa', 'kurye'].reduce((n, k) => n + S.shop[k].filter(w => w && (w.robot || w.kiosk || w.dbot || w.drone)).length, 0);
+  const fr = S.fr ? frAcikSube().length : 0, oran = S.price / priceRef();
+  const P = [
+    ['aci', S.marine === 'aci' ? 10 : 0, 'acılı Antep marinesi'],
+    ['sossuz', S.marine === 'sir' ? 9 : 0, 'ustanın sırrı marinesi'],
+    ['sos', S.marine === 'yogurt' ? 9 : S.ek && S.ek.marine ? 4.5 : 0, S.marine === 'yogurt' ? 'yoğurtlu marine' : 'katkısız doğal marine'],
+    ['kitir', S.kesimHassas ? 8 : 0, 'hassas kesim'],
+    ['bol', (yan.patates ? 4 : 0) + (yan.tatli ? 5 : 0), 'menüdeki yan ürünler'],
+    ['yeni', ms * 2.5 + (S.camps.sosyal ? 2.5 : 0) + (S.camps.influencer ? 2.5 : 0), 'robotlar, ekranlar ve sosyal medya'],
+    ['ates', (fr >= 3 ? 5 + Math.min(4, fr / 5) : 0) + (S.kesim2 ? 1.5 : 0), 'şehir şehir büyüme'],
+    ['almanci', oran >= 1.35 ? 7 : 0, 'Avrupa’daki gibi fiyat'],
+    ['minimal', !yan.patates && !yan.tatli && monthIdx() >= 12 ? 5 : 0, 'yan ürünsüz sade menü'],
+    ['klasik', S.marine === 'klasik' ? 6 + (Math.abs(oran - 1) < 0.15 ? 2 : 0) : 1, 'klasik marine ve bildik fiyat'],
+  ].filter(x => x[1] >= 4).sort((a, b) => b[1] - a[1]);
+  if (P.length < 2) for (const k of ['klasik', 'kitir']) if (P.length < 2 && !P.some(x => x[0] === k)) P.push([k, 1, k === 'klasik' ? 'bildik tarif' : 'ocaktan yeni inmiş döner']);
+  return P.slice(0, 3).map(([k, , neden]) => ({ k, neden }));
+}
+// franchise şubesinin karakteri: şube sahibinin türü ve şehrin damak tadı
+const FR_KAR = { deneyimli: ['kitir', 'ates'], hevesli: ['yeni', 'sos'], yatirimci: ['bol', 'yeni'], usta: ['klasik', 'kitir'], aile: ['klasik', 'bol'] };
+const ACI_SEHIR = ['gaziantep', 'sanliurfa', 'adana', 'hatay', 'kahramanmaras', 'mersin', 'diyarbakir', 'malatya'], TURIST = ['antalya', 'mugla', 'izmir', 'aydin'];
+function frKarakter(a) {
+  const k = (FR_KAR[a.tip] || ['klasik', 'bol']).slice();
+  const yerel = ACI_SEHIR.includes(a.city) ? 'aci' : TURIST.includes(a.city) ? 'almanci' : null;
+  if (yerel && !k.includes(yerel)) k[1] = yerel;
+  return k;
+}
 function denedikPuan() {
   const r1 = v => Math.round(clamp(v, 0, 10) * 10) / 10;
   const son = S.denetim, temiz = son && !son.n && S.t - son.t < C.month * 12;
@@ -2697,11 +2758,12 @@ function denedikPuan() {
 }
 function denedikZiyaret() {
   const d = denedikPuan(), D = S.denedik, first = !D.n, rekor = d.puan > D.best;
+  const kar = karakterler(); D.kar = kar.map(x => x.k);
   D.n++; D.last = { t: S.t, m: monthIdx(), puan: d.puan, parts: d.parts }; if (rekor) D.best = d.puan;
   puanEv('denedik', clamp((d.puan - 6.5) * 0.08, -0.2, 0.25), 6);
   if (d.puan >= 8) setBuzz('denedik', d.puan >= 9 ? 1.3 : 1.2, 2);
   logEv('denedik', `Denedik ekibi geldi ve ${fmtPuan(d.puan)} puan verdi${rekor && !first ? ' (yeni rekor)' : ''}.`, d.puan >= 7.5 ? 'gold' : d.puan >= 6 ? '' : 'bad');
-  ev('denedik', { puan: d.puan, parts: d.parts, rekor, first });
+  ev('denedik', { puan: d.puan, parts: d.parts, rekor, first, kar });
 }
 
 /* ---------- fırsatlar ve teklifler ---------- */
@@ -2812,6 +2874,18 @@ const frHazir = () => !!(S.fr && Object.keys(C.fr.infra).every(k => S.fr.infra[k
 const frInfra = k => !!(S.fr && S.fr.infra[k] && S.fr.infra[k].ok);
 const frCity = k => FR_CITIES.find(c => c.k === k);
 // ayrılma eki: İzmir’den, Ankara’dan, Gaziantep’ten
+// sayıya ek, okunuşuna göre: %45’i, %22’si, %30’u, ★3,8’e, ★3,6’ya, %84’ünü
+function sayiEk(v, tur) {
+  const s = String(v), m = s.match(/(\d[\d.]*)(?:,(\d+))?\D*$/);
+  const BIR = ['sıfır', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'], ON = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
+  const son = d => { const n = parseInt(d.replace(/\./g, ''), 10) || 0; return !n ? 'sıfır' : n % 10 ? BIR[n % 10] : n % 100 ? ON[Math.floor(n / 10) % 10] : n % 1000 ? 'yüz' : 'bin'; };
+  const w = m ? (m[2] ? son(m[2]) : son(m[1])) : 'bir', sv = (w.match(/[aıoueiöü]/g) || ['e']).pop(), unlu = /[aıoueiöü]$/.test(w);
+  const v4 = { a: 'ı', ı: 'ı', o: 'u', u: 'u', e: 'i', i: 'i', ö: 'ü', ü: 'ü' }[sv], v2 = 'aıou'.includes(sv) ? 'a' : 'e';
+  const ek = tur === 'e' ? (unlu ? 'y' : '') + v2 : tur === 'ini' ? (unlu ? 's' : '') + v4 + 'n' + v4 : (unlu ? 's' : '') + v4;
+  return s + '’' + ek;
+}
+// bulunma eki: Antalya’da, İzmir’de, Van’da, Muş’ta
+function ekDe(ad) { const l = ad.toLocaleLowerCase('tr-TR'), v = (l.match(/[aıoueiöü]/g) || ['a']).pop(), on = 'eiöü'.includes(v), sert = 'fstkçşhp'.includes(l.slice(-1)); return ad + '’' + (sert ? 't' : 'd') + (on ? 'e' : 'a'); }
 function ekDen(ad) { const l = ad.toLocaleLowerCase('tr-TR'), v = (l.match(/[aıoueiöü]/g) || ['a']).pop(), on = 'eiöü'.includes(v), sert = 'fstkçşhp'.includes(l.slice(-1)); return ad + '’' + (sert ? 't' : 'd') + (on ? 'en' : 'an'); }
 const frPuan = sb => Math.round((3 + 2 * clamp(sb.kalite, 0, 1)) * 10) / 10;
 const frSehir = () => new Set(frAcikSube().map(x => x.city)).size;
@@ -2820,10 +2894,14 @@ const frBosYer = c => c.n - frSubeSay(c.k);
 const frFilo = () => C.fr.filo[Math.min(S.fr.filo || 0, C.fr.filo.length - 1)];
 const frIndirim = sb => (sb.indirim && S.t < (sb.indirimT || 0) ? sb.indirim : 0);
 function frDestekCost(sb, k) { const b = frCity(sb.city).b; return Math.round(px((k === 'egitim' ? C.fr.egitim : C.fr.yenileme) * b) / 10000) * 10000; }
+const frKurum = () => { const n = S.fr ? frAcikSube().length : 0; return n ? px(C.fr.kurum.base) + px(C.fr.kurum.sube) * n : 0; };
+// pazar: fiyat savaşı ya da şubelere yansıyan zam bütün şubelerin satışını düşürür
+const frPazar = () => { const F = S.fr; return (F.savas && S.t < F.savas ? 0.82 : 1) * (F.zamT && S.t < F.zamT && !F.zamSabit ? 0.88 : 1); };
+function addDarbe(amount) { amount = Math.round(amount / 1000) * 1000; S.acc.darbe = (S.acc.darbe || 0) + amount; S.totals.kriz += amount; return amount; }
 function frGider() {
   if (!S.fr) return 0; let g = 0;
   for (const k in C.fr.infra) { const I = C.fr.infra[k]; if (I.gider && frInfra(k)) g += px(I.gider); }
-  if (frInfra('mutfak')) g += frFilo().n * px(C.fr.kamyon);
+  if (frInfra('mutfak')) g += frFilo().n * px(C.fr.kamyon) * (S.fr.yakit && S.t < S.fr.yakit ? 2 : 1);
   return g;
 }
 // şubenin aylık satışı (ekran birimi; ×100 porsiyon)
@@ -2837,7 +2915,7 @@ function frBeklenen(a) {
 }
 function frSatis(sb) {
   const c = frCity(sb.city), rk = sb.rakip && S.t < sb.rakip ? 0.75 : 1;
-  return C.fr.birim * c.b * sb.boyut * (0.55 + 0.45 * clamp(sb.kalite, 0, 1)) * rk * sezonMult();
+  return C.fr.birim * c.b * sb.boyut * (0.55 + 0.45 * clamp(sb.kalite, 0, 1)) * rk * sezonMult() * frPazar();
 }
 const frGirisUcret = (city, tip) => Math.round(px(C.fr.giris * frCity(city).b * FR_TIP[tip].ucret) / 10000) * 10000;
 const frTalep = () => sum(frAcikSube(), frSatis);
@@ -2894,10 +2972,11 @@ function frMonth(mi, rec) {
     const oran = talep > 0 ? tas / talep : 0, kendi = Math.min(F.m.kendi, tas), dis = Math.max(0, tas - kendi), kOran = tas > 0 ? kendi / tas : 0;
     F.need = 0;
     const birim = KQ * S.price;
-    soz = dis * birim * C.fr.sozlesmeli; malz = tas * birim * C.fr.malzeme;
+    const kurM = F.kur && S.t < F.kur ? 0.5 : 1;
+    soz = dis * birim * C.fr.sozlesmeli; malz = tas * birim * C.fr.malzeme * kurM;
     for (const sb of acik) {
       const sat = frSatis(sb), gid = sat * oran, ind = frIndirim(sb);
-      const g = gid * birim * (kOran * C.fr.toptan + (1 - kOran) * C.fr.sozlesmeli + C.fr.malzeme);
+      const g = gid * birim * (kOran * C.fr.toptan + (1 - kOran) * C.fr.sozlesmeli + C.fr.malzeme * kurM);
       iade += g * ind; sb.gelir = Math.round(g * (1 - ind)); sb.satis = sat; sb.oran = oran; sb.kOran = kOran; sb.ay = (sb.ay || 0) + 1;
       if (sb.indirimT && S.t >= sb.indirimT) { sb.indirim = 0; sb.indirimT = 0; }
       // gizli kaçak iş: dürüst olmayan şube zamanla kestirme yola sapar
@@ -2913,21 +2992,29 @@ function frMonth(mi, rec) {
     if (rec) { rec.rev += gel; rec.profit += gel; rec.fr = (rec.fr || 0) + Math.round(gel); }
     const ws = sum(acik, frSatis) || 1;
     F.marka = Math.round(sum(acik, x => x.puan * frSatis(x)) / ws * 100) / 100;
-    F.son = { m: mi, talep: Math.round(talep), tas: Math.round(tas), kendi: Math.round(kendi), dis: Math.round(dis), toptan: Math.round(F.m.toptan), soz: Math.round(soz), malz: Math.round(malz), iade: Math.round(iade), gel: Math.round(F.m.toptan + gel), sube: acik.length };
+    // zammı şubelere yansıtmadık: farkı biz karşılıyoruz; kendi çiftliğimizden giden şiş arttıkça yük azalır
+    const zam = F.zamSabit && F.zamT && S.t < F.zamT ? addDarbe((F.m.toptan + gel) * 0.2 * (1 - 0.5 * kOran)) : 0;
+    F.son = { m: mi, talep: Math.round(talep), tas: Math.round(tas), kendi: Math.round(kendi), dis: Math.round(dis), toptan: Math.round(F.m.toptan), soz: Math.round(soz), malz: Math.round(malz), iade: Math.round(iade), gel: Math.round(F.m.toptan + gel), sube: acik.length, zam };
   } else F.son = null;
   F.m = { toptan: 0, kendi: 0 };
   F.adaylar = F.adaylar.filter(a => S.t < a.until && frBosYer(frCity(a.city)) > 0);
   if (frHazir() && new Set(F.adaylar.map(a => a.city)).size < 3 && S.t >= F.nextAday) { if (frYeniAday()) F.nextAday = S.t + C.month * between([1, 2]); }
-  if (acik.length && !S.decision && !S.over) frOlay();
+  // büyük ödemeler: üç şubeden sonra arada bir dışarıdan büyük bir darbe gelir
+  let darbe = false;
+  if (acik.length >= 3 && !S.decision && !S.over) {
+    if (!F.nextDarbe) F.nextDarbe = S.t + C.month * between(C.fr.darbe.first);
+    else if (S.t >= F.nextDarbe) { F.nextDarbe = S.t + C.month * between(C.fr.darbe.every); frDarbe(); darbe = true; }
+  }
+  if (acik.length && !darbe && !S.decision && !S.over) frOlay();
 }
 // ayda en çok bir şube olayı
 function frOlay() {
   const F = S.fr, acik = frAcikSube(), until = S.t + C.inc.wait;
-  // denetim ekibi gizli kaçak işi çoğu zaman kendiliğinden yakalar; ekip yoksa er geç gazeteye çıkar
+  // denetim ekibi kestirme yola sapan şubeyi çoğu zaman kendiliğinden yakalar
   const gizli = acik.filter(x => x.gizli);
   for (const sb of gizli) {
     if (frInfra('denetim') && rand() < 0.35) { frYakala(sb); return; }
-    if (rand() < 0.15) { sb.gizli = false; sb.kalite = Math.max(0.2, sb.kalite - 0.05); sb.puan = frPuan(sb); F.marka = Math.max(1, Math.round((F.marka - 0.15) * 100) / 100); puanEv('frhaber', -0.12, 3); logEv('fr', `${frCity(sb.city).ad} şubesinde bayat tavuk kullanıldığı gazetelere çıktı; markamız yara aldı.`, 'bad'); ev('firsat', { k: 'frhaber', city: frCity(sb.city).ad, denetim: frInfra('denetim') }); return; }
+    // yakalanmadıkça şubenin kalitesi düşer (frMonth); puanı düşen şube için denetim önerilir
   }
   if (rand() > 0.45) return;
   const bosSehir = () => FR_CITIES.filter(c => frBosYer(c) > 0 && !F.adaylar.some(a => a.city === c.k));
@@ -2955,6 +3042,30 @@ function frOlay() {
     setBuzz('frbasin', 1.12, 2); logEv('fr', 'Ulusal bir gazete markamızı yazdı: “Şehir şehir aynı lezzet.”', 'gold'); ev('firsat', { k: 'frbasin' });
   }
 }
+// büyük darbe: vergi incelemesi, zam, kur, akaryakıt, yönetmelik, taklitçi, fiyat savaşı
+const DARBE_LOG = {
+  vergi: e => `Vergi incelemesi: kayıtlarımız düzgün çıktı; yorum farkı için ${fmtTL(e.cost)} ödedik.`,
+  yonetmelik: e => `Yeni gıda güvenliği kuralı: ${e.n} şubeye sıcaklık takip sistemi kurduk (${fmtTL(e.cost)}).`,
+  yakit: e => 'Akaryakıta büyük zam: kamyon giderleri altı ay iki katı.',
+  taklit: e => `${ekDe(e.city)} adımızı taklit eden dükkânla davayı kazandık; masraf ${fmtTL(e.cost)}.`,
+  kur: e => 'Kur yükseldi: altı ay lavaş, sos ve içecekten kazancımız yarıda.',
+};
+function frDarbe(force) {
+  const F = S.fr, acik = frAcikSube(), n = acik.length, h = S.hist.slice(-3), ort = h.length ? sum(h, r => r.fr || 0) / h.length : 0;
+  const yuv = x => Math.round(x / 10000) * 10000, until = S.t + C.inc.wait;
+  const opts = [['vergi', 1], ['zam', 1], ['savas', 0.9], ['yonetmelik', 0.8], ['yakit', frFilo().n >= 3 ? 0.8 : 0], ['taklit', 0.7], ['kur', 0.8]].filter(o => o[1] > 0 && o[0] !== F.sonDarbe);
+  let r = rand() * sum(opts, o => o[1]), oi = 0; while (r > opts[oi][1] && oi < opts.length - 1) r -= opts[oi++][1];
+  const k = force || opts[oi][0]; F.sonDarbe = k;
+  const e = { k };
+  if (k === 'zam') { S.decision = { k: 'frzam', pct: Math.round(between([15, 25])), aylik: yuv(ort * 0.2), until }; ev('decision', { k: 'frzam' }); return; }
+  if (k === 'savas') { S.decision = { k: 'frsavas', cost: yuv(ort * between([1.1, 1.5]) + px(500000)), until }; ev('decision', { k: 'frsavas' }); return; }
+  if (k === 'vergi') e.cost = addDarbe(yuv(ort * between([1.0, 1.6]) + px(200000)));
+  else if (k === 'yonetmelik') { e.n = n; e.cost = addDarbe(yuv(n * px(90000))); F.marka = Math.min(5, Math.round((F.marka + 0.04) * 100) / 100); }
+  else if (k === 'yakit') { F.yakit = S.t + C.month * 6; e.ek = frFilo().n * px(C.fr.kamyon); }
+  else if (k === 'taklit') { const c = pick(FR_CITIES.filter(x => !frSubeSay(x.k)).concat(FR_CITIES.slice(0, 1))); e.city = c.ad; e.cost = addDarbe(yuv(ort * 0.6 + px(400000))); }
+  else if (k === 'kur') F.kur = S.t + C.month * 6;
+  logEv('darbe', DARBE_LOG[k](e), 'bad'); ev('darbe', e);
+}
 // kaçak iş yakalandı: karar penceresi (başka karar bekliyorsa ceza kendiliğinden kesilir)
 function frYakala(sb) {
   const c = frCity(sb.city), ceza = Math.round(px(250000 * c.b) / 10000) * 10000;
@@ -2972,6 +3083,13 @@ function frDecide(D, yes) {
     if (sb) sb.ikinci = true;
     if (yes && frBosYer(frCity(D.city)) > 0) frSubeAc({ city: D.city, tip: sb ? sb.tip : 'deneyimli', ad: D.ad, kalite: sb ? sb.kalite - 0.05 : 0.6, durust: sb ? sb.durust : 0.85, boyut: sb ? sb.boyut : 1, ucret: D.ucret });
     else if (!yes) { if (sb) sb.kalite = Math.max(0.2, sb.kalite - 0.02); ev('firsat', { k: 'frikincired', city: D.cityAd }); }
+  } else if (D.k === 'frzam') {
+    F.zamT = S.t + C.month * 6; F.zamSabit = !!yes;
+    if (yes) { F.marka = Math.min(5, Math.round((F.marka + 0.03) * 100) / 100); logEv('darbe', `Tavuk ve yem zammını şubelere yansıtmadık; altı ay farkı biz karşılıyoruz.`, 'good'); ev('firsat', { k: 'frzamok' }); }
+    else { logEv('darbe', 'Zam şubelere yansıdı; altı ay satışları biraz düşük.', 'bad'); ev('firsat', { k: 'frzamno' }); }
+  } else if (D.k === 'frsavas') {
+    if (yes) { addDarbe(D.cost); F.marka = Math.min(5, Math.round((F.marka + 0.03) * 100) / 100); setBuzz('frsavas', 1.06, 2); logEv('darbe', `İndirim savaşına ülke çapında reklamla karşılık verdik (${fmtTL(D.cost)}); şubelerimiz yerini korudu.`, 'good'); ev('firsat', { k: 'frsavasok' }); }
+    else { F.savas = S.t + C.month * 5; logEv('darbe', 'Büyük zincirin indirim kampanyası şubelerin satışını beş ay düşürecek.', 'bad'); ev('firsat', { k: 'frsavasno' }); }
   } else if (D.k === 'frrakip') {
     if (!sb || sb.kapali) return;
     if (yes) { spend(D.cost); logEv('fr', `${D.city} şubesine yerel reklam desteği verdik; rakip tutunamadı.`, 'good'); ev('firsat', { k: 'frrakipok', city: D.city }); }
@@ -3023,7 +3141,7 @@ function loadGame() {
     // tereyağlı pilav menüden kalktı (12.2): eski kayıtta alındıysa parası geri verilir
     if (S.yan.pilav) { delete S.yan.pilav; S.cash += px(420000); }
     if (S.yanDev === undefined) S.yanDev = null;
-    if (!S.fr) S.fr = newFr(); if (S.m.fr == null) S.m.fr = 0; if (S.acc.frans == null) S.acc.frans = 0;
+    if (!S.fr) S.fr = newFr(); if (S.m.fr == null) S.m.fr = 0; if (S.acc.frans == null) S.acc.frans = 0; if (S.acc.kurum == null) S.acc.kurum = 0; if (S.acc.darbe == null) S.acc.darbe = 0;
     { const F = S.fr; if (F.filo == null) F.filo = 0; F.top = Object.assign({ giris: 0, toptan: 0, soz: 0, malz: 0, ceza: 0 }, F.top); F.m = Object.assign({ toptan: 0, kendi: 0 }, F.m); F.adaylar = F.adaylar || []; for (const sb of F.subeler) { if (sb.indirim && !sb.indirimT) sb.indirimT = S.t + C.month * 6; } }
     if (S.kesim2 == null) S.kesim2 = false; if (S.arazi2 == null) S.arazi2 = false; if (!S.tesis) S.tesis = {}; if (S.kredi === undefined) S.kredi = null;
     if (S.unvan == null) {
@@ -3047,9 +3165,27 @@ function loadGame() {
 function hasSave() { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); return !!(s && s.v === 4 && !s.over); } catch (e) { return false; } }
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } }
 
-if (typeof module !== 'undefined') module.exports = { frBeklenen, frOturur, saveGame, loadGame, ekDen, frTalep, frTasinan, frFilo, frSehir, frBosYer, frInfra, C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, priceSoft, priceMax, priceMult, frOpen, frHazir, frAcikSube, frSatis, FR_CITIES, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, UNVAN, ROZET, unvanReqs, yanPer, krediTutar, krediTaksit, krediOk, denedikPuan, firsat, fridgePors, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
+if (typeof module !== 'undefined') module.exports = { sayiEk, ekDe, karakterler, frKarakter, KAR, frDarbe, frKurum, frBeklenen, frOturur, saveGame, loadGame, ekDen, frTalep, frTasinan, frFilo, frSehir, frBosYer, frInfra, C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, priceSoft, priceMax, priceMult, frOpen, frHazir, frAcikSube, frSatis, FR_CITIES, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, UNVAN, ROZET, unvanReqs, yanPer, krediTutar, krediTaksit, krediOk, denedikPuan, firsat, fridgePors, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
 
 'use strict';
+/* ============================================================
+   DÖNERCİ KARAKTERLERİ — eniyitavukdoner.com testindeki ve videolardaki rozetler
+   (görseller karakterler.pdf'ten, 168 px, 48 renk)
+   ============================================================ */
+const KAR_IMG = {
+  ates: 'data:image/png;base64,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',
+  sossuz: 'data:image/png;base64,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',
+  sos: 'data:image/png;base64,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1bluiVm2PAGCLCPMN6taK7TueE9n17vnTA791HXL6gKr23QfGTnN8yamsWYmYvr0BVZxJXj3zcMLP30lmF+y/mak3ldcshbX1tU64apPJF11R5MvurbOkaoOmxwnwkRlZjrHg7zpT2j2Ov90NO6rGgEwpKEz3uXH564lAqCRO9ATVLbjcbQHkIctYN6+qlnF0/D6dieNlqxw5+LyzmkeFwb+2uWyoS6oePvq9h+jQJ0dpOALFq1RG+rcWKyd7MAvrNCQu90Eff8S+NNXN1TJZS2x2J1jAIpowAvCC4jSATscPbvYRcGkeeSxFNHglN5jWZGvbajCW9SsPE/mijhQBwpPferBBV+YAwpt3RzEh7/csUO2gRZ639GiRtX0h7PeA46HANSHhg6eTSEE8FBwfTw/Yqz/oaY/oo3SUiqjhQmY4JfIeh+SVSANyyjC1/AfaG8ilVFk+9s/39aYKnQkQLHyhh2bJgJoxhKJCBSVyZEA/cbGVFWrr5U7Vr7itvyR223w01NA1pHl+1p9Vc3TMoliaLejwykK5jfP+452dJ7359vRtRv8faIV3Q80+GtaJi4/EPzxHlE/1DKx3YSyuVowNjl8Yhr3400oW209V87knklonLP6E209ma16qhqlNnrSuZvS0q4o+WONUvutZ0crV92obj37/vi3NPPNus18s7+lmW8lA9PtkU/3htP/sy28/7l3b78DvQO9A70DvQO9A70D/f8A+h90QX6DqBiXBgAAAABJRU5ErkJggg==',
+  kitir: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKgAAACoCAMAAABDlVWGAAAAkFBMVEWhnZTb2NFbWVRbUxtPMwrQybYAAAAAAADSVwCLhnkAAADCrRqMOgCsRwCCfXHCu6qgjxYiDgAAAAD33CEAAAD+9d7Mthv+aQD+/v7iyh/bwx0XFg2qmBcAAAAsJwhPRgpzZw+HeBK5pRlYVlA5Mwfw6NI4NzQpKCUAAADnziCYiBQnGwSYlY0AAAB4dm+6tqwtBjnaAAAAMHRSTlP///////9xLf//sv////////8A//7//////////43/////////////zv////9O//+b7yxfAAAQLElEQVR42u1cCXfauhKWF5JQmqT3Ipx4wRtgNgP//9+9mZFsy7a8QEna9x5zTtWw2Z9n12gk9u9/CbEH0AfQB9AH0AfQB9AH0AfQ/zmgz6fT01LS0+n0/BcCPT392HEN7X48nf4aoE/LBsbjsYF2+fTHgT6XII9RnAQB/BHNBXlOkMSRX4J9/nNAS5RRkjoeYov5W8gD+MtxyyFIJNrfw3o70NMPuv06CRzEQ8ORGzm3y5deMRziNX35x+nbgT4JlAd3rpDDs8Viy2dzDbkHgfXpW4Eu8ZZ+7DXAxHy6WDBiqYaSOCYdWH4bUIK5DlzEWRtCbiyQpailnlsfZiH3PTcIb4XKbhP6Oi30UBlI8sjS9bz1qQU/CvGvdH2bAlwL9BkN3U61so05Q6DA0ubnbsS5yS3xgqDunr8WKEo9DA5+ogPqk+QLlioU+Hw7yXn5oxQV4McXAj2h1BJkHfcPLZwzbi0WOpaC2M3NwiTVLQwLr3T6KqDIThvsxkvJ6AEqmX0xxDyXQBkPqw/SI/cv8KbFHfke2h4qw1VGxa7TzkRYh8/fVwA1mXlKFPL5RgJdZMg9Dz/wgJ0ret/nFFdLE7Ou01R2jdjXXilMtpis6gqQcrPAWWmpB4Yj+LwRXFYIPxsvfnaFU4oVUCu4N0IND3MF/KLGUgidnGfCwBaTMltR3cR4R8XGq6diC3MuxDwx0QkUNr9ZKCwNhR6ei3dy5TkrdzBeUccB/YHeGvSKArrwixdx/3cLuergPVeLhcrSQ4pOqXzjDA+q5FR7MUAaM9JPjQIKZhSipRJGst2kUshLBp+mdcnDu+gYTIXHJhh9Pafa4+CAS93dC+iOt/TL5b4iZ4C65qrkiaV+DfmW61OVeTQOKbsJ53xu84mCgm15XfKgvm814Bt+7ACK8WB3D6CA09LkbJWZCKjmZNFHOqO/CikbYUdRlao7hYd3+FaP6N1kurcZt0oNF2quDNEIi2LDfilqJ3QwhDIDaZLfVFZBbyKoeZorwRANeyk26OfX846cbqoFuuW+DuhKP0EpaD3o+dlQ3Dy6+ks7Za5UJ4OBshq5aWXbLFtN30v8bh9QNxyKpr1An8EXOl3X9rUiLmCV5Asr4/68lxz46vPNQHcUN8t4pEQmZ9708A0nys3z29m0fOn3DX4MgvQQpM4M/nlO6uz3rhKjKJrubgW6pDzErVtrabJB03PWbLxws5MzYPXZhWvJ3+8R7d4RGcryNqCnTkMqEpNOoBu/CrEM5x3T6fl8NoFWQKZlWVmWgX4cGwZ1ugkoXN/rA1omJhoype1v8i1fYdzKdY7gWLu+Bze8BSgI/leX5geJhXw6ayJQ/mZQIEIN3kyBs6ADG9DZyxBOyl6X1wOVglf8MiY8WKALpX5lzai5YSv8YCXMCf7z/anwDJu2dyWcDf+/7rF81mPxqXIVN40tW9Y9fcucXlpxaXOWJUaTchD+BnzdVKG+wf4V1E1aMSrtsXzWHZKSmlCItqszm+jdJ0OYx58vJHPF7MVDTK16ZG3LvZhFP10JlNfmYgDU1zBRyZPRxdsvHx8vAuFKzVkMMC3GVbfbgRMzCH4d0GV9ioS1jqwH51nC/Ph4JaclJC+lvuLhFOsPpoIz7PAnQac9sU6GkiPeS2/sBmtRRtCGdzDq4+sHkU2FMkXyK24TK6eV2wV+pm69LF3GvU6Wsi6GYomWglwRj2KtO0KWgXbaH5KOxDhF8mxSTqKMkp+O43UA7XRRrIOhkVYstkb87yD2nwXOD6GKAH31Xv/atJhldctdznH4eKBPnOsKi55O/IiTtPPj9fiCtsQ2JGdwEblq55bU0QGc6KKeRgPtyZab4i9x/iT5v5LHZxsMnehSjWpyJ6LoEM5OLWX6oJRoZwzk6GriN3yB0y7U9KcICqsJTPfwD1ZKnvzoCo20Yz5S3eI0EugP7ndeCmqwivghNHJynv9UWvpCWH1Z8MnLqdSqjEdez+wJBl8702PavD7uEY2l+EiI7eSWXj5q9CoD/paHm1qCGg4KXujX8yigy4H0rrJ+VvqlF1vFehQpSBWNivx0YzUCScesZDkK6K4/X66sH25/lDD5UQH6UwDc8DIYmaUTPfeLS2bQuzFAn8mU9k7T4auDRVBMYUivR26/Kvx8kYJflejeeDW3vvhYD9Y4/H05JDrZM53kHbU6uK9fhYYAgU5I8C//cLuuolLw8LFVlEaVOI8B1w+crhDqdMmeXS95cso5cYyMvG5IheBh4gk+/yI8U7ZppDDx1bJnGm+fjMJpqJFTIcBnYXRaGCtyqKAg20YKC+Lvtf5Y4/OZJnw6Y3Cihupwou+n6FRkqYB7o8m3/B7rn2l8PmurqN8TNmCQOMFJ2h96ej2KEokM+ueODNbqvo9GSVlbRaN22FDKjgVOxPDSgVRGJ/yece7IYkn82hjlYQq1GwQ6oKJBGRXBizZZ+lLzUb7RW9rtE3/SVlLWTkjSfpysWpDhrzWJ25V1AU7eX4Lutf60raSsbUsjcaKWHmuKWflTxEkiZz04N7igpneF+3ZSytqZEy2ruLrIlNRwYix/rZyn4vZLnJtMD/E9N01Zx0jbwQ9iSjuDYhpbKiqBzaHOTyCb/1NEo5/15ElWcFizhmqwqZnJQsVxbR1mrv5mUcuaWMuW4nFyl+n9T60jPU6KZKT6xeW8Kuq7YSR6kHpzyUGgyWicWqeP7JQRcwPVE/tS8JR8q20d0uGMVGf2rJU6BeNxYuJRZ+kLxiXKqzdvmeSfxdQF53EUtBIo1vJOv7rikY+FWKjHnt+m0ynL85wxtqqzFGGWC7UTLDhxazopF3DmA9Olaji0/BPTulERMTxliPW17UypPRA3/dqijqWs8UzQFWkXxLzaQBEwHQLa7UahrSkFCoB+HYASoAiWFIpAKqaf502j6jBRl8rc8bJvOVLWyprHX2z+C4BhIH35SSlTUbZVqz01yztcA3R5R6DYkTUttEC7BmrWlvCjewL1592Rqa5gDiy2TjA3QZPJ9eXd2rtyjlNrLHAdT3sLfwTQejdT97D3Qgw876u398UoWonuwlFXHwV0vHz8xTXEdAv/nQuYdwTatW5bIcsbXRD+HYHya8KHWbfxRjIPFQg/r7vV2R2tfmTsgCGpr8dNm7lyzsHQwrzVBjHm6kNA5RxU6bN1Nd21NOwhxVFYaFicNzhs8xl2YWxLv2WIWbKrG+pXd4Yc/mmgQNYouW7UZaYQephUlhq0JluDuh2aiivrooOx3rnCKZfaaFIee6hZ11SmtrMK6nmwuFFV9E43pnm6py4mGhOo7qaCx+9qd0HxzDNbQp0Ml4tGpnmYOLtKxOiITDIVM8vZZLSn9wKFpaCQlXVgs3AGUI/crVaAy/t4KaQ8QUI329OQjMjw47GRKRE5HC6HJYVNhJV9oeQV28PG9uxi8oRSMEi9YiuKInsdHovtJFy5+vBUZDc+cxBNJbnS/4osleqwgfJ+AIggHYxjy0JEPu+nsLbatBueLo8FuoY6LVkRZqoBZKgxQAJlzLb+ECYtRX2BSVeA2Hchg76aWcmkCG35JkBdFF9VgBBzEdkuDYhAjyJVj64kH7tdihfMMIxt93cPiu0Nl3TEfJnihLv+DfYw4/MT62Sfn5/FbJTji+ob2y1UIsysemMmb+uOKpKp1pR0M6r848zECl2TABSUpBlAw4/9LTaYItDc5GdgbMZz/Ojyqfy415Y6CrlVG5pCW5bj9DhDDAVSE27HdE/xiUDPiAwLpcjX7JNoxS8w+jQanwpQvy930pfGKcigFOqb/ExiT12apmASJ8b6wCq2vdAqAz6ASWixEIXQVgJoJjXAEC8rnV27xW0xLp3GLDZYRcSw6mpHQC/EFVgRM2DX2oVuZvCMGIujYRA24nTJeoJ2xtHIfcFsTr+8KNKwZFCCwRqz2ABKWm70CFpAt0zKOiOpGhKo0ADJMyaBfpasF9CERLhPr2is+ZKkinvhqOUbyJ3dSlfq9vGJWKghEP84C7YAYIHhXAFlEuiZtE/8SFpWxf26cgdqjrccvcRY9vXVgRpS6wjUShhWqRVoM0ZWcp8VOii4L+xcPCKTD6qSp5bynscu2hJP93UHJZkkOixzIdfPCuiWNHZbPRSZHSu5L7jM6BFN+aAq0Q3JnMJxi7bU8yRDhOqgtoKh8vrCx2wllMqQVd9OOmsW3BeawRTuZ7V9xOV0KdB2lXQ0FrgU2jE5qHmnPC88jgBFvhHW54zCkI2K+4ZUlpL79HAmAoVAyi4s95spiYssdUc3FqgZlOKgSIB+YS0CAr38lK/8Ui+I0xf5HADNuFDnHt+apj+ckoxu1cDEJFD28UgSAjwLCylAMYK4LQ05l1GGnSmKX5HvHZRZyGl8O1EozMl1qytJARqKh6fF2fyMOZK5VTKAW2gm73hNOxGG0UDOmdZKPmTA+iXPzoDq3qkoGr2cLgXXNGgBS235fBb/HvJlmEfOXNdEmJZL599C62oVdHldW+a6tMFvIauKhVc3uop8O/oWwR8PIrm/utEVDX9W7jO9M6hjGEWwZyBOYJoI+zHSWRmUZsdrW4erZmzvt0CF4VpiOsBeEcd1B1cWn25ob/eKNslxjArXdmTB3D4hTN4Vi0pKfnd1eztG/KjcDqtnVEyMSoFR+/ldyL5lwwD1OdNq3zqKLMGnYAaMalShivSlmuuqw76YBrkj6lm3bcGgTS1BXzXvt4bGOhMGpeDGTS2D24TuTTdvE5Ibr76Lbt94VWxl+x76na1stDlwVjeMtnW4MzqZYB4fgqjDTtwwUm2vMsDKCtNeBR2z3dJ3B2yCYmzsuOAX7KIhlGrqXjk4oTXQgu36v7Xdsm8Dq7KjzYqvWUv5kg2sckvwANAU/s1gqRlWmjwOG8hi2jVvQS6bcIyK63nX8TrK1vXlPTZZjwCaJjyyeAxBENgLrxObOzHu4YGzNw7zAbHcY5N1sW1dE4/kACD3EQ9iHgA7HXiqkEOaHsDbMUy7YQUavqaW6tox6j7b1sVBAF53ZAJEjs1TCwIujwIAuuYgeTtcz2LYAQ5A4XvivJ+OyHSvgwAEUrdHbgc43AXkHCAoAgrZxZ5ceAAJEUq9R/Tu/Y5WID1duz0KhtPrQJQOBVDKuKDkkVIx+NgDFCdzu7se/3HsckApNEHhTDBNEghj8GcAtQRYmoNFDsy+3AO8fegKcHc+/kMcqHIoF9P7uv11w76RgJWr9Id7H6hSHlHj6Lq02+DVyLSvn/eg/v4LjqhpHPpzF/qaQ3/kMUqH++FEse/+/bKDqaI7MdWzv+xgquKor7ijA67RXel5PTos/Nfpiw9POwaj+1U7UkM6PG35DcfRrdPfkfq3HEdXHPBn3ww1tb/ngL/yyMTwptnUdx6ZqBxC6QxHJjUoOd99CGV1rGeI6zxdkcmtBSUvDv/AsZ7qQanWiA7G9M8dlNo8era7YyZNZC149/T8Nxzm69twmK+jxC06zNf+Kw7zLXRg+Hjk0+PA6f/ZI7z/fZze/gD6APoA+gD6APoA+gD6/wH0P5sGdc5oD+H6AAAAAElFTkSuQmCC',
+  minimal: 'data:image/png;base64,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',
+  aci: 'data:image/png;base64,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',
+  bol: 'data:image/png;base64,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',
+  klasik: 'data:image/png;base64,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',
+  almanci: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKgAAACoCAMAAABDlVWGAAAAkFBMVEWkoJfd189hXlgtIx7aybZlUCXfJB2adCfgrp4AAADnYFcAAADqoinnWR2JhHgAAAC7kTtbDg3uiXeiEA6CfXIAAADyu07+9d4AAAD2tizXp0X+/v7bDQ3Im0DDlz0zJxAYFQ6vhzVIOBYAAABwVyThrkiGaCs3NjPz6NJYQxsAAACXdTAjGwtKSER4dm8AAADbfcGHAAAAMHRSTlP///////////9x/y3///+y//////8A///+/////////////43////////O/////06WU/3+AAAOSUlEQVR42u1cC1vivBJOW0pBXBf1+9hY7XULBSn4///dmVwbaNKkBdk95zDPs11FJS9zz2Qy6N//EkJ3oHegd6B3oHegd6B3oHeg/3NAF19f89+c5l9fi78Q6Nf85yfW0OfP+ddfA3T++wxj05yh/T3/40AXEmRTVpsiiVeS4qTYVGUuwS7+HNDFb46i3BQFgUhxpvSxXq3WKXyxLopNeQ2s44F+/aTLZ2EkMbLHWj4IUPKI91VGf/nn182BzhnKjSLrfoo3DOv8pkCpzPPKGSXHWlGN/X0zoBRmFsUE51o+YuNjLR9xlI2FisYJPStgWWIsSftIDA9mXeKrIhunAEOBLog7KperC6gIiAtYfC9QIvWmWF1IlKs/vxHoF5HaZnUF2pB3+vouoISdZSwMYzX6EadxSq3q97cApdoZttbR94jZY80tbhkVxb4Kq2oXZE0uc4AgH6CpaIjYMxfHGcfJstjvNwCrzLKmk1DleVAffP/4hBAK3cWPBjilSg8sSQEYxVWq/JLAgjoUwGYT75dKk9rZUSF39SxEUgSwNlVI+KWBldXPCqztr37KnBXVDehPgkDLrqxl18SOq0O+s59yAgpmlGVCjgQXATYbgatDM5r/XQvoJ/FKODfDmoxHnOPSDSlywrlbRdg3Lrbt+ZnKPb3si50TUuSGc7XDyIjAwwcHnNup7lUEb+6EFDnY0Q6ytRxvLwQ6+/C00sBxvHOwKGT3SyVkawl+/nUh0IePF93LB7xPVqXdSyGrn89YEvF0CdDt7GH68fExfZhpZE/iSGZNUZEtbjYkA4E3mlzEUY8gBZxbjewbskdobMlUL9AFODkW3nH+61LRv3xozf5XjelGFZZa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',
+  yeni: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKgAAACoCAMAAABDlVWGAAAAkFBMVEVeZmfZ19wAAACnoadgm5Gf59bIuckAAAAqQj4cKSdVhHwAAACEeoQ6amR02MpCPUM/O0DIx7RCQDqRjH+/scChzL3Cu6oAAACQ284AAAD45fl2tap54dP+/v6Cx7oTFxYsNjWHzcB9wbT69d4AAABOeHAoJiiupq4aKSdjmI44V1JspZpLR0sAAAAvSkWOh456SandAAAAMHRSTlP//17/////Lf///7L//////////////wD//v////////////+N///////////O///IJIvEAAAPB0lEQVR42u1ciZabuBIVhniLuzPzthgTI0HMTsP//90rLYAkBAi7uzOZsc6JjtuxrUvtVSoJff9NBnoCfQJ9An0CfQJ9An0CfQL92wHdbTabmxjwcvcXBLrZfH3zDePt62bzlwG6uWkYMdbQ3ja/HOiuB4n3KCmC8NyPMCgStMc92N2vA9qj3CdVEAA20+R5iUD7GNb7gW6+suUJgGT066bYgLZAhH346+bTgW44yqPE6/kRJhzr5lOB3phUovi8asSIycDt04AymKQIKU4+hXNTHNGJvQqL/F6o6D6mk8qsOstTRe4TgLVAd28C5v2DQX3bfSxQyvVDcX5wVFQAvn4gUMb15PwOI1nNf7SSnCTstGOYzmIKvCMqy31DmqYpUeIVsfy/kTKF+5VKhdZJZ6JpB8MXnmOvJNgUlJASVbIPkLxBsk5S0Rq2E5PhjLxSYExrhNrWdbPMddsW1R32PXu8sQsga9iPVuBEhtU8Zm1wjTLnMh5O1qKUfuCATFjRCqTIXjzHyl41FER92l7mhuMyj5Qfx0gLe0G1AwrxxwFIwqjSRx9HamRI61wsBsdaBlykYYr4FGBbO2UFFNQoj+UICdThCEvgkxVKgfUPCjUctDCikAN42rf3Ago4G51n8Pupe1k3tlQmkRZvRY0dUnQPzpjcAZOJaw1s0GW9tEKKbHCW6i8fYbV2CRNCRrHYwjM24R1IkYUeNZ1dZxM1f2hRNl34kBHopYXHrNSUoLHQKLRslxolUAM9xdkYwKlVbRQyA3Vbzv9EDf6aZSuFFu08UQ08vOEYCQj/gdz+v8DMm6QjZehPI6kni5YfLeHEoSaeRo62vXfnPsqBV1vTx/i3M/35o8MS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',
+};
+// rozet: HTML içinde yuvarlak resim
+const karImg = (k, px = 56, cls = '') => KAR_IMG[k] ? `<img class="kar ${cls}" src="${KAR_IMG[k]}" width="${px}" height="${px}" alt="${esc(KAR[k].ad)} Dönerci" title="${esc(KAR[k].ad)} Dönerci">` : '';
 /* ============================================================
    Çizim dili: izometrik ızgara (1 kare = 64×32 px), tek ışık (sol üst),
    düz renk + ince kontur. Bütün sahneler bu parçalardan kurulur.
@@ -4728,7 +4864,7 @@ function backdrop() {
       for (let y = 0.5; y < D; y += 0.5) g += `M${pts([P(0, y, 0)])}L${pts([P(0, y, 30)])}`;
       d += `<path d="${g.replace(/,/g, ' ')}" stroke="#C3CCD8" stroke-width=".7" fill="none"/>`;
       d += face(planeX(P, 0, D + 0.22, 0, 60, 72), shade(PAL.cobalt, -0.15), { line: false }) + face(planeY(P, 0, W + 0.22, 0, 60, 72), PAL.cobalt, { line: false });
-      { const t = `${(S.name || '').toLocaleUpperCase('tr-TR')} ${frInfra('mutfak') ? 'MERKEZ MUTFAĞI' : 'MUTFAĞI'}`, [x, y] = P(6.3, 0, 62.4); d += wallText(x, y, 'r', t, r1(fitSize(t, 9.5, 300)), '#fff', 800); }
+      { const t = `${(S.name || '').toLocaleUpperCase('tr-TR')} ${frInfra('mutfak') ? 'MERKEZ MUTFAĞI' : 'MUTFAĞI'}`, [x, y] = P(6.3, 0, 62.4); d += wallText(x, y, 'r', t, r1(fitSize(t, 9.5, 250)), '#fff', 800); }
       { const [x, y] = P(0, 5.5, 62); d += wallText(x, y, 'l', 'BESİ ALANI', 9.5, '#fff', 800); }
       d += pl([P(0, D + 0.22, 54), P(0, 0, 54), P(W + 0.22, 0, 54)], '#FF8A2A', 3.2);
       for (const a of [3.5, 5.3]) d += face(planeY(P, a, a + 1.3, 0.01, 36, 50), '#FFFFFF', { lo: 0.4 }) + face(planeY(P, a + 0.08, a + 1.22, 0.01, 38, 48), '#BFE3F8', { line: false });
@@ -4809,7 +4945,7 @@ function lineSvg(working, o = 0) {
   { const x0 = o ? Math.min(6.35, penR() + 0.05) : 6.35; s += belt(P, x0, 2.45 + o, 7.1 - x0, 0.6, 'steel'); }
   s += machine(P, 7.05, 2.05 + o, 1.35, 1.3, working);
   // makinenin sağ yüzünde tabela, ön panelde hedef kilo
-  { const [x, y] = P(8.41, 2.7 + o, 30); s += `<text transform="matrix(1,-.5,0,1,${r1(x)},${r1(y)})" font-size="5.8" font-weight="800" fill="#fff" text-anchor="middle">${o ? 'KESİM 2' : 'KESİM'}</text>`; }
+  { const [x, y] = P(8.41, 2.7 + o, 30); s += `<text transform="matrix(1,-.5,0,1,${r1(x)},${r1(y)})" font-size="${o ? 5 : 5.8}" font-weight="800" fill="#fff" text-anchor="middle">${o ? 'KESİM 2' : 'KESİM'}</text>`; }
   if (S.kesimHizli) {
     // hızlı hat: üstte dönen bıçak ve ikinci kol
     const [x, y] = P(7.45, 2.6 + o, 52);
@@ -4961,7 +5097,7 @@ function card(id) {
   if (id === 'muh') return {
     title: 'Gıda mühendisimiz', sub: 'Kalite ve hijyen sorumlusu', icon: 'check',
     body: () => kv([['Maaşı', `${fmtTL(muhCost())} / ay`], ['Son denetim', S.denetim ? (S.denetim.n ? `${S.denetim.n} eksik` : 'tam not') : 'henüz olmadı'], ['Müşteri puanına etkisi', `★ +${fmtPuan(C.puan.hijyen)}`]])
-      + `<p class="hint">Her partinin kaydını tutuyor, soğuk zinciri izliyor. Denetimde eksik neredeyse hiç çıkmaz; zehirlenme iddiası gelse bile kayıtlarla kendimizi aklarız.</p>`,
+      + `<p class="hint">Her partinin kaydını tutuyor, soğuk zinciri izliyor. Denetimde eksik neredeyse hiç çıkmaz; elektrik kesilse bile kayıtlara bakıp yalnızca riskli partiyi ayırırız.</p>`,
     actions: () => [{ label: 'Gıda mühendisini çıkar', sub: `ayda ${fmtTL(muhCost())} kalır; denetim riski artar`, icon: 'userx', tone: 'danger', close: true, sound: 'bad', run: () => A.fireMuh() }],
   };
   if (id === 'silo') return {
@@ -5139,7 +5275,7 @@ function backdrop() {
       for (let i = 0; i < 4; i++) { const a = SHOP.ocakX[i] - 0.75; d += face(planeY(P, a, a + 1.5, 0.01, 30, 50), '#DDE1E7', { lo: 0.3 }); }
       d += face(planeY(P, 0, W + 0.22, 0, 62, 72), T.trim, { line: false }) + face(planeX(P, 0, D + 0.22, 0, 62, 72), shade(T.trim, -0.12), { line: false });
       { const t = (S.name || '').toLocaleUpperCase('tr-TR'), [x, y] = P(5.6, 0, 63.5); d += wallText(x, y, 'r', t, r1(fitSize(t, 8.5, 260)), '#fff', 800); }
-      { const [x, y] = P(0, 4.6, 63.8); d += wallText(x, y, 'l', (S.name || '').toLocaleLowerCase('tr-TR'), 7, '#fff', 700); }
+      { const t = (S.name || '').toLocaleLowerCase('tr-TR'), [x, y] = P(0, 4.6, 63.8); d += wallText(x, y, 'l', t, r1(fitSize(t, 7, 120, 700)), '#fff', 700); }
       for (const a of [4.2, 6.4]) {
         d += face(planeX(P, a, a + 1.6, 0.01, 26, 54), '#FFFFFF', { lo: 0.4 }) + face(planeX(P, a + 0.1, a + 1.5, 0.01, 29, 51), '#BFE3F8', { line: false });
         d += poly([P(0.01, a + 0.1, 29), P(0.01, a + 1.5, 29), P(0.01, a + 1.5, 38), P(0.01, a + 0.1, 33)], '#9ED36A', 'opacity=".8"');
@@ -5428,11 +5564,17 @@ function tvSvg() {
   let s = face(planeX(P, y0, y1, 0.03, 29, 53), '#151922', { lo: 0.15 });
   s += face(planeX(P, y0 + 0.08, y1 - 0.08, 0.035, 31.5, 51), '#3B6FE0', { line: false });
   s += face(planeX(P, y0 + 0.08, y1 - 0.08, 0.036, 31.5, 37), PAL.orange, { line: false });
-  const [gx, gy] = P(0.04, ym + 0.42, 39), [tx, ty] = P(0.04, ym - 0.28, 45.5), [bx, by] = P(0.04, ym, 33), [rx, ry] = P(0.04, y0 + 0.2, 49);
-  s += `<g transform="translate(${r1(gx)},${r1(gy)}) matrix(1,-.5,0,1,0,0) scale(.62)">${wrapGlyph(1)}</g>`;
-  s += `<text transform="matrix(1,-.5,0,1,${r1(tx)},${r1(ty)})" font-size="4.6" font-weight="800" fill="#fff" text-anchor="middle">${esc((S.name || '').toLocaleUpperCase('tr-TR').slice(0, 12))}</text>`;
+  const [gx, gy] = P(0.04, ym + 0.05, 38.6), [tx, ty] = P(0.04, ym, 46), [bx, by] = P(0.04, ym, 33), [rx, ry] = P(0.04, y0 + 0.14, 52);
+  { // ad uzunsa iki satıra bölünür; yine sığmazsa ekranda yalnızca reklam yazısı kalır
+    const nm = (S.name || '').toLocaleUpperCase('tr-TR'), w = nm.split(' '), sz = fitSize(nm, 4.6, 40, 800, 0);
+    const satir = (t, z) => { const [ax, ay] = P(0.04, ym, z); return `<text transform="matrix(1,-.5,0,1,${r1(ax)},${r1(ay)})" font-size="${r1(fitSize(t, 4.4, 42, 800, 0))}" font-weight="800" fill="#fff" text-anchor="middle">${esc(t)}</text>`; };
+    const gl = `<g transform="translate(${r1(gx)},${r1(gy)}) matrix(1,-.5,0,1,0,0) scale(.5)">${wrapGlyph(1)}</g>`;
+    if (sz >= 3.4) s += gl + `<text transform="matrix(1,-.5,0,1,${r1(tx)},${r1(ty)})" font-size="${r1(sz)}" font-weight="800" fill="#fff" text-anchor="middle">${esc(nm)}</text>`;
+    else if (w.length > 1) { const h = Math.ceil(w.length / 2), a1 = w.slice(0, h).join(' '), a2 = w.slice(h).join(' '); if (Math.min(fitSize(a1, 4.4, 42, 800, 0), fitSize(a2, 4.4, 42, 800, 0)) >= 3) s += satir(a1, 47.6) + satir(a2, 42.6); else s += gl; }
+    else s += gl;
+  }
   s += `<text transform="matrix(1,-.5,0,1,${r1(bx)},${r1(by)})" font-size="3.6" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing=".4">TV REKLAMI</text>`;
-  s += `<circle cx="${r1(rx)}" cy="${r1(ry)}" r="1.4" fill="#FF4B4B" class="blink"/>`;
+  s += `<circle cx="${r1(rx)}" cy="${r1(ry)}" r="1" fill="#FF4B4B" class="blink"/>`;
   return s;
 }
 // sadakat kartı: kapının içinde, girene dönük afiş (roll-up)
@@ -5449,7 +5591,7 @@ function kartAfis() {
   s += face(planeX(P, y0, y1, x + 0.004, 3, 11), PAL.cobalt, { line: false });
   s += T(ym, 51.4, 'SADAKAT', 4.4, '#fff') + T(ym, 42.6, 'KARTI', 4.4, PAL.cobalt);
   { const [sx, sy] = P(x + 0.012, ym, 28); s += `<path transform="translate(${r1(sx)},${r1(sy)}) matrix(1,-.5,0,1,0,0)" d="M0 -3.6 l1 2.1 l2.3 .3 l-1.7 1.6 l.4 2.3 l-2 -1.1 l-2 1.1 l.4 -2.3 l-1.7 -1.6 l2.3 -.3z" fill="#fff"/>`; }
-  s += T(ym, 18.5, '10 döner al', 3.6, '#14275A', 700) + T(ym, 13.6, '1 bedava', 3.8, PAL.orange) + T(ym, 5, (S.name || '').toLocaleUpperCase('tr-TR').slice(0, 12), 2.8, '#fff');
+  s += T(ym, 18.5, '10 döner al', 3.3, '#14275A', 700) + T(ym, 13.6, '1 bedava', 3.8, PAL.orange) + (() => { const nm = (S.name || '').toLocaleUpperCase('tr-TR'), f = fitSize(nm, 2.8, 22, 800, 0); return f >= 2.2 ? T(ym, 5, esc(nm), r1(f), '#fff') : ''; })();
   return s;
 }
 function campaignProps(L) {
@@ -5479,6 +5621,9 @@ function campaignProps(L) {
     L.dyn.put('k-inf2', { x: ix, y: iy, d: 11.55 + 4.6 + 0.1, v: 'i', op: lv('influencer'), hit: 'kamp:influencer',
       html: () => `<g class="serve">${person(0, 0, { s: 0.84, shirt: '#C2185B', hair: HAIRS[3], hairStyle: 'long', skin: SKINS[3], hold: 'doner', glasses: true, flip: true })}</g><g transform="translate(0,-64)">${liveTag()}</g>` });
   }
+  // Denedik ekibinin verdiği dönerci rozetleri: sol penceredeki camda çıkartma
+  const kar = S.denedik && S.denedik.kar;
+  if (kar && kar.length) L.dyn.put('k-kar', { x: 0, y: 0, d: 0.32, v: 'k' + kar.join(','), hit: 'karakter', html: () => kar.map((k, i) => { const y1 = 5.72 - i * 0.5, [x, y] = P(0.03, y1, 52); return `<image href="${KAR_IMG[k]}" width="15.4" height="15.4" transform="matrix(1,-.5,0,1,${r1(x)},${r1(y)})"/>`; }).join('') });
   if (lv('tv') > 0.02) L.dyn.put('k-tv', { x: 0, y: 0, d: 0.3, v: 't', op: lv('tv'), html: tvSvg, hit: 'kamp:tv' });
   if (lv('sadakat') > 0.02) {
     L.dyn.put('k-sad', { x: 0, y: 0, d: ROLL.x + ROLL.y1, v: 's' + S.name, op: lv('sadakat'), html: kartAfis, hit: 'kamp:sadakat' });
@@ -5645,7 +5790,7 @@ function frame(L) {
   }
   // kapalı dükkân: kapıda tabela ve nedeni
   if (isClosed()) {
-    const [x, y] = P(12.5, 7.3, 46), why = { denetim: 'Mühürlü', zehir: 'Soruşturma', yangin: 'Onarımda', tadilat: 'Tadilatta', tasinma: 'Taşınıyoruz' }[S.closed.why] || 'Kapalı';
+    const [x, y] = P(12.5, 7.3, 46), why = { denetim: 'Düzenleniyor', zehir: 'Temizlikte', yangin: 'Onarımda', tadilat: 'Tadilatta', tasinma: 'Taşınıyoruz' }[S.closed.why] || 'Kapalı';
     L.marks.put('kapali', { x, y, v: 'k' + why, html: () => `${pill('KAPALI', '#D93025', '#fff', 10)}<g transform="translate(0,16)">${pill(why, '#14275A', '#fff', 8)}</g>` });
   }
   // şiş dolabı
@@ -5719,6 +5864,7 @@ function label(id) {
   }
   if (id === 'fridge') return `${S.fridgeLv >= 3 ? 'Soğuk hava deposu' : 'Şiş dolabı'} · ${fmtK(fridgePors())} porsiyon döner`;
   if (id === 'menu') return `Menü · tavuk dürüm ₺${S.price} · fiyatı değiştir`;
+  if (id === 'karakter') return 'Dönerci karakterimiz · Denedik ekibinin rozetleri';
   if (id === 'paket') return SH.paket ? `${SH.pmut ? 'Paket mutfağı' : 'Paket servis'} · ${fmtK(SH.orders.length)} sipariş bekliyor` : `Paket servis · ${fmtTL(C.shop.paket.cost)} yatırımla başlat`;
   if (k === 'kamp') { const c = C.hq.camps[i] || C.hq.instant[i]; return c ? `${c.label} · kampanya sürüyor` : ''; }
   if (id === 'mgr:shop') return `${MANAGERS.shop.name} · ${MANAGERS.shop.role}`;
@@ -5846,13 +5992,14 @@ function menuCard() {
           : S.price >= soft - st * 3 ? `<p class="hint warn">₺${fmtNum(soft)} üstüne çıkarsan müşteri hızla azalmaya başlar.</p>` : '')
         + kv([['Lavaş, sebze, sos, ambalaj', fmtTL(uc)], ['Tavuk (çiftlik, kesim, bakım)', tc ? fmtTL(tc) : '—'], ['Porsiyon maliyeti', `<b>${fmtTL(tot)}</b>`], ['Porsiyon başı brüt kâr', fmtTL(S.price - tot)], ['Müşterinin alıştığı fiyat', `₺${fmtNum(ref)}`], ['Gelen müşteriye etkisi', pct === 0 ? 'olağan' : pct > 0 ? `%${pct} daha fazla` : `%${-pct} daha az`], ['Ayran', `₺${fmtNum(ayranPrice())}`]])
         + (y.gelir ? kv([['Yan ürünler (müşteri başı ortalama)', `+${fmtTL(Math.round(y.gelir))}`], ['Müşteri başı ortalama kasa', `<b>${fmtTL(Math.round(S.price + y.gelir))}</b>`], ['Yan ürün kârı (müşteri başı)', `+${fmtTL(Math.round(y.gelir - y.malz))}`]]) : '')
+        + `<a class="karsat" data-card="karakter">${karakterler().map(x => karImg(x.k, 30)).join('')}<span>Dönerci karakterimiz: <b>${karakterler().map(x => KAR[x.k].ad).join(', ')}</b></span><i>›</i></a>`
         + `<p class="hint">Fiyat artınca daha az müşteri gelir, düşünce daha çok. Kuyruk uzunsa fiyatı artırmak kârı büyütür. Yan ürünlerin fiyatı dürüme göre ayarlanır. Kasada çıkan yeşil rakam dürüm fiyatıdır; yanında yan ürün aldıysa ayrıca yazılır.</p>`;
     },
     actions: () => [
       ...Object.keys(C.yan).filter(k => !S.yan[k]).slice(0, 1).map(k => {
         const y = C.yan[k], open = monthIdx() >= y.ay, kar = y.oran * y.pay * S.price * (1 - y.mal), dev = S.yanDev && S.yanDev.k === k;
         if (dev) { const kal = Math.max(1, Math.ceil((S.yanDev.until - S.t) / C.month * 30)); return { label: `${y.label} geliştiriliyor`, sub: 'mutfakta tarifler deneniyor; hazır olunca menüye kendiliğinden girer', icon: 'bowl', disabled: true, hint: `${kal} gün`, run: () => false }; }
-        return { label: y.act, sub: open ? `müşterilerin %${Math.round(y.oran * 100)}’i alır · tanesi ₺${fmtNum(Math.round(y.pay * S.price / 5) * 5)} · porsiyon başına +${fmtTL(Math.round(kar))} kâr${y.dev ? ` · ${y.dev * 30} günde hazır` : ''}` : `${y.ay}. aydan sonra açılır`, icon: 'bowl', cost: y.cost, tone: 'primary', disabled: !open || S.cash < y.cost, hint: !open ? 'Henüz değil' : S.cash < y.cost ? 'Para yetmiyor' : '', sound: 'cash', run: () => A.buyYan(k) }; })
+        return { label: y.act, sub: open ? `müşterilerin ${sayiEk('%' + Math.round(y.oran * 100), 'i')} alır · tanesi ₺${fmtNum(Math.round(y.pay * S.price / 5) * 5)} · porsiyon başına +${fmtTL(Math.round(kar))} kâr${y.dev ? ` · ${y.dev * 30} günde hazır` : ''}` : `${y.ay}. aydan sonra açılır`, icon: 'bowl', cost: y.cost, tone: 'primary', disabled: !open || S.cash < y.cost, hint: !open ? 'Henüz değil' : S.cash < y.cost ? 'Para yetmiyor' : '', sound: 'cash', run: () => A.buyYan(k) }; })
     ],
   };
 }
@@ -5872,6 +6019,14 @@ function card(id) {
   if (k === 'ocak' || k === 'kasa' || k === 'kurye') return workerCard(k, +i);
   if (id === 'paket') return paketCard();
   if (id === 'menu') return menuCard();
+  if (id === 'karakter') return {
+    title: 'Dönerci karakterimiz', sub: S.denedik && S.denedik.kar ? 'Denedik ekibinin verdiği rozetler vitrinde' : 'Denedik ekibi gelince rozetlerini verir', icon: 'star',
+    body: () => { const k = karakterler(), ver = S.denedik && S.denedik.kar;
+      return `<p>Nasıl bir dönerci olduğumuzu kararlarımız belirler: marine, menü, fiyat, teknoloji, büyüme. Denedik ekibi her ziyarette dükkâna iki üç rozet verir.</p>`
+        + `<div class="karlar">${k.map(x => `<div class="krt">${karImg(x.k, 56)}<b>${esc(KAR[x.k].ad)} Dönerci</b><span>${esc(x.neden.charAt(0).toLocaleUpperCase('tr-TR') + x.neden.slice(1))}</span></div>`).join('')}</div>`
+        + `<p class="hint">${ver ? `Vitrindekiler son ziyaretten: ${ver.map(x => KAR[x].ad).join(', ')}. Kararların değişirse bir sonraki ziyarette rozetler de değişir.` : 'Şu anki kararlarınla Denedik ekibinin vereceği rozetler bunlar.'}</p>`; },
+    actions: () => [],
+  };
   if (k === 'kamp') return campCard(i);
   if (id === 'fridge') return {
     title: S.fridgeLv >= 3 ? 'Soğuk hava deposu' : 'Şiş dolabı', icon: 'skewer',
@@ -6247,7 +6402,7 @@ function miniChart() {
   const line = vals.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(' ');
   return `<svg class="minichart" viewBox="0 0 ${w} ${ht}">${mn < 0 ? `<line x1="0" x2="${w}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="#E53935" stroke-dasharray="3 3"/>` : ''}<path d="${line}" fill="none" stroke="${PAL.cobalt}" stroke-width="2.4" stroke-linejoin="round"/>${vals.map((v, i) => `<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="2.6" fill="${h[i].profit >= 0 ? '#2E9E4F' : '#E53935'}"/>`).join('')}</svg>`;
 }
-const PART = { frans: 'Franchise (akademi, denetim)', maas: 'Maaşlar', malzeme: 'Malzeme (ekmek, sebze, sos)', yem: 'Dışarıdan alınan yem', kira: 'Dükkân kirası', fatura: 'Elektrik, su, doğalgaz', arazi: 'Çiftlik (civciv, aşı, tarla)', gubre: 'Gübre', katki: 'Silo katkıları', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün (organik yem, soğuk zincir)', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar ve davalar', faiz: 'Kredi faizi', vergi: 'Vergi (geçen ayın kârından)', hasar: 'Kriz ve hasar' };
+const PART = { kurum: 'Franchise merkezi kadrosu (bölge müdürleri, muhasebe, hukuk)', darbe: 'Büyük ödemeler (vergi, zam, kur, dava)', frans: 'Franchise (akademi, denetim, kamyonlar)', maas: 'Maaşlar', malzeme: 'Malzeme (ekmek, sebze, sos)', yem: 'Dışarıdan alınan yem', kira: 'Dükkân kirası', fatura: 'Elektrik, su, doğalgaz', arazi: 'Çiftlik (civciv, aşı, tarla)', gubre: 'Gübre', katki: 'Silo katkıları', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün (organik yem, soğuk zincir)', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar ve davalar', faiz: 'Kredi faizi', vergi: 'Vergi (geçen ayın kârından)', hasar: 'Kriz ve hasar' };
 const gunKaldi = t => Math.max(1, Math.ceil((t - S.t) / C.month * 30));
 // kart içindeki düğmeler (aday seç / geri çevir): ui.js tıklamayı buraya yollar
 window.CARD_DO = Object.assign(window.CARD_DO || {}, {
@@ -6260,7 +6415,7 @@ function frSide(odak) {
   let h = frMapSvg(odak);
   const F = S.fr, acik = frAcikSube(), son = F.son;
   if (frHazir() && acik.length) h += `<div class="kpis"><div><small>Şube</small><b>${acik.length}</b><span>${frSehir()} şehir</span></div><div><small>Marka puanı</small><b>${F.marka ? yildiz(F.marka) : '—'}</b><span>şubelerin ortalaması</span></div>`
-    + `<div><small>Geçen ay kazanç</small><b class="pos">${son && son.sube ? '+' + fmtTL(son.gel) : '—'}</b><span>şiş, lavaş, sos, içecek</span></div><div><small>Teslim edilen mal</small><b${son && son.talep && son.tas / son.talep < 0.9 ? ' class="neg"' : ''}>${son && son.talep ? '%' + Math.round(son.tas / son.talep * 100) : '—'}</b><span>${son && son.tas ? `%${Math.round(son.kendi / son.tas * 100)}’i kendi şişimiz` : 'kamyonlar taşır'}</span></div></div>`;
+    + `<div><small>Geçen ay kazanç</small><b class="pos">${son && son.sube ? '+' + fmtTL(son.gel) : '—'}</b><span>şiş, lavaş, sos, içecek</span></div><div><small>Teslim edilen mal</small><b${son && son.talep && son.tas / son.talep < 0.9 ? ' class="neg"' : ''}>${son && son.talep ? '%' + Math.round(son.tas / son.talep * 100) : '—'}</b><span>${son && son.tas ? `${sayiEk('%' + Math.round(son.kendi / son.tas * 100), 'i')} kendi şişimiz` : 'kamyonlar taşır'}</span></div></div>`;
   return h;
 }
 const geri = (id, t) => `<a class="geri" data-card="${id}">‹ ${esc(t)}</a>`;
@@ -6307,7 +6462,7 @@ function frCard() {
 function adayKart(a, etiket, yer) {
   const T = FR_TIP[a.tip], e = frBeklenen(a), kn = clamp(Math.round((e.kal - 0.5) / 0.1), 1, 5), gn = clamp(Math.round((a.durust - 0.45) / 0.12), 1, 5), sn = clamp(Math.round((a.boyut - 0.7) / 0.15) + 1, 1, 5);
   const gt = gn <= 2 ? 'riskli' : gn === 3 ? 'orta' : 'güvenilir';
-  return `<div class="aday">${etiket ? `<span class="etk">${esc(etiket)}</span>` : ''}<div class="ah"><b>${esc(a.ad)}</b><span>${esc(T.ad)}</span></div>`
+  return `<div class="aday">${etiket ? `<span class="etk">${esc(etiket)}</span>` : ''}<div class="ah"><span class="akar">${frKarakter(a).map(k => karImg(k, 34)).join('')}</span><b>${esc(a.ad)}</b><span>${esc(T.ad)} · ${frKarakter(a).map(k => KAR[k].ad).join(', ')}</span></div>`
     + `<div class="am"><div><small>Bize aylık</small><b class="pos">≈ +${fmtTL(e.gel)}</b></div><div><small>Giriş ücreti</small><b>+${fmtTL(a.ucret)}</b></div></div>`
     + `<div class="ar"><span>Satış</span>${nokta(sn)}<em>${fmtK(e.sat)} porsiyon/ay</em></div>`
     + `<div class="ar"><span>Kalite</span>${nokta(kn)}<em>zamanla ★${fmtPuan(e.puan)}</em></div>`
@@ -6317,7 +6472,7 @@ function adayKart(a, etiket, yer) {
 }
 // şubenin ayrıntıları ve yapılabilecekler
 function subeKv(sb) {
-  return kv([['Puanı', yildiz(sb.puan)], ['Aylık satışı', `${fmtK(frSatis(sb))} porsiyon`], ['Bize kazandırdığı', sb.gelir ? `+${fmtTL(sb.gelir)}/ay` : 'ilk ay sonunda belli olur'],
+  return `<div class="karsat dz">${frKarakter(sb).map(k => karImg(k, 30)).join('')}<span>Dönerci karakteri: <b>${frKarakter(sb).map(k => KAR[k].ad).join(', ')}</b></span></div>` + kv([['Puanı', yildiz(sb.puan)], ['Aylık satışı', `${fmtK(frSatis(sb))} porsiyon`], ['Bize kazandırdığı', sb.gelir ? `+${fmtTL(sb.gelir)}/ay` : 'ilk ay sonunda belli olur'],
     ['Teslim ettiğimiz mal', `%${Math.round((sb.oran == null ? 1 : sb.oran) * 100)}`], ['Açık', `${Math.max(1, sb.ay || 0)} aydır`],
     sb.rakip && S.t < sb.rakip ? ['Rakip', `<span class="neg">karşısında rakip var · ${gunKaldi(sb.rakip)} gün</span>`] : null, frIndirim(sb) ? ['İndirim', `%${Math.round(sb.indirim * 100)} indirimli mal · ${gunKaldi(sb.indirimT)} gün`] : null]);
 }
@@ -6361,7 +6516,7 @@ function frSehirCard(k) {
       }
       if (B_.length === 1) { const sb = B_[0]; h += `<h4 class="sh4">Şube · ${esc(sb.ad)} · ${esc(FR_TIP[sb.tip].ad.toLocaleLowerCase('tr-TR'))}</h4>` + subeKv(sb) + subeIpucu(sb); }
       else if (B_.length > 1) h += `<h4 class="sh4">${B_.length} şube · birine dokun</h4><table class="tbl frs lnk">${B_.map(subeSatir).join('')}</table>`;
-      if (!A_.length && !B_.length) h += `<p>${esc(c.ad)}’da henüz şube ya da başvuru yok. Adaylar kendiliğinden başvurur; büyük şehirlerden daha sık gelir.</p>`;
+      if (!A_.length && !B_.length) h += `<p>${esc(ekDe(c.ad))} henüz şube ya da başvuru yok. Adaylar kendiliğinden başvurur; büyük şehirlerden daha sık gelir.</p>`;
       return h;
     },
     actions: () => { const B_ = sbs(); return B_.length === 1 ? subeActs(B_[0]) : []; },
@@ -6536,7 +6691,7 @@ async function rankSubmit(sc) {
   localAdd(sc);
   try {
     if (RANK.backend === 'remote') {
-      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: temizAd(sc.ad), ay: sc.ay, butce: sc.butce, surum: window.APP ? '15-app' : '15' }) });
+      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: temizAd(sc.ad), ay: sc.ay, butce: sc.butce, surum: window.APP ? '16-app' : '16' }) });
       if (r.ok) {
         const q = `or=(ay.gt.${sc.ay},and(ay.eq.${sc.ay},butce.gt.${Math.round(sc.butce)}))`;
         const c = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}?select=id&${q}`, { headers: remoteHeaders({ Prefer: 'count=exact', Range: '0-0' }) });
@@ -6868,7 +7023,7 @@ function openDenetim() {
   if (R.n) SND.fine(); else SND.fanfare();
   const rows = R.items.map(x => `<tr><td><span class="rk ${x.bad ? 'n' : 'y'}">${x.bad ? '✗' : '✓'}</span>${esc(x.bad || x.t)}</td><td class="${x.bad ? 'neg' : ''}">${x.bad ? '−' + fmtTL(x.fine) : ''}</td></tr>`).join('');
   const lead = !R.n ? `<p><b>Tam not!</b> Denetçi: “Böyle düzenli bir mutfak az gördüm.” Müşteri puanı bir süre yükselecek.</p>${R.muh ? `<p class="small">Bu titizliğin bedeli belli: gıda mühendisimize ayda ${fmtTL(muhCost())} ödüyoruz. Değiyor.</p>` : ''}`
-    : `<p>Denetçi ${R.n} eksik buldu. Kurallara aykırı en basit şeyin bile cezası ağırdır.${R.kapat ? ` <b>Üç ya da daha fazla eksik çıktığı için dükkân ${C.inc.denetim.gun} gün mühürlendi.</b>` : ''}</p>${R.muh ? '' : '<p class="small">Gıda mühendisimiz olsaydı bu eksiklerin neredeyse hiçbiri çıkmazdı.</p>'}`;
+    : `<p>Denetçi ${R.n} eksik buldu. Kurallara aykırı en basit şeyin bile cezası ağırdır.${R.kapat ? ` <b>Üç ya da daha fazla eksik çıktığı için eksikleri giderene kadar dükkân ${C.inc.denetim.gun} gün kapalı.</b>` : ''}</p>${R.muh ? '' : '<p class="small">Gıda mühendisimiz olsaydı bu eksiklerin neredeyse hiçbiri çıkmazdı.</p>'}`;
   openModal(R.n ? 'Denetim: eksikler bulundu' : 'Denetimden tam not', decHead(R.n ? 'receipt' : 'check', R.n ? '#D93025' : '#1F8F4E', lead)
     + `<table class="tbl res">${rows}${R.n ? `<tr class="tot"><td>Toplam ceza (ay sonu ödenir)</td><td class="neg">−${fmtTL(R.total)}</td></tr>` : ''}</table>`
     + `<div class="menu">${!S.muh && R.n ? `<button class="btn o" id="rMuh">Gıda mühendisi tut · ayda ${fmtTL(muhCost())}</button>` : ''}<button class="btn ${!S.muh && R.n ? 'w' : 'o'}" data-close>Tamam</button></div>`, 'report');
@@ -6878,10 +7033,24 @@ function openDenetim() {
 const KRIZ_TXT = {
   kusgribi: e => ['Kuş gribi!', 'bird', `<p>Bölgede kuş gribi çıktı. Yetkililer tavuklarımızın <b>${e.vet ? 'yarısını' : 'hepsini'}</b> itlaf etti; kümese <b>${e.vet ? 'iki hafta' : 'bir ay'}</b> civciv gelmeyecek. Dezenfeksiyon: ${fmtTL(e.cost)}.</p><p class="small">${e.vet ? 'Veterinerimiz hastalığı erken fark etti; kayıp yarıda kaldı.' : 'Kadrolu veterinerimiz olsaydı hastalığı erken fark eder, kaybı yarıya indirirdi.'}</p>`],
   ekonomi: e => ['Ekonomik kriz', 'chart', `<p>Döviz bir gecede yükseldi: <b>bütün fiyatlar %${e.pct} arttı</b>. Altı ay boyunca insanlar daha az dışarıda yiyecek (müşteri %20 az); banka da kredi limitini kıstı.</p><p class="small">Menü fiyatını gözden geçir, gereksiz gideri kapat.</p>`],
-  zehir: e => e.muh ? ['Zehirlenme şikâyeti', 'shield', `<p>Bir müşteri dönerimizden zehirlendiğini iddia etti. <b>Gıda mühendisimizin kayıtları ve laboratuvar raporu temiz çıktı</b>; iş büyümeden kapandı. Rapor masrafı: ${fmtTL(e.cost)}.</p><p class="small">Her partinin kaydını tutmak işte bu gün için.</p>`]
-    : ['Zehirlenme şikâyeti', 'bug', `<p>Bir müşteri zehirlendiğini iddia etti ve haber sosyal medyada yayıldı. Kayıtlarımız eksik olduğu için <b>${fmtTL(e.cost)} ceza</b> kesildi; dükkân soruşturma için <b>${e.gun} gün kapalı</b>. Müşteri puanı ciddi düştü.</p><p class="small">Gıda mühendisimiz olsaydı kayıtlarla kendimizi aklardık.</p>`],
+  zehir: e => e.muh ? ['Elektrik kesintisi', 'zap', `<p>Gece bölgede saatlerce elektrik kesildi, soğuk odamız ısındı. <b>Gıda mühendisimiz sabah sıcaklık kayıtlarına bakıp riskli partiyi hemen ayırdı</b>; müşteriye tek bir riskli şiş gitmedi. İmha edilen mal: ${fmtTL(e.cost)}.</p><p class="small">Her partinin kaydını tutmak işte bu gün için.</p>`]
+    : ['Elektrik kesintisi', 'zap', `<p>Gece bölgede saatlerce elektrik kesildi, soğuk odamız ısındı. Hangi partinin ne kadar ısındığını bilemediğimiz için <b>dolaptaki bütün şişleri imha ettik</b> ve dükkânı <b>${e.gun} gün</b> kapatıp baştan temizledik. Kayıp: ${fmtTL(e.cost)}.</p><p class="small">Gıda mühendisimiz olsaydı kayıtlara bakıp yalnızca riskli partiyi ayırırdık.</p>`],
   yangin: e => ['Mutfakta yangın', 'fire', `<p>Gece ocak tarafında yangın çıktı. Kimse yaralanmadı ama dükkân <b>${e.gun} gün onarımda</b>. Hasar: ${fmtTL(e.dmg)}.</p><p class="small">${e.cover ? `Sigortamız ${fmtTL(e.cover)} karşıladı; bize ${fmtTL(e.cost)} kaldı.` : `Sigortamız olmadığı için hepsini biz ödüyoruz. Sigorta olsaydı %85'ini karşılardı.`}</p>`],
 };
+// franchise döneminin büyük ödemeleri: dışarıdan gelir, biz göğüs gereriz
+const DARBE_TXT = {
+  vergi: e => ['Vergi incelemesi', 'receipt', `<p>Maliye büyüyen franchise gelirlerimizi geriye dönük inceledi. <b>Kayıtlarımız düzgün çıktı</b>; yalnızca bazı giderlerin yorumunda fark çıktı, uzlaşmaya gittik.</p><p>Ödeme: <b>${fmtTL(e.cost)}</b> (ay sonunda).</p><p class="small">Şirket büyüdükçe incelemesi de büyük olur.</p>`],
+  yonetmelik: e => ['Yeni gıda güvenliği kuralı', 'shield', `<p>Yeni yönetmelikle her döner dükkânına sıcaklık takip sistemi zorunlu oldu. <b>${e.n} şubemizin hepsine sistemi biz kurduk</b>; masrafın yarısını üstlendik: <b>${fmtTL(e.cost)}</b>.</p><p class="small">Şubelerimiz yeni kurala ilk uyanlardan oldu; marka puanı biraz yükseldi.</p>`],
+  yakit: e => ['Akaryakıta büyük zam', 'truck', `<p>Mazot bir gecede pahalandı. Altı ay boyunca <b>kamyon giderlerimiz iki katına</b> çıkıyor: ayda ${fmtTL(e.ek)} daha fazla.</p><p class="small">Şubelere mal yine eksiksiz gidecek.</p>`],
+  taklit: e => ['Adımızı taklit ettiler', 'gavel', `<p>${esc(ekDe(e.city))} adımızı ve tabelamızı taklit eden bir dükkân açıldı. <b>Marka tescilimiz sayesinde davayı kısa sürede kazandık</b>; dükkân tabelasını indirdi.</p><p>Avukat ve mahkeme masrafı: <b>${fmtTL(e.cost)}</b>.</p>`],
+  kur: e => ['Kur yükseldi', 'chart', `<p>Döviz yükselince ambalaj, sos ve içecek alış fiyatları arttı. Şubeleri zora sokmamak için onlara satış fiyatını artırmadık.</p><p><b>Altı ay boyunca lavaş, sos ve içecekten kazancımız yarıya iniyor.</b></p>`],
+};
+function openDarbe(e) {
+  const f = DARBE_TXT[e.k]; if (!f || !UI.started || S.over) return;
+  closeCard(); hideTalk(); SND.bad();
+  const [title, icon, html] = f(e);
+  openModal(title, decHead(icon, '#D93025', html) + `<div class="menu"><button class="btn o" data-close>Tamam</button></div>`, 'report');
+}
 function openKriz(e) {
   const f = KRIZ_TXT[e.k]; if (!f || !UI.started || S.over) return;
   closeCard(); hideTalk(); SND.bad();
@@ -6890,7 +7059,7 @@ function openKriz(e) {
 }
 
 /* ---------- olay bantları ---------- */
-const ACILDI = { tadilat: ['Yeni tasarımla açıldık!', 'Dükkân pırıl pırıl; müşteriler hemen fark etti.', 'sparkle', 'green'], denetim: ['Mühür kaldırıldı', 'Dükkân yeniden açıldı.', 'store', 'green'], zehir: ['Dükkân yeniden açıldı', 'Soruşturma bitti; müşterinin güvenini yeniden kazanmak zaman alacak.', 'store', 'amber'], yangin: ['Onarım bitti', 'Dükkân yeniden açıldı.', 'store', 'green'], tasinma: ['Yeni yerimizde açıldık', 'Yepyeni dükkânımız müşterilerini bekliyor.', 'store', 'green'] };
+const ACILDI = { tadilat: ['Yeni tasarımla açıldık!', 'Dükkân pırıl pırıl; müşteriler hemen fark etti.', 'sparkle', 'green'], denetim: ['Eksikler giderildi', 'Dükkân yeniden açıldı.', 'store', 'green'], zehir: ['Dükkân yeniden açıldı', 'Temizlik bitti; dolap yeniden doluyor.', 'store', 'green'], yangin: ['Onarım bitti', 'Dükkân yeniden açıldı.', 'store', 'green'], tasinma: ['Yeni yerimizde açıldık', 'Yepyeni dükkânımız müşterilerini bekliyor.', 'store', 'green'] };
 const CIFTLIK_TXT = {
   bocek: ['Tarlaya böcek düştü', 'Hasat durdu. Çiftliğe gidip tarlayı ilaçla; üç ay beklersen toprak ölür.', 'bug', 'red'],
   toprakoldu: ['Tarlanın toprağı öldü', 'Böcek üç ay ilaçlanmadı. Toprak ıslah edilmeden ürün vermez.', 'bug', 'red'],
@@ -7138,6 +7307,7 @@ function openDenedik(e) {
   openModal('Denedik ekibi geldi', `<div class="dnd"><div class="dsc ${iyi ? 'g' : orta ? 'm' : 'b'}"><b>${fmtPuan(p)}</b><span>/ 10</span></div><div><p>Habersiz geldiler, sıraya girdiler, dönerimizi yediler ve mutfağı gezdiler.</p><p class="dq">${soz}</p></div></div>
     <ul class="dbars">${e.parts.map(x => `<li><span>${esc(x.ad)}</span><span class="dbar"><i style="width:${x.v * 10}%" class="${x.v >= 8 ? 'g' : x.v >= 6 ? 'm' : 'b'}"></i></span><b>${fmtPuan(x.v)}</b></li>`).join('')}</ul>
     <p class="small">${iyi ? 'Yazı yayımlandı: iki ay boyunca kapıya daha çok müşteri gelecek, puanımız da yükselecek.' : p >= 6.5 ? 'Müşteri puanına küçük bir katkısı oldu.' : 'Yazı iyi çıkmadı; müşteri puanı bir süre düşecek.'}${low.v < 9 ? ` En zayıf başlık <b>${esc(low.ad.toLocaleLowerCase('tr-TR'))}</b>: ${DENEDIK_IPUCU[low.k]}` : ''}</p>
+    ${e.kar && e.kar.length ? `<h4 class="sh4">Dönerci karakterimiz</h4><p class="small">Ekip her dükkâna nasıl bir dönerci olduğunu anlatan rozetler verir. Bizimkiler vitrine yapıştırıldı:</p><div class="karlar">${e.kar.map(x => `<div class="krt">${karImg(x.k, 64)}<b>${esc(KAR[x.k].ad)} Dönerci</b><span>${esc(x.neden.charAt(0).toLocaleUpperCase('tr-TR') + x.neden.slice(1))}</span></div>`).join('')}</div>` : ''}
     <div class="menu"><button class="btn o" data-close>Tamam</button></div>`, 'report');
 }
 
@@ -7156,11 +7326,17 @@ function storyDecision(D) {
     const w = S.shop.ocak.find(x => x && x.id === D.id), ek = w ? Math.round(wageOfW(w) * D.pct / 100 / 1000) * 1000 : 0;
     openModal('Ustaya transfer teklifi', who('shop', `<p>Karşıdaki dönerci <b>${esc(D.name)} Usta</b>’ya iş teklif etmiş. En eski ustamız; elinin ayarını müşteri bilir.</p><p>Maaşını <b>%${D.pct}</b> artırırsak kalır. Artırmazsak gider; ekibin de morali bozulur.</p>`) + btn(`Maaşını artır · ayda +${fmtTL(ek)}`, 'Gitmesine izin ver'), 'decide', { lock: true });
   } else if (D.k === 'frkacak') {
-    openModal('Şubede kural dışı iş', who('hq', `<p>Denetim ekibimiz <b>${esc(D.city)}</b> şubesinde bayat tavuk ve eksik temizlik buldu. Şube sahibi <b>${esc(D.ad)}</b> özür diliyor.</p><p>Sözleşme cezası kesersek şube toparlanır ama bir süre kalitesi düşük kalır. Sözleşmeyi bitirirsek şube kapanır; markamız korunur ama o şehre şiş ve malzeme satışımız da biter.</p>`)
+    openModal('Denetim ekibimiz yakaladı', who('hq', `<p>Denetim ekibimiz <b>${esc(D.city)}</b> şubesinin şişi bizden değil, dışarıdan ucuza aldığını ve tarifimize uymadığını tespit etti. <b>Müşteriye yansımadan durdurduk.</b> Şube sahibi <b>${esc(D.ad)}</b> özür diliyor.</p><p>Sözleşme cezası kesersek şube kurala döner. Sözleşmeyi bitirirsek şube kapanır; o şehre şiş ve malzeme satışımız da biter.</p>`)
       + btn(`Ceza kes · +${fmtTL(D.ceza)}`, 'Sözleşmeyi bitir'), 'decide', { lock: true });
   } else if (D.k === 'frikinci') {
-    openModal('İkinci şube isteği', who('hq', `<p><b>${esc(D.from)}</b> şubemiz çok iyi gidiyor. Sahibi <b>${esc(D.ad)}</b> şimdi <b>${esc(D.cityAd)}</b>’da da bir şube açmak istiyor.</p><p>Giriş ücretinde biraz indirim bekliyor: <b>${fmtTL(D.ucret)}</b>. İşini bilen biri; yeni şube de iyi başlar.</p>`)
+    openModal('İkinci şube isteği', who('hq', `<p><b>${esc(D.from)}</b> şubemiz çok iyi gidiyor. Sahibi <b>${esc(D.ad)}</b> şimdi <b>${esc(ekDe(D.cityAd))}</b> ${ekDe(D.cityAd).endsWith('e') ? 'de' : 'da'} bir şube açmak istiyor.</p><p>Giriş ücretinde biraz indirim bekliyor: <b>${fmtTL(D.ucret)}</b>. İşini bilen biri; yeni şube de iyi başlar.</p>`)
       + btn(`Kabul et · +${fmtTL(D.ucret)}`, 'Geri çevir'), 'decide', { lock: true });
+  } else if (D.k === 'frzam') {
+    openModal('Tavuk ve yem zammı', who('hq', `<p>Tavuk ve yem fiyatları ülke genelinde <b>%${D.pct}</b> arttı.</p><p>Şubelere giden malın fiyatını sabit tutarsak zammı altı ay biz karşılarız: ayda yaklaşık <b>${fmtTL(D.aylik)}</b>. Kendi çiftliğimizden giden şiş arttıkça bu yük azalır. Şubeler rahat eder, marka güçlenir.</p><p>Zammı yansıtırsak şubelerin müşterisi azalır; altı ay bizden aldıkları mal da yaklaşık %12 düşer.</p>`)
+      + btn('Fiyatı sabit tut', 'Zammı yansıt'), 'decide', { lock: true });
+  } else if (D.k === 'frsavas') {
+    openModal('İndirim savaşı', who('hq', `<p>Ülke çapında büyük bir zincir altı ay sürecek bir indirim kampanyası başlattı.</p><p>Biz de ülke çapında reklamla karşılık verirsek şubelerimiz yerini korur, marka güçlenir: <b>${fmtTL(D.cost)}</b>.</p><p>Karşılık vermezsek beş ay boyunca şubelerin satışı yaklaşık %18 düşer.</p>`)
+      + btn(`Reklamla karşılık ver · ${fmtTL(D.cost)}`, 'Bekleyelim'), 'decide', { lock: true });
   } else if (D.k === 'frrakip') {
     openModal('Şubenin karşısına rakip', who('hq', `<p><b>${esc(D.city)}</b> şubemizin tam karşısına büyük bir zincir açılıyor.</p><p>Yerel reklama destek verirsek rakip tutunamaz. Vermezsek şubenin satışı <b>altı ay boyunca dörtte bir düşer</b>; bizden aldığı şiş ve malzeme de azalır.</p>`)
       + btn(`Reklama destek ver · ${fmtTL(D.cost)}`, 'Kendi başına baksın'), 'decide', { lock: true });
@@ -7193,7 +7369,10 @@ const FIRSAT_TXT = {
   fraday: e => [`${esc(ekDen(e.city))} ${e.n > 1 ? e.n + ' ' : ''}franchise başvurusu`, e.n > 1 ? 'Franchise merkezinde başvuruları karşılaştırıp birini seçebilirsin.' : 'Franchise merkezinde başvuruya bakıp kabul edebilir ya da geri çevirebilirsin.', 'store', 'amber'],
   fryeni: e => [`${esc(e.city)} şubesi açıldı`, `Giriş ücreti kasaya girdi: ${fmtTL(e.ucret)}. Şube şişini ve malzemesini bizden alacak.`, 'store', 'gold'],
   frkapandi: e => [`${esc(e.city)} şubesi kapandı`, `${esc(e.neden.charAt(0).toLocaleUpperCase('tr-TR') + e.neden.slice(1))}.`, 'x', 'red'],
-  frhaber: e => [`${esc(e.city)} şubesi gazetede`, 'Bayat tavuk kullandığı ortaya çıktı; marka puanımız düştü. Puanı düşen şubelere denetim yollamak bu riski azaltır.', 'down', 'red'],
+  frzamok: () => ['Fiyat sabit kaldı', 'Zammı altı ay biz karşılıyoruz; şubelerimiz rahat, marka güçlendi.', 'heart', 'green'],
+  frzamno: () => ['Zam şubelere yansıdı', 'Altı ay şubelerin satışı biraz düşük olacak.', 'down', 'amber'],
+  frsavasok: () => ['Reklamımız her yerde', 'İndirim savaşına karşılık verdik; şubelerimiz yerini korudu.', 'mega', 'green'],
+  frsavasno: () => ['İndirim savaşı', 'Beş ay şubelerin satışı düşük olacak; sonra müşteri geri döner.', 'down', 'amber'],
   frbasin: () => ['Markamız gazetede', '“Şehir şehir aynı lezzet.” İki ay boyunca dükkânımıza da daha çok müşteri gelecek.', 'star', 'green'],
   frceza: e => [`${esc(e.city)} şubesine ceza`, `Sözleşme cezası kasaya girdi: ${fmtTL(e.ceza)}. Şube artık daha dikkatli.`, 'gavel', 'green'],
   frikincired: e => ['İkinci şube isteği geri çevrildi', `${esc(e.city)} boş kaldı; başka bir aday gelebilir.`, 'x', 'amber'],
@@ -7231,7 +7410,7 @@ function openYil(y) {
 }
 
 /* ---------- bu ay: para kartına dokununca ---------- */
-const ACC_AD = { frans: 'Franchise', maas: 'Maaşlar', malzeme: 'Malzeme', yem: 'Dışarıdan yem', kira: 'Kira', fatura: 'Faturalar', arazi: 'Çiftlik', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar', faiz: 'Banka faizi', vergi: 'Vergi', hasar: 'Kriz ve hasar', gubre: 'Gübre', katki: 'Katkı' };
+const ACC_AD = { kurum: 'Franchise kadrosu', darbe: 'Büyük ödemeler', frans: 'Franchise', maas: 'Maaşlar', malzeme: 'Malzeme', yem: 'Dışarıdan yem', kira: 'Kira', fatura: 'Faturalar', arazi: 'Çiftlik', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar', faiz: 'Banka faizi', vergi: 'Vergi', hasar: 'Kriz ve hasar', gubre: 'Gübre', katki: 'Katkı' };
 const ACC_GRUP = [
   ['Ürün maliyeti', ['malzeme', 'yem', 'arazi', 'gubre', 'katki']],
   ['İşletme giderleri', ['maas', 'kira', 'fatura', 'kampanya', 'bakim']],
@@ -7432,6 +7611,12 @@ async function storyCard() {
   // unvan
   const un = UNVAN[S.unvan].ad; g.font = F(700, 40); const uw = g.measureText(un).width + 80;
   rr(90, 520, uw, 76, 38, '#FFD500'); g.fillStyle = '#4A3700'; g.fillText(un, 130, 572);
+  // dönerci karakteri: Denedik rozetleri (yoksa kararlarına göre)
+  try {
+    const ks = (S.denedik && S.denedik.kar && S.denedik.kar.length ? S.denedik.kar : karakterler().map(x => x.k)).slice(0, 3);
+    const ims = await Promise.all(ks.map(k => new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = KAR_IMG[k]; })));
+    ims.forEach((im, i) => { if (!im) return; const d = 112, x = 990 - d - (ims.length - 1 - i) * 92, y = 500; g.save(); g.beginPath(); g.arc(x + d / 2, y + d / 2, d / 2 + 5, 0, 7); g.fillStyle = '#fff'; g.fill(); g.restore(); g.drawImage(im, x, y, d, d); });
+  } catch (e) { }
   g.fillStyle = '#DCE3FF'; g.font = F(500, 38); g.fillText(`${Math.floor(T.months / 12) ? Math.floor(T.months / 12) + ' yıl ' : ''}${T.months % 12 ? (T.months % 12) + ' ay ' : ''}açık kaldı${T.karAy ? ` · ${T.karAy} ay kâr` : ''}`, 90, 670);
   // dört kutu
   const nR = ROZET.filter(r => S.rozet[r.k] != null).length;
@@ -7717,6 +7902,7 @@ function dispatchEvents() {
     else if (e.type === 'inc') incFlash(e);
     else if (e.type === 'denetim') showSheet(openDenetim);
     else if (e.type === 'kriz') { const ee = e; showSheet(() => openKriz(ee)); }
+    else if (e.type === 'darbe') { const ee = e; showSheet(() => openDarbe(ee)); }
     else if (e.type === 'staff') staffFlash(e);
     else if (e.type === 'ciftlik') ciftlikFlash(e);
     else if (e.type === 'omur') omurFlash(e);
@@ -7785,7 +7971,7 @@ const PUAN_HINT = {
   rakip: () => S.rakipN ? `Bugüne kadar ${S.rakipN} rakip dönerci açıldı; her biri biraz müşteri götürdü.` : 'Henüz rakip yok.',
   olay: () => { const a = S.puanEv.filter(e => S.t < e.until).map(e => PUAN_EV[e.k] || e.k); return a.length ? a.join(', ') + '.' : 'Yakın zamanda bir olay olmadı.'; },
 };
-const PUAN_EV = { denetim: 'son denetim', zehir: 'zehirlenme şikâyeti' };
+const PUAN_EV = { denetim: 'son denetim', zehir: 'kapalı kaldığımız günler' };
 function openPuan() {
   if (!S) return;
   const parts = puanParts(), tg = puanTarget(), pct = Math.round((puanMult() - 1) * 100);
