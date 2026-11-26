@@ -110,11 +110,7 @@ html.full .caption { display: none; }
 
 /* --- paneller --- */
 .panel { background: var(--glass); box-shadow: var(--sh-1); border-radius: 16px; }
-@media (hover: hover) and (pointer: fine) {
-  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .panel { background: rgba(255, 255, 255, .84); -webkit-backdrop-filter: blur(18px) saturate(1.6); backdrop-filter: blur(18px) saturate(1.6); }
-  }
-}
+/* buzlu cam (backdrop-filter) yok: büyük ekranda ve uzun oyunda her karede yeniden bulanıklaştırmak oyunu kastırıyordu */
 .hud-l, .hud-r { display: contents; }
 .hud-l > *, .hud-r > * { position: absolute; z-index: 10; }
 .game:not(.playing) .hud-l, .game:not(.playing) .hud-r { visibility: hidden; }
@@ -263,7 +259,7 @@ html.full .caption { display: none; }
 .kv dt, .kv dd { margin: 0; padding: 8px 0; border-top: 1px solid var(--sep); }
 .kv dt:first-of-type, .kv dd:first-of-type { border-top: 0; }
 .kv dt { color: var(--ink-2); padding-right: 12px; }
-.kv dd { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.kv dd { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; } .kv dd.nw { white-space: nowrap; }
 .kv dt { min-width: 0; }
 .bar { margin: 0; }
 .bar .bl { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; margin-bottom: 6px; }
@@ -687,8 +683,8 @@ html.full .caption { display: none; }
 .sky.sz-kis .wx i { box-shadow: 0 0 0 1px rgba(160, 185, 215, .35); }
 .sky.sz-sonbahar .wx i { border-radius: 60% 0 60% 0; width: 9px; height: 9px; animation-name: fallLeaf; }
 .sky.sz-ilkbahar .wx i { border-radius: 60% 0 60% 0; width: 6px; height: 6px; animation-name: fallLeaf; opacity: .85; }
-@keyframes fall { to { transform: translate3d(var(--dx, 30px), 720px, 0) scale(var(--sc, 1)); } }
-@keyframes fallLeaf { 0% { transform: translate3d(0, 0, 0) rotate(0) scale(var(--sc, 1)); } 50% { transform: translate3d(calc(var(--dx, 30px) * .2), 360px, 0) rotate(200deg) scale(var(--sc, 1)); } 100% { transform: translate3d(var(--dx, 30px), 720px, 0) rotate(420deg) scale(var(--sc, 1)); } }
+@keyframes fall { to { transform: translate3d(var(--dx, 30px), var(--fh, 720px), 0) scale(var(--sc, 1)); } }
+@keyframes fallLeaf { 0% { transform: translate3d(0, 0, 0) rotate(0) scale(var(--sc, 1)); } 50% { transform: translate3d(calc(var(--dx, 30px) * .2), calc(var(--fh, 720px) / 2), 0) rotate(200deg) scale(var(--sc, 1)); } 100% { transform: translate3d(var(--dx, 30px), var(--fh, 720px), 0) rotate(420deg) scale(var(--sc, 1)); } }
 @media (prefers-reduced-motion: reduce) { .sky .cl, .wx { display: none; } }
 
 /* ---------- sürüm 10: hikâye arayüzü ---------- */
@@ -777,16 +773,16 @@ html.full .caption { display: none; }
 .game.gwait.playing .pausetag { display: flex; } .game.gwait .pausetag .pt1 { display: none; } .game.gwait .pausetag .pt2 { display: inline; }
 
 /* ---------- sürüm 11: koyu sahne, cam gibi üst bilgi ---------- */
-.panel { --glass: rgba(13, 22, 58, .74); --surface: rgba(255, 255, 255, .12); --ink: #FFFFFF; --ink-2: #B9C3E6; --ink-3: #7D89B5; --fill: rgba(255, 255, 255, .10); --fill-2: rgba(255, 255, 255, .2); --sep: rgba(255, 255, 255, .12);
+.panel { --glass: rgba(13, 22, 58, .9); --surface: rgba(255, 255, 255, .12); --ink: #FFFFFF; --ink-2: #B9C3E6; --ink-3: #7D89B5; --fill: rgba(255, 255, 255, .10); --fill-2: rgba(255, 255, 255, .2); --sep: rgba(255, 255, 255, .12);
   --cobalt: #FFFFFF; --cobalt-l: rgba(255, 255, 255, .16); --bad-l: rgba(255, 99, 88, .26); --bad: #FF8A80; --good: #6EE7A0; --warn: #FFC56B; --warn-l: rgba(255, 197, 107, .2); --navy: #FFFFFF;
-  color: var(--ink); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .09), 0 10px 30px rgba(3, 8, 28, .35); }
+  color: var(--ink); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .09), 0 10px 30px rgba(3, 8, 28, .35); }
 .pz.uz { background: rgba(255, 213, 0, .16); color: #FFE27A; } .pz.uz .uic svg { stroke: #FFD500; } .pz.uz .up i { background: rgba(255, 226, 122, .3); } .pz.uz .up i.on { background: #FFD500; }
 .pz.uz.top { background: linear-gradient(90deg, #FFE27A, #FFD500); color: #5C4300; }
 .sky .cl { display: none; }
 .sky .vig, .sky.sz-sonbahar .vig, .sky.sz-kis .vig, .sky.sz-ilkbahar .vig { background: radial-gradient(ellipse at 50% 46%, rgba(6, 10, 34, 0) 55%, rgba(6, 10, 34, .42) 100%); }
 .panel { background: rgba(13, 22, 58, .74); }
 .seg button.on { background: #3D5CE0; color: #fff; }
-.nextbar { position: absolute; z-index: 8; left: 50%; transform: translateX(-50%); bottom: calc(80px + var(--sb)); display: flex; align-items: center; gap: 10px; max-width: min(600px, calc(100% - 28px)); padding: 7px 12px 7px 7px; border: 0; border-radius: 999px; cursor: pointer; font: 500 13px/1.25 var(--f); color: #fff; background: rgba(13, 22, 58, .8); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1), 0 10px 30px rgba(3, 8, 28, .35); text-align: left; transition: transform .15s var(--ease); }
+.nextbar { position: absolute; z-index: 8; left: 50%; transform: translateX(-50%); bottom: calc(80px + var(--sb)); display: flex; align-items: center; gap: 10px; max-width: min(600px, calc(100% - 28px)); padding: 7px 12px 7px 7px; border: 0; border-radius: 999px; cursor: pointer; font: 500 13px/1.25 var(--f); color: #fff; background: rgba(13, 22, 58, .92); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1), 0 10px 30px rgba(3, 8, 28, .35); text-align: left; transition: transform .15s var(--ease); }
 .nextbar[hidden] { display: none; } .nextbar:active { transform: translateX(-50%) scale(.97); }
 .nextbar .nk { flex: none; padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; background: rgba(255, 255, 255, .14); }
 .nextbar .nt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -860,6 +856,12 @@ html.full .caption { display: none; }
 .game[data-mode="short"] .einfo { grid-template-columns: 1fr 1fr; }
 /* büyük ekranda açılış ekranı da büyür */
 @media (min-width: 1600px) and (min-height: 950px) { html:not(.full) .screen.title .in { zoom: 1.3; } }
+
+/* ---------- sürüm 13: franchise ---------- */
+.frmap { display: block; width: 100%; height: auto; margin: 0 0 10px; }
+.tbl.frs td { vertical-align: top; } .tbl.frs td span { display: block; font-size: 11.5px; color: var(--ink-2); margin-top: 1px; }
+.tbl.frs td:last-child { text-align: right; white-space: nowrap; } .tbl.frs .pos { color: var(--good, #2E9E4F); } .tbl.frs .neg { color: var(--bad); }
+.tbl.res td .sv { display: block; font-size: 11.5px; color: var(--ink-2); margin: 1px 0 0 26px; }
 </style>
 </head>
 <body>
@@ -948,7 +950,7 @@ html.full .caption { display: none; }
     </div>
   </div>
 </div>
-<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 12.2</span><span>Oyun kendiliğinden kaydedilir</span></div>
+<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 13</span><span>Oyun kendiliğinden kaydedilir</span></div>
 </div>
 
 <script>(function(){var e=window.self!==window.top,m=!!(window.matchMedia&&matchMedia('(pointer: coarse)').matches&&Math.min(screen.width,screen.height)<820);if(e)document.body.classList.add('embed');if(e||m)document.documentElement.classList.add('full');})();</script>
@@ -1070,8 +1072,26 @@ const C = {
   sezon: { musteri: [0.93, 0.93, 0.97, 1.02, 1.05, 1.08, 1.08, 1.05, 1.04, 1.0, 0.96, 0.93], paket: [1.15, 1.15, 1.08, 1.0, 0.95, 0.92, 0.92, 0.95, 1.0, 1.05, 1.1, 1.15] },
   // yan ürünler: menüye bir kez eklenir; müşterilerin bir kısmı dönerin yanında bunu da alır (ay: açıldığı ay)
   yan: {
-    patates: { label: 'Patates kızartması', get cost() { return px(280000); }, oran: 0.30, pay: 0.25, mal: 0.5, ay: 4 },
-    tatli: { label: 'Sütlü tatlı', get cost() { return px(650000); }, oran: 0.20, pay: 0.40, mal: 0.48, ay: 18 },
+    patates: { label: 'Patates kızartması', kisa: 'patates', act: 'Menüye ekle: Patates kızartması', get cost() { return px(280000); }, oran: 0.30, pay: 0.25, mal: 0.5, ay: 4 },
+    // özel tatlı satın alınmaz, geliştirilir: dev ay boyunca mutfakta denenir, sonra menüye girer
+    tatli: { label: 'Özel tatlı', kisa: 'tatlı', act: 'Menüye özel tatlı geliştir', get cost() { return px(650000); }, oran: 0.20, pay: 0.40, mal: 0.48, ay: 18, dev: 1 },
+  },
+  // franchise (sürüm 13): marka olunca şehirlere şube verilir; şubeler dönerini merkez mutfaktan alır
+  fr: {
+    unvan: 3, puan: 4.2,                                    // panelin açılması: "Şehrin en iyilerinden" ve ★4,2
+    infra: {
+      mutfak: { label: 'Merkez mutfak ve dağıtım', ne: 'Şubelere hazır şiş gönderir: önce kendi çiftliğinden, yetmezse sözleşmeli üreticiden', cost: 5000000, ay: 4, icon: 'truck' },
+      akademi: { label: 'Eğitim akademisi', ne: 'Şube ustalarını yetiştirir; yeni şubeler iyi başlar, zayıflar toparlanır', cost: 3000000, ay: 3, gider: 80000, icon: 'book' },
+      denetim: { label: 'Denetim ekibi', ne: 'Şubeleri habersiz denetler; kural dışını çoğu zaman yakalar', cost: 2000000, ay: 2, gider: 100000, icon: 'shield' },
+      marka: { label: 'Marka tescili ve sözleşmeler', ne: 'Adın korunur, franchise sözleşmesi hazırlanır', cost: 2000000, ay: 2, icon: 'key' },
+    },
+    royalty: 0.08,          // şube cirosundan aylık pay
+    toptan: 0.42,           // kendi çiftliğinden giden porsiyon: menü fiyatının bu kadarı kasaya
+    sozlesmeli: 0.10,       // sözleşmeli üreticiden giden porsiyon: yalnız aracılık payı
+    rezerv: 4,              // dolapta kendi dükkânın için bırakılan şiş
+    birim: 30,              // orta boy şehirde bir şubenin aylık satışı (ekran birimi; ×100 porsiyon)
+    giris: 900000,          // giriş ücretinin temeli (şehir ve aday türüyle çarpılır)
+    max: 12,
   },
   // banka kredisi: eşit taksitli; faiz gider yazılır, anapara kasadan düşer
   kredi: { faiz: 0.022, ay: 24, tutar: [1000000, 3000000], guven: 35 },
@@ -1096,6 +1116,27 @@ const fmtK = v => fmtNum(v * KQ);                  // ekrandaki birimi gerçek s
 const fmtKg = v => v.toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const sum = (arr, f = x => x) => arr.reduce((a, x) => a + f(x), 0);
+
+/* ---------- franchise: şehirler ve aday türleri ---------- */
+const FR_CITIES = [
+  { k: 'istanbul', ad: 'İstanbul', lon: 28.98, lat: 41.01, b: 1.6 }, { k: 'ankara', ad: 'Ankara', lon: 32.85, lat: 39.93, b: 1.3 },
+  { k: 'izmir', ad: 'İzmir', lon: 27.14, lat: 38.42, b: 1.25 }, { k: 'bursa', ad: 'Bursa', lon: 29.06, lat: 40.19, b: 1.1 },
+  { k: 'antalya', ad: 'Antalya', lon: 30.71, lat: 36.89, b: 1.05 }, { k: 'adana', ad: 'Adana', lon: 35.32, lat: 37.0, b: 1.0 },
+  { k: 'konya', ad: 'Konya', lon: 32.49, lat: 37.87, b: 0.95 }, { k: 'gaziantep', ad: 'Gaziantep', lon: 37.38, lat: 37.07, b: 0.95 },
+  { k: 'mersin', ad: 'Mersin', lon: 34.64, lat: 36.8, b: 0.9 }, { k: 'kayseri', ad: 'Kayseri', lon: 35.49, lat: 38.73, b: 0.85 },
+  { k: 'diyarbakir', ad: 'Diyarbakır', lon: 40.23, lat: 37.92, b: 0.85 }, { k: 'eskisehir', ad: 'Eskişehir', lon: 30.52, lat: 39.78, b: 0.8 },
+  { k: 'samsun', ad: 'Samsun', lon: 36.33, lat: 41.29, b: 0.8 }, { k: 'denizli', ad: 'Denizli', lon: 29.09, lat: 37.78, b: 0.75 },
+  { k: 'trabzon', ad: 'Trabzon', lon: 39.72, lat: 41.0, b: 0.75 }, { k: 'erzurum', ad: 'Erzurum', lon: 41.27, lat: 39.9, b: 0.7 },
+];
+const FR_TIP = {
+  deneyimli: { ad: 'Deneyimli işletmeci', kalite: 0.74, durust: 0.85, ucret: 1.3, boyut: 1.1, not: 'işi bilir, giriş ücreti yüksek' },
+  hevesli: { ad: 'Hevesli genç girişimci', kalite: 0.5, durust: 0.8, ucret: 0.7, boyut: 0.9, not: 'acemi ama öğrenmeye açık; akademiyle hızlı toparlar' },
+  yatirimci: { ad: 'Varlıklı yatırımcı', kalite: 0.6, durust: 0.55, ucret: 1.6, boyut: 1.25, not: 'büyük dükkân açar; kâr için kestirme yola sapabilir' },
+  usta: { ad: 'Eski döner ustası', kalite: 0.84, durust: 0.9, ucret: 0.8, boyut: 0.8, not: 'elinin ayarı iyi; küçük ama sağlam' },
+  aile: { ad: 'Aile işletmesi', kalite: 0.64, durust: 0.92, ucret: 0.9, boyut: 0.95, not: 'güvenilir ve sabırlı' },
+};
+const FR_AD = ['Ayşe', 'Mehmet', 'Elif', 'Murat', 'Zeynep', 'Emre', 'Fatma', 'Burak', 'Selin', 'Okan', 'Hülya', 'Kerem', 'Derya', 'Serkan', 'Gül', 'Tolga', 'Nur', 'Cem', 'Esra', 'Barış'];
+const FR_SOY = ['Kaya', 'Demir', 'Şahin', 'Yıldız', 'Aydın', 'Öztürk', 'Arslan', 'Doğan', 'Kılıç', 'Aslan', 'Çetin', 'Kurt', 'Koç', 'Özdemir', 'Polat', 'Erdem', 'Güneş', 'Tekin'];
 
 /* ---------- dükkân yerleşimi (ızgara birimi) ---------- */
 const SHOP = {
@@ -1141,7 +1182,7 @@ function newGame(name, seed, opts = {}) {
     shop: { ocak: [null, null, null, null], kasa: [null, null, null, null], cone: [0, 0, 0, 0], tray: 0, cust: [], nextArr: 0, seatTaken: {},
       paket: false, pmut: false, ptray: 0, pocak: { cone: 0, p: 0, st: 'idle' }, kurye: [null, null, null], orders: [], nextOrd: 0 },
     camps: {}, campLv: {}, boost: null, cool: {},
-    acc: { maas: 0, malzeme: 0, yem: 0, kira: 0, fatura: 0, arazi: 0, gubre: 0, katki: 0, vet: 0, muh: 0, ek: 0, sigorta: 0, bakim: 0, kampanya: 0, ceza: 0, faiz: 0, vergi: 0, hasar: 0 },
+    acc: { maas: 0, malzeme: 0, yem: 0, kira: 0, fatura: 0, arazi: 0, gubre: 0, katki: 0, vet: 0, muh: 0, ek: 0, sigorta: 0, bakim: 0, kampanya: 0, ceza: 0, faiz: 0, vergi: 0, hasar: 0, frans: 0 },
     fines: { next: C.month * 7, turned: [], lastQueue: -1e9, fired: [], lastSuit: -1e9 },
     m: newMonth(),
     hist: [],
@@ -1161,6 +1202,7 @@ function newGame(name, seed, opts = {}) {
     // sürüm 10: hikâye
     yan: {}, kredi: null,
     unvan: 0, unvanAt: [0], rozet: {}, log: [], yillar: [], denedik: { best: 0, n: 0, last: null }, buzz: null, ucuz: null, flags: {}, krizAt: null, lastFirsat: '',
+    yanDev: null, fr: newFr(),
   };
   S.inc.firsat = C.month * between(C.inc.firsat.first);
   S.inc.denedik = C.month * between(C.inc.denedik.first);
@@ -1184,7 +1226,8 @@ function newGame(name, seed, opts = {}) {
   logEv('acilis', `${S.name} kapılarını açtı. Bir tarla, bir kümes, küçük bir mutfak ve köşede bir dükkân.`, 'gold');
   return S;
 }
-function newMonth() { return { rev: 0, sold: 0, paket: 0, lost: 0, angry: 0, harvest: 0, pilic: 0, kesim: 0, buy: 0, olum: 0, disYem: 0, ceza: 0, nosis: 0 }; }
+function newFr() { return { acik: false, infra: {}, adaylar: [], subeler: [], marka: 0, need: 0, nid: 1, nextAday: 0, m: { pay: 0, toptan: 0, soz: 0, kendi: 0, dis: 0 }, son: null, top: { giris: 0, pay: 0, toptan: 0, soz: 0 } }; }
+function newMonth() { return { fr: 0, rev: 0, sold: 0, paket: 0, lost: 0, angry: 0, harvest: 0, pilic: 0, kesim: 0, buy: 0, olum: 0, disYem: 0, ceza: 0, nosis: 0 }; }
 function newChicken(w) { return { id: S.nid++, w: w || C.kitchen.w0, app: 0.85 + rand() * 0.3, sick: false, sickT: 0 }; }
 function newWorker(role) {
   S.totals.hires++;
@@ -1309,7 +1352,9 @@ const fameMult = () => 1 + C.unvan.fame * (S.unvan || 0);
 function buzzMult() { const b = S.buzz; if (!b || S.t >= b.until) return 1; const left = b.until - S.t; return 1 + (b.mult - 1) * Math.min(1, (S.t - b.t0) / 3, left / 6); }
 function setBuzz(k, mult, months) { if (S.buzz && S.t < S.buzz.until && S.buzz.mult > mult) return; S.buzz = { k, mult, t0: S.t, until: S.t + C.month * months }; }
 const kirMult = () => 1 - 0.55 * (S.kir || 0);
-const shopMult = () => rivalMult() * krizMult() * fameMult() * buzzMult() * kirMult();
+// franchise markası: her açık şube adını duyurur; marka puanı iyiyse kendi dükkânına da müşteri gelir, kötüyse kaçar
+function markaMult() { const F = S.fr; if (!F) return 1; const n = frAcikSube().length; if (!n) return 1; return 1 + Math.min(0.18, 0.02 * n) * clamp((F.marka - 3.6) / 0.9, -1, 1); }
+const shopMult = () => rivalMult() * krizMult() * fameMult() * buzzMult() * kirMult() * markaMult();
 function arrivalRate() { return working('kasa').length && !isClosed() ? (C.shop.base + campaignAdd()) * puanMult() * priceMult() * boostMult() * shopMult() * sezonMult() : 0; }
 function orderRate() { return S.shop.paket && working('kurye').length && !isClosed() ? (C.shop.paket.base + campaignAdd('paket')) * puanMult() * priceMult() * shopMult() * sezonMult('paket') : 0; }
 function stationSpeed(kind, w) {
@@ -1347,7 +1392,7 @@ function monthCostRate() {
   let ar = 0; for (const t of S.tiles) { if (t.type === 'tarla') ar += px(F.tarlaUp); else if (t.type === 'kumes') ar += px(F.kumesUp[t.dens] || 0); }
   let kp = 0; for (const k in C.hq.camps) if (S.camps[k]) kp += C.hq.camps[k].cost;
   const kapali = isClosed() ? 0.5 : 1;                      // kapalıyken fatura yarıya iner
-  return { maas, kira: kiraNow(), fatura: C.fixed.fatura * kapali, arazi: ar, vet: S.vet ? vetCost() : 0, muh: S.muh ? muhCost() : 0, ek: S.ek && S.ek.zincir ? px(C.ek.zincir.ay) : 0, sigorta: S.sigorta ? sigortaCost() : 0, bakim, kampanya: kp, faiz: Math.max(0, -S.cash) * C.bank.faiz };
+  return { maas, kira: kiraNow(), fatura: C.fixed.fatura * kapali, arazi: ar, vet: S.vet ? vetCost() : 0, muh: S.muh ? muhCost() : 0, ek: S.ek && S.ek.zincir ? px(C.ek.zincir.ay) : 0, sigorta: S.sigorta ? sigortaCost() : 0, bakim, kampanya: kp, faiz: Math.max(0, -S.cash) * C.bank.faiz, frans: frGider() };
 }
 const accTotal = () => sum(Object.values(S.acc));
 function assetValue() {
@@ -1379,6 +1424,8 @@ function step(dt) {
   finesStep();
   incStep();
   hqStep(dt);
+  frStep(dt);
+  if (S.yanDev && S.t >= S.yanDev.until) { const k = S.yanDev.k; S.yanDev = null; S.yan[k] = true; logEv('yan', `${C.yan[k].label} hazır, menüye girdi.`, 'good'); ev('yan', { k }); ev('firsat', { k: 'yanhazir', ad: C.yan[k].label }); }
   accrue(dt);
   S.puan += (puanTarget() - S.puan) * Math.min(1, dt / (C.month * 0.6));
   if (S.cash > S.totals.peak) S.totals.peak = S.cash;
@@ -2027,12 +2074,14 @@ function monthEnd(mi) {
   const a = S.acc, cost = Math.round(accTotal());
   S.cash -= cost;
   const rec = { m: mi, rev: S.m.rev, cost, buy: S.m.buy, parts: Object.fromEntries(Object.entries(a).map(([k, v]) => [k, Math.round(v)])), sold: S.m.sold, paket: S.m.paket, lost: S.m.lost, cash: S.cash, itibar: Math.round(S.itibar), puan: Math.round(S.puan * 10) / 10, harvest: Math.round(S.m.harvest), pilic: S.m.pilic, kesim: S.m.kesim, olum: S.m.olum, nosis: Math.round(S.m.nosis) };
+  rec.fr = Math.round(S.m.fr || 0);
   rec.profit = rec.rev - rec.cost;
   S.hist.push(rec); if (S.hist.length > 48) S.hist.shift();
   S.totals.months++; S.totals.cost += cost; S.totals.buy += S.m.buy;
   S.totals.kalite += (a.vet || 0) + (a.muh || 0) + (a.ek || 0);
   S.best = Math.max(S.best, rec.profit); if (rec.profit > 0) S.totals.karAy = (S.totals.karAy || 0) + 1;
   S.totals.bestSold = Math.max(S.totals.bestSold, rec.sold + rec.paket);
+  frMonth(mi, rec);
   for (const k in a) a[k] = 0;
   // vergi: kârlı ayın dörtte biri, ertesi ayın giderine yazılır (nisanda toplu ödeme yok)
   const vergiBu = Math.max(0, rec.profit + (rec.parts.vergi || 0)) * C.inc.vergi;
@@ -2123,9 +2172,21 @@ const A = {
     return false;
   },
   startMarine(k) { const m = C.kitchen.marine[k]; if (!m || !m.cost || S.marineDone[k] || S.arge || !isOpen('marine')) return false; spend(m.cost); S.arge = { k, t: 0 }; ev('arge', { k }); return true; },
+  frBuild(k) {
+    const I = C.fr.infra[k]; if (!I || !frOpen() || S.fr.infra[k]) return false;
+    const c = px(I.cost); if (S.cash < c) return false;
+    spend(c); S.fr.infra[k] = { t0: S.t, until: S.t + I.ay * C.month, ok: false }; logEv('fr', `${I.label} kurulmaya başlandı.`, 'info'); ev('frkur', { k }); return true;
+  },
+  frGive(id) {
+    const F = S.fr, i = F.adaylar.findIndex(a => a.id === id); if (i < 0 || !frHazir() || frAcikSube().length >= C.fr.max) return false;
+    frSubeAc(F.adaylar.splice(i, 1)[0]); return true;
+  },
+  frEnd(id) { const sb = S.fr.subeler.find(x => x.id === id && !x.kapali); if (!sb) return false; frKapat(sb, 'sözleşme bitirildi'); return true; },
   buyYan(k) {
-    const y = C.yan[k]; if (!y || S.yan[k] || monthIdx() < y.ay || S.cash < y.cost) return false;
-    spend(y.cost); S.yan[k] = true; logEv('yan', `Menüye ${y.label.toLocaleLowerCase('tr-TR')} eklendi.`, 'good'); ev('yan', { k }); return true;
+    const y = C.yan[k]; if (!y || S.yan[k] || S.yanDev || monthIdx() < y.ay || S.cash < y.cost) return false;
+    spend(y.cost);
+    if (y.dev) { S.yanDev = { k, until: S.t + y.dev * C.month }; logEv('yan', `${y.label} geliştirilmeye başlandı.`, 'info'); ev('yanDev', { k }); return true; }
+    S.yan[k] = true; logEv('yan', `Menüye ${y.label.toLocaleLowerCase('tr-TR')} eklendi.`, 'good'); ev('yan', { k }); return true;
   },
   takeLoan(i) {
     if (!krediOk()) return false;
@@ -2392,6 +2453,13 @@ function issues() {
   const fin = { sec: 'hq', hit: 'oda:finans' };
   if (S.cash < 0) push('hq', 'eksi', 'Kasa eksiye düştü; banka kredisiyle dönüyoruz. Satışı artır ya da giderleri kıs.', after < -lim * 0.7 ? 2 : 1, fin);
   if (after < -lim * 0.85) push('hq', 'iflasyakin', `Bu gidişle ay sonunda kasa ${fmtTL(after)} olur ve banka limiti dolar: iflas! Gereksiz gideri kapat ya da bir şey sat.`, 2, fin);
+  if (frOpen()) {
+    const F = S.fr, fg = { sec: 'hq', hit: 'oda:franchise' };
+    const ilk = Object.keys(C.fr.infra).find(k => !F.infra[k]);
+    if (ilk && !Object.keys(F.infra).length) push('hq', 'frbasla', 'Artık franchise verebiliriz! Önce dört altyapıyı kurmalıyız; franchise masasına bak.', 1, Object.assign({ act: `Kur: ${C.fr.infra[ilk].label}` }, fg));
+    else if (frHazir() && F.adaylar.length) { const a = F.adaylar[0]; push('hq', 'fraday', `${ekDen(frCity(a.city).ad)} franchise başvurusu var: ${a.ad}.`, 1, Object.assign({ act: `Franchise ver: ${frCity(a.city).ad}` }, fg)); }
+    if (F.son && F.son.sube && F.son.dis > F.son.kendi * 2 && F.son.dis > 20) push('hq', 'frsis', 'Şubelere giden şişin çoğu sözleşmeli üreticiden gidiyor. Çiftliği ve mutfağı büyütürsek o para bize kalır.', 1, { sec: 'farm' });
+  }
   const last = S.hist[S.hist.length - 1];
   if (last && last.profit < 0 && S.cash < 300000) push('hq', 'zarar', `Geçen ay ${fmtTL(-last.profit)} zarar ettik. Boşta duran çalışan ya da gereksiz gider var mı?`, 1, fin);
   return out;
@@ -2457,7 +2525,7 @@ function unvanReqs(lv) {
     case 1: return [r('Dükkânı üç ay açık tut', T.months >= 3, `${Math.min(3, T.months)} / 3 ay`), r(`Toplam ${fmtK(40)} porsiyon sat`, tot >= 40, `${fmtK(Math.min(40, tot))} / ${fmtK(40)}`), r('Bir ayı kârla kapat', T.karAy >= 1, T.karAy ? 'oldu' : 'henüz değil')];
     case 2: return [r('Bir yılı doldur', T.months >= 12, `${Math.min(12, T.months)} / 12 ay`), star(4.0), best(50), r('Bir denetimden tam not al', T.tamNot >= 1, T.tamNot ? 'alındı' : T.denetim ? 'henüz değil' : 'denetim gelmedi')];
     case 3: return [star(4.4), r('Veteriner ve gıda mühendisi çalıştır', S.vet && S.muh, S.vet && S.muh ? 'ikisi de var' : S.vet ? 'mühendis yok' : S.muh ? 'veteriner yok' : 'ikisi de yok'), best(75), den(7.5), r('Üç yılı doldur', T.months >= 36, `${Math.floor(T.months / 12)} / 3 yıl`)];
-    case 4: return [star(4.7), r('Tarifi “Ustanın sırrı”na çıkar', S.marine === 'sir', C.kitchen.marine[S.marine].label), r('Üç sağlıklı ürün seçeneğini de aç', S.ek.yem && S.ek.zincir && S.ek.marine, `${['yem', 'zincir', 'marine'].filter(k => S.ek[k]).length} / 3`), den(9), r('Beş yılı doldur', T.months >= 60, `${Math.floor(T.months / 12)} / 5 yıl`)];
+    case 4: return [star(4.7), r('Tarifi “Ustanın sırrı”na çıkar', S.marine === 'sir', C.kitchen.marine[S.marine].label), r('Üç sağlıklı ürün seçeneğini de aç', S.ek.yem && S.ek.zincir && S.ek.marine, `${['yem', 'zincir', 'marine'].filter(k => S.ek[k]).length} / 3`), den(9), r('Beş yılı doldur', T.months >= 60, `${Math.floor(T.months / 12)} / 5 yıl`), r('En az beş şehirde franchise şuben olsun', frAcikSube().length >= 5, `${frAcikSube().length} / 5 şehir`), r('Marka puanı ★4,5 olsun', S.fr && S.fr.marka >= 4.495, S.fr && S.fr.marka ? `şimdi ★${fmtPuan(S.fr.marka)}` : 'henüz şube yok')];
   }
   return [];
 }
@@ -2477,6 +2545,8 @@ const ROZET = [
   { k: 'sir', ad: 'Ustanın sırrı', ne: 'Tarifin son basamağına çıktın.', ic: 'yildiz', ok: () => S.marine === 'sir' },
   { k: 'ucuz', ad: 'Ucuza kaçmadık', ne: 'Ucuz dondurulmuş tavuğu geri çevirdin.', ic: 'kalkan', ok: () => S.flags.ucuzRed >= 1 },
   { k: 'tasarim', ad: 'Yepyeni dükkân', ne: 'Dükkânı yeni tasarım diline geçirdin.', ic: 'firca', ok: () => S.design.gen >= 1 },
+  { k: 'sube1', ad: 'İlk şube', ne: 'İlk franchise şubeni açtın.', ic: 'kupa', ok: () => S.fr && S.fr.subeler.length >= 1 },
+  { k: 'sube5', ad: 'Şehir şehir', ne: 'Beş şehirde franchise şuben var.', ic: 'yildiz', ok: () => frAcikSube().length >= 5, pr: () => [frAcikSube().length, 5] },
   { k: 'menu', ad: 'Dolu dolu menü', ne: 'Menüye iki yan ürünü de ekledin.', ic: 'tabak', ok: () => S.yan && Object.keys(C.yan).every(k => S.yan[k]), pr: () => [S.yan ? Object.keys(C.yan).filter(k => S.yan[k]).length : 0, Object.keys(C.yan).length] },
   { k: 'paket', ad: 'Kapıya kadar', ne: 'Paket servisi başlattın.', ic: 'moto', ok: () => S.shop.paket },
   { k: 'denedik8', ad: 'Denedik: çok iyi', ne: 'Denedik ekibinden 8 ve üstü puan aldın.', ic: 'yildiz', ok: () => S.denedik.best >= 8, pr: () => [S.denedik.best || 0, 8, 1] },
@@ -2559,6 +2629,7 @@ function topluStep() {
 }
 function firsatDecide(D, yes) {
   const k = D.k;
+  if (k.startsWith('fr')) return frDecide(D, yes);
   if (k === 'toplu') {
     if (yes === 'pazar') {
       // pazarlık: tutarsa indirim yarıya iner, tutmazsa müşteri vazgeçer
@@ -2609,6 +2680,149 @@ function yilSonu(mi) {
   ev('yil', { rec });
 }
 
+/* ============================================================
+   FRANCHISE (sürüm 13): marka olunca şehirlere şube verilir.
+   Önce dört altyapı kurulur; sonra adaylar başvurur. Şubeler cirolarından pay öder
+   ve dönerini merkez mutfaktan alır: önce kendi çiftliğinden (iyi kâr), yetmezse
+   sözleşmeli üreticiden (az kâr, kalite biraz düşer). Kötü şube markayı aşağı çeker.
+   ============================================================ */
+const frAcikSube = () => (S && S.fr ? S.fr.subeler.filter(x => !x.kapali) : []);
+const frOpen = () => !!(S.fr && (S.fr.acik || (S.unvan >= C.fr.unvan && S.puan >= C.fr.puan - 0.005)));
+const frHazir = () => !!(S.fr && Object.keys(C.fr.infra).every(k => S.fr.infra[k] && S.fr.infra[k].ok));
+const frCity = k => FR_CITIES.find(c => c.k === k);
+// ayrılma eki: İzmir’den, Ankara’dan, Gaziantep’ten
+function ekDen(ad) { const l = ad.toLocaleLowerCase('tr-TR'), v = (l.match(/[aıoueiöü]/g) || ['a']).pop(), on = 'eiöü'.includes(v), sert = 'fstkçşhp'.includes(l.slice(-1)); return ad + '’' + (sert ? 't' : 'd') + (on ? 'en' : 'an'); }
+const frPuan = sb => Math.round((3 + 2 * clamp(sb.kalite, 0, 1)) * 10) / 10;
+function frGider() { if (!S.fr) return 0; let g = 0; for (const k in C.fr.infra) { const I = C.fr.infra[k]; if (I.gider && S.fr.infra[k] && S.fr.infra[k].ok) g += px(I.gider); } return g; }
+// şubenin aylık satışı (ekran birimi; ×100 porsiyon)
+function frSatis(sb) {
+  const c = frCity(sb.city), rk = sb.rakip && S.t < sb.rakip ? 0.75 : 1;
+  return C.fr.birim * c.b * sb.boyut * (0.55 + 0.45 * clamp(sb.kalite, 0, 1)) * rk * sezonMult();
+}
+const frGirisUcret = (city, tip) => Math.round(px(C.fr.giris * frCity(city).b * FR_TIP[tip].ucret) / 10000) * 10000;
+function frYeniAday() {
+  const F = S.fr, dolu = new Set(F.subeler.filter(x => !x.kapali).map(x => x.city).concat(F.adaylar.map(a => a.city)));
+  const bos = FR_CITIES.filter(c => !dolu.has(c.k)); if (!bos.length) return;
+  // büyük şehirler daha çok başvurur; marka iyiyse deneyimli aday artar
+  const w = bos.map(c => c.b * c.b); let r = rand() * sum(w), ci = 0; while (r > w[ci] && ci < w.length - 1) r -= w[ci++];
+  const city = bos[ci].k, tips = Object.keys(FR_TIP), m = F.marka || 4;
+  const tw = tips.map(t => (t === 'deneyimli' ? 1 + Math.max(0, m - 4) * 2 : t === 'yatirimci' ? 1.2 : 1)); let r2 = rand() * sum(tw), ti = 0; while (r2 > tw[ti] && ti < tw.length - 1) r2 -= tw[ti++];
+  const tip = tips[ti], T = FR_TIP[tip];
+  F.adaylar.push({ id: F.nid++, city, tip, ad: pick(FR_AD) + ' ' + pick(FR_SOY), kalite: clamp(T.kalite + (rand() - 0.5) * 0.12, 0.3, 0.95), durust: clamp(T.durust + (rand() - 0.5) * 0.15, 0.3, 1), boyut: T.boyut * (0.9 + rand() * 0.2), ucret: frGirisUcret(city, tip), until: S.t + C.month * 3 });
+  logEv('fr', `${ekDen(frCity(city).ad)} franchise başvurusu geldi.`, 'info'); ev('firsat', { k: 'fraday', city: frCity(city).ad });
+}
+function frSubeAc(a) {
+  const F = S.fr, ak = F.infra.akademi && F.infra.akademi.ok;
+  const sb = { id: F.nid++, city: a.city, tip: a.tip, ad: a.ad, kalite: clamp(a.kalite + (ak ? 0.06 : 0), 0.2, 0.98), durust: a.durust, boyut: a.boyut, t0: S.t, ay: 0, satis: 0, pay: 0, kapali: false, indirim: 0 };
+  sb.puan = frPuan(sb); F.subeler.push(sb);
+  S.cash += a.ucret; S.m.rev += a.ucret; S.m.fr += a.ucret; S.totals.rev += a.ucret; F.top.giris += a.ucret;
+  if (!F.marka) F.marka = sb.puan;
+  logEv('fr', `${frCity(a.city).ad} şubesi açıldı: ${a.ad} (${FR_TIP[a.tip].ad.toLocaleLowerCase('tr-TR')}).`, 'gold');
+  ev('firsat', { k: 'fryeni', city: frCity(a.city).ad, ucret: a.ucret });
+  return sb;
+}
+function frKapat(sb, neden) { sb.kapali = true; sb.kapanis = S.t; logEv('fr', `${frCity(sb.city).ad} şubesi kapandı: ${neden}.`, 'bad'); ev('firsat', { k: 'frkapandi', city: frCity(sb.city).ad, neden }); }
+function frStep(dt) {
+  const F = S.fr; if (!F) return;
+  if (!F.acik && frOpen()) { F.acik = true; logEv('fr', 'Marka olacak kadar büyüdük: Genel Merkez’de franchise masası açıldı.', 'gold'); ev('firsat', { k: 'fracik' }); }
+  for (const k in F.infra) { const I = F.infra[k]; if (!I.ok && S.t >= I.until) { I.ok = true; logEv('fr', `${C.fr.infra[k].label} hazır.`, 'good'); ev('firsat', { k: 'frkuruldu', ad: C.fr.infra[k].label, hepsi: frHazir() }); if (frHazir() && !F.adaylar.length) F.nextAday = S.t; } }
+  if (frHazir() && F.adaylar.length === 0 && !frAcikSube().length && S.t >= F.nextAday) { frYeniAday(); frYeniAday(); F.nextAday = S.t + C.month * 1.5; }
+  // merkez mutfak: şubelerin şiş ihtiyacı birikir; dolapta kendi dükkânına yetecek kadar kalırsa şiş yola çıkar
+  const acik = frAcikSube(); if (!acik.length || !(F.infra.mutfak && F.infra.mutfak.ok)) return;
+  F.need += sum(acik, frSatis) * dt / C.month;
+  while (S.fridge.length > C.fr.rezerv && F.need >= S.fridge[S.fridge.length - 1] && !isClosed()) {
+    const p = S.fridge.pop(); F.need -= p; F.m.kendi += p;
+    const gel = p * KQ * S.price * C.fr.toptan;
+    S.cash += gel; S.m.rev += gel; S.m.fr += gel; S.totals.rev += gel; F.m.toptan += gel; F.top.toptan += gel;
+    ev('sevk', { p });
+  }
+}
+// ay sonu: şube payları, sözleşmeli üretici, kalite, marka, adaylar, olaylar (ay kaydı yazıldıktan sonra, vergiden önce)
+function frMonth(mi, rec) {
+  const F = S.fr; if (!F || !F.acik) return;
+  const acik = frAcikSube();
+  let pay = 0, soz = 0, dis = 0;
+  if (acik.length) {
+    if (F.infra.mutfak && F.infra.mutfak.ok) { dis = Math.max(0, F.need); soz = dis * KQ * S.price * C.fr.sozlesmeli; F.need = 0; }
+    else dis = sum(acik, frSatis);
+    const kendiOran = F.m.kendi + dis > 0 ? F.m.kendi / (F.m.kendi + dis) : 1, ak = F.infra.akademi && F.infra.akademi.ok;
+    for (const sb of acik) {
+      const sat = frSatis(sb); sb.satis = sat; sb.ay = (sb.ay || 0) + 1;
+      const p = sat * KQ * S.price * C.fr.royalty * (1 - (sb.indirim || 0)); pay += p; sb.pay = Math.round(p);
+      // kalite türünün doğasına kayar; akademi yukarı çeker, dışarıdan gelen şiş ve kaçak iş aşağı
+      if (sb.kacak && S.t >= sb.kacak) sb.kacak = 0;
+      const hedef = FR_TIP[sb.tip].kalite + (ak ? 0.1 : 0) - (1 - kendiOran) * 0.06 - (sb.kacak ? 0.15 : 0);
+      sb.kalite = clamp(sb.kalite + (hedef - sb.kalite) * 0.12 + (rand() - 0.5) * 0.03, 0.2, 0.98);
+      sb.puan = frPuan(sb);
+    }
+    const gel = pay + soz;
+    S.cash += gel; S.totals.rev += gel; F.top.pay += pay; F.top.soz += soz;
+    if (rec) { rec.rev += gel; rec.profit += gel; rec.fr = (rec.fr || 0) + Math.round(gel); }
+    const ws = sum(acik, frSatis) || 1;
+    F.marka = Math.round(sum(acik, x => x.puan * frSatis(x)) / ws * 100) / 100;
+  }
+  F.son = { m: mi, pay: Math.round(pay), toptan: Math.round(F.m.toptan), soz: Math.round(soz), kendi: Math.round(F.m.kendi), dis: Math.round(dis), sube: acik.length };
+  F.m = { pay: 0, toptan: 0, soz: 0, kendi: 0, dis: 0 };
+  F.adaylar = F.adaylar.filter(a => S.t < a.until);
+  if (frHazir() && acik.length < C.fr.max && F.adaylar.length < 3 && S.t >= F.nextAday) { frYeniAday(); F.nextAday = S.t + C.month * between([1, 2.5]); }
+  if (acik.length && !S.decision && !S.over) frOlay();
+}
+// ayda en çok bir şube olayı: kaçak iş, ikinci şube isteği, rakip, ayrılmak isteyen, basın
+function frOlay() {
+  if (rand() > 0.5) return;
+  const F = S.fr, acik = frAcikSube(), until = S.t + C.inc.wait, ok = k => F.infra[k] && F.infra[k].ok;
+  const bosSehir = () => FR_CITIES.filter(c => !F.subeler.some(x => !x.kapali && x.city === c.k) && !F.adaylar.some(a => a.city === c.k));
+  const kacak = acik.filter(x => !x.kacak && rand() < (1 - x.durust) * 0.7);
+  const ikinci = acik.filter(x => x.puan >= 4.4 && (x.ay || 0) >= 8 && !x.ikinci);
+  const rakip = acik.filter(x => !(x.rakip && S.t < x.rakip) && (x.ay || 0) >= 3);
+  const ayril = acik.filter(x => x.puan < 3.9 && (x.ay || 0) >= 4 && !x.indirim);
+  const opts = [];                               // [olay, ağırlık]
+  if (kacak.length) opts.push(['kacak', 1]);
+  if (ikinci.length && acik.length < C.fr.max && bosSehir().length) opts.push(['ikinci', 1]);
+  if (rakip.length) opts.push(['rakip', 0.45]);
+  if (ayril.length) opts.push(['ayril', 1]);
+  if (F.marka >= 4.5) opts.push(['basin', 0.6]);
+  if (!opts.length) return;
+  let r = rand() * sum(opts, o => o[1]), oi = 0; while (r > opts[oi][1] && oi < opts.length - 1) r -= opts[oi++][1];
+  const k = opts[oi][0];
+  if (k === 'kacak') {
+    const sb = pick(kacak), c = frCity(sb.city);
+    if (rand() < (ok('denetim') ? 0.8 : 0.25)) { S.decision = { k: 'frkacak', id: sb.id, city: c.ad, ad: sb.ad, ceza: Math.round(px(250000 * c.b) / 10000) * 10000, until }; ev('decision', { k: 'frkacak' }); }
+    else { sb.kacak = S.t + C.month * 3; F.marka = Math.max(1, Math.round((F.marka - 0.15) * 100) / 100); puanEv('frhaber', -0.12, 3); logEv('fr', `${c.ad} şubesinde bayat tavuk kullanıldığı gazetelere çıktı; markamız yara aldı.`, 'bad'); ev('firsat', { k: 'frhaber', city: c.ad }); }
+  } else if (k === 'ikinci') {
+    const sb = pick(ikinci), c = pick(bosSehir());
+    S.decision = { k: 'frikinci', id: sb.id, city: c.k, cityAd: c.ad, from: frCity(sb.city).ad, ad: sb.ad, ucret: Math.round(frGirisUcret(c.k, sb.tip) * 0.8 / 10000) * 10000, until }; ev('decision', { k: 'frikinci' });
+  } else if (k === 'rakip') {
+    const sb = pick(rakip), c = frCity(sb.city);
+    S.decision = { k: 'frrakip', id: sb.id, city: c.ad, cost: Math.round(px(300000 * c.b) / 10000) * 10000, until }; ev('decision', { k: 'frrakip' });
+  } else if (k === 'ayril') {
+    const sb = pick(ayril);
+    S.decision = { k: 'frayril', id: sb.id, city: frCity(sb.city).ad, ad: sb.ad, until }; ev('decision', { k: 'frayril' });
+  } else if (k === 'basin') {
+    setBuzz('frbasin', 1.12, 2); logEv('fr', 'Ulusal bir gazete markamızı yazdı: “Şehir şehir aynı lezzet.”', 'gold'); ev('firsat', { k: 'frbasin' });
+  }
+}
+function frDecide(D, yes) {
+  const F = S.fr, sb = F.subeler.find(x => x.id === D.id);
+  if (D.k === 'frkacak') {
+    if (!sb || sb.kapali) return;
+    if (yes) { S.cash += D.ceza; F.top.pay += D.ceza; sb.durust = Math.min(1, sb.durust + 0.25); sb.kalite = Math.max(0.2, sb.kalite - 0.03); sb.puan = frPuan(sb); logEv('fr', `${D.city} şubesine sözleşme cezası kestik: ${fmtTL(D.ceza)}.`, 'good'); ev('firsat', { k: 'frceza', city: D.city, ceza: D.ceza }); }
+    else frKapat(sb, 'kural dışı iş yüzünden sözleşme bitirildi');
+  } else if (D.k === 'frikinci') {
+    if (sb) sb.ikinci = true;
+    if (yes) frSubeAc({ city: D.city, tip: sb ? sb.tip : 'deneyimli', ad: D.ad, kalite: sb ? sb.kalite - 0.05 : 0.6, durust: sb ? sb.durust : 0.85, boyut: sb ? sb.boyut : 1, ucret: D.ucret });
+    else { if (sb) sb.kalite = Math.max(0.2, sb.kalite - 0.02); ev('firsat', { k: 'frikincired', city: D.cityAd }); }
+  } else if (D.k === 'frrakip') {
+    if (!sb || sb.kapali) return;
+    if (yes) { spend(D.cost); logEv('fr', `${D.city} şubesine yerel reklam desteği verdik; rakip tutunamadı.`, 'good'); ev('firsat', { k: 'frrakipok', city: D.city }); }
+    else { sb.rakip = S.t + C.month * 6; logEv('fr', `${D.city} şubesinin karşısına rakip açıldı; satışları bir süre düşecek.`, 'bad'); ev('firsat', { k: 'frrakipno', city: D.city }); }
+  } else if (D.k === 'frayril') {
+    if (!sb || sb.kapali) return;
+    if (yes) { sb.indirim = 0.5; sb.kalite = Math.min(0.98, sb.kalite + 0.05); logEv('fr', `${D.city} şubesinin payını yarıya indirdik; ${D.ad} devam ediyor.`, ''); ev('firsat', { k: 'frindirim', city: D.city }); }
+    else frKapat(sb, 'şube sahibi işi bıraktı');
+  }
+}
+
 /* ---------- kayıt ---------- */
 const SAVE_KEY = 'eniyitavukdoner-oyun-v4';
 function saveGame() { try { if (S && !S.over) localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { } }
@@ -2647,7 +2861,9 @@ function loadGame() {
     // sürüm 10: hikâye (unvan, rozet, günlük, Denedik, fırsatlar)
     if (!S.yan) S.yan = {};
     // tereyağlı pilav menüden kalktı (12.2): eski kayıtta alındıysa parası geri verilir
-    if (S.yan.pilav) { delete S.yan.pilav; S.cash += px(420000); } if (S.kredi === undefined) S.kredi = null;
+    if (S.yan.pilav) { delete S.yan.pilav; S.cash += px(420000); }
+    if (S.yanDev === undefined) S.yanDev = null;
+    if (!S.fr) S.fr = newFr(); if (S.m.fr == null) S.m.fr = 0; if (S.acc.frans == null) S.acc.frans = 0; if (S.kredi === undefined) S.kredi = null;
     if (S.unvan == null) {
       Object.assign(S, { unvan: 0, unvanAt: [0], rozet: {}, log: [], yillar: [], denedik: { best: 0, n: 0, last: null }, buzz: null, ucuz: null, toplu: null, flags: {}, krizAt: null, lastFirsat: '' });
       S.totals.karAy = S.hist.filter(r => r.profit > 0).length;
@@ -2667,7 +2883,7 @@ function loadGame() {
 function hasSave() { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); return !!(s && s.v === 4 && !s.over); } catch (e) { return false; } }
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } }
 
-if (typeof module !== 'undefined') module.exports = { C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, priceSoft, priceMax, priceMult, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, UNVAN, ROZET, unvanReqs, yanPer, krediTutar, krediTaksit, krediOk, denedikPuan, firsat, fridgePors, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
+if (typeof module !== 'undefined') module.exports = { ekDen, C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, priceSoft, priceMax, priceMult, frOpen, frHazir, frAcikSube, frSatis, FR_CITIES, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, UNVAN, ROZET, unvanReqs, yanPer, krediTutar, krediTaksit, krediOk, denedikPuan, firsat, fridgePors, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
 
 'use strict';
 /* ============================================================
@@ -3498,6 +3714,7 @@ function fitScene() {
   const mode = layoutMode(w, h);
   if (g.dataset.mode !== mode) { g.dataset.mode = mode; if (typeof paintChain === 'function' && S) paintChain(true); }
   VIEW.mode = mode;
+  { const wx = $('wx'); if (wx) wx.style.setProperty('--fh', Math.round(h * 1.08 + 20) + 'px'); }
   const gr = g.getBoundingClientRect(), R = id => { const el = $(id); return el && el.offsetParent !== null ? el.getBoundingClientRect() : null; };
   let safe = { x: 0, y: 44, w, h: h - 44 - 60 };          // masaüstü: üst bilgi ve alt çubuk sahnenin kenar boşluğuna biner
   if (mode === 'short') {
@@ -3590,7 +3807,9 @@ function renderBack() {
 function paintSky() {
   const sky = $('sky'); if (!sky) return;
   sky.className = 'sky sz-' + SZ.k;
-  const wx = $('wx'), n = SZ.k === 'kis' ? 34 : SZ.k === 'sonbahar' ? 16 : SZ.k === 'ilkbahar' ? 10 : 0;
+  // az ama yeterli tane: her biri ayrı bir katman, çok olunca büyük ekranda kasıyordu
+  const wx = $('wx'), n = SZ.k === 'kis' ? 18 : SZ.k === 'sonbahar' ? 10 : SZ.k === 'ilkbahar' ? 7 : 0;
+  wx.style.setProperty('--fh', Math.round(($('game') || wx).clientHeight * 1.08 + 20) + 'px');
   let h = '';
   for (let i = 0; i < n; i++) {
     const r = lcg(i * 97 + 13), x = Math.round(r() * 100), d = (7 + r() * 9).toFixed(1), del = (-r() * 16).toFixed(1), sc = (0.6 + r() * 0.9).toFixed(2), dx = Math.round(-40 + r() * 140);
@@ -3677,7 +3896,7 @@ const EV_SEC = {
   sick: 'kitchen', olum: 'kitchen', tokesim: 'kitchen', kesim: 'kitchen', sis: 'kitchen', treat: 'kitchen', cull: 'kitchen', arge: 'kitchen', marine: 'kitchen',
   sale: 'shop', plate: 'shop', load: 'shop', angry: 'shop', turned: 'shop', hire: 'shop', fire: 'shop', prim: 'shop', quit: 'shop', mood: 'shop', machine: 'shop',
   talk: 'shop', scold: 'shop', order: 'shop', ride: 'shop', deliver: 'shop', ordlost: 'shop', price: 'shop',
-  boost: 'hq', month: 'hq', board: 'hq',
+  boost: 'hq', month: 'hq', board: 'hq', frkur: 'hq', sevk: 'shop',
 };
 
 // yardımlı oyunda henüz açılmamış bir özellik: kilitli satır
@@ -3688,7 +3907,8 @@ const lockNote = (what, f) => isOpen(f) ? '' : `<p class="hint lockn">${ico('loc
 const techNote = (what, k) => techOpen(k) || monthIdx() < 6 ? '' : `<p class="hint lockn">${ico('lock', '#9AA2BD')}${esc(what)} ${techMonth(k)}. ayda piyasaya çıkar.</p>`;
 // tasarımın durumu
 const designWord = () => { const a = designAge(); return a < 12 ? 'yepyeni' : a < 24 ? 'yeni' : a < 36 ? 'eskimeye başladı' : a < 48 ? 'sıradanlaştı' : 'eskidi'; };
-const kv = rows => `<dl class="kv">${rows.filter(Boolean).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('')}</dl>`;
+// kısa değerler (₺31, %8 gibi) bölünmesin
+const kv = rows => `<dl class="kv">${rows.filter(Boolean).map(([k, v]) => `<dt>${esc(k)}</dt><dd${String(v).replace(/<[^>]+>/g, '').length <= 14 ? ' class="nw"' : ''}>${v}</dd>`).join('')}</dl>`;
 function bar(label, v, max, color, extra = '') {
   const p = max > 0 ? clamp(v / max, 0, 1) : 0;
   return `<div class="bar"><div class="bl"><span>${esc(label)}</span><b>${fmtNum(v)} / ${fmtNum(max)}${extra}</b></div><div class="bt"><i style="width:${(p * 100).toFixed(1)}%;background:${color}"></i></div></div>`;
@@ -4567,7 +4787,9 @@ const P = mkIso(360, 112);
 const W = SHOP.W, D = SHOP.D;
 const CNT_Y = 2.55, CNT_D = 0.7, CNT_H = 18;        // tezgâh
 const OCAK_Y = 0.25;
-const TRAY_XS = [2.85, 3.5, 5.05, 5.7, 7.25, 7.9, 9.45, 10.05], TRAY_X = i => TRAY_XS[i] ?? 10.05;   // tezgâh üstündeki hazır döner yerleri: kasaların arasında, ekranların önünde değil
+// tezgâh üstündeki hazır dürüm yerleri: ekranda kasiyerin sağıyla bir sonraki kasa ekranının arasındaki boşluk;
+// her boşlukta biri arkada biri önde, aynı hizada (izometrik görünümde kimsenin önüne binmez)
+const TRAY_P = SHOP.kasaX.flatMap(k => [[k + 1.17, 2.72], [k + 1.51, 3.06]]);
 // tezgâhın üstündeki cihaz, dokunduğu en öndeki tezgâh parçasından sonra çizilir (yarısı tezgâhın altında kalmasın)
 const onCounter = x => { const j = clamp(Math.floor(x + 0.36 - 1.5), 0, 8); return 1.5 + j + 0.5 + CNT_Y + CNT_D - 0.05 + 0.03; };
 const PK = { x0: 10.2, x1: 11.85, y0: 0.15, y1: 0.75, h: 16 };    // paket tezgâhı
@@ -4913,6 +5135,14 @@ function renovProps(L) {
   for (const [a, b] of [[13.05, 6.45], [13.05, 8.15]]) { const [x, y] = P(a, b); L.over.put('rv-c' + b, { x, y, d: a + b, v: 'c', html: coneSvg }); }
   { const [x0, y0] = P(13.05, 6.45, 9), [x1, y1] = P(13.05, 8.15, 9); L.over.put('rv-t', { x: 0, y: 0, d: 13.05 + 8.2, v: 't' + x0, html: () => `<path d="M${r1(x0)} ${r1(y0)} L${r1(x1)} ${r1(y1)}" stroke="#FFD500" stroke-width="3"/><path d="M${r1(x0)} ${r1(y0)} L${r1(x1)} ${r1(y1)}" stroke="#14275A" stroke-width="3" stroke-dasharray="5 5"/>` }); }
 }
+// satış yazısı: dürüm fiyatı; bu müşteri yan ürün de aldıysa (oranı kadar müşteri alır) altında ayrı satır
+function saleFx(x, y, ek) {
+  fxText(x, y, '+₺' + fmtNum(S.price) + ek, '#2E9E4F', { size: 10.5 });
+  const al = Object.keys(C.yan).filter(k => S.yan && S.yan[k] && Math.random() < C.yan[k].oran);
+  if (!al.length) return;
+  const tl = al.reduce((t, k) => t + Math.round(C.yan[k].pay * S.price / 5) * 5, 0);
+  fxText(x, y + 18, '+₺' + fmtNum(tl) + ' ' + (al.length > 1 ? 'yan ürün' : C.yan[al[0]].kisa), '#2E9E4F', { size: 7.5, nostack: true });
+}
 function campaignProps(L) {
   const lv = k => clamp((S.campLv[k] || 0) * 1.6, 0, 1);
   if (lv('afis') > 0.02) {
@@ -5020,7 +5250,7 @@ function dronePos(i, w) {
 }
 const ISS = id => (ISSUES.shop || []).some(x => x.id === id);
 /* ---------- kare kare ---------- */
-let lastSale = 0, lastDoor = 0;
+let lastSale = 0, lastDoor = 0, lastSevk = -9;
 const SALE = {};
 function frame(L) {
   const SH = S.shop;
@@ -5028,8 +5258,8 @@ function frame(L) {
   for (let i = 0; i < 9; i++) L.dyn.put('cnt' + i, { x: 0, y: 0, d: 1.5 + i + 0.5 + CNT_Y + CNT_D - 0.05, v: tg, html: () => counterSeg(i) });
   for (let i = 0; i < C.shop.tray; i++) {
     if (i >= SH.tray) continue;
-    const [x, y] = P(TRAY_X(i), CNT_Y + 0.22, CNT_H);
-    L.dyn.put('tr' + i, { x, y, d: TRAY_X(i) + CNT_Y + 0.75, v: 'w', html: () => wrapGlyph(0.95) });
+    const [tx, ty] = TRAY_P[i] || TRAY_P[TRAY_P.length - 1], [x, y] = P(tx, ty, CNT_H);
+    L.dyn.put('tr' + i, { x, y, d: tx + ty + 1.0, v: 'w', html: () => wrapGlyph(0.95) });
   }
   L.dyn.put('menu', { x: 0, y: 0, d: 0.05, v: 'm' + S.price + '|' + ayranPrice(), html: menuBoard, hit: 'menu' });
   if (S.bakimDue || (S.kir || 0) > 0.04) L.dyn.put('kir', { x: 0, y: 0, d: 0.06, v: 'k' + Math.round((S.kir || 0) * 20) + (S.bakimDue ? 'd' : ''), html: stainsSvg });
@@ -5136,10 +5366,11 @@ function frame(L) {
     if (e.type === 'sale') {
       const a = SALE[e.i] || (SALE[e.i] = { sum: 0, t: -9 }); a.sum += e.rev;
       // tek müşterinin ödediği tutar görünür (dürüm + yan ürün): ekrandaki bir kişi 100 müşteridir ama fiyat bir kişinin fiyatıdır
-      if (S.t - a.t > 3) { const [x, y] = P(SHOP.kasaX[e.i], CNT_Y + 0.4, 42); fxText(x, y, '+₺' + fmtNum(S.price), '#2E9E4F', { size: 10.5 }); const yg = yanPer().gelir; if (yg >= 5) fxText(x, y + 18, '+₺' + fmtNum(Math.round(yg / 5) * 5) + ' yan ürün', '#2E9E4F', { size: 7.5, nostack: true }); a.sum = 0; a.t = S.t; }
+      if (S.t - a.t > 3) { const [x, y] = P(SHOP.kasaX[e.i], CNT_Y + 0.4, 42); saleFx(x, y, ''); a.sum = 0; a.t = S.t; }
       if (S.t - lastSale > 0.3) { SND.cash(); lastSale = S.t; }
     }
-    if (e.type === 'deliver') { const [x, y] = P((PK.x0 + PK.x1) / 2, PK.y1, 44); fxText(x, y, '+₺' + fmtNum(S.price) + ' paket', '#2E9E4F', { size: 10.5 }); SND.cash(); }
+    if (e.type === 'sevk' && S.t - lastSevk > 2) { lastSevk = S.t; const [x, y] = P(1.0, 1.4, 70); fxText(x, y, `${fmtK(e.p)} porsiyon şubelere`, PAL.cobalt, { size: 9.5 }); }
+    if (e.type === 'deliver') { const [x, y] = P((PK.x0 + PK.x1) / 2, PK.y1, 44); saleFx(x, y, ' paket'); SND.cash(); }
     if (e.type === 'plate') SND.slice();
     if (e.type === 'load') SND.clunk(0.5);
     if (e.type === 'order') SND.order();
@@ -5292,7 +5523,7 @@ function menuCard() {
       const st = priceStep(), up = S.price < priceMax(), dn = S.price > priceMin(), y = yanPer(), soft = priceSoft();
       const b = (d, cls, t, ok, al) => `<button data-pr="${d}" class="${cls}" ${ok ? '' : 'disabled'} aria-label="${al}">${t}</button>`;
       return `<div class="bigprice">₺${fmtNum(S.price)}<small>bir dürüm</small></div>`
-        + `<div class="pstep">${b(-5, 'dn big', `− ${fmtNum(st * 5)}`, dn, 'Fiyatı çok düşür')}${b(-1, 'dn', `− ${fmtNum(st)}`, dn, 'Fiyatı düşür')}${b(1, 'up', `+ ${fmtNum(st)}`, up, 'Fiyatı artır')}${b(5, 'up big', `+ ${fmtNum(st * 5)}`, up, 'Fiyatı çok artır')}</div>`
+        + `<div class="pstep">${b(-5, 'dn big', `−₺${fmtNum(st * 5)}`, dn, 'Fiyatı çok düşür')}${b(-1, 'dn', `−₺${fmtNum(st)}`, dn, 'Fiyatı düşür')}${b(1, 'up', `+₺${fmtNum(st)}`, up, 'Fiyatı artır')}${b(5, 'up big', `+₺${fmtNum(st * 5)}`, up, 'Fiyatı çok artır')}</div>`
         + (!up ? '<p class="hint warn cok">Bu en yüksek fiyat. Bu fiyata gelen müşteri çok az.</p>'
           : S.price > soft ? `<p class="hint warn cok">Fiyat müşterinin alıştığının çok üstünde. ₺${fmtNum(soft)} üstünde her artışta müşteri hızla azalır.</p>`
           : S.price >= soft - st * 3 ? `<p class="hint warn">₺${fmtNum(soft)} üstüne çıkarsan müşteri hızla azalmaya başlar.</p>` : '')
@@ -5301,8 +5532,10 @@ function menuCard() {
         + `<p class="hint">Fiyat artınca daha az müşteri gelir, düşünce daha çok. Kuyruk uzunsa fiyatı artırmak kârı büyütür. Yan ürünlerin fiyatı dürüme göre ayarlanır. Kasada çıkan yeşil rakam dürüm fiyatıdır; yanında yan ürün aldıysa ayrıca yazılır.</p>`;
     },
     actions: () => [
-      ...Object.keys(C.yan).filter(k => !S.yan[k]).slice(0, 1).map(k => { const y = C.yan[k], open = monthIdx() >= y.ay, kar = y.oran * y.pay * S.price * (1 - y.mal);
-        return { label: `Menüye ekle: ${y.label}`, sub: open ? `müşterilerin %${Math.round(y.oran * 100)}’i alır · tanesi ₺${fmtNum(Math.round(y.pay * S.price / 5) * 5)} · porsiyon başına +${fmtTL(Math.round(kar))} kâr` : `${y.ay}. aydan sonra açılır`, icon: 'bowl', cost: y.cost, tone: 'primary', disabled: !open || S.cash < y.cost, hint: !open ? 'Henüz değil' : S.cash < y.cost ? 'Para yetmiyor' : '', sound: 'cash', run: () => A.buyYan(k) }; }),
+      ...Object.keys(C.yan).filter(k => !S.yan[k]).slice(0, 1).map(k => {
+        const y = C.yan[k], open = monthIdx() >= y.ay, kar = y.oran * y.pay * S.price * (1 - y.mal), dev = S.yanDev && S.yanDev.k === k;
+        if (dev) { const kal = Math.max(1, Math.ceil((S.yanDev.until - S.t) / C.month * 30)); return { label: `${y.label} geliştiriliyor`, sub: 'mutfakta tarifler deneniyor; hazır olunca menüye kendiliğinden girer', icon: 'bowl', disabled: true, hint: `${kal} gün`, run: () => false }; }
+        return { label: y.act, sub: open ? `müşterilerin %${Math.round(y.oran * 100)}’i alır · tanesi ₺${fmtNum(Math.round(y.pay * S.price / 5) * 5)} · porsiyon başına +${fmtTL(Math.round(kar))} kâr${y.dev ? ` · ${y.dev * 30} günde hazır` : ''}` : `${y.ay}. aydan sonra açılır`, icon: 'bowl', cost: y.cost, tone: 'primary', disabled: !open || S.cash < y.cost, hint: !open ? 'Henüz değil' : S.cash < y.cost ? 'Para yetmiyor' : '', sound: 'cash', run: () => A.buyYan(k) }; })
     ],
   };
 }
@@ -5532,6 +5765,46 @@ function lobby() {
   return s;
 }
 
+
+/* ---------- franchise masası: üstünde Türkiye haritası, şubeler turuncu bayrak ---------- */
+// Türkiye'nin sade dış çizgisi (boylam, enlem); Marmara içeri girinti
+const TR_OUT = [[26.33, 41.72], [26.6, 41.97], [28.0, 41.98], [28.6, 41.55], [29.05, 41.25], [30.3, 41.2], [31.4, 41.3], [32.3, 41.75], [33.3, 42.0], [34.5, 41.98], [35.15, 42.08], [35.5, 41.65], [36.35, 41.35], [37.0, 41.2], [38.4, 40.95], [39.7, 41.0], [40.6, 41.05], [41.55, 41.52],
+  [42.5, 41.45], [43.45, 41.1], [43.6, 40.55], [44.1, 40.05], [44.8, 39.72], [44.4, 39.42], [44.3, 38.4], [44.25, 37.9], [44.8, 37.25], [44.2, 37.1], [43.3, 37.35], [42.35, 37.1], [41.2, 37.07], [40.2, 36.88], [39.0, 36.68], [38.0, 36.85], [37.1, 36.68], [36.65, 36.82], [36.6, 36.25], [36.15, 35.82], [35.85, 35.95], [35.95, 36.4], [36.2, 36.65], [35.6, 36.62], [34.95, 36.75],
+  [34.2, 36.35], [33.1, 36.1], [32.1, 36.5], [31.2, 36.8], [30.6, 36.85], [30.5, 36.45], [30.1, 36.25], [29.3, 36.2], [28.95, 36.6], [28.1, 36.75], [27.45, 36.68], [27.5, 37.0], [27.2, 37.4], [27.15, 37.85], [26.3, 38.25], [26.9, 38.55], [26.7, 38.95], [26.65, 39.3], [26.1, 39.45], [26.2, 40.0], [26.4, 40.2],
+  [27.3, 40.4], [28.0, 40.38], [28.9, 40.38], [29.9, 40.72], [29.3, 40.85], [28.95, 41.0], [28.3, 41.05], [27.5, 40.95], [26.8, 40.55], [26.05, 40.75], [26.35, 41.25]];
+const MAPW = (44.9 - 25.9) * 0.777, MAPH = 42.15 - 35.8;
+const mapXY = (lon, lat) => [(lon - 25.9) * 0.777 / MAPW, (42.15 - lat) / MAPH];      // 0..1
+const FT = { x0: 7.0, y0: 6.9, w: 3.6, d: 1.6, h: 15 };
+const ftP = (lon, lat, z = 0) => { const [u, v] = mapXY(lon, lat); return P(FT.x0 + 0.12 + u * (FT.w - 0.24), FT.y0 + 0.1 + v * (FT.d - 0.2), FT.h + z); };
+function frTable() {
+  const open = frOpen(), F = S.fr;
+  let s = shadowQ(P, FT.x0, FT.y0, FT.w, FT.d, 0.3) + solid(P, FT.x0, FT.y0, FT.w, FT.d, FT.h, '#2A3F80', { top: '#14275A' });
+  s += `<polygon points="${pts(TR_OUT.map(([a, b]) => ftP(a, b, 0.2)))}" fill="${open ? '#F1EBDD' : '#8E98B8'}" stroke="${open ? '#C9BFA9' : '#6E789A'}" stroke-width=".6" stroke-linejoin="round"/>`;
+  if (open) for (const c of FR_CITIES) {
+    const sb = F.subeler.find(x => x.city === c.k && !x.kapali), ad = F.adaylar.some(a => a.city === c.k), [x, y] = ftP(c.lon, c.lat, 0.3);
+    if (sb) s += `<g transform="translate(${r1(x)},${r1(y)})"><ellipse rx="2.6" ry="1.3" fill="#000" opacity=".2"/><line x1="0" y1="0" x2="0" y2="-9" stroke="#5B6475" stroke-width=".9"/><path d="M0 -9 l6 2 l-6 2z" fill="${PAL.orange}"/><circle r="1.4" fill="${PAL.orange}"/></g>`;
+    else if (ad) s += `<circle cx="${r1(x)}" cy="${r1(y)}" r="2.4" fill="none" stroke="${PAL.yellow}" stroke-width="1.1" class="blink"/>`;
+    else s += `<circle cx="${r1(x)}" cy="${r1(y)}" r=".9" fill="#B8AE98"/>`;
+  }
+  // masanın önünde yazı
+  const [tx, ty] = P(FT.x0 + FT.w / 2, FT.y0 + FT.d, 6.5);
+  s += `<text transform="matrix(1,.5,0,1,${r1(tx)},${r1(ty)})" font-size="5.6" font-weight="800" fill="#fff" text-anchor="middle">FRANCHISE</text>`;
+  if (!open) { const [lx, ly] = P(FT.x0 + FT.w / 2, FT.y0 + FT.d / 2, FT.h + 14); s += `<g transform="translate(${r1(lx)},${r1(ly)})">${pill('Yakında', '#5B6475')}</g>`; }
+  return s;
+}
+// kartta düz harita
+function frMapSvg() {
+  const W2 = 292, H2 = Math.round(W2 * MAPH / MAPW) + 8, F = S.fr, q = (lon, lat) => { const [u, v] = mapXY(lon, lat); return [4 + u * (W2 - 8), 4 + v * (H2 - 8)]; };
+  let s = `<svg class="frmap" viewBox="0 0 ${W2} ${H2}"><rect width="${W2}" height="${H2}" rx="10" fill="#DCE6F7"/><polygon points="${TR_OUT.map(([a, b]) => q(a, b).map(v => v.toFixed(1)).join(',')).join(' ')}" fill="#FBF8F1" stroke="#B9C4DC" stroke-width="1" stroke-linejoin="round"/>`;
+  for (const c of FR_CITIES) {
+    const sb = F.subeler.find(x => x.city === c.k && !x.kapali), ad = F.adaylar.some(a => a.city === c.k), [x, y] = q(c.lon, c.lat);
+    if (sb) s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="${PAL.orange}" stroke="#fff" stroke-width="1.5"/><text x="${x.toFixed(1)}" y="${(y - 8).toFixed(1)}" font-size="8.5" font-weight="700" fill="#14275A" text-anchor="middle">${esc(c.ad)}</text>`;
+    else if (ad) s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="#fff" stroke="#E0A800" stroke-width="2"/><text x="${x.toFixed(1)}" y="${(y - 8).toFixed(1)}" font-size="8" font-weight="600" fill="#8A6A00" text-anchor="middle">${esc(c.ad)}</text>`;
+    else s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2" fill="#B9C4DC"/>`;
+  }
+  return s + '</svg>';
+}
+
 function frame(L) {
   const sig = CAMPS.map(k => (S.camps[k] ? 1 : 0) + '' + Math.round((S.campLv[k] || 0) * 8)).join('');
   L.dyn.put('pazar', { x: 0, y: 0, d: 4, v: sig, html: pazarRoom, hit: 'oda:pazar' });
@@ -5540,16 +5813,19 @@ function frame(L) {
   const gsig = S.board.goals.map(g => { const p = goalProgress(g); return g.k + Math.round(clamp(p.p, 0, 1) * 20) + (p.fail ? 'x' : ''); }).join('|');
   L.dyn.put('kurul', { x: 0, y: 0, d: 9, v: 'k' + trustMood() + S.board.trust + gsig + monthIdx(), html: kurulRoom, hit: 'oda:kurul' });
   L.dyn.put('lobi', { x: 0, y: 0, d: 13, v: 'l', html: lobby });
-  [['pazar', 5.3, 3.55, 'Pazarlama', 2], ['finans', 11.4, 3.55, 'Finans', 2], ['kurul', 4.6, 8.75, 'Yönetim kurulu', 2]].forEach(([k, a, b, t, z]) => { const [x, y] = P(a, b, z); markPut(L, 'r' + k, x, y, 'info', t, 'oda:' + k); });
-  managerSprite(L, 'hq', P(9.4, 6.9), 16.3, { shirt: '#fff', jacket: '#2340B8', hairStyle: 'long', hair: '#3B2416', skin: SKINS[1], glasses: false, s: 0.9 });
+  const F = S.fr, fsig = 'f' + (frOpen() ? 1 : 0) + F.subeler.map(x => x.city + (x.kapali ? 'k' : '')).join('') + '|' + F.adaylar.map(a => a.city).join('');
+  L.dyn.put('frmasa', { x: 0, y: 0, d: FT.x0 + FT.y0 + FT.w, v: fsig, html: frTable, hit: 'oda:franchise' });
+  [['pazar', 5.3, 3.55, 'Pazarlama', 2], ['finans', 11.4, 3.55, 'Finans', 2], ['kurul', 4.6, 8.75, 'Yönetim kurulu', 2], ['franchise', 10.9, 8.75, 'Franchise', 2]].forEach(([k, a, b, t, z]) => { const [x, y] = P(a, b, z); markPut(L, 'r' + k, x, y, 'info', t, 'oda:' + k); });
+  managerSprite(L, 'hq', P(11.0, 6.1), 17.1, { shirt: '#fff', jacket: '#2340B8', hairStyle: 'long', hair: '#3B2416', skin: SKINS[1], glasses: false, s: 0.9 });
   for (const e of EVQ.hq) {
+    if (e.type === 'frkur') { const [x, y] = P(FT.x0 + FT.w / 2, FT.y0 + FT.d / 2, 60); fxText(x, y, C.fr.infra[e.k].label + ' kuruluyor', PAL.orange, { size: 10 }); SND.build(); }
     if (e.type === 'boost') { const [x, y] = P(3.0, 1.8, 90); fxText(x, y, C.hq.instant[e.k].label + ' başladı!', PAL.orange, { size: 11 }); }
   }
 }
 
 /* ---------- kartlar ---------- */
 function label(id) {
-  return { 'oda:pazar': 'Pazarlama · kampanyalar', 'oda:finans': 'Finans · aylık rapor', 'oda:kurul': `Yönetim kurulu · güven %${Math.round(S.board.trust)}`, 'mgr:hq': `${MANAGERS.hq.name} · ${MANAGERS.hq.role}` }[id] || '';
+  return { 'oda:franchise': frOpen() ? `Franchise · ${frAcikSube().length} şube` : 'Franchise · marka olunca açılır', 'oda:pazar': 'Pazarlama · kampanyalar', 'oda:finans': 'Finans · aylık rapor', 'oda:kurul': `Yönetim kurulu · güven %${Math.round(S.board.trust)}`, 'mgr:hq': `${MANAGERS.hq.name} · ${MANAGERS.hq.role}` }[id] || '';
 }
 function miniChart() {
   const h = S.hist.slice(-12);
@@ -5559,8 +5835,57 @@ function miniChart() {
   const line = vals.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(' ');
   return `<svg class="minichart" viewBox="0 0 ${w} ${ht}">${mn < 0 ? `<line x1="0" x2="${w}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="#E53935" stroke-dasharray="3 3"/>` : ''}<path d="${line}" fill="none" stroke="${PAL.cobalt}" stroke-width="2.4" stroke-linejoin="round"/>${vals.map((v, i) => `<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="2.6" fill="${h[i].profit >= 0 ? '#2E9E4F' : '#E53935'}"/>`).join('')}</svg>`;
 }
-const PART = { maas: 'Maaşlar', malzeme: 'Malzeme (ekmek, sebze, sos)', yem: 'Dışarıdan alınan yem', kira: 'Dükkân kirası', fatura: 'Elektrik, su, doğalgaz', arazi: 'Çiftlik (civciv, aşı, tarla)', gubre: 'Gübre', katki: 'Silo katkıları', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün (organik yem, soğuk zincir)', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar ve davalar', faiz: 'Kredi faizi', vergi: 'Vergi (geçen ayın kârından)', hasar: 'Kriz ve hasar' };
+const PART = { frans: 'Franchise (akademi, denetim)', maas: 'Maaşlar', malzeme: 'Malzeme (ekmek, sebze, sos)', yem: 'Dışarıdan alınan yem', kira: 'Dükkân kirası', fatura: 'Elektrik, su, doğalgaz', arazi: 'Çiftlik (civciv, aşı, tarla)', gubre: 'Gübre', katki: 'Silo katkıları', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün (organik yem, soğuk zincir)', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar ve davalar', faiz: 'Kredi faizi', vergi: 'Vergi (geçen ayın kârından)', hasar: 'Kriz ve hasar' };
+const gunKaldi = t => Math.max(1, Math.ceil((t - S.t) / C.month * 30));
+function frCard() {
+  const F = S.fr, I = C.fr.infra;
+  const rk = (ok, t, v) => `<tr><td><span class="rk ${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'}</span>${esc(t)}<span class="sv">${esc(v)}</span></td></tr>`;
+  return {
+    title: 'Franchise', sub: frOpen() ? (frHazir() ? `${frAcikSube().length} şube · marka ${F.marka ? '★' + fmtPuan(F.marka) : 'henüz yok'}` : 'önce altyapı kurulur') : 'marka olunca açılır', icon: 'globe',
+    body: () => {
+      let h = frMapSvg();
+      if (!frOpen()) {
+        h += `<p>Şehir şehir şube vermek için önce kendi dükkânının adı duyulmalı.</p><table class="tbl res">${rk(S.unvan >= C.fr.unvan, `“${UNVAN[C.fr.unvan].ad}” unvanı`, `şimdi: ${UNVAN[S.unvan].ad}`)}${rk(S.puan >= C.fr.puan - 0.005, `Müşteri puanı ★${fmtPuan(C.fr.puan)}`, `şimdi ★${fmtPuan(S.puan)}`)}</table>`;
+        return h + `<p class="hint">Açılınca dört altyapı kurarsın: merkez mutfak, eğitim akademisi, denetim ekibi ve marka tescili. Sonra adaylar başvurur; şubeler cirolarından pay öder ve dönerini senden alır.</p>`;
+      }
+      if (!frHazir()) {
+        h += `<p>Şube verebilmek için dört altyapının hepsi kurulmalı.</p><table class="tbl res">${Object.keys(I).map(k => { const x = F.infra[k]; return rk(x && x.ok, I[k].label, x ? (x.ok ? 'hazır' : `${gunKaldi(x.until)} gün kaldı`) : 'kurulmadı'); }).join('')}</table>`;
+        return h + `<p class="hint">Akademi ve denetim ekibinin ayda bir gideri vardır; kurulunca aylık giderlere eklenir.</p>`;
+      }
+      const acik = frAcikSube(), son = F.son;
+      const gel = son ? son.pay + son.toptan + son.soz : 0, kendiOran = son && son.kendi + son.dis > 0 ? Math.round(son.kendi / (son.kendi + son.dis) * 100) : null;
+      h += kv([['Açık şube', `${acik.length} / ${C.fr.max}`], ['Marka puanı', F.marka ? `★ ${fmtPuan(F.marka)}` : 'henüz yok'], son && son.sube ? ['Geçen ay franchise geliri', `+${fmtTL(gel)}`] : null,
+        kendiOran != null && son.sube ? ['Şubelere giden şiş', `%${kendiOran} kendi çiftliğinden`] : null, ['Bugüne kadar giriş ücreti', fmtTL(F.top.giris)]]);
+      if (acik.length) h += `<table class="tbl frs">${acik.map(sb => `<tr><td><b>${esc(frCity(sb.city).ad)}</b><span>${esc(sb.ad)} · ${esc(FR_TIP[sb.tip].ad.toLocaleLowerCase('tr-TR'))}${sb.rakip && S.t < sb.rakip ? ' · karşısında rakip var' : ''}${sb.indirim ? ' · payı yarıda' : ''}</span></td><td><b class="${sb.puan >= 4.4 ? 'pos' : sb.puan < 3.9 ? 'neg' : ''}">★${fmtPuan(sb.puan)}</b><span>${fmtK(frSatis(sb))}/ay</span></td></tr>`).join('')}</table>`;
+      else h += '<p>Henüz şube yok. Aşağıdaki adaylardan birine franchise ver.</p>';
+      if (F.adaylar.length) h += `<h4 class="sh4">Başvurular</h4><table class="tbl frs">${F.adaylar.map(a => `<tr><td><b>${esc(frCity(a.city).ad)}</b><span>${esc(a.ad)} · ${esc(FR_TIP[a.tip].ad.toLocaleLowerCase('tr-TR'))}: ${esc(FR_TIP[a.tip].not)}</span></td><td><b class="pos">+${fmtTL(a.ucret)}</b><span>${gunKaldi(a.until)} gün</span></td></tr>`).join('')}</table>`;
+      return h + `<p class="hint">Şubeler cirolarının %${Math.round(C.fr.royalty * 100)}’ini öder. Dönerini merkez mutfaktan alır: senin çiftliğinden giden şişten porsiyon başına menü fiyatının %${Math.round(C.fr.toptan * 100)}’i, sözleşmeli üreticiden gidenden yalnız %${Math.round(C.fr.sozlesmeli * 100)}’i kasana girer. Dolapta kendi dükkânın için ${C.fr.rezerv} şiş her zaman kalır. Puanı düşük şube markanı, marka da kendi dükkânını etkiler.</p>`;
+    },
+    actions: () => {
+      if (!frOpen()) return [];
+      const out = [];
+      const yok = Object.keys(I).filter(k => !F.infra[k]);
+      for (const k of Object.keys(I)) {
+        const x = F.infra[k], c = px(I[k].cost);
+        if (x && x.ok) continue;
+        if (x) { out.push({ label: `${I[k].label} kuruluyor`, sub: `${gunKaldi(x.until)} gün sonra hazır`, icon: I[k].icon, disabled: true, hint: 'Kuruluyor', run: () => false }); continue; }
+        out.push({ label: `Kur: ${I[k].label}`, sub: `${I[k].ne} · ${I[k].ay} ayda kurulur${I[k].gider ? ` · ayda ${fmtTL(px(I[k].gider))} gider` : ''}`, icon: I[k].icon, cost: c, tone: k === yok[0] ? 'primary' : '', disabled: S.cash < c, hint: S.cash < c ? 'Para yetmiyor' : '', sound: 'cash', run: () => A.frBuild(k) });
+      }
+      if (frHazir()) {
+        const dolu = frAcikSube().length >= C.fr.max;
+        for (const a of F.adaylar) {
+          const T = FR_TIP[a.tip], tah = frSatis({ city: a.city, boyut: a.boyut, kalite: a.kalite + (F.infra.akademi && F.infra.akademi.ok ? 0.06 : 0) });
+          out.push({ label: `Franchise ver: ${frCity(a.city).ad}`, sub: `${a.ad} · ${T.ad.toLocaleLowerCase('tr-TR')} · ayda ~${fmtK(tah)} porsiyon`, icon: 'store', tone: 'primary', disabled: dolu, hint: dolu ? 'Şube sınırı doldu' : `+${fmtTL(a.ucret)}`, sound: 'cash', run: () => A.frGive(a.id) });
+        }
+        if (!F.adaylar.length) out.push({ label: 'Yeni başvuru bekleniyor', sub: 'adaylar ayda bir iki gelir; marka puanı yüksekse daha iyi adaylar gelir', icon: 'clock', disabled: true, hint: '', run: () => false });
+        for (const sb of frAcikSube()) if (sb.puan < 4.0) out.push({ label: `Sözleşmeyi bitir: ${frCity(sb.city).ad}`, sub: `★${fmtPuan(sb.puan)} · markayı aşağı çekiyor`, icon: 'x', tone: 'danger', confirm: `${frCity(sb.city).ad} şubesi kapanır; payı ve şiş satışı da biter. Emin misin?`, run: () => A.frEnd(sb.id) });
+      }
+      return out;
+    },
+  };
+}
 function card(id) {
+  if (id === 'oda:franchise') return frCard();
   if (id === 'mgr:hq') return managerCard('hq');
   if (id === 'oda:pazar') return {
     title: 'Pazarlama', sub: 'Müşteri sayısını buradan artır', icon: 'mega',
@@ -5580,8 +5905,8 @@ function card(id) {
       const last = S.hist[S.hist.length - 1];
       let h = miniChart();
       const cur = Object.entries(S.acc).filter(([, v]) => v > 0.5);
-      h += `<table class="tbl"><tr><td><b>Bu ay şimdiye kadar</b></td><td></td></tr><tr><td>Satış (${fmtK(S.m.sold + S.m.paket)} porsiyon)</td><td class="pos">+${fmtTL(S.m.rev)}</td></tr>${cur.map(([k, v]) => `<tr><td>${PART[k]}</td><td>${fmtTL(-v)}</td></tr>`).join('')}${S.m.buy ? `<tr><td>Yatırımlar (hemen ödendi)</td><td>${fmtTL(-S.m.buy)}</td></tr>` : ''}</table>`;
-      if (last) h += `<table class="tbl"><tr><td><b>Geçen ay · ${dateLabel(last.m)}</b></td><td></td></tr><tr><td>Satış (${fmtK(last.sold + (last.paket || 0))} porsiyon)</td><td class="pos">+${fmtTL(last.rev)}</td></tr><tr><td>Giderler</td><td>${fmtTL(-last.cost)}</td></tr>${last.buy ? `<tr><td>Yatırımlar</td><td>${fmtTL(-last.buy)}</td></tr>` : ''}<tr class="tot"><td>İşletme ${last.profit >= 0 ? 'kârı' : 'zararı'}</td><td class="${last.profit >= 0 ? 'pos' : 'neg'}">${fmtTL(last.profit)}</td></tr></table>`;
+      h += `<table class="tbl"><tr><td><b>Bu ay şimdiye kadar</b></td><td></td></tr><tr><td>Satış (${fmtK(S.m.sold + S.m.paket)} porsiyon)</td><td class="pos">+${fmtTL(S.m.rev - (S.m.fr || 0))}</td></tr>${S.m.fr > 0 ? `<tr><td>Franchise (giriş ücreti, şiş satışı)</td><td class="pos">+${fmtTL(S.m.fr)}</td></tr>` : ''}${cur.map(([k, v]) => `<tr><td>${PART[k]}</td><td>${fmtTL(-v)}</td></tr>`).join('')}${S.m.buy ? `<tr><td>Yatırımlar (hemen ödendi)</td><td>${fmtTL(-S.m.buy)}</td></tr>` : ''}</table>`;
+      if (last) h += `<table class="tbl"><tr><td><b>Geçen ay · ${dateLabel(last.m)}</b></td><td></td></tr><tr><td>Satış (${fmtK(last.sold + (last.paket || 0))} porsiyon)</td><td class="pos">+${fmtTL(last.rev - (last.fr || 0))}</td></tr>${last.fr > 0 ? `<tr><td>Franchise</td><td class="pos">+${fmtTL(last.fr)}</td></tr>` : ''}<tr><td>Giderler</td><td>${fmtTL(-last.cost)}</td></tr>${last.buy ? `<tr><td>Yatırımlar</td><td>${fmtTL(-last.buy)}</td></tr>` : ''}<tr class="tot"><td>İşletme ${last.profit >= 0 ? 'kârı' : 'zararı'}</td><td class="${last.profit >= 0 ? 'pos' : 'neg'}">${fmtTL(last.profit)}</td></tr></table>`;
       h += kv([['Bankanın kredi limiti', fmtTL(creditLimit())], ['Bugüne kadar ödenen vergi', fmtTL(S.totals.vergi)], ['Sigorta', S.sigorta ? 'var' : 'yok'], [S.totals.rev - S.totals.cost >= 0 ? 'Bugüne kadar kâr' : 'Bugüne kadar zarar', fmtTL(Math.abs(S.totals.rev - S.totals.cost))]]);
       h += `<p class="hint">Gelir hemen kasaya girer, giderler ay sonunda ödenir. Kârlı her ayın dörtte biri ertesi ay vergi olarak ödenir. Kasa eksideyken bankaya ayda %${(Math.round(C.bank.faiz * 1000) / 10).toLocaleString('tr-TR')} faiz ödenir; ay sonunda kredi limitini aşarsan iflas edersin.</p>`;
       return h;
@@ -5618,8 +5943,8 @@ SCN.hq = {
   id: 'hq', vb: [0, 0, 800, 530], cb: [58, 30, 768, 470], focus: 360, P,
   backSig: () => 'h' + S.name,
   backdrop, frame, label, card,
-  mgrAt: () => P(9.4, 6.9, 70),
-  hello: 'Ben Leyla. Kampanyalar müşteriyi artırır. Finans odası paranın nereye gittiğini gösterir; vergi ve sigorta da orada. Kurul her üç ayda iki hedef koyar.',
+  mgrAt: () => P(11.0, 6.1, 70),
+  hello: 'Ben Leyla. Kampanyalar müşteriyi artırır. Finans odası paranın nereye gittiğini gösterir; vergi ve sigorta da orada. Kurul her üç ayda iki hedef koyar. Ön taraftaki franchise masası, adımız duyulunca açılacak.',
 };
 })();
 
@@ -5698,7 +6023,7 @@ async function rankSubmit(sc) {
   localAdd(sc);
   try {
     if (RANK.backend === 'remote') {
-      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: temizAd(sc.ad), ay: sc.ay, butce: sc.butce, surum: window.APP ? '12.2-app' : '12.2' }) });
+      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: temizAd(sc.ad), ay: sc.ay, butce: sc.butce, surum: window.APP ? '13-app' : '13' }) });
       if (r.ok) {
         const q = `or=(ay.gt.${sc.ay},and(ay.eq.${sc.ay},butce.gt.${Math.round(sc.butce)}))`;
         const c = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}?select=id&${q}`, { headers: remoteHeaders({ Prefer: 'count=exact', Range: '0-0' }) });
@@ -6317,6 +6642,18 @@ function storyDecision(D) {
   } else if (D.k === 'transfer') {
     const w = S.shop.ocak.find(x => x && x.id === D.id), ek = w ? Math.round(wageOfW(w) * D.pct / 100 / 1000) * 1000 : 0;
     openModal('Ustaya transfer teklifi', who('shop', `<p>Karşıdaki dönerci <b>${esc(D.name)} Usta</b>’ya iş teklif etmiş. En eski ustamız; elinin ayarını müşteri bilir.</p><p>Maaşını <b>%${D.pct}</b> artırırsak kalır. Artırmazsak gider; ekibin de morali bozulur.</p>`) + btn(`Maaşını artır · ayda +${fmtTL(ek)}`, 'Gitmesine izin ver'), 'decide', { lock: true });
+  } else if (D.k === 'frkacak') {
+    openModal('Şubede kural dışı iş', who('hq', `<p>Denetim ekibimiz <b>${esc(D.city)}</b> şubesinde bayat tavuk ve eksik temizlik buldu. Şube sahibi <b>${esc(D.ad)}</b> özür diliyor.</p><p>Sözleşme cezası kesersek şube toparlanır ama bir süre kalitesi düşük kalır. Sözleşmeyi bitirirsek şube kapanır; markamız korunur ama payını da kaybederiz.</p>`)
+      + btn(`Ceza kes · +${fmtTL(D.ceza)}`, 'Sözleşmeyi bitir'), 'decide', { lock: true });
+  } else if (D.k === 'frikinci') {
+    openModal('İkinci şube isteği', who('hq', `<p><b>${esc(D.from)}</b> şubemiz çok iyi gidiyor. Sahibi <b>${esc(D.ad)}</b> şimdi <b>${esc(D.cityAd)}</b>’da da bir şube açmak istiyor.</p><p>Giriş ücretinde biraz indirim bekliyor: <b>${fmtTL(D.ucret)}</b>. İşini bilen biri; yeni şube de iyi başlar.</p>`)
+      + btn(`Kabul et · +${fmtTL(D.ucret)}`, 'Geri çevir'), 'decide', { lock: true });
+  } else if (D.k === 'frrakip') {
+    openModal('Şubenin karşısına rakip', who('hq', `<p><b>${esc(D.city)}</b> şubemizin tam karşısına büyük bir zincir açılıyor.</p><p>Yerel reklama destek verirsek rakip tutunamaz. Vermezsek şubenin satışı <b>altı ay boyunca dörtte bir düşer</b>; payımız ve şiş satışımız da azalır.</p>`)
+      + btn(`Reklama destek ver · ${fmtTL(D.cost)}`, 'Kendi başına baksın'), 'decide', { lock: true });
+  } else if (D.k === 'frayril') {
+    openModal('Şube sahibi ayrılmak istiyor', who('hq', `<p><b>${esc(D.city)}</b> şubesinin sahibi <b>${esc(D.ad)}</b> yeterince kazanamadığını, işi bırakmak istediğini söylüyor.</p><p>Payını yarıya indirirsek devam eder ve biraz toparlanır. İndirmezsek şube kapanır.</p>`)
+      + btn('Payını yarıya indir', 'Bıraksın'), 'decide', { lock: true });
   } else if (D.k === 'festival') {
     openModal('Şehir lezzet festivali', who('hq', `<p>Bu ay şehirde lezzet festivali var; bize de stant önerdiler. Stant, ekip ve tanıtım: <b>${fmtTL(D.cost)}</b>.</p><p>Gidersek adımız duyulur: <b>iki ay boyunca daha çok müşteri</b> gelir, puanımız da biraz yükselir.</p>`) + btn(`Stant aç · ${fmtTL(D.cost)}`, 'Bu yıl katılma'), 'decide', { lock: true });
   } else return false;
@@ -6336,6 +6673,20 @@ const FIRSAT_TXT = {
   transferkaldi: e => [`${esc(e.name)} Usta kaldı`, 'Maaşı arttı, keyfi yerinde.', 'chef', 'green'],
   transfergitti: e => [`${esc(e.name)} Usta rakibe geçti`, 'Ocak boş kaldı; yerine yeni bir usta al.', 'userx', 'red'],
   festivalok: () => ['Festivalde stant açtık', 'Kuyruk standı dolandı. İki ay boyunca daha çok müşteri gelecek.', 'sparkle', 'green'],
+  yanhazir: e => [`${esc(e.ad)} menüde`, 'Mutfakta denenen tarif tuttu; müşterilerin bir kısmı dürümün yanında bunu da alacak.', 'bowl', 'green'],
+  // franchise
+  fracik: () => ['Artık bir markayız', 'Genel Merkez’de franchise masası açıldı. Önce dört altyapıyı kur, sonra şehirlere şube ver.', 'globe', 'gold'],
+  frkuruldu: e => [`${esc(e.ad)} hazır`, e.hepsi ? 'Dört altyapı da tamam: adaylar başvurmaya başlayacak.' : 'Kalan altyapıları da kurunca şube verebilirsin.', 'check', 'green'],
+  fraday: e => [`${esc(ekDen(e.city))} franchise başvurusu`, 'Genel Merkez’de franchise masasından bakabilirsin.', 'store', 'amber'],
+  fryeni: e => [`${esc(e.city)} şubesi açıldı`, `Giriş ücreti kasaya girdi: ${fmtTL(e.ucret)}. Şube her ay payını öder.`, 'store', 'gold'],
+  frkapandi: e => [`${esc(e.city)} şubesi kapandı`, `${esc(e.neden.charAt(0).toLocaleUpperCase('tr-TR') + e.neden.slice(1))}.`, 'x', 'red'],
+  frhaber: e => [`${esc(e.city)} şubesi gazetede`, 'Bayat tavuk kullandığı ortaya çıktı; marka puanımız düştü. Denetim ekibi olsa yakalardı.', 'down', 'red'],
+  frbasin: () => ['Markamız gazetede', '“Şehir şehir aynı lezzet.” İki ay boyunca dükkânımıza da daha çok müşteri gelecek.', 'star', 'green'],
+  frceza: e => [`${esc(e.city)} şubesine ceza`, `Sözleşme cezası kasaya girdi: ${fmtTL(e.ceza)}. Şube artık daha dikkatli.`, 'gavel', 'green'],
+  frikincired: e => ['İkinci şube isteği geri çevrildi', `${esc(e.city)} boş kaldı; başka bir aday gelebilir.`, 'x', 'amber'],
+  frrakipok: e => [`${esc(e.city)} şubesine destek`, 'Yerel reklamla rakip tutunamadı.', 'mega', 'green'],
+  frrakipno: e => [`${esc(e.city)} şubesinin karşısına rakip açıldı`, 'Altı ay boyunca satışları düşecek.', 'down', 'red'],
+  frindirim: e => [`${esc(e.city)} şubesi devam ediyor`, 'Payını yarıya indirdik; şube sahibi biraz rahatladı.', 'percent', 'amber'],
 };
 function firsatFlash(e) {
   const f = FIRSAT_TXT[e.k]; if (!f) return;
@@ -6365,7 +6716,7 @@ function openYil(y) {
 }
 
 /* ---------- bu ay: para kartına dokununca ---------- */
-const ACC_AD = { maas: 'Maaşlar', malzeme: 'Malzeme', yem: 'Dışarıdan yem', kira: 'Kira', fatura: 'Faturalar', arazi: 'Çiftlik', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar', faiz: 'Banka faizi', vergi: 'Vergi', hasar: 'Kriz ve hasar', gubre: 'Gübre', katki: 'Katkı' };
+const ACC_AD = { frans: 'Franchise', maas: 'Maaşlar', malzeme: 'Malzeme', yem: 'Dışarıdan yem', kira: 'Kira', fatura: 'Faturalar', arazi: 'Çiftlik', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar', faiz: 'Banka faizi', vergi: 'Vergi', hasar: 'Kriz ve hasar', gubre: 'Gübre', katki: 'Katkı' };
 const ACC_GRUP = [
   ['Ürün maliyeti', ['malzeme', 'yem', 'arazi', 'gubre', 'katki']],
   ['İşletme giderleri', ['maas', 'kira', 'fatura', 'kampanya', 'bakim']],
@@ -7346,7 +7697,7 @@ function openHelp() {
       <div class="st"><span class="sn">1</span><div><b>Çiftlik</b><p>Satılık arsalara tarla ya da kümes kur. Tarla tavukların yemini, kümes yeni piliçleri verir.</p></div></div>
       <div class="st"><span class="sn">2</span><div><b>Mutfak</b><p>Piliçler yemle büyür, kesilip döner şişi olur. Veteriner tavukları, gıda mühendisi mutfağı korur; ikisi de pahalıdır ama değer.</p></div></div>
       <div class="st"><span class="sn">3</span><div><b>Dükkân</b><p>Boş ocağa usta, boş kasaya kasiyer al; kasada kimse yoksa müşteri girmez. Tasarım yıllar içinde eskir; yenisi pahalıdır.</p></div></div>
-      <div class="st"><span class="sn">4</span><div><b>Merkez</b><p>Reklam müşteriyi artırır. Finans odasında vergi ve sigorta var. Kurul her üç ayda iki hedef koyar.</p></div></div>
+      <div class="st"><span class="sn">4</span><div><b>Merkez</b><p>Reklam müşteriyi artırır. Finans odasında vergi ve sigorta var. Kurul her üç ayda iki hedef koyar. Adın duyulunca franchise masasından şehir şehir şube verirsin.</p></div></div>
     </div>
     <p class="small">Sol üstteki <b>kasaya dokunursan</b> bu ayın gelir ve giderini görürsün. <b>Müşteri puanı (★)</b> kalabalığı belirler: tarif, hijyen, veteriner, tasarımın tazeliği ve hızlı servis puanı yükseltir.</p>
     <p class="small"><b>Hedef:</b> beş basamaklı unvan merdivenini tırman ve “Türkiye’nin en iyi tavuk döneri” ol. Her basamağın şartları “Hikâyem” sayfasında yazar; her yeni unvan ödül ve yeni müşteri getirir. Denedik ekibi arada bir habersiz gelir ve 10 üzerinden puan verir.</p>
