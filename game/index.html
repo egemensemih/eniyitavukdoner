@@ -55,8 +55,12 @@ html.full .caption { display: none; }
 
 /* --- sahnedeki nesneler --- */
 .scene .obj, .scene [data-hit] { cursor: pointer; }
-.scene .obj.hov { filter: url(#hlf); }
-.scene .obj.sel { filter: url(#slf); }
+/* seçim ve üzerine gelme: filtre yok (büyük SVG'de filtre her karede yeniden çizilir, oyun kasar) */
+.scene .obj { cursor: pointer; }
+.selmark { position: absolute; z-index: 9; left: 0; top: 0; width: 22px; height: 22px; margin: -30px 0 0 -11px; pointer-events: none; will-change: transform; }
+.selmark i { display: block; width: 22px; height: 22px; animation: selb 0.9s ease-in-out infinite; }
+.selmark svg { width: 22px; height: 22px; display: block; filter: drop-shadow(0 2px 2px rgba(20, 39, 90, .35)); }
+@keyframes selb { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 /* küçük ekranda etiket, işaret ve uçan yazılar okunur boyda kalır (--lbl) */
 .scene .bub, .scene .mk, .scene .fxt, .scene .ntag { transform: scale(var(--lbl, 1)); }
 .scene .walk { animation: walk .56s ease-in-out infinite; }
@@ -933,6 +937,164 @@ img.kar { display: block; flex: none; border-radius: 50%; }
 .aday .ah { position: relative; padding-right: 64px; }
 .aday .akar { position: absolute; right: 0; top: 0; display: flex; }
 .aday .akar img.kar + img.kar { margin-left: -10px; box-shadow: 0 0 0 2px var(--fill); }
+/* franchise (sürüm 17) */
+.cb .frbek { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; background: var(--orange-l, #FFF0E5); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; }
+.cb .frbek b { font-size: 14px; } .cb .frbek span { grid-column: 1; font-size: 12.5px; color: var(--ink-2); }
+.cb .frbek .abt { grid-column: 2; grid-row: 1 / span 2; }
+.sheet .frap { display: flex; align-items: center; gap: 10px; background: #F5ECDD; border-radius: 14px; padding: 8px 12px; margin: 4px 0 10px; font-size: 13px; }
+.sheet .frap .akar { display: flex; flex: none; }
+.sheet .frap .akar img + img { margin-left: -12px; }
+
+/* franchise ekranı (sürüm 17): kobalt vitrin, gelişim yolu, sade şube listesi */
+.eyebrow { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--orange); }
+.frhero { background: linear-gradient(150deg, #2340B8 0%, #1B3296 55%, #14275A 100%); color: #fff; border-radius: 18px; padding: 14px 14px 10px; display: grid; gap: 8px; }
+.frhero .eyebrow { color: #FFD500; }
+.frhero .fh1 { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+.frhero .fbig { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; margin-top: 2px; }
+.frhero .fnet { text-align: right; } .frhero .fnet small { display: block; font-size: 11px; color: #AEBDF2; }
+.frhero .fnet b { font-size: 17px; font-weight: 800; color: #7CF0A8; font-variant-numeric: tabular-nums; } .frhero .fnet b.neg { color: #FF9A9A; }
+.frhero .frmap { margin: 0; }
+.frhero .fh3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.frhero .fh3 span { background: rgba(255, 255, 255, .1); border-radius: 12px; padding: 6px 9px; min-width: 0; }
+.frhero .fh3 small { display: block; font-size: 10.5px; color: #AEBDF2; }
+.frhero .fh3 b { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.frhero .fleg { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 10.5px; color: #C9D3F7; align-items: center; }
+.frhero .fleg i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: -6px; } .frhero .fleg i.ring { background: transparent; box-shadow: inset 0 0 0 1.5px #fff; }
+.frhero .mc { cursor: pointer; }
+.fryol { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; margin: 2px 0 0; }
+.fryol::before, .fryol::after { content: ''; position: absolute; left: 10%; right: 10%; top: 17px; height: 3px; border-radius: 2px; background: var(--fill-2); }
+.fryol::after { right: auto; width: var(--p, 0%); background: var(--cobalt); }
+.card .cs .frsum { margin: 10px 2px 0; line-height: 1.5; }
+.fk { position: relative; display: grid; justify-items: center; gap: 2px; text-align: center; min-width: 0; }
+.fk .fd { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--fill); box-shadow: 0 0 0 4px var(--surface); }
+.fk .fd svg { width: 17px; height: 17px; }
+.fk b { font-size: 11.5px; font-weight: 700; color: var(--ink-3); } .fk small { font-size: 10.5px; color: var(--ink-3); white-space: nowrap; }
+.fk.ok .fd { background: var(--cobalt); } .fk.ok b { color: var(--ink); } .fk.ok small { color: var(--ink-2); }
+.fk.yap .fd { background: var(--orange); animation: yapb 1.4s ease-in-out infinite; } .fk.yap b, .fk.yap small { color: var(--orange-d); }
+@keyframes yapb { 50% { box-shadow: 0 0 0 4px var(--surface), 0 0 0 8px rgba(255, 106, 0, .22); } }
+.fk.sira .fd { background: var(--surface); box-shadow: 0 0 0 4px var(--surface), inset 0 0 0 2px var(--cobalt); } .fk.sira b { color: var(--cobalt); } .fk.sira small { color: var(--ink-2); }
+.frnext { background: var(--fill); border-radius: 16px; padding: 12px 13px; display: grid; gap: 5px; }
+.frnext b { font-size: 16px; font-weight: 800; letter-spacing: -.02em; }
+.frnext p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--ink); } .frnext p.small { font-size: 12px; color: var(--ink-2); }
+.frnext.yap { background: var(--orange-l); }
+.rqs { display: flex; flex-wrap: wrap; gap: 5px; }
+.rq { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--surface); color: var(--ink); }
+.rq.y { background: var(--good-l); color: var(--good); } .rq em { font-style: normal; font-weight: 500; color: var(--ink-2); }
+.rq.n { box-shadow: inset 0 0 0 1px var(--sep); }
+.frlist { display: grid; gap: 6px; }
+.frrow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; border: 0; background: var(--fill); border-radius: 14px; padding: 8px 12px 8px 8px; text-align: left; cursor: pointer; font: inherit; color: var(--ink); }
+.frrow .pp, .pp { display: inline-block; min-width: 44px; text-align: center; color: #fff; font-size: 12px; font-weight: 700; padding: 5px 7px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.pp.big { font-size: 15px; padding: 7px 10px; min-width: 58px; }
+.frrow .fc b { display: block; font-size: 14px; font-weight: 700; } .frrow .fc small { display: block; font-size: 11.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.frrow .fg { text-align: right; font-weight: 700; font-size: 13px; color: var(--good); font-variant-numeric: tabular-nums; white-space: nowrap; } .frrow .fg small { display: block; font-size: 10.5px; font-weight: 500; color: var(--ink-3); }
+.frrow.more { grid-template-columns: 1fr auto; justify-items: start; font-weight: 600; font-size: 13px; color: var(--cobalt); background: var(--cobalt-l); padding: 10px 14px; }
+@media (hover: hover) { .frrow:hover { background: var(--cobalt-l); } }
+.frsum { margin: 0; font-size: 12px; color: var(--ink-2); } .frsum b { color: var(--ink); font-weight: 700; } .frsum b.pos { color: var(--good); }
+.frsb { display: flex; align-items: center; gap: 12px; } .frsb b { display: block; font-size: 15px; } .frsb small { display: block; font-size: 12.5px; color: var(--ink-2); line-height: 1.35; }
+.card.wide .cs .frhero { margin: 0; }
+
+/* ===================================================================
+   DİKEY TELEFON (sürüm 17): mobil önce
+   üst: tek bant (kasa · ay · gider · puan | hız · menü)
+   orta: sahne (yüksekliğe yakın sığar, parmakla kaydırılır)
+   alt: sıradaki iş şeridi · akış · bölümler
+   =================================================================== */
+.game[data-mode="tall"] { --tb: 54px; --dk: 60px; --ch: 36px; font-size: 13px; }
+.game[data-mode="tall"] .money { top: calc(6px + var(--st)); left: calc(6px + var(--sl)); right: calc(150px + var(--sr)); min-width: 0; height: var(--tb); padding: 6px 10px 6px 8px; border-radius: 16px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; grid-template-areas: "cash cash pz" "meta due due"; column-gap: 8px; row-gap: 1px; align-content: center; }
+.game[data-mode="tall"] .money .cash { grid-area: cash; gap: 6px; min-width: 0; }
+.game[data-mode="tall"] .coin { width: 20px; height: 20px; font-size: 11px; }
+.game[data-mode="tall"] #cash { font-size: 17px; font-weight: 800; letter-spacing: -.02em; white-space: nowrap; }
+.game[data-mode="tall"] .money .meta { grid-area: meta; padding-left: 0; font-size: 11px; gap: 5px; }
+.game[data-mode="tall"] .weeks i { width: 6px; height: 3px; }
+.game[data-mode="tall"] .due { grid-area: due; padding-left: 0; font-size: 11px; text-align: right; overflow: hidden; text-overflow: ellipsis; }
+.game[data-mode="tall"] .pzrow { grid-area: pz; margin: 0; justify-self: end; }
+.game[data-mode="tall"] .pz { margin: 0; padding: 3px 8px 3px 6px; font-size: 12px; gap: 4px; }
+.game[data-mode="tall"] .pz .pst { display: none; }
+.game[data-mode="tall"] .pz::before { content: '★'; color: #F5B400; font-size: 12px; }
+.game[data-mode="tall"] .pz.uz { display: none; }
+.game[data-mode="tall"] .warn { position: absolute; left: 8px; top: calc(100% + 4px); margin: 0; }
+.game[data-mode="tall"] .ctrl { top: calc(6px + var(--st)); right: calc(6px + var(--sr)); height: var(--tb); gap: 6px; }
+.game[data-mode="tall"] .seg { height: var(--tb); align-items: center; padding: 0 5px; border-radius: 16px; }
+.game[data-mode="tall"] .seg button { min-width: 36px; height: 40px; padding: 0 5px; border-radius: 12px; }
+.game[data-mode="tall"] .ib { width: 48px; height: var(--tb); border-radius: 16px; }
+.game[data-mode="tall"] #btnSound { display: none; }
+/* alt: bölümler tam genişlik, üstünde akış, onun üstünde sıradaki iş */
+.game[data-mode="tall"] .tabbar { bottom: calc(6px + var(--sb)); left: calc(6px + var(--sl)); right: calc(6px + var(--sr)); transform: none; height: var(--dk); padding: 4px; gap: 4px; border-radius: 20px; justify-content: space-between; }
+.game[data-mode="tall"] .dk { flex: 1; width: auto; height: 100%; border-radius: 16px; gap: 2px; }
+.game[data-mode="tall"] .dk .dl { font-size: 11.5px; }
+.game[data-mode="tall"] .dk.on { background: var(--cobalt); color: #fff; }
+.game[data-mode="tall"] .chain { top: auto; bottom: calc(6px + var(--dk) + 6px + var(--sb)); left: calc(6px + var(--sl)); right: calc(6px + var(--sr)); transform: none; height: var(--ch); padding: 3px; border-radius: 14px; justify-content: space-between; }
+.game[data-mode="tall"] .chip { padding: 0 8px; height: 100%; gap: 5px; border-radius: 11px; flex: 1; justify-content: center; }
+.game[data-mode="tall"] .chip b { font-size: 12.5px; }
+.game[data-mode="tall"] .chip svg { width: 15px; height: 15px; }
+.game[data-mode="tall"] .chip .ck, .game[data-mode="tall"] .chip .cu { display: none; }
+.game[data-mode="tall"] .chain .ar { width: 10px; } .game[data-mode="tall"] .chain .ar svg { width: 10px; height: 10px; }
+.game[data-mode="tall"] .nextbar { left: calc(6px + var(--sl)); right: calc(6px + var(--sr)); transform: none; max-width: none; bottom: calc(6px + var(--dk) + 6px + var(--ch) + 8px + var(--sb)); border-radius: 16px; padding: 7px 10px 7px 7px; font-size: 13px; min-height: 44px; }
+.game[data-mode="tall"] .nextbar:active { transform: scale(.98); }
+.game[data-mode="tall"] .nextbar .nk { font-size: 10.5px; padding: 5px 8px; border-radius: 10px; }
+.game[data-mode="tall"] .zoom { display: none; }
+/* kart: alttan açılan sayfa; bölümler ve akış görünür kalır */
+.game[data-mode="tall"] .card { left: calc(6px + var(--sl)); right: calc(6px + var(--sr)); width: auto; top: auto; bottom: calc(6px + var(--dk) + 6px + var(--ch) + 8px + var(--sb)); transform: none !important;
+  max-height: calc(100% - var(--tb) - var(--dk) - var(--ch) - 40px - var(--st) - var(--sb)); border-radius: 22px; box-shadow: 0 -2px 10px rgba(14, 29, 69, .10), 0 18px 48px rgba(14, 29, 69, .30); }
+.game[data-mode="tall"] .card.show { animation: sheetup .28s var(--ease); }
+@keyframes sheetup { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+.game[data-mode="tall"] .card header { padding: 12px 10px 10px 12px; }
+.game[data-mode="tall"] .card h3 { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+.game[data-mode="tall"] .card .ci { width: 36px; height: 36px; }
+.game[data-mode="tall"] .card .x { width: 36px; height: 36px; }
+.game[data-mode="tall"] .cb { padding: 12px 12px 4px; font-size: 14px; }
+.game[data-mode="tall"] .ca { padding: 6px 12px 12px; }
+.game[data-mode="tall"] .banner { top: calc(6px + var(--tb) + 8px + var(--st)); bottom: auto; width: calc(100% - 12px); }
+.game[data-mode="tall"] .coach { top: calc(6px + var(--tb) + 8px + var(--st)); width: calc(100% - 12px); padding: 11px 12px; border-radius: 18px; }
+.game[data-mode="tall"] .coach p { font-size: 15px; }
+.game[data-mode="tall"] .coach p.cl { font-size: 13.5px; }
+.game[data-mode="tall"] .coach .cbt button { padding: 10px 18px; font-size: 14px; }
+.game[data-mode="tall"] .pausetag { top: calc(6px + var(--tb) + 10px + var(--st)); bottom: auto; }
+.game[data-mode="tall"] .talk { max-width: calc(100% - 24px); }
+/* çok kısa dikey ekran (küçük telefon, tarayıcı çubukları açık) */
+@media (max-height: 640px) {
+  .game[data-mode="tall"] { --tb: 48px; --dk: 52px; --ch: 32px; }
+  .game[data-mode="tall"] .dk .di svg { width: 21px; height: 21px; }
+  .game[data-mode="tall"] .dk .dl { font-size: 10.5px; }
+  .game[data-mode="tall"] #cash { font-size: 15.5px; }
+  .game[data-mode="tall"] .nextbar { min-height: 38px; font-size: 12.5px; padding: 5px 8px 5px 5px; }
+}
+@media (max-width: 360px) {
+  .game[data-mode="tall"] .money { right: calc(140px + var(--sr)); }
+  .game[data-mode="tall"] .seg button { min-width: 33px; }
+  .game[data-mode="tall"] .ib { width: 44px; }
+}
+
+/* ---------- sürüm 17: sitemizle aynı dil — beyaz paneller, lacivert yazı, kobalt seçili, turuncu çağrı ---------- */
+.panel { --glass: #FFFFFF; --surface: #FFFFFF; --ink: #14275A; --ink-2: #5B6485; --ink-3: #9AA2BD; --fill: #F2F4FA; --fill-2: #E3E8F3; --sep: rgba(20, 39, 90, .09);
+  --cobalt: #2340B8; --cobalt-l: #E8EDFB; --bad-l: #FDECEA; --bad: #C62828; --good: #17804A; --warn: #B86400; --warn-l: #FFF3DD; --navy: #14275A;
+  background: #FFFFFF; color: var(--ink); box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 8px 24px rgba(3, 8, 28, .28); }
+.seg button.on { background: var(--cobalt); color: #fff; }
+#spPause.on { background: var(--orange); color: #fff; }
+#sp1.fast { background: var(--navy); color: #fff; }
+.dk.on { color: #fff; background: var(--cobalt); }
+.game[data-mode="tall"] .dk.on { background: var(--cobalt); color: #fff; }
+.dk .dl { font-weight: 600; }
+.pz { background: var(--fill); color: var(--ink); }
+.pz.uz { background: #FFF6CC; color: #7A5A00; } .pz.uz .uic svg { stroke: #B88A00; } .pz.uz .up i { background: #E2CF86; } .pz.uz .up i.on { background: #B88A00; }
+.chip.low { background: var(--warn-l); } .chip.bad { background: var(--bad-l); }
+/* sıradaki iş: beyaz şerit, renkli etiket */
+.nextbar { background: #FFFFFF; color: var(--ink, #14275A); box-shadow: 0 8px 24px rgba(3, 8, 28, .30); }
+.nextbar .nk { background: var(--cobalt-l); color: var(--cobalt); }
+.nextbar.bad .nk { background: #C62828; color: #fff; } .nextbar.warn .nk { background: #FF6A00; color: #fff; } .nextbar.gold .nk { background: #FFD500; color: #3D2E00; } .nextbar.ok .nk { background: #17804A; color: #fff; }
+.nextbar .nc { color: var(--cobalt); opacity: 1; }
+.nextbar.bad { box-shadow: inset 0 0 0 2px #C62828, 0 8px 24px rgba(3, 8, 28, .30); }
+/* başlıklar: Poppins 800, sıkı */
+.card h3, .sheet h2, .frnext b { font-weight: 800; letter-spacing: -.02em; }
+/* çağrı düğmeleri: sitedeki gibi hap, altta 4px gölge */
+.btn { border-radius: 999px; font-weight: 700; }
+.btn.o { background: var(--orange); color: #fff; box-shadow: 0 4px 0 var(--orange-d); }
+.btn.o:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--orange-d); }
+.act.primary { box-shadow: 0 4px 0 #DB5A00; margin-bottom: 4px; }
+.act.primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #DB5A00; }
+.coach .cbt .p { box-shadow: 0 4px 0 #DB5A00; } .coach .cbt .p:active { transform: translateY(2px); box-shadow: 0 2px 0 #DB5A00; }
+.abt.pri { box-shadow: 0 3px 0 #DB5A00; }
 </style>
 </head>
 <body>
@@ -941,8 +1103,6 @@ img.kar { display: block; flex: none; border-radius: 50%; }
   <div class="scene-wrap" id="sceneWrap">
     <svg class="scene" id="scene" viewBox="0 0 800 530" role="img" aria-label="Oyun sahnesi">
       <defs>
-        <filter id="hlf" x="-15%" y="-15%" width="130%" height="130%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d1"/><feFlood flood-color="#FFD500"/><feComposite in2="d1" operator="in" result="o1"/><feMorphology in="SourceAlpha" operator="dilate" radius="1.4" result="d2"/><feFlood flood-color="#FFFFFF"/><feComposite in2="d2" operator="in" result="o2"/><feMerge><feMergeNode in="o1"/><feMergeNode in="o2"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="slf" x="-15%" y="-15%" width="130%" height="130%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d1"/><feFlood flood-color="#FF6A00"/><feComposite in2="d1" operator="in" result="o1"/><feMorphology in="SourceAlpha" operator="dilate" radius="1.4" result="d2"/><feFlood flood-color="#FFFFFF"/><feComposite in2="d2" operator="in" result="o2"/><feMerge><feMergeNode in="o1"/><feMergeNode in="o2"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
       <g id="lyBack"></g><g id="lyDyn"></g><g id="lyFront"></g><g id="lyOver"></g><g id="lyMarks"></g><g id="lyFx"></g>
     </svg>
@@ -982,6 +1142,7 @@ img.kar { display: block; flex: none; border-radius: 50%; }
   <button class="nextbar" id="nextBar" hidden></button>
   <div class="pausetag" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg><span class="pt1">Duraklatıldı</span><span class="pt2">Yardım gösterirken zaman bekliyor</span></div>
   <div class="tip" id="tip" hidden></div>
+  <div class="selmark" id="selMark" hidden><i><svg viewBox="0 0 22 22"><path d="M3 5 h16 l-8 11z" fill="#FF6A00" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></i></div>
   <div class="talk" id="talk" hidden></div>
   <div class="card" id="card" hidden></div>
   <div class="confetti" id="confetti" aria-hidden="true"></div>
@@ -1021,7 +1182,7 @@ img.kar { display: block; flex: none; border-radius: 50%; }
     </div>
   </div>
 </div>
-<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 16</span><span>Oyun kendiliğinden kaydedilir</span></div>
+<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 17</span><span>Oyun kendiliğinden kaydedilir</span></div>
 </div>
 
 <script>(function(){var e=window.self!==window.top,m=!!(window.matchMedia&&matchMedia('(pointer: coarse)').matches&&Math.min(screen.width,screen.height)<820);if(e)document.body.classList.add('embed');if(e||m)document.documentElement.classList.add('full');})();</script>
@@ -1074,7 +1235,7 @@ const C = {
     risk: 0.05, crowd: 0.012, spread: 0.8,                       // ay başına olasılık
     sickDeath: 45, get treat() { return px(12000); }, get visit() { return px(20000); }, starve: 0.6, dieW: 0.7,
     kesimTime: [4, 2], beltTime: [5, 3.5], get hizliCost() { return px(300000); }, get hassasCost() { return px(250000); },
-    fridgeCap: [12, 20, 30, 48], get fridgeCost() { return [200000, 380000, 950000].map(px); }, // şiş
+    fridgeCap: [6, 10, 16, 24], get fridgeCost() { return [200000, 380000, 950000].map(px); }, // şiş
     marine: {
       klasik: { label: 'Klasik marine', lezzet: 0, puan: 0, malz: 0, color: '#D4883A' },
       yogurt: { label: 'Yoğurtlu marine', get cost() { return px(250000); }, time: 30, lezzet: 10, puan: 0.2, malz: 5, color: '#E0A35C', desc: 'Yumuşak ve sulu; müşteriler daha çok gelir.' },
@@ -1084,10 +1245,10 @@ const C = {
   },
   shop: {
     n: 4, wage: { usta: 50000, kasiyer: 40000, kurye: 35000 },
-    tUsta: 2.8, tKasa: 2.4, load: 1.4, tRobot: 3.0, tKiosk: 3.0, loadRobot: 2.0,
+    tUsta: 1.7, tKasa: 1.7, load: 1.4, tRobot: 1.8, tKiosk: 1.8, loadRobot: 2.0,           // "İyi" keyifte bir usta da bir kasiyer de ayda ≈3.000 porsiyon
     robot: { get cost() { return px(1400000); }, get bakim() { return px(35000); } }, kiosk: { get cost() { return px(450000); }, get bakim() { return px(14000); } },
     speed: [0.45, 0.65, 0.85, 1],                                // ruh hali 0..3
-    moodLabel: ['Kızgın', 'Yorgun', 'İyi', 'Mutlu'],
+    moodLabel: ['Morali bozuk', 'Yorgun', 'İyi', 'Keyifli'],
     get prim() { return px(12000); }, talkCool: 25,
     tray: 8, base: 0.5, queueMax: 7, patience: 35, walk: 2.0,
     paket: { get cost() { return px(350000); }, n: 3, base: 0.1, trip: 4, pack: 0.8, bag: 3, expire: 45, queueMax: 8,
@@ -1126,7 +1287,7 @@ const C = {
     infl: { every: 12, pct: [4, 7] },                                         // enflasyon: kira dışında her şey; maaşlar ocakta, kira yıl dönümünde yetişir
     bakim: { first: 6, every: [5, 8], base: 40000, rev: 0.05, pen: 0.85 },   // dükkân bakımı; ertelenirse müşteri azalır
     zam: { first: 15, every: [16, 24], pct: 5, strike: 0.6, dur: 0.25 },     // zam isteği; reddedilirse çoğu zaman grev
-    rakip: { first: [9, 14], every: [12, 18], later: [9, 14], mult: 0.82, dur: 3 },  // karşıya rakip dönerci açılır; gidince de biraz müşteri götürür
+    rakip: { first: [9, 14], every: [12, 18], later: [9, 14], mult: 0.88, dur: 3 },  // karşıya rakip dönerci açılır; gidince de biraz müşteri götürür
     ariza: { base: 0.015, age: 0.0015, max: 0.2, repair: 0.12, repairAge: 0.005, life: [96, 132], old: 12 },   // makine arızası: ay başına olasılık, yaşla artar; ömrü dolan makine yenilenmeli
     ciftlik: { first: [3, 5], every: [4, 8], bocek: 40000, cati: 70000, cit: 90000, sulama: 300000, kurak: 0.5 },   // çiftlik sorunları: böcek, fırtına, tilki; yazın kuraklık
     denetim: { first: [3, 5], every: [4, 7], p: 0.3, pMuh: 0.04, pBakim: 0.15, kapat: 3, gun: 3 },   // gıda ve belediye denetimi
@@ -1147,30 +1308,26 @@ const C = {
     // özel tatlı satın alınmaz, geliştirilir: dev ay boyunca mutfakta denenir, sonra menüye girer
     tatli: { label: 'Özel tatlı', kisa: 'tatlı', act: 'Menüye özel tatlı geliştir', get cost() { return px(650000); }, oran: 0.20, pay: 0.40, mal: 0.48, ay: 18, dev: 1 },
   },
-  // franchise (sürüm 13): marka olunca şehirlere şube verilir; şubeler dönerini merkez mutfaktan alır
+  // franchise (sürüm 17): marka olunca franchise ofisi kurulur; şube sayısı merkezin kademesiyle sınırlıdır.
+  // Her kademe para, zaman, açık şube ve marka puanı ister; büyüme doğal ve yavaş olur.
   fr: {
-    unvan: 3, puan: 4.2,                                    // panelin açılması: "Şehrin en iyilerinden" ve ★4,2
-    infra: {
-      mutfak: { label: 'Merkez mutfak ve dağıtım', ne: 'Şubelere hazır şiş gönderir: önce kendi çiftliğinden, yetmezse anlaşmalı üreticiden', cost: 5000000, ay: 4, icon: 'truck' },
-      akademi: { label: 'Eğitim akademisi', ne: 'Şube ustalarını yetiştirir; yeni şubeler iyi başlar, zayıflar toparlanır', cost: 3000000, ay: 3, gider: 80000, icon: 'book' },
-      denetim: { label: 'Denetim ekibi', ne: 'Şubeleri habersiz denetler; kural dışını çoğu zaman yakalar', cost: 2000000, ay: 2, gider: 100000, icon: 'shield' },
-      marka: { label: 'Marka tescili ve sözleşmeler', ne: 'Adın korunur, franchise sözleşmesi hazırlanır', cost: 2000000, ay: 2, icon: 'key' },
-    },
-    // cirodan pay alınmaz: para şubelere sattığımız maldan gelir (porsiyon başına, menü fiyatının oranı)
-    toptan: 0.42,           // kendi çiftliğimizden giden şiş
-    sozlesmeli: 0.10,       // sözleşmeli üreticiden aldığımız şiş: yalnız aracılık payı kalır
-    malzeme: 0.12,          // lavaş, sos, ambalaj, ayran ve içecek
-    // dağıtım filosu: ayda taşıyabileceği porsiyon (ekran birimi); fazlasını şube başka yerden alır
-    filo: [{ n: 1, cap: 60 }, { n: 3, cap: 160, cost: 1500000 }, { n: 6, cap: 320, cost: 3000000 }, { n: 10, cap: 550, cost: 6000000 }, { n: 16, cap: 900, cost: 10000000 }],
-    kamyon: 25000,          // kamyon başına aylık (yakıt, şoför)
-    kurum: { base: 120000, sube: 48000 },   // franchise merkezi kadrosu (bölge müdürleri, muhasebe, hukuk): şube sayısıyla büyür
-    darbe: { first: [5, 8], every: [4, 7] },   // franchise döneminde dışarıdan gelen büyük ödemeler (vergi, zam, kur, fiyat savaşı)
-    denetim: 40000,         // şubeye denetim göndermek
-    egitim: 150000,         // destek: ustaları akademide eğitmek (şehir büyüklüğüyle çarpılır)
-    yenileme: 400000,       // destek: dükkân yenilemesine ortak olmak
-    rezerv: 4,              // dolapta kendi dükkânın için bırakılan şiş
-    birim: 30,              // orta boy şehirde bir şubenin aylık satışı (ekran birimi; ×100 porsiyon)
-    giris: 900000,          // giriş ücretinin temeli (şehir ve aday türüyle çarpılır)
+    unvan: 3, puan: 4.2,                       // binanın açılması: "Şehrin en iyilerinden" ve ★4,2
+    kademe: [
+      null,
+      { ad: 'Franchise ofisi', kur: 'Franchise ofisini kur', kisa: 'Ofis', icon: 'store', cost: 3000000, ay: 3, kap: 3, sube: 0, marka: 0, gider: 40000, ne: 'Sözleşmeler ve açılış desteği. İlk üç şube.' },
+      { ad: 'Eğitim mutfağı', kur: 'Eğitim mutfağını kur', kisa: 'Eğitim', icon: 'book', cost: 5000000, ay: 3, kap: 8, sube: 3, marka: 4.3, gider: 80000, ne: 'Şube ustaları burada yetişir; şubelerin puanı yükselir.' },
+      { ad: 'Lojistik deposu', kur: 'Lojistik deposunu kur', kisa: 'Depo', icon: 'truck', cost: 8000000, ay: 4, kap: 14, sube: 7, marka: 4.35, gider: 140000, ne: 'Soğuk depo ve kamyonlar: kendi şişimiz şubelere gider, ikinci kesim hattı açılır.' },
+      { ad: 'Denetim ekibi', kur: 'Denetim ekibini kur', kisa: 'Denetim', icon: 'shield', cost: 12000000, ay: 4, kap: 22, sube: 12, marka: 4.4, gider: 220000, ne: 'Şubeleri habersiz gezer; puanı düşen şube toparlanır.' },
+      { ad: 'Ulusal marka', kur: 'Ulusal markaya geç', kisa: 'Ulusal', icon: 'globe', cost: 18000000, ay: 6, kap: 31, sube: 20, marka: 4.45, gider: 320000, ne: 'Ulusal reklam ve tedarik anlaşmaları: her şehirde yerimiz var, payımız artar.' },
+    ],
+    giris: 400000,                             // giriş ücretinin temeli (şehir büyüklüğü ve şube sahibinin türüyle çarpılır)
+    pay: 0.12,                                 // şube satışından her ay bize kalan: lavaş, sos, ambalaj ve marka payı (ulusal markayla +0,02)
+    sis: 0.30,                                 // şubeye kendi mutfağımızdan giden şişte porsiyon başı ek kazanç (lojistik deposuyla)
+    birim: 30,                                 // orta boy şehirde bir şubenin aylık satışı (ekran birimi; ×100 porsiyon)
+    sube: 25000,                               // şube başına merkez gideri (bölge sorumlusu, muhasebe)
+    aday: [2.5, 4],                            // iki başvuru arası (ay)
+    darbe: { first: [5, 8], every: [5, 8] },   // büyük dış ödemeler (vergi incelemesi, yönetmelik, dava): bilgi verilir, karar yok
+    rezerv: 4,                                 // dolapta kendi dükkânımız için bırakılan şiş
   },
   // franchise sonrası büyüme: ikinci kesim hattı, komşu arazi, yem fabrikası, kuluçkahane
   buyume: { get kesim2() { return px(1200000); }, get arazi() { return px(1600000); }, get fabrika() { return px(1400000); }, get kulucka() { return px(1400000); }, tesisAy: 40000, tesisEtki: 1.3 },
@@ -1217,11 +1374,11 @@ const FR_CITIES = [
   { k: 'canakkale', ad: 'Çanakkale', lon: 26.41, lat: 40.15, b: 0.6, n: 1 }, { k: 'edirne', ad: 'Edirne', lon: 26.56, lat: 41.68, b: 0.55, n: 1 },
 ];
 const FR_TIP = {
-  deneyimli: { ad: 'Deneyimli işletmeci', kalite: 0.74, durust: 0.85, ucret: 1.3, boyut: 1.1, not: 'işi bilir, giriş ücreti yüksek' },
-  hevesli: { ad: 'Hevesli genç girişimci', kalite: 0.5, durust: 0.8, ucret: 0.7, boyut: 0.9, not: 'acemi ama öğrenmeye açık; akademiyle hızlı toparlar' },
-  yatirimci: { ad: 'Varlıklı yatırımcı', kalite: 0.6, durust: 0.55, ucret: 1.6, boyut: 1.25, not: 'büyük dükkân açar; kâr için kestirme yola sapabilir' },
-  usta: { ad: 'Eski döner ustası', kalite: 0.84, durust: 0.9, ucret: 0.8, boyut: 0.8, not: 'elinin ayarı iyi; küçük ama sağlam' },
-  aile: { ad: 'Aile işletmesi', kalite: 0.64, durust: 0.92, ucret: 0.9, boyut: 0.95, not: 'güvenilir ve sabırlı' },
+  deneyimli: { ad: 'Deneyimli işletmeci', kalite: 0.74, ucret: 1.3, boyut: 1.1, not: 'işi bilir; giriş ücreti yüksek' },
+  hevesli: { ad: 'Hevesli genç girişimci', kalite: 0.52, ucret: 0.7, boyut: 0.9, not: 'acemi ama hızlı öğrenir; puanı zamanla yükselir' },
+  yatirimci: { ad: 'Varlıklı yatırımcı', kalite: 0.6, ucret: 1.6, boyut: 1.25, not: 'büyük dükkân açar, çok satar; puanı ortalama' },
+  usta: { ad: 'Eski döner ustası', kalite: 0.84, ucret: 0.8, boyut: 0.8, not: 'elinin ayarı çok iyi; dükkânı küçük' },
+  aile: { ad: 'Aile işletmesi', kalite: 0.66, ucret: 0.9, boyut: 0.95, not: 'güvenilir ve sabırlı; her şeyi dengeli' },
 };
 const FR_AD = ['Ayşe', 'Mehmet', 'Elif', 'Murat', 'Zeynep', 'Emre', 'Fatma', 'Burak', 'Selin', 'Okan', 'Hülya', 'Kerem', 'Derya', 'Serkan', 'Gül', 'Tolga', 'Nur', 'Cem', 'Esra', 'Barış'];
 const FR_SOY = ['Kaya', 'Demir', 'Şahin', 'Yıldız', 'Aydın', 'Öztürk', 'Arslan', 'Doğan', 'Kılıç', 'Aslan', 'Çetin', 'Kurt', 'Koç', 'Özdemir', 'Polat', 'Erdem', 'Güneş', 'Tekin'];
@@ -1282,7 +1439,7 @@ function newGame(name, seed, opts = {}) {
     inc: { infl: C.month * C.inc.infl.every, bakim: C.month * C.inc.bakim.first, zam: C.month * C.inc.zam.first, rakip: 0, denetim: 0, kriz: 0 },
     guide: { on: !!opts.guide, step: 0, done: !opts.guide, tips: {} },
     // sürüm 8: puan, kalite ekibi, denetim, tasarım, vergi, kira, krizler
-    puan: C.puan.start, puanEv: [], muh: false, sigorta: false, rakipN: 0,
+    puan: C.puan.start, puanEv: [], muh: false, sigorta: true, rakipN: 0,
     design: { gen: 0, t0: 0, asked: false }, closed: null, karantina: 0, kriz: null, lastKriz: '',
     wageIdx: 1, wageReal: 1, kiraIdx: 1, kiraReal: 1, refReal: 1,
     yil: { kar: 0, buy: 0 }, vergiDue: 0, denetim: null,
@@ -1314,8 +1471,9 @@ function newGame(name, seed, opts = {}) {
   logEv('acilis', `${S.name} kapılarını açtı. Bir tarla, bir kümes, küçük bir mutfak ve köşede bir dükkân.`, 'gold');
   return S;
 }
-function newFr() { return { acik: false, infra: {}, adaylar: [], subeler: [], marka: 0, need: 0, nid: 1, nextAday: 0, filo: 0, m: { toptan: 0, kendi: 0 }, son: null, top: { giris: 0, toptan: 0, soz: 0, malz: 0, ceza: 0 } }; }
-function newMonth() { return { fr: 0, rev: 0, sold: 0, paket: 0, lost: 0, angry: 0, harvest: 0, pilic: 0, kesim: 0, buy: 0, olum: 0, disYem: 0, ceza: 0, nosis: 0 }; }
+function newFr() { return { v: 17, acik: false, lv: 0, yapim: null, subeler: [], marka: 0, need: 0, nid: 1, nextAday: 0, nextDarbe: 0, etki: {}, m: { kendi: 0, sis: 0 }, son: null, top: { giris: 0, pay: 0, sis: 0 } }; }
+const newLed = () => ({ kasa0: S ? S.cash : 0, gelir: {}, gider: {}, yatirim: 0, finans: 0 });
+function newMonth() { return { led: newLed(), fr: 0, rev: 0, sold: 0, paket: 0, lost: 0, angry: 0, harvest: 0, pilic: 0, kesim: 0, buy: 0, olum: 0, disYem: 0, ceza: 0, nosis: 0 }; }
 function newChicken(w) { return { id: S.nid++, w: w || C.kitchen.w0, app: 0.85 + rand() * 0.3, sick: false, sickT: 0 }; }
 function newWorker(role) {
   S.totals.hires++;
@@ -1337,7 +1495,7 @@ const porsOf = w => Math.round(w * C.kitchen.porsPerKg) + (S.kesimHassas ? 1 : 0
 const owned = t => t.type === 'tarla' || t.type === 'kumes' || t.type === 'nadas' || t.type === 'corak';
 const fertMult = t => (0.35 + 0.65 * t.fert / 100) * (tesisOn('fabrika') ? C.buyume.tesisEtki : 1);
 // toprak yorgunluğu: beş yıl aralıksız ekilen tarla her ay %2 verim kaybeder (en az yarısı kalır)
-const yorgun = t => ((t.yas || 0) <= 60 ? 1 : Math.max(0.5, 1 - ((t.yas || 0) - 60) * 0.02));
+const yorgun = t => 1;   // sürüm 17: tarla yorgunluğu kalktı
 // kampanyanın açılması: bazıları belli bir aydan, bazıları marka olunca (franchise)
 const campOpen = c => monthIdx() >= (c.ay || 0) && (!c.fr || !!(S.fr && S.fr.subeler.length));   // tv ve ünlü: ilk franchise şubesi açılınca
 const tesisOn = k => !!(S.tesis && S.tesis[k]);
@@ -1447,6 +1605,8 @@ const kirMult = () => 1 - 0.55 * (S.kir || 0);
 // franchise markası: her açık şube adını duyurur; marka puanı iyiyse kendi dükkânına da müşteri gelir, kötüyse kaçar
 function markaMult() { const F = S.fr; if (!F) return 1; const n = frAcikSube().length; if (!n) return 1; return 1 + Math.min(0.18, 0.02 * n) * clamp((F.marka - 3.6) / 0.9, -1, 1); }
 const shopMult = () => rivalMult() * krizMult() * fameMult() * buzzMult() * kirMult() * markaMult();
+// müşteri sayısının parçaları (kartlarda "neden az/çok müşteri" ve denge testleri için)
+function talepParca() { return { base: C.shop.base, kamp: campaignAdd(), puan: puanMult(), fiyat: priceMult(), boost: boostMult(), rakip: rivalMult(), kriz: krizMult(), un: fameMult(), buzz: buzzMult(), kir: kirMult(), marka: markaMult(), sezon: sezonMult() }; }
 function arrivalRate() { return working('kasa').length && !isClosed() ? (C.shop.base + campaignAdd()) * puanMult() * priceMult() * boostMult() * shopMult() * sezonMult() : 0; }
 function orderRate() { return S.shop.paket && working('kurye').length && !isClosed() ? (C.shop.paket.base + campaignAdd('paket')) * puanMult() * priceMult() * shopMult() * sezonMult('paket') : 0; }
 function stationSpeed(kind, w) {
@@ -1485,7 +1645,7 @@ function monthCostRate() {
   for (const k of ['fabrika', 'kulucka']) if (tesisOn(k)) ar += px(C.buyume.tesisAy);
   let kp = 0; for (const k in C.hq.camps) if (S.camps[k]) kp += C.hq.camps[k].cost;
   const kapali = isClosed() ? 0.5 : 1;                      // kapalıyken fatura yarıya iner
-  return { maas, kira: kiraNow(), fatura: C.fixed.fatura * kapali, arazi: ar, vet: S.vet ? vetCost() : 0, muh: S.muh ? muhCost() : 0, ek: S.ek && S.ek.zincir ? px(C.ek.zincir.ay) : 0, sigorta: S.sigorta ? sigortaCost() : 0, bakim, kampanya: kp, faiz: Math.max(0, -S.cash) * C.bank.faiz, frans: frGider(), kurum: frKurum() };
+  return { maas, kira: kiraNow(), fatura: C.fixed.fatura * kapali, arazi: ar, vet: S.vet ? vetCost() : 0, muh: S.muh ? muhCost() : 0, ek: S.ek && S.ek.zincir ? px(C.ek.zincir.ay) : 0, sigorta: S.sigorta ? sigortaCost() : 0, bakim, kampanya: kp, faiz: Math.max(0, -S.cash) * C.bank.faiz, kurum: frKurum() };
 }
 const accTotal = () => sum(Object.values(S.acc));
 function assetValue() {
@@ -1538,7 +1698,6 @@ function farmStep(dt) {
   for (const t of S.tiles) {
     if (t.type === 'tarla') {
       if (t.dinlen) { if (S.t >= t.dinlen) { t.dinlen = 0; t.yas = 0; ev('ciftlik', { k: 'dinlendi', tile: t.id }); } continue; }
-      if (t.sorun && t.sorun.k === 'bocek' && S.t - t.sorun.t0 > C.month * 3) { t.sorun = { k: 'olu', t0: S.t }; t.grow = 0; ev('ciftlik', { k: 'toprakoldu', tile: t.id }); }
       if (t.sorun) { if (t.sorun.k === 'bocek' && !t.sorun.spread && S.t - t.sorun.t0 > C.month) { t.sorun.spread = true; const o = S.tiles.find(x => x.type === 'tarla' && !x.sorun); if (o) { o.sorun = { k: 'bocek', t0: S.t, spread: true }; ev('ciftlik', { k: 'bocekyayildi', tile: o.id }); } } continue; }   // böcek: hasat durur
       t.grow += dt / F.harvestTime; t.yas = (t.yas || 0) + mf;
       t.fert = Math.max(0, t.fert - (t.gubre ? F.loss.gubre : F.loss.tarla) * mf);
@@ -1657,7 +1816,7 @@ function yanPer() {
 }
 function sell(units, i, paket) {
   const y = yanPer(), rev = (S.price + y.gelir) * KQ * units;
-  S.cash += rev; S.m.rev += rev; S.totals.rev += rev;
+  gelir('satis', rev);
   S.acc.malzeme += (unitCost() + y.malz) * KQ * units;
   if (S.ek && S.ek.marine) S.totals.kalite += C.ek.marine.malz * S.infl * (S.refReal || 1) * KQ * units;
   if (paket) { S.m.paket += units; S.totals.paket += units; } else { S.m.sold += units; S.totals.sold += units; }
@@ -1976,7 +2135,7 @@ function denetim() {
   const items = pick.map(i => {
     const r = RULES[i], p = r.z && S.ek && S.ek.zincir ? 0 : (S.muh ? D.pMuh : D.p) + (r.b && S.bakimDue ? D.pBakim : 0);
     const bad = rand() < p;
-    return { t: r.t, bad: bad ? r.bad : '', fine: bad ? px(r.f) : 0 };
+    return { t: r.t, bad: bad ? r.bad : '', fine: bad ? Math.round(px(r.f * 0.6) / 1000) * 1000 : 0 };
   });
   const n = items.filter(x => x.bad).length, total = sum(items, x => x.fine);
   if (total) addFine('denetim', total, `Denetim: ${n} eksik bulundu.`, true);
@@ -2002,10 +2161,10 @@ function bigKriz(force) {
   S.lastKriz = k;
   const e = { k }, h3 = S.hist.slice(-3), rev3 = h3.length ? sum(h3, r => r.rev) / h3.length : 0;   // büyüyen işletmenin krizi de büyük olur
   if (k === 'kusgribi') {
-    const share = S.vet ? 0.5 : 1, n = Math.ceil(S.chickens.length * share);
+    const share = S.vet ? 0.3 : 0.6, n = Math.ceil(S.chickens.length * share);
     S.chickens.sort(() => rand() - 0.5).splice(0, n);
     for (const t of S.tiles) if (t.type === 'kumes') t.slots = t.slots.map(() => 0);
-    S.karantina = S.t + C.month * (S.vet ? 0.4 : 1);
+    S.karantina = S.t + C.month * (S.vet ? 0.25 : 0.5);
     S.m.olum += n; S.totals.olum += n;
     e.lost = n; e.cost = px(60000) * (1 + S.tiles.filter(t => t.type === 'kumes').length); e.vet = S.vet; addHasar(e.cost);
   } else if (k === 'ekonomi') {
@@ -2016,9 +2175,9 @@ function bigKriz(force) {
     e.muh = S.muh;
     // uzun elektrik kesintisi soğuk odayı ısıttı: mühendis kayıtlardan riskli partiyi ayırır; yoksa bütün şişler imha edilir, dükkân temizlenir
     if (S.muh) { e.cost = px(40000) + Math.round(fridgePors() * 0.15 * KQ * unitCost() / 1000) * 1000; addHasar(e.cost); }
-    else { e.cost = px(450000) + Math.round(rev3 * 0.2 / 1000) * 1000; addHasar(e.cost); S.fridge = []; closeShop(6, 'zehir'); puanEv('zehir', -0.4, 3); e.gun = 6; }
+    else { e.cost = px(200000) + Math.round(rev3 * 0.15 / 1000) * 1000; addHasar(e.cost); S.fridge = []; closeShop(6, 'zehir'); puanEv('zehir', -0.4, 3); e.gun = 6; }
   } else if (k === 'yangin') {
-    e.dmg = px(1300000) + Math.round(assetValue() * 0.15 / 1000) * 1000; e.cover = S.sigorta ? Math.round(e.dmg * 0.85 / 1000) * 1000 : 0; e.cost = e.dmg - e.cover; e.gun = 10;
+    e.dmg = Math.round((Math.max(px(400000), rev3 * 0.8) + assetValue() * 0.05) / 1000) * 1000; e.cover = S.sigorta ? Math.round(e.dmg * 0.85 / 1000) * 1000 : 0; e.cost = e.dmg - e.cover; e.gun = 10;
     addHasar(e.cost); closeShop(10, 'yangin');
     for (const kd of ['ocak', 'kasa']) S.shop[kd].forEach(w => { if (isMachine(w) && rand() < 0.5) w.broken = true; });
   } else if (k === 'ev') {
@@ -2064,10 +2223,10 @@ function iflasNedeni() {
   if (lost > sold * 0.35 && lost > 3) add(lost * S.price * KQ * 0.5, `Müşterilerin çoğu beklemekten kaçtı (ayda ${fmtK(lost)} kişi).`, 'Kuyruk uzayınca kasiyer ya da usta al; fiyatı biraz artırmak da kuyruğu kısaltır.');
   const kamp = part('kampanya'); if (kamp > rev * 0.15) add(kamp, `Kampanyalar pahalıya geldi: ayda ${fmtTL(kamp)}.`, 'Kampanyayı ancak döner ve kasa yetişiyorsa aç.');
   const yem = part('yem'); if (yem > rev * 0.08) add(yem, `Silo boş kaldı, dışarıdan pahalı yem alındı: ayda ${fmtTL(yem)}.`, 'Çiftlikte yeterince yem tarlası olsun; silo dolu kalsın.');
-  const ceza = part('ceza'); if (ceza > rev * 0.05) add(ceza, `Cezalar ve davalar ayda ${fmtTL(ceza)} tuttu.`, 'Gıda mühendisi tut; kapıda kuyruk taşmasın, işçileri peş peşe çıkarma.');
+  const ceza = part('ceza'); if (ceza > rev * 0.05) add(ceza, `Cezalar ve davalar ayda ${fmtTL(ceza)} tuttu.`, 'Gıda mühendisi tut; çalışanları peş peşe çıkarma.');
   const vergi = sum(h, r => (r.parts && r.parts.vergi) || 0); if (false) add(vergi / n, `Vergi kasayı zorladı.`, 'Yıl boyunca kârın dörtte birini vergi için kenara ayır.');
   const faiz = part('faiz'); if (faiz > rev * 0.02) add(faiz, `Kasa uzun süre eksideydi; bankaya ayda ${fmtTL(faiz)} faiz ödendi.`, 'Eksideyken büyük yatırım yapma; önce kasayı artıya çevir.');
-  const hasar = sum(h, r => (r.parts && r.parts.hasar) || 0); if (hasar > 0) add(hasar / n, `Kriz ve hasar ${fmtTL(hasar)} tuttu.`, 'Sigorta yaptır; veteriner ve gıda mühendisi krizlerin zararını azaltır.');
+  const hasar = sum(h, r => (r.parts && r.parts.hasar) || 0); if (hasar > 0) add(hasar / n, `Kriz ve hasar ${fmtTL(hasar)} tuttu.`, 'Veteriner ve gıda mühendisi krizlerin zararını azaltır.');
   if (S.puan < 3.2) add(rev * (3.65 - S.puan) * 0.4, `Müşteri puanı ★${fmtPuan(S.puan)}'e düştü; kapıya gelen müşteri azaldı.`, 'Tasarımı zamanında yenile, gıda mühendisi tut, tarifi geliştir.');
   if (!out.length) add(1, `Satış giderleri karşılamadı (ayda ${fmtK(sold)} porsiyon).`, 'Daha çok müşteri için kampanya aç ya da fiyatı ayarla.');
   out.sort((a, b) => b.w - a.w);
@@ -2086,7 +2245,7 @@ function finesStep() {
   // kapının önünde taşan kuyruk: kısa sürede çok müşteri geri dönerse zabıta ceza keser
   const q = CF.queue;
   while (F.turned.length && S.t - F.turned[0] > q.win) F.turned.shift();
-  if (F.turned.length >= q.n && S.t - F.lastQueue > q.cool * C.month) { F.lastQueue = S.t; F.turned.length = 0; addFine('queue', px(q.amount), 'Zabıta: kapıdaki kuyruk kaldırımı kapattı.'); }
+  // sürüm 17: kuyruk cezası kalktı; geri dönen müşteri zaten kayıptır
 }
 
 /* ---------- genel merkez ---------- */
@@ -2151,7 +2310,7 @@ function goalProgress(g) {
 function quarterEnd() {
   const B = S.board, res = B.goals.map(g => ({ k: g.k, text: GOAL_TEXT[g.k](g), ok: goalProgress(g).p >= 1, reward: g.reward }));
   const won = res.filter(r => r.ok), pay = sum(won, r => r.reward);
-  if (pay) { S.cash += pay; S.totals.support += pay; }
+  if (pay) { gelir('kurul', pay); S.totals.support += pay; }
   B.trust = clamp(B.trust + won.length * 10 - (res.length - won.length) * 6, zengin() ? 60 : 5, 100);
   B.results.push({ m: monthIdx(), res, pay, trust: B.trust }); if (B.results.length > 12) B.results.shift();
   ev('board', { res, pay });
@@ -2163,11 +2322,14 @@ function monthEnd(mi) {
   // kredi taksiti: faizi gider, anaparası borcun azalması
   if (S.kredi) {
     const K = S.kredi, faiz = K.kalan * C.kredi.faiz, ana = Math.min(K.kalan, K.taksit - faiz);
-    S.acc.faiz += faiz; S.cash -= ana; K.kalan -= ana; K.ay--; K.son = Math.round(ana);
+    S.acc.faiz += faiz; finans(-ana); K.kalan -= ana; K.ay--; K.son = Math.round(ana);
     if (K.ay <= 0 || K.kalan < 1) { S.kredi = null; logEv('kredi', 'Banka kredisinin son taksiti ödendi.', 'good'); ev('inc', { k: 'kredibitti' }); }
   }
-  const a = S.acc, cost = Math.round(accTotal());
+  frMonth(mi);
+  const a = S.acc; for (const k in a) a[k] = Math.round(a[k] || 0);
+  const cost = accTotal();
   S.cash -= cost;
+  const L = led(); for (const k in a) if (a[k]) L.gider[k] = (L.gider[k] || 0) + a[k];
   const rec = { m: mi, rev: S.m.rev, cost, buy: S.m.buy, parts: Object.fromEntries(Object.entries(a).map(([k, v]) => [k, Math.round(v)])), sold: S.m.sold, paket: S.m.paket, lost: S.m.lost, cash: S.cash, itibar: Math.round(S.itibar), puan: Math.round(S.puan * 10) / 10, harvest: Math.round(S.m.harvest), pilic: S.m.pilic, kesim: S.m.kesim, olum: S.m.olum, nosis: Math.round(S.m.nosis) };
   rec.fr = Math.round(S.m.fr || 0);
   rec.profit = rec.rev - rec.cost;
@@ -2176,7 +2338,7 @@ function monthEnd(mi) {
   S.totals.kalite += (a.vet || 0) + (a.muh || 0) + (a.ek || 0);
   S.best = Math.max(S.best, rec.profit); if (rec.profit > 0) S.totals.karAy = (S.totals.karAy || 0) + 1;
   S.totals.bestSold = Math.max(S.totals.bestSold, rec.sold + rec.paket);
-  frMonth(mi, rec);
+  rec.led = L; rec.kasa0 = L.kasa0;
   for (const k in a) a[k] = 0;
   // vergi: kârlı ayın dörtte biri, ertesi ayın giderine yazılır (nisanda toplu ödeme yok)
   const vergiBu = Math.max(0, rec.profit + (rec.parts.vergi || 0)) * C.inc.vergi;
@@ -2197,7 +2359,6 @@ function calendar(mi) {
     const old = S.wageIdx, real = between(I.asgari) / 100; S.wageReal *= 1 + real; S.wageIdx = S.infl * S.wageReal; S.refReal = (S.refReal || 1) * (1 + real * I.refPay);
     ev('inc', { k: 'asgari', pct: Math.round((S.wageIdx / old - 1) * 100) });
   }
-  if (cm === 5 && rand() < 0.5 && S.tiles.some(t => t.type === 'tarla')) { S.kurak = S.t + C.month * 2; ev('ciftlik', { k: S.sulama ? 'kuraksulama' : 'kurak' }); }
   if (cm === 4 && mi >= 12) {
     const h = S.hist.slice(-3), busy = h.length && sum(h, r => r.sold + (r.paket || 0)) / h.length > 60 ? I.kiraYogun : 0;
     const old = S.kiraIdx; S.kiraReal *= 1 + (between(I.kira) + busy) / 100; S.kiraIdx = S.infl * S.kiraReal;
@@ -2209,10 +2370,20 @@ function calendar(mi) {
    KARARLAR (oyuncu)
    Para eksideyken de harcanabilir; iflas yalnızca ay sonunda kredi limiti aşılınca.
    ============================================================ */
-function spend(n) { S.cash -= n; S.m.buy += n; }
+// TEK DEFTER: kasaya giren ve çıkan her kuruş bir kalemle yazılır; ay kaydı bundan çıkar
+// işletme geliri (satış, toplu sipariş, franchise) aylık ciroya da yazılır; ödül, destek, kredi ayrı durur
+const ISLETME = new Set(['satis', 'toplu', 'franchise']);
+function led() { if (!S.m.led) S.m.led = newLed(); return S.m.led; }
+function gelir(k, n) {
+  if (!n) return 0; S.cash += n; const L = led(); L.gelir[k] = (L.gelir[k] || 0) + n;
+  if (ISLETME.has(k)) { S.m.rev += n; S.totals.rev += n; }
+  return n;
+}
+function finans(n) { S.cash += n; led().finans += n; }
+function spend(n) { S.cash -= n; S.m.buy += n; led().yatirim += n; }
 const tileById = id => S.tiles[id];
 const WORDS = {
-  talkGood: ['Sağ ol, toparlanıyorum!', 'Haklısın, devam!', 'Tamam, moralim yerine geldi.'],
+  talkGood: ['Asıl ben teşekkür ederim!', 'Sağ ol, iyi geldi!', 'Ne güzel, moralim yerine geldi.'],
   talkMeh: ['Peki, deneyeceğim.', 'Anladım…'],
   scoldGood: ['Haklısın, kendime geleceğim.', 'Tamam, hızlanıyorum!'],
   scoldMeh: ['Peki.', 'Tamam tamam…'],
@@ -2248,9 +2419,9 @@ const A = {
   },
   sellTile(id) {
     const t = tileById(id); if (!t || !owned(t)) return false;
-    if (t.type === 'corak') { S.cash += C.farm.corakSell; t.type = 'satilik'; t.fert = 0; ev('sell', { tile: id }); return true; }
+    if (t.type === 'corak') { gelir('varlik', C.farm.corakSell); t.type = 'satilik'; t.fert = 0; ev('sell', { tile: id }); return true; }
     const base = t.type === 'tarla' ? C.farm.cost.tarla : C.farm.cost.kumes;
-    S.cash += Math.round(base * C.farm.sellBack);
+    gelir('varlik', Math.round(base * C.farm.sellBack));
     t.type = 'satilik'; t.grow = 0; t.gubre = false; t.dens = 0; t.slots = []; ev('sell', { tile: id }); return true;
   },
   upSilo() { if (S.siloLv >= C.kitchen.siloCost.length) return false; spend(C.kitchen.siloCost[S.siloLv]); S.siloLv++; ev('build', {}); return true; },
@@ -2267,46 +2438,14 @@ const A = {
     return false;
   },
   startMarine(k) { const m = C.kitchen.marine[k]; if (!m || !m.cost || S.marineDone[k] || S.arge || !isOpen('marine')) return false; spend(m.cost); S.arge = { k, t: 0 }; ev('arge', { k }); return true; },
-  frBuild(k) {
-    const I = C.fr.infra[k]; if (!I || !frOpen() || S.fr.infra[k]) return false;
-    const c = px(I.cost); if (S.cash < c) return false;
-    spend(c); S.fr.infra[k] = { t0: S.t, until: S.t + I.ay * C.month, ok: false }; logEv('fr', `${I.label} kurulmaya başlandı.`, 'info'); ev('frkur', { k }); return true;
+  // franchise merkezinin sıradaki kademesi: koşullar tutunca kurulur, birkaç ayda hazır olur
+  frBuild() {
+    if (!frOpen() || S.fr.yapim) return false;
+    const N = frSonraki(); if (!N || !N.ok || !N.para) return false;
+    spend(N.cost); S.fr.yapim = { lv: N.lv, t0: S.t, until: S.t + N.K.ay * C.month };
+    logEv('fr', `${N.K.ad} kurulmaya başlandı.`, 'info'); ev('frkur', { lv: N.lv }); return true;
   },
-  // adaylardan birini seç: şehirde yer kalmadıysa öteki adaylara teşekkür edilir
-  frGive(id) {
-    const F = S.fr, i = F.adaylar.findIndex(a => a.id === id); if (i < 0 || !frHazir()) return false;
-    const a = F.adaylar[i], c = frCity(a.city); if (frBosYer(c) <= 0) return false;
-    F.adaylar.splice(i, 1); frSubeAc(a);
-    if (frBosYer(c) <= 0) F.adaylar = F.adaylar.filter(x => x.city !== a.city);
-    return true;
-  },
-  frReject(id) { const F = S.fr, i = F.adaylar.findIndex(a => a.id === id); if (i < 0) return false; const a = F.adaylar.splice(i, 1)[0]; logEv('fr', `${a.ad} adlı adayın ${frCity(a.city).ad} başvurusunu geri çevirdik.`, ''); return true; },
-  frEnd(id) { const sb = S.fr.subeler.find(x => x.id === id && !x.kapali); if (!sb) return false; frKapat(sb, 'sözleşme bitirildi'); return true; },
-  // şubeye habersiz denetim: kaçak iş varsa ortaya çıkar, yoksa şube daha da dikkatli olur
-  frDenetim(id) {
-    const sb = S.fr.subeler.find(x => x.id === id && !x.kapali); if (!sb || !frInfra('denetim') || S.t < (sb.denetimT || 0)) return false;
-    const c = px(C.fr.denetim); if (S.cash < c) return false;
-    spend(c); sb.denetimT = S.t + C.month * 2;
-    if (sb.gizli) { frYakala(sb); return true; }
-    sb.kalite = Math.min(0.98, sb.kalite + 0.03); sb.puan = frPuan(sb);
-    logEv('fr', `${frCity(sb.city).ad} şubesi denetimden temiz çıktı.`, 'good'); ev('firsat', { k: 'frtemiz', city: frCity(sb.city).ad }); return true;
-  },
-  // puanı düşen şubeye destek: ustaları akademide eğitmek ya da dükkânın yenilenmesine ortak olmak
-  frDestek(id, k) {
-    const sb = S.fr.subeler.find(x => x.id === id && !x.kapali); if (!sb || S.t < (sb.destekT || 0)) return false;
-    if (k === 'egitim' && !frInfra('akademi')) return false;
-    const c = frDestekCost(sb, k); if (!c || S.cash < c) return false;
-    spend(c); sb.destekT = S.t + C.month * 6;
-    if (k === 'egitim') { sb.kalite = Math.min(0.98, sb.kalite + 0.08); sb.destek = 0.1; }
-    else { sb.kalite = Math.min(0.98, sb.kalite + 0.05); sb.destek = 0.06; sb.boyut *= 1.12; }
-    sb.puan = frPuan(sb);
-    logEv('fr', `${frCity(sb.city).ad} şubesine ${k === 'egitim' ? 'eğitim' : 'yenileme'} desteği verdik.`, 'good'); ev('firsat', { k: 'frdestek', city: frCity(sb.city).ad, tur: k }); return true;
-  },
-  frFiloUp() {
-    const F = S.fr, nx = C.fr.filo[(F.filo || 0) + 1]; if (!nx || !frInfra('mutfak')) return false;
-    const c = px(nx.cost); if (S.cash < c) return false;
-    spend(c); F.filo = (F.filo || 0) + 1; logEv('fr', `Dağıtım filosu büyüdü: ${nx.n} kamyon.`, 'good'); ev('build', {}); ev('filo', { n: nx.n }); return true;
-  },
+  frEnd(id) { const sb = S.fr.subeler.find(x => x.id === id && !x.kapali); if (!sb) return false; frKapat(sb); return true; },
   // franchise sonrası büyüme
   buyKesim2() { if (S.kesim2 || !frInfra('mutfak')) return false; const c = C.buyume.kesim2; if (S.cash < c) return false; spend(c); S.kesim2 = true; logEv('build', 'İkinci kesim hattı kuruldu.', 'good'); ev('build', {}); return true; },
   buyArazi() {
@@ -2327,12 +2466,12 @@ const A = {
   },
   takeLoan(i) {
     if (!krediOk()) return false;
-    const tutar = krediTutar(i); S.cash += tutar; S.kredi = { ana: tutar, kalan: tutar, taksit: krediTaksit(i), ay: C.kredi.ay };
+    const tutar = krediTutar(i); finans(tutar); S.kredi = { ana: tutar, kalan: tutar, taksit: krediTaksit(i), ay: C.kredi.ay };
     logEv('kredi', `Bankadan ${fmtTL(tutar)} kredi çekildi: ${C.kredi.ay} ay, ayda ${fmtTL(S.kredi.taksit)}.`, ''); ev('inc', { k: 'kredi', tutar }); return true;
   },
   payLoan() {
     const K = S.kredi; if (!K || S.cash < K.kalan) return false;
-    S.cash -= K.kalan; S.kredi = null; logEv('kredi', 'Banka kredisi erken kapatıldı.', 'good'); ev('inc', { k: 'kredibitti' }); return true;
+    finans(-K.kalan); S.kredi = null; logEv('kredi', 'Banka kredisi erken kapatıldı.', 'good'); ev('inc', { k: 'kredibitti' }); return true;
   },
   upMarine() {
     if (!isOpen('marine')) return false;
@@ -2408,7 +2547,7 @@ const A = {
   talk(kind, i) {
     const w = S.shop[kind] && S.shop[kind][i]; if (!w || isMachine(w) || w.cd > 0 || w.mood >= 3) return false;
     w.cd = C.shop.talkCool;
-    if (rand() < 0.7) { w.mood++; w.yawn = 0; say(w, pick(WORDS.talkGood), true); ev('talk', { kind, i, good: true }); }
+    if (true) { w.mood++; w.yawn = 0; say(w, pick(WORDS.talkGood), true); ev('talk', { kind, i, good: true }); }
     else { say(w, w.mood >= 3 ? 'Zaten keyfim yerinde!' : pick(WORDS.talkMeh), w.mood >= 3); ev('talk', { kind, i, good: false }); }
     return true;
   },
@@ -2514,16 +2653,16 @@ function issues() {
   }
   // çiftlik sorunları
   const SORUN = {
-    bocek: () => 'Bir tarlaya böcek düştü; hasat durdu. Üç ay ilaçlamazsak toprak ölür.',
+    bocek: () => 'Bir tarlaya böcek düştü; hasat durdu. Tarlayı ilaçlayalım.',
     olu: () => 'Böcek ilaçlanmadı, bir tarlanın toprağı öldü. Islah etmeden ürün vermez.',
     cati: () => 'Fırtına bir kümesin çatısını uçurdu; yeni piliç gelmiyor. Çatıyı onar.',
     tilki: () => 'Tilki bir kümese girdi, civcivleri kaptı; çit kırık ve üretim yarıya düştü. Çiti güçlendir.',
   };
-  for (const t of S.tiles) if (t.type === 'tarla' && !t.sorun && !t.dinlen && yorgun(t) < 0.85) push('farm', 'yorgun' + t.id, `Bir tarla yıllardır aralıksız ekiliyor; verimi ${sayiEk('%' + Math.round(yorgun(t) * 100), 'e')} düştü. Üç ay dinlendir.`, 1, { sec: 'farm', hit: 'tile:' + t.id, act: 'Toprağı dinlendir' });
+  // tarla yorgunluğu kalktı
   for (const t of S.tiles) if (t.sorun) push('farm', 'sorun' + t.id, SORUN[t.sorun.k](t), 2, { sec: 'farm', hit: 'tile:' + t.id, act: FIX[t.sorun.k][0] });
   if (S.kurak && S.t < S.kurak && !S.sulama && tarla.length) push('farm', 'kurak', 'Kuraklık var: tarlalar yarı ürün veriyor. Damla sulama kurarsak bir daha etkilenmeyiz.', 1, { sec: 'farm', hit: 'tile:' + tarla[0].id, act: 'Damla sulama kur' });
-  if (kumes.some(t => t.slots.some(p => p >= 1))) push('farm', 'pilicbekle', 'Piliçler hazır ama mutfaktaki besi alanı dolu. Besi alanını büyüt.', 1, { sec: 'kitchen', hit: 'besi', act: 'Besi alanını büyüt' });
-  if (S._siloFull && S.t - S._siloFull < 10) push('farm', 'silodolu', 'Silo doldu; hasadın bir kısmı boşa gitti. Siloyu büyüt.', 1, { sec: 'kitchen', hit: 'silo', act: 'Siloyu büyüt' });
+  if (!S.kesimWait && kumes.some(t => t.slots.some(p => p >= 1))) push('farm', 'pilicbekle', 'Piliçler hazır ama mutfaktaki besi alanı dolu. Besi alanını büyüt.', 1, { sec: 'kitchen', hit: 'besi', act: 'Besi alanını büyüt' });
+  if (S._siloFull && S.t - S._siloFull < 10 && f.pors < f.demand) push('farm', 'silodolu', 'Silo dolu, yem bol. Müşteri döneri bekliyor: kümesteki piliç sayısını artırabiliriz.', 1, kumes[0] ? { sec: 'farm', hit: 'tile:' + kumes[0].id } : buyTile('kumes'));
   // mutfak
   const sick = sickCount();
   if (sick && !S.vet) push('kitchen', 'hasta', `${fmtK(sick)} hasta tavuk var! Veteriner tutalım; yoksa hastalık ötekilere bulaşır.`, 2, { sec: 'kitchen', hit: 'besi', act: 'Veteriner tut' });
@@ -2533,7 +2672,7 @@ function issues() {
   else if (S.silo < f.eat * 0.25 && S.chickens.length && f.yem < f.eat) push('kitchen', 'yemaz', 'Siloda yem azaldı. Çiftlikte bir tarla daha kurmazsak tavuklar aç kalacak.', 1, buyTile('tarla'));
   if (S.chickens.length < 3 && !kumes.length) push('kitchen', 'tavukaz', 'Besi alanında neredeyse tavuk kalmadı. Çiftlikte kümes alanı kur.', 2, buyTile('kumes'));
   else if (S.chickens.length < 3) push('kitchen', 'tavukaz', 'Besi alanında az tavuk var; yakında şiş azalacak. Kümesteki piliç sayısını artır.', 1, { sec: 'farm', hit: 'tile:' + kumes[0].id });
-  if (S.kesimWait > 0 && S.fridge.length + S.kesim.length + S.belt.length >= fridgeCap()) push('kitchen', 'dolapdolu', `Dükkânın şiş dolabı dolu; ${fmtK(S.kesimWait)} tavuk kesim bekliyor ve boşuna yem yiyor. Dükkânda bir usta daha al ya da kümesteki piliçleri azalt.`, 1, slot('ocak') >= 0 ? at('ocak', slot('ocak'), 'Usta al') : { sec: 'farm', hit: 'tile:' + (kumes[0] ? kumes[0].id : 0) });
+  if (S.kesimWait > 0 && S.fridge.length + S.kesim.length + S.belt.length >= fridgeCap()) push('kitchen', 'dolapdolu', f.ustaCap < f.demand * 0.95 ? `Şiş dolabı dolu; ${fmtK(S.kesimWait)} tavuk kesim bekliyor. Döner kesmeye usta yetişmiyor: dükkâna bir usta daha alalım.` : `Şiş dolabı dolu; ${fmtK(S.kesimWait)} tavuk kesim bekliyor. Müşteriden çok tavuk yetiştiriyoruz: bir kampanya açabilir ya da kümesteki piliç sayısını azaltabiliriz.`, 1, f.ustaCap < f.demand * 0.95 && slot('ocak') >= 0 ? at('ocak', slot('ocak'), 'Usta al') : { sec: 'hq', hit: 'oda:pazar' });
   // dükkân
   const kasa = staffed('kasa'), ocak = staffed('ocak');
   if (!kasa.length) push('shop', 'nokasa', 'Kasada kimse yok, müşteri içeri girmiyor. Boş kasaya bir kasiyer al.', 2, at('kasa', slot('kasa'), 'Kasiyer al'));
@@ -2565,9 +2704,9 @@ function issues() {
     }
   }
   if ((S.kir || 0) >= 0.25) push('shop', 'kir', `Dükkân kirlendi; müşteri ${Math.round((1 - kirMult()) * 100)}% azaldı ve azalmaya devam ediyor. Bakım yaptır.`.replace(/(\d+)%/, '%$1'), 2, { sec: 'shop', hit: 'mgr:shop' });
-  if (S.fines.turned.length >= 4) push('shop', 'kapikuyruk', 'Kapının önünde kuyruk taşıyor; böyle sürerse zabıta ceza keser.', 1, slot('kasa') >= 0 ? at('kasa', slot('kasa'), 'Kasiyer al') : { sec: 'shop', hit: 'menu', act: 'Fiyatı artır' });
-  if (!S.fridge.length && ocak.every(w => w.cone <= 0)) push('shop', 'sisyok', 'Şiş bitti! Daha çok tavuk lazım: çiftlikte kümes kur ya da piliç sayısını artır.', 2, buyTile('kumes') || { sec: 'farm', hit: 'tile:' + (kumes[0] ? kumes[0].id : 0) });
-  else if (S.fridge.length <= 1 && ocak.length && SH.ocak.some(w => w && w.cone <= 2)) push('shop', 'sisaz', 'Dolapta şiş azaldı. Çiftlikten gelen tavuk yetmezse satış durur.', 1, buyTile('kumes'));
+  if (S.fines.turned.length >= 4) push('shop', 'kapikuyruk', 'Kapının önünde kuyruk taşıyor; bekleyemeyen müşteri geri dönüyor.', 1, slot('kasa') >= 0 ? at('kasa', slot('kasa'), 'Kasiyer al') : { sec: 'shop', hit: 'menu', act: 'Fiyatı artır' });
+  if (!S.fridge.length && ocak.every(w => w.cone <= 0)) push('shop', 'sisyok', f.pors < f.demand ? 'Şiş bitti! Müşteriye yetecek kadar tavuk yetişmiyor: kümeste piliç sayısını artıralım ya da yeni kümes kuralım.' : 'Şiş bitti; tavuklar besi alanında büyüyor, yeni şişler birkaç gün içinde gelir.', f.pors < f.demand ? 2 : 1, buyTile('kumes') || { sec: 'farm', hit: 'tile:' + (kumes[0] ? kumes[0].id : 0) });
+  else if (S.fridge.length <= 1 && ocak.length && SH.ocak.some(w => w && w.cone <= 2) && f.pors < f.demand) push('shop', 'sisaz', 'Dolapta şiş azaldı. Çiftlikten gelen tavuk yetmezse satış durur.', 1, buyTile('kumes'));
   if (SH.paket && !staffed('kurye').length) push('shop', 'nokurye', 'Paket servis kuruldu ama kurye yok. Paket tezgâhından bir kurye al.', 1, { sec: 'shop', hit: 'paket', act: 'Kurye al' });
   if (SH.paket && SH.orders.length >= 4) {
     const waitD = staffed('kurye').some(w => w.st === 'wait'), freeK = SH.kurye.some(o => !o);
@@ -2592,13 +2731,10 @@ function issues() {
   if (after < -lim * 0.85) push('hq', 'iflasyakin', `Bu gidişle ay sonunda kasa ${fmtTL(after)} olur ve banka limiti dolar: iflas! Gereksiz gideri kapat ya da bir şey sat.`, 2, fin);
   if (frOpen()) {
     const F = S.fr, fg = { sec: 'hq', hit: 'oda:franchise' };
-    const ilk = Object.keys(C.fr.infra).find(k => !F.infra[k]);
-    if (ilk && !Object.keys(F.infra).length) push('hq', 'frbasla', 'Artık franchise verebiliriz! Önce dört altyapıyı kurmalıyız; franchise binasına bak.', 1, Object.assign({ act: `Kur: ${C.fr.infra[ilk].label}` }, fg));
-    else if (frHazir() && F.adaylar.length) { const a = F.adaylar[0], n = F.adaylar.filter(x => x.city === a.city).length; push('hq', 'fraday', `${ekDen(frCity(a.city).ad)} ${n > 1 ? n + ' ' : ''}franchise başvurusu var; birini seçebilir ya da geri çevirebilirsin.`, 1, { sec: 'hq', hit: 'fr:sehir:' + a.city }); }
-    if (F.son && F.son.sube && F.son.talep > F.son.tas * 1.08) push('hq', 'frfilo', `Kamyonlar şubelerin istediği malın ${sayiEk('%' + Math.round(F.son.tas / F.son.talep * 100), 'ini')} taşıyabildi; kalanını başka yerden aldılar. Filoyu büyütmeliyiz.`, 1, { sec: 'kitchen', hit: 'lojistik', act: 'Filoyu büyüt' });
-    else if (F.son && F.son.sube && F.son.dis > F.son.kendi * 2 && F.son.dis > 20) push('hq', 'frsis', 'Şubelere giden şişin çoğunu anlaşmalı üreticiden alıyoruz. Çiftliği ve mutfağı büyütürsek o kâr bize kalır.', 1, { sec: 'kitchen', hit: 'kesim' });
-    const kotu = frAcikSube().find(x => x.puan < 3.9);
-    if (kotu) push('hq', 'frkotu' + kotu.id, `${frCity(kotu.city).ad} şubesinin puanı ${sayiEk('★' + fmtPuan(kotu.puan), 'e')} düştü; markamızı aşağı çekiyor. Denetim gönder ya da destek teklif et.`, 1, { sec: 'hq', hit: 'fr:sube:' + kotu.id });
+    if (!F.lv && !F.yapim) push('hq', 'frbasla', 'Artık franchise verebiliriz! Franchise binasında ofisi kuralım; sonra şehirlerden başvuru gelir.', 1, Object.assign({ act: 'Franchise ofisini kur' }, fg));
+    else if (F.lv && !F.yapim && frAcikSube().length >= frKap()) { const N = frSonraki(); if (N && N.ok) push('hq', 'frdolu', `Franchise merkezimiz dolu (${frAcikSube().length}/${frKap()} şube). ${N.K.ad} hazır olursa ${N.K.kap} şubeye yer açılır.`, 1, Object.assign({ act: N.K.kur }, fg)); }
+    const kotu = frAcikSube().find(x => x.puan < 4.0 && (x.ay || 0) >= 6);
+    if (kotu) push('hq', 'frkotu' + kotu.id, `${frCity(kotu.city).ad} şubesinin puanı ${sayiEk('★' + fmtPuan(kotu.puan), 'e')} indi; marka puanımızı aşağı çekiyor. İstersen şubeyle yollarını ayırabilirsin.`, 1, fg);
   }
   const last = S.hist[S.hist.length - 1];
   if (last && last.profit < 0 && S.cash < 300000) push('hq', 'zarar', `Geçen ay ${fmtTL(-last.profit)} zarar ettik. Boşta duran çalışan ya da gereksiz gider var mı?`, 1, fin);
@@ -2799,7 +2935,7 @@ function topluStep() {
   if (fridgePors() >= T.n && !isClosed()) {
     let need = T.n;
     while (need > 0 && S.fridge.length) { const i = S.fridge.length - 1; if (S.fridge[i] <= need) need -= S.fridge.pop(); else { S.fridge[i] -= need; need = 0; } }
-    S.cash += T.pay; S.m.rev += T.pay; S.totals.rev += T.pay; S.m.sold += T.n; S.totals.sold += T.n; S.acc.malzeme += unitCost() * KQ * T.n;
+    gelir('toplu', T.pay); S.m.sold += T.n; S.totals.sold += T.n; S.acc.malzeme += unitCost() * KQ * T.n;
     S.flags.toplu = (S.flags.toplu || 0) + 1; puanEv('toplu', 0.06, 3); S.toplu = null;
     logEv('toplu', `${T.kim} için ${fmtK(T.n)} porsiyon yola çıktı: ${fmtTL(T.pay)}.`, 'good');
     ev('firsat', { k: 'topluok', n: T.n, pay: T.pay, kim: T.kim });
@@ -2843,7 +2979,7 @@ function storyTick() {
   const nx = S.unvan + 1;
   if (nx < UNVAN.length && unvanReqs(nx).every(x => x.ok)) {
     const odul = unvanOdul(nx);
-    S.unvan = nx; S.unvanAt[nx] = monthIdx(); S.cash += odul; S.totals.support += odul;
+    S.unvan = nx; S.unvanAt[nx] = monthIdx(); gelir('odul', odul); S.totals.support += odul;
     setBuzz('unvan', 1.15, 1);
     logEv('unvan', `Yeni unvan: ${UNVAN[nx].ad}.`, 'gold');
     ev('unvan', { lv: nx, odul });
@@ -2862,19 +2998,31 @@ function yilSonu(mi) {
   ev('yil', { rec });
 }
 
-/* ============================================================
-   FRANCHISE (sürüm 13): marka olunca şehirlere şube verilir.
-   Önce dört altyapı kurulur; sonra adaylar başvurur. Şubeler cirolarından pay öder
-   ve dönerini merkez mutfaktan alır: önce kendi çiftliğinden (iyi kâr), yetmezse
-   sözleşmeli üreticiden (az kâr, kalite biraz düşer). Kötü şube markayı aşağı çeker.
-   ============================================================ */
+/* ---------- franchise (sürüm 17) ----------
+   Unvan 3 ve ★4,2 olunca franchise binası açılır. Önce franchise ofisi kurulur (3 şubelik yer). Daha çok şube için
+   merkez kademe kademe büyür: eğitim mutfağı, lojistik deposu, denetim ekibi, ulusal marka. Her kademe para, zaman,
+   açık şube ve marka puanı ister. Yer varsa iki üç ayda bir bir şehirden başvuru gelir: kabul et ya da geri çevir.
+   Şube her ay satar; satışından payımızı alırız (lavaş, sos, ambalaj, marka payı). Dolabımızda fazla şiş varsa kamyonlar
+   şubelere götürür; şiş başına ayrıca kazanırız. Merkezin kadro gideri şube sayısıyla büyür. Üç şubeden sonra arada bir
+   büyük dış ödeme gelir (vergi incelemesi, yönetmelik, dava): karar yok, bilgi verilir. */
 const frAcikSube = () => (S && S.fr ? S.fr.subeler.filter(x => !x.kapali) : []);
 const frOpen = () => !!(S.fr && (S.fr.acik || (S.unvan >= C.fr.unvan && S.puan >= C.fr.puan - 0.005)));
-const frHazir = () => !!(S.fr && Object.keys(C.fr.infra).every(k => S.fr.infra[k] && S.fr.infra[k].ok));
-const frInfra = k => !!(S.fr && S.fr.infra[k] && S.fr.infra[k].ok);
+const frLv = () => (S && S.fr ? S.fr.lv || 0 : 0);
+const frHazir = () => frLv() >= 1;
+const FR_INFRA_LV = { akademi: 2, mutfak: 3, lojistik: 3, denetim: 4, marka: 5 };
+const frInfra = k => frLv() >= (FR_INFRA_LV[k] || 1);   // eski adlar: hangi kademeyle geldiği
+const frKap = () => (frLv() ? C.fr.kademe[frLv()].kap : 0);
+// sıradaki kademe ve koşulları
+function frSonraki() {
+  const F = S.fr, lv = frLv() + 1, K = C.fr.kademe[lv]; if (!K) return null;
+  const n = frAcikSube().length, reqs = [];
+  if (lv === 1) { reqs.push({ t: `“${UNVAN[C.fr.unvan].ad}” unvanı`, ok: S.unvan >= C.fr.unvan, v: UNVAN[S.unvan].ad }); reqs.push({ t: `Müşteri puanı ★${fmtPuan(C.fr.puan)}`, ok: S.puan >= C.fr.puan - 0.005, v: '★' + fmtPuan(S.puan) }); }
+  if (K.sube) reqs.push({ t: `${K.sube} şube açık`, ok: n >= K.sube, v: `${n} şube` });
+  if (K.marka) reqs.push({ t: `Marka puanı ★${fmtPuan(K.marka)}`, ok: (F.marka || 0) >= K.marka - 0.005, v: F.marka ? '★' + fmtPuan(F.marka) : '—' });
+  const c = px(K.cost);
+  return { lv, K, reqs, cost: c, ok: !F.yapim && reqs.every(r => r.ok), para: S.cash >= c };
+}
 const frCity = k => FR_CITIES.find(c => c.k === k);
-// ayrılma eki: İzmir’den, Ankara’dan, Gaziantep’ten
-// sayıya ek, okunuşuna göre: %45’i, %22’si, %30’u, ★3,8’e, ★3,6’ya, %84’ünü
 function sayiEk(v, tur) {
   const s = String(v), m = s.match(/(\d[\d.]*)(?:,(\d+))?\D*$/);
   const BIR = ['sıfır', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'], ON = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
@@ -2884,221 +3032,132 @@ function sayiEk(v, tur) {
   const ek = tur === 'e' ? (unlu ? 'y' : '') + v2 : tur === 'ini' ? (unlu ? 's' : '') + v4 + 'n' + v4 : (unlu ? 's' : '') + v4;
   return s + '’' + ek;
 }
-// bulunma eki: Antalya’da, İzmir’de, Van’da, Muş’ta
+
 function ekDe(ad) { const l = ad.toLocaleLowerCase('tr-TR'), v = (l.match(/[aıoueiöü]/g) || ['a']).pop(), on = 'eiöü'.includes(v), sert = 'fstkçşhp'.includes(l.slice(-1)); return ad + '’' + (sert ? 't' : 'd') + (on ? 'e' : 'a'); }
+
 function ekDen(ad) { const l = ad.toLocaleLowerCase('tr-TR'), v = (l.match(/[aıoueiöü]/g) || ['a']).pop(), on = 'eiöü'.includes(v), sert = 'fstkçşhp'.includes(l.slice(-1)); return ad + '’' + (sert ? 't' : 'd') + (on ? 'en' : 'an'); }
+
 const frPuan = sb => Math.round((3 + 2 * clamp(sb.kalite, 0, 1)) * 10) / 10;
 const frSehir = () => new Set(frAcikSube().map(x => x.city)).size;
-const frSubeSay = k => S.fr.subeler.filter(x => !x.kapali && x.city === k).length;
-const frBosYer = c => c.n - frSubeSay(c.k);
-const frFilo = () => C.fr.filo[Math.min(S.fr.filo || 0, C.fr.filo.length - 1)];
-const frIndirim = sb => (sb.indirim && S.t < (sb.indirimT || 0) ? sb.indirim : 0);
-function frDestekCost(sb, k) { const b = frCity(sb.city).b; return Math.round(px((k === 'egitim' ? C.fr.egitim : C.fr.yenileme) * b) / 10000) * 10000; }
-const frKurum = () => { const n = S.fr ? frAcikSube().length : 0; return n ? px(C.fr.kurum.base) + px(C.fr.kurum.sube) * n : 0; };
-// pazar: fiyat savaşı ya da şubelere yansıyan zam bütün şubelerin satışını düşürür
-const frPazar = () => { const F = S.fr; return (F.savas && S.t < F.savas ? 0.82 : 1) * (F.zamT && S.t < F.zamT && !F.zamSabit ? 0.88 : 1); };
+const frSubeSay = k => frAcikSube().filter(x => x.city === k).length;
+const frBosYer = c => (frSubeSay(c.k) ? 0 : 1);                       // her şehirde bir şube
+const frFilo = () => { const n = frAcikSube().length; return { n: n ? Math.min(3, 1 + Math.floor(n / 6)) : 1 }; };   // rampadaki kamyonlar (görsel)
+const frKurum = () => (frHazir() ? px(C.fr.kademe[frLv()].gider) + px(C.fr.sube) * frAcikSube().length : 0);
+const frEtki = k => !!(S.fr && S.fr.etki && S.fr.etki[k] && S.t < S.fr.etki[k]);
 function addDarbe(amount) { amount = Math.round(amount / 1000) * 1000; S.acc.darbe = (S.acc.darbe || 0) + amount; S.totals.kriz += amount; return amount; }
-function frGider() {
-  if (!S.fr) return 0; let g = 0;
-  for (const k in C.fr.infra) { const I = C.fr.infra[k]; if (I.gider && frInfra(k)) g += px(I.gider); }
-  if (frInfra('mutfak')) g += frFilo().n * px(C.fr.kamyon) * (S.fr.yakit && S.t < S.fr.yakit ? 2 : 1);
-  return g;
-}
+// şubenin zamanla oturacağı kalite: türü + merkezin eğitimi; hevesli genç her ay biraz daha iyi
+// şubenin zamanla oturacağı kalite: türü + eğitim mutfağı; hevesli genç her ay biraz daha iyi; denetim ekibi düşük puanı toparlar
+const frOturur = a => { let k = FR_TIP[a.tip].kalite + (frLv() >= 2 ? 0.06 : 0.02) + (a.tip === 'hevesli' ? Math.min(0.2, (a.ay || 0) * 0.015) : 0); if (frLv() >= 4) k = Math.max(k + 0.02, 0.62); return clamp(k, 0.3, 0.97); };
 // şubenin aylık satışı (ekran birimi; ×100 porsiyon)
-// şubenin zamanla oturacağı kalite: türü + akademi (hevesli genç akademiyle daha çok toparlar)
-const frOturur = a => FR_TIP[a.tip].kalite + (frInfra('akademi') ? (a.tip === 'hevesli' ? 0.18 : 0.1) : 0);
-// adaydan beklenen: oturunca puanı, aylık satışı ve bize aylık kazancı (son ayın teslim ve kendi şiş oranıyla)
+function frSatis(sb) { const c = frCity(sb.city); return C.fr.birim * c.b * sb.boyut * (0.6 + 0.4 * clamp(sb.kalite, 0, 1)) * sezonMult() * (frEtki('savas') ? 0.85 : 1); }
+const frTalep = () => sum(frAcikSube(), frSatis);
+const frPayOran = () => (C.fr.pay + (frLv() >= 5 ? 0.02 : 0)) * (frEtki('kur') ? 0.75 : 1);
+const frSisOran = () => C.fr.sis * (frEtki('zam') ? 0.7 : 1);
+// adaydan beklenen (bir yıl sonra): puanı, aylık satışı, bize aylık kalan (merkezin şube başı gideri düşülmüş)
 function frBeklenen(a) {
-  const son = S.fr.son, oran = son && son.talep ? Math.min(1, son.tas / son.talep) : 1, kOran = son && son.tas ? son.kendi / son.tas : 0.6;
-  const kal = clamp(frOturur(a), 0.2, 0.98), sat = frSatis({ city: a.city, boyut: a.boyut, kalite: kal });
-  return { kal, puan: frPuan({ kalite: kal }), sat, gel: Math.round(sat * oran * KQ * S.price * (kOran * C.fr.toptan + (1 - kOran) * C.fr.sozlesmeli + C.fr.malzeme)) };
-}
-function frSatis(sb) {
-  const c = frCity(sb.city), rk = sb.rakip && S.t < sb.rakip ? 0.75 : 1;
-  return C.fr.birim * c.b * sb.boyut * (0.55 + 0.45 * clamp(sb.kalite, 0, 1)) * rk * sezonMult() * frPazar();
+  const son = S.fr.son, kOran = frLv() >= 3 && son && son.talep ? Math.min(1, son.kendi / son.talep) : 0;
+  const kal = frOturur(Object.assign({}, a, { ay: 12 })), sat = frSatis({ city: a.city, boyut: a.boyut, kalite: kal });
+  const gel = sat * KQ * S.price * (frPayOran() + kOran * frSisOran());
+  return { kal, puan: frPuan({ kalite: kal }), sat, gel: Math.round(gel / 1000) * 1000, net: Math.round((gel - px(C.fr.sube)) / 1000) * 1000 };
 }
 const frGirisUcret = (city, tip) => Math.round(px(C.fr.giris * frCity(city).b * FR_TIP[tip].ucret) / 10000) * 10000;
-const frTalep = () => sum(frAcikSube(), frSatis);
-const frTasinan = () => (frInfra('mutfak') ? Math.min(frTalep(), frFilo().cap) : 0);
-// bir şehirden aynı anda bir, iki ya da üç kişi başvurur; sen birini seçersin
+// boş bir şehirden tek başvuru; büyük şehirlerden daha sık; marka güçlendikçe işini bilen adaylar artar
 function frYeniAday() {
-  const F = S.fr, adayli = new Set(F.adaylar.map(a => a.city));
-  const bos = FR_CITIES.filter(c => frBosYer(c) > 0 && !adayli.has(c.k)); if (!bos.length) return false;
+  const F = S.fr, bos = FR_CITIES.filter(c => !frSubeSay(c.k)); if (!bos.length) return null;
   const w = bos.map(c => c.b * c.b); let r = rand() * sum(w), ci = 0; while (r > w[ci] && ci < w.length - 1) r -= w[ci++];
-  const city = bos[ci].k, tips = Object.keys(FR_TIP), m = F.marka || 4, n = 1 + (rand() < 0.6 ? 1 : 0) + (rand() < 0.3 ? 1 : 0), used = new Set();
-  for (let i = 0; i < n; i++) {
-    const tw = tips.map(t => (used.has(t) ? 0.15 : 1) * (t === 'deneyimli' ? 1 + Math.max(0, m - 4) * 2 : t === 'yatirimci' ? 1.2 : 1)); let r2 = rand() * sum(tw), ti = 0; while (r2 > tw[ti] && ti < tw.length - 1) r2 -= tw[ti++];
-    const tip = tips[ti], T = FR_TIP[tip]; used.add(tip);
-    F.adaylar.push({ id: F.nid++, city, tip, ad: pick(FR_AD) + ' ' + pick(FR_SOY), kalite: clamp(T.kalite + (rand() - 0.5) * 0.12, 0.3, 0.95), durust: clamp(T.durust + (rand() - 0.5) * 0.15, 0.3, 1), boyut: T.boyut * (0.9 + rand() * 0.2), ucret: Math.round(frGirisUcret(city, tip) * (0.92 + rand() * 0.16) / 10000) * 10000, until: S.t + C.month * 3 });
-  }
-  logEv('fr', `${ekDen(frCity(city).ad)} ${n === 1 ? 'bir' : n === 2 ? 'iki' : 'üç'} franchise başvurusu geldi.`, 'info');
-  ev('firsat', { k: 'fraday', city: frCity(city).ad, n });
-  return true;
+  const city = bos[ci].k, tips = Object.keys(FR_TIP), m = F.marka || 4.3;
+  const tw = tips.map(t => (t === 'deneyimli' || t === 'usta' ? 1 + Math.max(0, m - 4.3) * 3 : 1)); let r2 = rand() * sum(tw), ti = 0; while (r2 > tw[ti] && ti < tw.length - 1) r2 -= tw[ti++];
+  const tip = tips[ti], T = FR_TIP[tip];
+  return { id: F.nid++, city, tip, ad: pick(FR_AD) + ' ' + pick(FR_SOY), kalite: clamp(T.kalite + (rand() - 0.5) * 0.1, 0.35, 0.92), boyut: Math.round(T.boyut * (0.92 + rand() * 0.16) * 100) / 100, ucret: Math.round(frGirisUcret(city, tip) * (0.92 + rand() * 0.16) / 10000) * 10000 };
 }
 function frSubeAc(a) {
-  const F = S.fr;
-  const sb = { id: F.nid++, city: a.city, tip: a.tip, ad: a.ad, kalite: clamp(a.kalite + (frInfra('akademi') ? 0.06 : 0), 0.2, 0.98), durust: a.durust, boyut: a.boyut, t0: S.t, ay: 0, satis: 0, gelir: 0, oran: 1, kapali: false, indirim: 0, indirimT: 0, gizli: false, denetimT: 0, destekT: 0 };
+  const F = S.fr, sb = { id: a.id, city: a.city, tip: a.tip, ad: a.ad, kalite: a.kalite, boyut: a.boyut, t0: S.t, ay: 0, satis: 0, gelir: 0, kapali: false };
   sb.puan = frPuan(sb); F.subeler.push(sb);
-  S.cash += a.ucret; S.m.rev += a.ucret; S.m.fr += a.ucret; S.totals.rev += a.ucret; F.top.giris += a.ucret;
+  gelir('franchise', a.ucret); S.m.fr += a.ucret; F.top.giris += a.ucret;
   if (!F.marka) F.marka = sb.puan;
   logEv('fr', `${frCity(a.city).ad} şubesi açıldı: ${a.ad} (${FR_TIP[a.tip].ad.toLocaleLowerCase('tr-TR')}).`, 'gold');
   ev('firsat', { k: 'fryeni', city: frCity(a.city).ad, ucret: a.ucret });
   return sb;
 }
-function frKapat(sb, neden) { sb.kapali = true; sb.kapanis = S.t; logEv('fr', `${frCity(sb.city).ad} şubesi kapandı: ${neden}.`, 'bad'); ev('firsat', { k: 'frkapandi', city: frCity(sb.city).ad, neden }); }
+function frKapat(sb) { sb.kapali = true; sb.kapanis = S.t; logEv('fr', `${frCity(sb.city).ad} şubesiyle yollarımızı ayırdık.`, ''); ev('firsat', { k: 'frkapandi', city: frCity(sb.city).ad }); }
 function frStep(dt) {
   const F = S.fr; if (!F) return;
-  if (!F.acik && frOpen()) { F.acik = true; logEv('fr', 'Marka olacak kadar büyüdük: Genel Merkez’in yanına franchise binası açıldı.', 'gold'); ev('firsat', { k: 'fracik' }); }
-  for (const k in F.infra) { const I = F.infra[k]; if (!I.ok && S.t >= I.until) { I.ok = true; logEv('fr', `${C.fr.infra[k].label} hazır.`, 'good'); ev('firsat', { k: 'frkuruldu', ad: C.fr.infra[k].label, hepsi: frHazir() }); if (frHazir() && !F.adaylar.length) F.nextAday = S.t; } }
-  if (frHazir() && !F.adaylar.length && !frAcikSube().length && S.t >= F.nextAday) { frYeniAday(); frYeniAday(); F.nextAday = S.t + C.month * 1.5; }
-  // merkez mutfak: filonun taşıyabildiği kadar şiş istenir; dolapta kendi dükkânına ve toplu siparişe yetecek kadarı kalır
-  if (!frAcikSube().length || !frInfra('mutfak')) return;
-  F.need += frTasinan() * dt / C.month;
+  if (!F.acik && frOpen()) { F.acik = true; logEv('fr', 'Marka olacak kadar büyüdük: Genel Merkez’in yanında franchise binası açıldı.', 'gold'); ev('firsat', { k: 'fracik' }); }
+  if (F.yapim && S.t >= F.yapim.until) {
+    const lv = F.yapim.lv, K = C.fr.kademe[lv]; F.lv = lv; F.yapim = null;
+    F.nextAday = Math.min(F.nextAday || Infinity, S.t + C.month * (lv === 1 ? 0.3 : 0.6));
+    logEv('fr', `${K.ad} hazır: artık ${K.kap} şubelik yerimiz var.`, 'good'); ev('firsat', { k: 'frkademe', lv });
+  }
+  // başvuru: yer varsa ve başka bir karar beklemiyorsa
+  if (frHazir() && S.t >= F.nextAday && !S.decision && !S.over && frAcikSube().length < frKap()) {
+    const a = frYeniAday(); F.nextAday = S.t + C.month * between(C.fr.aday) * ((F.marka || 0) >= 4.5 ? 0.85 : 1);
+    if (a) { S.decision = { k: 'fraday', a, until: S.t + C.inc.wait * 2 }; ev('decision', { k: 'fraday' }); }
+  }
+  // kendi şişimiz: dolapta fazlası varsa kamyonlar şubelere götürür (kendi dükkânımıza ve toplu siparişe yetecek kadarı kalır)
+  if (!frAcikSube().length || frLv() < 3) return;
+  F.need += frTalep() * dt / C.month;
   const ayir = () => (S.toplu ? S.toplu.n : 0) + C.fr.rezerv * 9;
   while (S.fridge.length && fridgePors() - S.fridge[S.fridge.length - 1] >= ayir() && F.need >= S.fridge[S.fridge.length - 1] && !isClosed()) {
     const p = S.fridge.pop(); F.need -= p; F.m.kendi += p;
-    const gel = p * KQ * S.price * C.fr.toptan;
-    S.cash += gel; S.m.rev += gel; S.m.fr += gel; S.totals.rev += gel; F.m.toptan += gel; F.top.toptan += gel;
+    const g = p * KQ * S.price * frSisOran();
+    gelir('franchise', g); S.m.fr += g; F.m.sis += g; F.top.sis += g;
     ev('sevk', { p });
   }
 }
-// ay sonu: sözleşmeli şiş, malzeme ve içecek satışı, kalite, marka, adaylar, olaylar (ay kaydı yazıldıktan sonra, vergiden önce)
-function frMonth(mi, rec) {
+// ay sonu (giderler yazılmadan önce): şubelerin payı, kalite, marka puanı, büyük dış ödemeler
+function frMonth(mi) {
   const F = S.fr; if (!F || !F.acik) return;
   const acik = frAcikSube();
-  let soz = 0, malz = 0, iade = 0, talep = 0, tas = 0;
   if (acik.length) {
-    talep = frTalep(); tas = frTasinan();
-    const oran = talep > 0 ? tas / talep : 0, kendi = Math.min(F.m.kendi, tas), dis = Math.max(0, tas - kendi), kOran = tas > 0 ? kendi / tas : 0;
-    F.need = 0;
-    const birim = KQ * S.price;
-    const kurM = F.kur && S.t < F.kur ? 0.5 : 1;
-    soz = dis * birim * C.fr.sozlesmeli; malz = tas * birim * C.fr.malzeme * kurM;
+    const birim = KQ * S.price, talep = frTalep(), kendi = frLv() >= 3 ? Math.min(F.m.kendi, talep) : 0, kOran = talep > 0 ? kendi / talep : 0;
+    let pay = 0;
     for (const sb of acik) {
-      const sat = frSatis(sb), gid = sat * oran, ind = frIndirim(sb);
-      const g = gid * birim * (kOran * C.fr.toptan + (1 - kOran) * C.fr.sozlesmeli + C.fr.malzeme * kurM);
-      iade += g * ind; sb.gelir = Math.round(g * (1 - ind)); sb.satis = sat; sb.oran = oran; sb.kOran = kOran; sb.ay = (sb.ay || 0) + 1;
-      if (sb.indirimT && S.t >= sb.indirimT) { sb.indirim = 0; sb.indirimT = 0; }
-      // gizli kaçak iş: dürüst olmayan şube zamanla kestirme yola sapar
-      if (!sb.gizli && rand() < (1 - sb.durust) * 0.08) sb.gizli = true;
-      // kalite: türünün doğasına kayar; akademi yukarı çeker; eksik mal, dışarıdan şiş ve kaçak iş aşağı
-      const hedef = frOturur(sb) + (sb.destek || 0) - (1 - oran) * 0.08 - (1 - kOran) * oran * 0.05 - (sb.gizli ? 0.18 : 0);
-      sb.kalite = clamp(sb.kalite + (hedef - sb.kalite) * 0.12 + (rand() - 0.5) * 0.03, 0.2, 0.98);
-      if (sb.destek) sb.destek = Math.max(0, sb.destek - 0.01);
+      const sat = frSatis(sb), p = sat * birim * frPayOran();
+      pay += p; sb.satis = sat; sb.gelir = Math.round(p + sat * kOran * birim * frSisOran()); sb.ay = (sb.ay || 0) + 1;
+      sb.kalite = clamp(sb.kalite + (frOturur(sb) - sb.kalite) * 0.15 + (rand() - 0.5) * 0.02, 0.3, 0.97);
       sb.puan = frPuan(sb);
     }
-    const gel = soz + malz - iade;
-    S.cash += gel; S.totals.rev += gel; F.top.soz += soz; F.top.malz += malz;
-    if (rec) { rec.rev += gel; rec.profit += gel; rec.fr = (rec.fr || 0) + Math.round(gel); }
+    gelir('franchise', pay); S.m.fr += pay; F.top.pay += pay;
     const ws = sum(acik, frSatis) || 1;
     F.marka = Math.round(sum(acik, x => x.puan * frSatis(x)) / ws * 100) / 100;
-    // zammı şubelere yansıtmadık: farkı biz karşılıyoruz; kendi çiftliğimizden giden şiş arttıkça yük azalır
-    const zam = F.zamSabit && F.zamT && S.t < F.zamT ? addDarbe((F.m.toptan + gel) * 0.2 * (1 - 0.5 * kOran)) : 0;
-    F.son = { m: mi, talep: Math.round(talep), tas: Math.round(tas), kendi: Math.round(kendi), dis: Math.round(dis), toptan: Math.round(F.m.toptan), soz: Math.round(soz), malz: Math.round(malz), iade: Math.round(iade), gel: Math.round(F.m.toptan + gel), sube: acik.length, zam };
+    F.son = { m: mi, talep: Math.round(talep), kendi: Math.round(kendi), pay: Math.round(pay), sis: Math.round(F.m.sis), gel: Math.round(pay + F.m.sis), sube: acik.length };
   } else F.son = null;
-  F.m = { toptan: 0, kendi: 0 };
-  F.adaylar = F.adaylar.filter(a => S.t < a.until && frBosYer(frCity(a.city)) > 0);
-  if (frHazir() && new Set(F.adaylar.map(a => a.city)).size < 3 && S.t >= F.nextAday) { if (frYeniAday()) F.nextAday = S.t + C.month * between([1, 2]); }
-  // büyük ödemeler: üç şubeden sonra arada bir dışarıdan büyük bir darbe gelir
-  let darbe = false;
-  if (acik.length >= 3 && !S.decision && !S.over) {
+  F.need = 0; F.m = { kendi: 0, sis: 0 };
+  if (acik.length >= 3 && !S.over) {
     if (!F.nextDarbe) F.nextDarbe = S.t + C.month * between(C.fr.darbe.first);
-    else if (S.t >= F.nextDarbe) { F.nextDarbe = S.t + C.month * between(C.fr.darbe.every); frDarbe(); darbe = true; }
+    else if (S.t >= F.nextDarbe) { F.nextDarbe = S.t + C.month * between(C.fr.darbe.every); frDarbe(); return; }
   }
-  if (acik.length && !darbe && !S.decision && !S.over) frOlay();
+  // iyi haber: marka güçlüyse ara sıra ulusal basın
+  if (acik.length >= 3 && F.marka >= 4.5 && rand() < 0.07) { setBuzz('frbasin', 1.12, 2); logEv('fr', 'Ulusal bir gazete markamızı yazdı: “Şehir şehir aynı lezzet.”', 'gold'); ev('firsat', { k: 'frbasin' }); }
 }
-// ayda en çok bir şube olayı
-function frOlay() {
-  const F = S.fr, acik = frAcikSube(), until = S.t + C.inc.wait;
-  // denetim ekibi kestirme yola sapan şubeyi çoğu zaman kendiliğinden yakalar
-  const gizli = acik.filter(x => x.gizli);
-  for (const sb of gizli) {
-    if (frInfra('denetim') && rand() < 0.35) { frYakala(sb); return; }
-    // yakalanmadıkça şubenin kalitesi düşer (frMonth); puanı düşen şube için denetim önerilir
-  }
-  if (rand() > 0.45) return;
-  const bosSehir = () => FR_CITIES.filter(c => frBosYer(c) > 0 && !F.adaylar.some(a => a.city === c.k));
-  const ikinci = acik.filter(x => x.puan >= 4.4 && (x.ay || 0) >= 8 && !x.ikinci);
-  const rakip = acik.filter(x => !(x.rakip && S.t < x.rakip) && (x.ay || 0) >= 3);
-  const ayril = acik.filter(x => x.puan < 3.9 && (x.ay || 0) >= 4 && !frIndirim(x) && !x.ayrilSor);
-  const opts = [];                               // [olay, ağırlık]
-  if (ikinci.length && bosSehir().length) opts.push(['ikinci', 1]);
-  if (rakip.length) opts.push(['rakip', 0.45]);
-  if (ayril.length) opts.push(['ayril', 1]);
-  if (F.marka >= 4.5) opts.push(['basin', 0.6]);
-  if (!opts.length) return;
-  let r = rand() * sum(opts, o => o[1]), oi = 0; while (r > opts[oi][1] && oi < opts.length - 1) r -= opts[oi++][1];
-  const k = opts[oi][0];
-  if (k === 'ikinci') {
-    const sb = pick(ikinci), c = pick(bosSehir());
-    S.decision = { k: 'frikinci', id: sb.id, city: c.k, cityAd: c.ad, from: frCity(sb.city).ad, ad: sb.ad, ucret: Math.round(frGirisUcret(c.k, sb.tip) * 0.8 / 10000) * 10000, until }; ev('decision', { k: 'frikinci' });
-  } else if (k === 'rakip') {
-    const sb = pick(rakip), c = frCity(sb.city);
-    S.decision = { k: 'frrakip', id: sb.id, city: c.ad, cost: Math.round(px(300000 * c.b) / 10000) * 10000, until }; ev('decision', { k: 'frrakip' });
-  } else if (k === 'ayril') {
-    const sb = pick(ayril); sb.ayrilSor = true;
-    S.decision = { k: 'frayril', id: sb.id, city: frCity(sb.city).ad, ad: sb.ad, until }; ev('decision', { k: 'frayril' });
-  } else if (k === 'basin') {
-    setBuzz('frbasin', 1.12, 2); logEv('fr', 'Ulusal bir gazete markamızı yazdı: “Şehir şehir aynı lezzet.”', 'gold'); ev('firsat', { k: 'frbasin' });
-  }
-}
-// büyük darbe: vergi incelemesi, zam, kur, akaryakıt, yönetmelik, taklitçi, fiyat savaşı
+// büyük dış ödeme ya da dönemlik zorluk: karar yok, haber verilir
 const DARBE_LOG = {
   vergi: e => `Vergi incelemesi: kayıtlarımız düzgün çıktı; yorum farkı için ${fmtTL(e.cost)} ödedik.`,
   yonetmelik: e => `Yeni gıda güvenliği kuralı: ${e.n} şubeye sıcaklık takip sistemi kurduk (${fmtTL(e.cost)}).`,
-  yakit: e => 'Akaryakıta büyük zam: kamyon giderleri altı ay iki katı.',
   taklit: e => `${ekDe(e.city)} adımızı taklit eden dükkânla davayı kazandık; masraf ${fmtTL(e.cost)}.`,
-  kur: e => 'Kur yükseldi: altı ay lavaş, sos ve içecekten kazancımız yarıda.',
+  kur: () => 'Kur yükseldi: altı ay şubelerden kalan payımız dörtte bir az.',
+  zam: () => 'Tavuk ve yem zammı: altı ay şubelere giden şişten kazancımız biraz az.',
+  savas: () => 'Büyük bir zincir indirim kampanyası başlattı: beş ay şubelerin satışı biraz düşük.',
 };
 function frDarbe(force) {
-  const F = S.fr, acik = frAcikSube(), n = acik.length, h = S.hist.slice(-3), ort = h.length ? sum(h, r => r.fr || 0) / h.length : 0;
-  const yuv = x => Math.round(x / 10000) * 10000, until = S.t + C.inc.wait;
-  const opts = [['vergi', 1], ['zam', 1], ['savas', 0.9], ['yonetmelik', 0.8], ['yakit', frFilo().n >= 3 ? 0.8 : 0], ['taklit', 0.7], ['kur', 0.8]].filter(o => o[1] > 0 && o[0] !== F.sonDarbe);
+  const F = S.fr, n = frAcikSube().length, h = S.hist.slice(-3), ort = h.length ? sum(h, r => r.fr || 0) / h.length : 0;
+  const yuv = x => Math.round(x / 10000) * 10000;
+  const opts = [['vergi', 1], ['yonetmelik', 0.8], ['taklit', 0.7], ['kur', 0.7], ['zam', 0.8], ['savas', 0.7]].filter(o => o[0] !== F.sonDarbe);
   let r = rand() * sum(opts, o => o[1]), oi = 0; while (r > opts[oi][1] && oi < opts.length - 1) r -= opts[oi++][1];
   const k = force || opts[oi][0]; F.sonDarbe = k;
   const e = { k };
-  if (k === 'zam') { S.decision = { k: 'frzam', pct: Math.round(between([15, 25])), aylik: yuv(ort * 0.2), until }; ev('decision', { k: 'frzam' }); return; }
-  if (k === 'savas') { S.decision = { k: 'frsavas', cost: yuv(ort * between([1.1, 1.5]) + px(500000)), until }; ev('decision', { k: 'frsavas' }); return; }
   if (k === 'vergi') e.cost = addDarbe(yuv(ort * between([1.0, 1.6]) + px(200000)));
   else if (k === 'yonetmelik') { e.n = n; e.cost = addDarbe(yuv(n * px(90000))); F.marka = Math.min(5, Math.round((F.marka + 0.04) * 100) / 100); }
-  else if (k === 'yakit') { F.yakit = S.t + C.month * 6; e.ek = frFilo().n * px(C.fr.kamyon); }
   else if (k === 'taklit') { const c = pick(FR_CITIES.filter(x => !frSubeSay(x.k)).concat(FR_CITIES.slice(0, 1))); e.city = c.ad; e.cost = addDarbe(yuv(ort * 0.6 + px(400000))); }
-  else if (k === 'kur') F.kur = S.t + C.month * 6;
+  else if (k === 'kur') F.etki.kur = S.t + C.month * 6;
+  else if (k === 'zam') F.etki.zam = S.t + C.month * 6;
+  else if (k === 'savas') F.etki.savas = S.t + C.month * 5;
   logEv('darbe', DARBE_LOG[k](e), 'bad'); ev('darbe', e);
 }
-// kaçak iş yakalandı: karar penceresi (başka karar bekliyorsa ceza kendiliğinden kesilir)
-function frYakala(sb) {
-  const c = frCity(sb.city), ceza = Math.round(px(250000 * c.b) / 10000) * 10000;
-  sb.gizli = false;
-  if (!S.decision && !S.over) { S.decision = { k: 'frkacak', id: sb.id, city: c.ad, ad: sb.ad, ceza, until: S.t + C.inc.wait }; ev('decision', { k: 'frkacak' }); }
-  else frDecide({ k: 'frkacak', id: sb.id, city: c.ad, ad: sb.ad, ceza }, true);
-}
 function frDecide(D, yes) {
-  const F = S.fr, sb = F.subeler.find(x => x.id === D.id);
-  if (D.k === 'frkacak') {
-    if (!sb || sb.kapali) return;
-    if (yes) { S.cash += D.ceza; S.totals.rev += D.ceza; F.top.ceza += D.ceza; sb.durust = Math.min(1, sb.durust + 0.25); sb.kalite = Math.max(0.2, sb.kalite - 0.03); sb.puan = frPuan(sb); logEv('fr', `${D.city} şubesine sözleşme cezası kestik: ${fmtTL(D.ceza)}.`, 'good'); ev('firsat', { k: 'frceza', city: D.city, ceza: D.ceza }); }
-    else frKapat(sb, 'kural dışı iş yüzünden sözleşme bitirildi');
-  } else if (D.k === 'frikinci') {
-    if (sb) sb.ikinci = true;
-    if (yes && frBosYer(frCity(D.city)) > 0) frSubeAc({ city: D.city, tip: sb ? sb.tip : 'deneyimli', ad: D.ad, kalite: sb ? sb.kalite - 0.05 : 0.6, durust: sb ? sb.durust : 0.85, boyut: sb ? sb.boyut : 1, ucret: D.ucret });
-    else if (!yes) { if (sb) sb.kalite = Math.max(0.2, sb.kalite - 0.02); ev('firsat', { k: 'frikincired', city: D.cityAd }); }
-  } else if (D.k === 'frzam') {
-    F.zamT = S.t + C.month * 6; F.zamSabit = !!yes;
-    if (yes) { F.marka = Math.min(5, Math.round((F.marka + 0.03) * 100) / 100); logEv('darbe', `Tavuk ve yem zammını şubelere yansıtmadık; altı ay farkı biz karşılıyoruz.`, 'good'); ev('firsat', { k: 'frzamok' }); }
-    else { logEv('darbe', 'Zam şubelere yansıdı; altı ay satışları biraz düşük.', 'bad'); ev('firsat', { k: 'frzamno' }); }
-  } else if (D.k === 'frsavas') {
-    if (yes) { addDarbe(D.cost); F.marka = Math.min(5, Math.round((F.marka + 0.03) * 100) / 100); setBuzz('frsavas', 1.06, 2); logEv('darbe', `İndirim savaşına ülke çapında reklamla karşılık verdik (${fmtTL(D.cost)}); şubelerimiz yerini korudu.`, 'good'); ev('firsat', { k: 'frsavasok' }); }
-    else { F.savas = S.t + C.month * 5; logEv('darbe', 'Büyük zincirin indirim kampanyası şubelerin satışını beş ay düşürecek.', 'bad'); ev('firsat', { k: 'frsavasno' }); }
-  } else if (D.k === 'frrakip') {
-    if (!sb || sb.kapali) return;
-    if (yes) { spend(D.cost); logEv('fr', `${D.city} şubesine yerel reklam desteği verdik; rakip tutunamadı.`, 'good'); ev('firsat', { k: 'frrakipok', city: D.city }); }
-    else { sb.rakip = S.t + C.month * 6; logEv('fr', `${D.city} şubesinin karşısına rakip açıldı; satışları bir süre düşecek.`, 'bad'); ev('firsat', { k: 'frrakipno', city: D.city }); }
-  } else if (D.k === 'frayril') {
-    if (!sb || sb.kapali) return;
-    if (yes) { sb.indirim = 0.3; sb.indirimT = S.t + C.month * 6; sb.kalite = Math.min(0.98, sb.kalite + 0.05); sb.puan = frPuan(sb); logEv('fr', `${D.city} şubesine altı ay %30 indirimli mal veriyoruz; ${D.ad} devam ediyor.`, ''); ev('firsat', { k: 'frindirim', city: D.city }); }
-    else frKapat(sb, 'şube sahibi işi bıraktı');
-  }
+  const a = D.a; if (D.k !== 'fraday' || !a) return;
+  if (yes) { if (frHazir() && !frSubeSay(a.city) && frAcikSube().length < frKap()) frSubeAc(a); }
+  else logEv('fr', `${ekDen(frCity(a.city).ad)} gelen başvuruya teşekkür edip geri çevirdik.`, '');
 }
 
 /* ---------- kayıt ---------- */
@@ -3142,7 +3201,25 @@ function loadGame() {
     if (S.yan.pilav) { delete S.yan.pilav; S.cash += px(420000); }
     if (S.yanDev === undefined) S.yanDev = null;
     if (!S.fr) S.fr = newFr(); if (S.m.fr == null) S.m.fr = 0; if (S.acc.frans == null) S.acc.frans = 0; if (S.acc.kurum == null) S.acc.kurum = 0; if (S.acc.darbe == null) S.acc.darbe = 0;
-    { const F = S.fr; if (F.filo == null) F.filo = 0; F.top = Object.assign({ giris: 0, toptan: 0, soz: 0, malz: 0, ceza: 0 }, F.top); F.m = Object.assign({ toptan: 0, kendi: 0 }, F.m); F.adaylar = F.adaylar || []; for (const sb of F.subeler) { if (sb.indirim && !sb.indirimT) sb.indirimT = S.t + C.month * 6; } }
+    S.sigorta = true;                                  // sürüm 17: sigorta hep var (aylık giderde)
+    // sürüm 17: franchise sadeleşti (tek merkez, tek başvuru, şehir başına bir şube)
+    if (S.fr && S.fr.v !== 17) {
+      const O = S.fr, N = newFr(), inf = O.infra || {};
+      N.acik = !!O.acik; N.marka = O.marka || 0; N.nid = O.nid || 1; N.nextAday = S.t + C.month; N.nextDarbe = O.nextDarbe || 0;
+      const altyapi = Object.keys(inf).some(k => inf[k] && inf[k].ok);
+      const gor = new Set(), say = {};
+      for (const x of O.subeler || []) if (!x.kapali) say[x.city] = (say[x.city] || 0) + 1;
+      N.subeler = (O.subeler || []).filter(x => !x.kapali && FR_TIP[x.tip] && !gor.has(x.city) && gor.add(x.city)).map(x => ({ id: x.id, city: x.city, tip: x.tip, ad: x.ad, kalite: x.kalite, boyut: x.boyut, t0: x.t0 || 0, ay: x.ay || 0, satis: x.satis || 0, gelir: x.gelir || 0, kapali: false, puan: x.puan || frPuan(x) }));
+      // aynı şehirdeki şubeler tek, daha büyük bir şubede birleşir
+      for (const x of N.subeler) if (say[x.city] > 1) x.boyut = Math.min(1.6, x.boyut + 0.25 * (say[x.city] - 1));
+      if (Object.values(say).some(n => n > 1)) logEv('fr', 'Franchise yeniden düzenlendi: her şehirde tek ve daha büyük bir şube var.', 'info');
+      // açık şubeler kapanmasın: kademe en az o kadar şubeyi taşır
+      if (altyapi || N.subeler.length) { N.lv = 1; while (N.lv < 5 && C.fr.kademe[N.lv].kap < N.subeler.length) N.lv++; }
+      N.top = { giris: (O.top && O.top.giris) || 0, pay: ((O.top && O.top.soz) || 0) + ((O.top && O.top.malz) || 0), sis: (O.top && O.top.toptan) || 0 };
+      S.fr = N;
+      if (S.decision && /^fr/.test(S.decision.k)) S.decision = null;
+      S.acc.frans = 0;
+    }
     if (S.kesim2 == null) S.kesim2 = false; if (S.arazi2 == null) S.arazi2 = false; if (!S.tesis) S.tesis = {}; if (S.kredi === undefined) S.kredi = null;
     if (S.unvan == null) {
       Object.assign(S, { unvan: 0, unvanAt: [0], rozet: {}, log: [], yillar: [], denedik: { best: 0, n: 0, last: null }, buzz: null, ucuz: null, toplu: null, flags: {}, krizAt: null, lastFirsat: '' });
@@ -3165,7 +3242,7 @@ function loadGame() {
 function hasSave() { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); return !!(s && s.v === 4 && !s.over); } catch (e) { return false; } }
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } }
 
-if (typeof module !== 'undefined') module.exports = { sayiEk, ekDe, karakterler, frKarakter, KAR, frDarbe, frKurum, frBeklenen, frOturur, saveGame, loadGame, ekDen, frTalep, frTasinan, frFilo, frSehir, frBosYer, frInfra, C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, priceSoft, priceMax, priceMult, frOpen, frHazir, frAcikSube, frSatis, FR_CITIES, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, UNVAN, ROZET, unvanReqs, yanPer, krediTutar, krediTaksit, krediOk, denedikPuan, firsat, fridgePors, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
+if (typeof module !== 'undefined') module.exports = { frSonraki, frKap, frLv, talepParca, sayiEk, ekDe, karakterler, frKarakter, KAR, frDarbe, frKurum, frBeklenen, frOturur, saveGame, loadGame, ekDen, frTalep, frFilo, frYeniAday, frSubeAc, frEtki, frSehir, frBosYer, frInfra, C, SHOP, A, KQ, newGame, step, issues, forecast, monthCostRate, accTotal, arrivalRate, creditLimit, goalProgress, iflasNedeni, people, priceRef, priceSoft, priceMax, priceMult, frOpen, frHazir, frAcikSube, frSatis, FR_CITIES, repairCostOf: repairCost, machineCostOf: machineCost, designAge, tasarimCost, nextMarine, techOpen, puanParts, puanTarget, UNVAN, ROZET, unvanReqs, yanPer, krediTutar, krediTaksit, krediOk, denedikPuan, firsat, fridgePors, get S() { return S; }, get EV() { return EV; }, DT, fmtTL, fmtK, dateLabel, monthIdx };
 
 'use strict';
 /* ============================================================
@@ -3925,7 +4002,7 @@ function initView() {
       return;
     }
     if (!down) return;
-    if (!down.moved && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 10 && VIEW.zoom > 1.01) down.moved = true;
+    if (!down.moved && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 10 && (VIEW.zoom > 1.01 || VIEW.canPan)) down.moved = true;
     if (down.moved) { panBy(e.clientX - down.lx, e.clientY - down.ly); down.lx = e.clientX; down.ly = e.clientY; }
   });
   const lift = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; };
@@ -3993,6 +4070,17 @@ function moveTip(e) {
   if (y + tip.offsetHeight > r.height - 8) y = e.clientY - r.top - tip.offsetHeight - 12;
   tip.style.transform = `translate(${Math.round(x)}px,${Math.round(y)}px)`;
 }
+// seçili nesnenin üstünde küçük turuncu ok (filtre yerine; ucuz)
+let selEl = null;
+function placeSelMark() {
+  const m = $('selMark'); if (!m) return;
+  if (!VIEW.sel) { if (!m.hidden) m.hidden = true; return; }
+  if (!selEl || !selEl.isConnected || selEl.dataset.hit !== VIEW.sel) selEl = document.querySelector(`#scene [data-hit="${CSS.escape(VIEW.sel)}"]`);
+  if (!selEl) { if (!m.hidden) m.hidden = true; return; }
+  const r = selEl.getBoundingClientRect(), g = $('game').getBoundingClientRect();
+  if (!r.width || r.bottom < g.top || r.top > g.bottom) { if (!m.hidden) m.hidden = true; return; }
+  m.hidden = false; m.style.transform = `translate(${Math.round(r.left - g.left + r.width / 2)}px,${Math.round(Math.max(36, r.top - g.top))}px)`;
+}
 function setSelected(id) {
   document.querySelectorAll('#scene .sel').forEach(el => el.classList.remove('sel'));
   VIEW.sel = id;
@@ -4031,7 +4119,8 @@ function fitScene() {
   const scn = VIEW.scn, cb = (scn && scn.cb) || [0, 0, 800, 530];
   const cw = cb[2] - cb[0], ch = cb[3] - cb[1];
   // sahnenin önemli kısmı (cb) güvenli alana bütünüyle sığar; kenardaki çimen ekran dışına taşabilir
-  const s0 = Math.min(safe.w / cw, safe.h / ch);
+  // dikey telefonda sahne genişliğe değil yüksekliğe yakın sığar: önemli kısmın üçte ikisi görünür, kalanı parmakla kaydırılır
+  const s0 = mode === 'tall' ? Math.min(safe.h / ch, safe.w / (cw * 0.66)) : Math.min(safe.w / cw, safe.h / ch);
   // küçük ekranda geniş sahne çok küçülmesin: bölüme girerken sahnenin asıl kısmına yakından bakılır (iki parmakla uzaklaşılabilir)
   if (VIEW.odak) {
     VIEW.odak = false;
@@ -4048,6 +4137,7 @@ function fitScene() {
   const fitC = (c, lo, hi, half) => hi - lo <= 2 * half ? (lo + hi) / 2 : clamp(c, lo + half, hi - half);
   const cx = fitC(mx + VIEW.pan.x, cb[0], cb[2], hw), cy = fitC(my + VIEW.pan.y, cb[1], cb[3], hh);
   VIEW.pan.x = cx - mx; VIEW.pan.y = cy - my;
+  VIEW.canPan = 2 * hw < cb[2] - cb[0] - 4 || 2 * hh < cb[3] - cb[1] - 4;
   const upp = 1 / s;
   const x0 = cx - (safe.x + safe.w / 2) * upp, y0 = cy - (safe.y + safe.h / 2) * upp - (VIEW.shiftY || 0) * upp;
   const svg = $('scene');
@@ -4135,6 +4225,7 @@ function renderFrame(dt) {
   for (const k in L) L[k].begin();
   scn.frame(L, dt);
   fxFrame(dt);
+  placeSelMark();
   for (const k in L) L[k].end();
   if (VIEW.hov) document.querySelectorAll(`#scene [data-hit="${CSS.escape(VIEW.hov)}"]:not(.hov)`).forEach(el => el.classList.add('hov'));
   if (VIEW.sel) document.querySelectorAll(`#scene [data-hit="${CSS.escape(VIEW.sel)}"]:not(.sel)`).forEach(el => el.classList.add('sel'));
@@ -4765,17 +4856,17 @@ function card(id) {
     ],
   };
   const fixAct = () => t.sorun ? { label: FIX[t.sorun.k][0], sub: { bocek: 'hasat yeniden başlar', cati: 'piliç yeniden gelir', tilki: 'bir daha tilki giremez', olu: 'toprak yeniden ürün verir' }[t.sorun.k], icon: 'tools', cost: fixCost(t), tone: 'primary', sound: 'build', run: () => A.fixTile(ti) } : null;
-  const sorunTxt = () => t.sorun ? `<p class="hint neg">${{ olu: 'Böcek üç ay ilaçlanmadı; toprak öldü. Islah edilmeden ürün vermez.', bocek: `Tarlaya böcek düştü; hasat durdu. ${Math.max(0, Math.ceil(3 - (S.t - t.sorun.t0) / C.month))} ay içinde ilaçlamazsak toprak ölür.`, cati: 'Fırtına çatıyı uçurdu; çatı onarılana kadar yeni piliç gelmez.', tilki: 'Tilki çiti kırıp civcivleri kaptı; çit onarılana kadar üretim yarıda.' }[t.sorun.k]}</p>` : '';
+  const sorunTxt = () => t.sorun ? `<p class="hint neg">${{ olu: 'Böcek üç ay ilaçlanmadı; toprak öldü. Islah edilmeden ürün vermez.', bocek: 'Tarlaya böcek düştü; ilaçlanana kadar hasat durdu.', cati: 'Fırtına çatıyı uçurdu; çatı onarılana kadar yeni piliç gelmez.', tilki: 'Tilki çiti kırıp civcivleri kaptı; çit onarılana kadar üretim yarıda.' }[t.sorun.k]}</p>` : '';
   if (t.type === 'tarla') return {
     title: 'Yem tarlası', sub: 'Tavukların yemi burada yetişir', icon: 'rows', tone: t.sorun ? 'empty' : '',
     body: () => sorunTxt() + (t.dinlen ? `<p class="hint">Toprak dinleniyor: ${Math.max(1, Math.ceil((t.dinlen - S.t) / C.month))} ay sonra yeniden ekilecek.</p>` : '') + meter('Hasada', t.grow, '#E2B400', t.dinlen ? 'dinleniyor' : t.sorun ? 'durdu' : `%${Math.round(t.grow * 100)}`)
-      + kv([['Her hasatta', `${fmtNum(Math.round(F.harvestYield * yorgun(t)))} çuval yem${S.kurak && S.t < S.kurak && !S.sulama ? ' (kuraklıkta yarısı)' : ''}`], ['Toprağın verimi', yorgun(t) < 1 ? `<span class="neg">%${Math.round(yorgun(t) * 100)} · yoruldu</span>` : `%100 · ${Math.floor((t.yas || 0) / 12)} yıldır ekiliyor`], ['Bakımı', `${fmtTL(px(F.tarlaUp))} / ay`], ['Sulama', S.sulama ? 'damla sulama var' : 'yağmura bağlı']])
-      + `<p class="hint">Hasat olunca yem kendiliğinden mutfaktaki siloya gider.${S.sulama ? '' : ' Yazın kuraklık olursa tarlalar yarı ürün verir; damla sulama bunu önler.'}</p>`,
+      + kv([['Her ay', `${fmtNum(Math.round(F.harvestYield * fertMult(t) * C.month / F.harvestTime))} çuval yem`], ['Bakımı', `${fmtTL(px(F.tarlaUp))} / ay`]])
+      + `<p class="hint">Hasat olunca yem kendiliğinden mutfaktaki siloya gider. Bir tarla, kümesten gelen tavukların ayda yaklaşık ${fmtK(F.harvestYield * C.month / F.harvestTime / C.kitchen.eat)} tanesini besler.</p>`,
     actions: () => [
       fixAct(),
-      !t.sorun && !t.dinlen && (t.yas || 0) > 36 ? { label: 'Toprağı dinlendir', sub: 'üç ay ürün vermez, sonra verimi %100’e döner', icon: 'leaf', tone: yorgun(t) < 0.85 ? 'primary' : '', sound: 'build', run: () => A.restTile(ti) } : null,
-      !S.sulama ? { label: 'Damla sulama kur', sub: 'bütün tarlalar kuraklıkta da tam ürün verir', icon: 'drop', cost: px(C.inc.ciftlik.sulama), tone: S.kurak && S.t < S.kurak ? 'primary' : '', sound: 'build', run: () => A.buySulama() } : null,
-      { label: 'Tarlayı sat', sub: `+${fmtTL(F.cost.tarla * F.sellBack)} geri gelir`, icon: 'coin', tone: 'danger', close: true, sound: 'cash', run: () => A.sellTile(ti) },
+      false ? { label: 'Toprağı dinlendir', sub: 'üç ay ürün vermez, sonra verimi %100’e döner', icon: 'leaf', tone: yorgun(t) < 0.85 ? 'primary' : '', sound: 'build', run: () => A.restTile(ti) } : null,
+      false ? { label: 'Damla sulama kur', sub: 'bütün tarlalar kuraklıkta da tam ürün verir', icon: 'drop', cost: px(C.inc.ciftlik.sulama), tone: S.kurak && S.t < S.kurak ? 'primary' : '', sound: 'build', run: () => A.buySulama() } : null,
+      false && { label: 'Tarlayı sat', sub: `+${fmtTL(F.cost.tarla * F.sellBack)} geri gelir`, icon: 'coin', tone: 'danger', close: true, sound: 'cash', run: () => A.sellTile(ti) },
     ].filter(Boolean),
   };
   if (t.type === 'kumes') return {
@@ -4789,7 +4880,7 @@ function card(id) {
     actions: () => [
       fixAct(),
       { stepper: true, label: 'Piliç sayısı', icon: 'chick', value: `${fmtK(t.dens)}`, decDis: t.dens <= 1, incDis: t.dens >= F.maxDens, dec: () => A.setDens(ti, t.dens - 1), inc: () => A.setDens(ti, t.dens + 1) },
-      { label: 'Kümesi sat', sub: `+${fmtTL(F.cost.kumes * F.sellBack)} geri gelir`, icon: 'coin', tone: 'danger', close: true, sound: 'cash', run: () => A.sellTile(ti) },
+      false && { label: 'Kümesi sat', sub: `+${fmtTL(F.cost.kumes * F.sellBack)} geri gelir`, icon: 'coin', tone: 'danger', close: true, sound: 'cash', run: () => A.sellTile(ti) },
     ].filter(Boolean),
   };
   return null;
@@ -5071,7 +5162,7 @@ function label(id) {
   if (id === 'silo') return `Yem silosu · ${fmtNum(S.silo)} / ${fmtNum(siloCap())} çuval`;
   if (id === 'besi') return `Besi alanı · ${fmtK(S.chickens.length)} / ${fmtK(besiCap())} tavuk`;
   if (id === 'kesim') return S.kesim2 ? 'İki kesim hattı · tavuk girer, şiş çıkar' : 'Kesim hattı · tavuk girer, şiş çıkar';
-  if (id === 'lojistik') return frInfra('mutfak') ? `Lojistik · ${frFilo().n} kamyon` : 'Kamyonet · şişleri dükkâna taşır';
+  if (id === 'lojistik') return frAcikSube().length ? `Lojistik · ${frFilo().n} kamyon` : 'Kamyonet · şişleri dükkâna taşır';
   if (id === 'marine') return `Döner tarifi · ${marineSpec().label}`;
   if (id === 'vet') return 'Veterinerimiz · tavukları her gün kontrol ediyor';
   if (id === 'muh') return 'Gıda mühendisimiz · her partiyi kontrol ediyor';
@@ -5134,7 +5225,7 @@ function card(id) {
     actions: () => [
       !S.muh ? { label: 'Gıda mühendisi tut', sub: `denetimde eksik çıkmaz · ★ +${fmtPuan(C.puan.hijyen)}`, icon: 'check', cost: muhCost(), per: true, tone: 'primary', sound: 'hire', run: () => A.hireMuh() } : null,
       ekAct('zincir', `et hiç ısınmaz · ★ +${fmtPuan(C.ek.zincir.puan)}`, px(C.ek.zincir.ay)),
-      S.kesim2 ? null : !frInfra('mutfak') ? { label: 'İkinci kesim hattı', sub: 'franchise merkez mutfağı kurulunca açılır · kesim iki katına çıkar', icon: 'lock', disabled: true, hint: 'Kilitli', run: () => false }
+      S.kesim2 ? null : !frInfra('mutfak') ? { label: 'İkinci kesim hattı', sub: 'franchise merkezi kurulunca açılır · kesim iki katına çıkar', icon: 'lock', disabled: true, hint: 'Kilitli', run: () => false }
         : { label: 'İkinci kesim hattı kur', sub: 'aynı anda iki tavuk kesilir; şubelere giden şiş artar', icon: 'skewer', cost: C.buyume.kesim2, tone: 'primary', disabled: S.cash < C.buyume.kesim2, sound: 'build', run: () => A.buyKesim2() },
       !isOpen('kesim') ? lockRow('Hızlı hat', 'kesim') : { label: 'Hızlı hat', sub: S.kesimHizli ? 'kurulu · kesim iki kat hızlı' : 'kesim iki kat hızlı olur', icon: 'zap', cost: S.kesimHizli ? 0 : K.hizliCost, disabled: S.kesimHizli, hint: S.kesimHizli ? 'Kurulu' : '', tone: S.kesimHizli || !S.muh ? '' : 'primary', sound: 'build', run: () => A.upKesim('hizli') },
       S.muh ? { label: 'Gıda mühendisini çıkar', sub: `ayda ${fmtTL(muhCost())} kalır; denetim riski artar`, icon: 'userx', tone: 'danger', sound: 'bad', run: () => A.fireMuh() } : null,
@@ -5164,21 +5255,17 @@ function card(id) {
 // kamyonet ve dağıtım filosu: şişleri dükkâna, malı şubelere taşır
 function lojistikCard() {
   return {
-    title: 'Lojistik', sub: frInfra('mutfak') ? `${frFilo().n} kamyon · ayda ${fmtK(frFilo().cap)} porsiyon taşır` : 'Kamyonet şişleri dükkâna taşır', icon: 'truck',
+    title: 'Lojistik', icon: 'truck',
+    get sub() { return frAcikSube().length ? `${frFilo().n} kamyon · şubelere şiş taşır` : 'Kamyonet şişleri dükkâna taşır'; },
     body: () => {
-      if (!frInfra('mutfak')) { const son = S.hist[S.hist.length - 1]; return kv([['Bu ay taşınan', `${fmtK(S.m.kesim * porsOf(kesimTarget()))} porsiyon`], son ? ['Geçen ay', `${fmtK((son.kesim || 0) * porsOf(kesimTarget()))} porsiyon`] : null, ['Dolapta bekleyen', `${fmtK(fridgePors())} porsiyon`]]) + '<p class="hint">Kamyonet kesimden çıkan şişleri soğuk zincirle dükkâna taşır. Franchise açılıp merkez mutfak kurulunca şubelere mal taşıyan dağıtım filosu da burada büyür.</p>'; }
-      const F = S.fr, son = F.son, talep = frTalep(), cap = frFilo().cap;
-      return bar('Kamyon doluluğu', Math.min(talep, cap) * KQ, Math.max(cap, 1) * KQ, talep > cap ? '#E2A200' : PAL.cobalt, ' porsiyon')
-        + kv([['Kamyon', `${frFilo().n}`], ['Kapasite', `${fmtK(cap)} porsiyon/ay`], ['Şubelerin isteği', `${fmtK(talep)} porsiyon/ay`], ['Aylık gider', fmtTL(frFilo().n * px(C.fr.kamyon))], son && son.sube ? ['Geçen ay teslim', `%${son.talep ? Math.round(son.tas / son.talep * 100) : 100}`] : null])
-        + `<p class="hint">${talep > cap ? 'Kamyonlar yetmiyor: taşıyamadığımız malı şubeler başka yerden alıyor; o para bize gelmiyor, şubelerin kalitesi de düşüyor.' : 'Kamyonlar şubelerin istediği malın hepsini taşıyor.'} Önce kendi dolabımızdaki şiş gider; yetmezse anlaşmalı üreticiden alınır. Yakıt ve şoför kamyon başına ayda ${fmtTL(px(C.fr.kamyon))}.</p>`;
+      const son = S.hist[S.hist.length - 1];
+      let h = kv([['Bu ay dükkâna giden', `${fmtK(S.m.kesim * porsOf(kesimTarget()))} porsiyon`], son ? ['Geçen ay', `${fmtK((son.kesim || 0) * porsOf(kesimTarget()))} porsiyon`] : null, ['Dolapta bekleyen', `${fmtK(fridgePors())} porsiyon`]]);
+      if (!frAcikSube().length) return h + '<p class="hint">Kamyonet kesimden çıkan şişleri soğuk zincirle dükkâna taşır. Franchise şubeleri açılınca kamyonlar dolaptaki fazla şişi şubelere de götürür.</p>';
+      const F = S.fr, fs = F.son;
+      h += kv([['Şubelerin aylık isteği', `${fmtK(frTalep())} porsiyon`], fs ? ['Geçen ay kendi şişimizden', `${fmtK(fs.kendi)} porsiyon · +${fmtTL(fs.sis)}`] : null]);
+      return h + `<p class="hint">Dolapta dükkânımıza yetecek kadar şiş kalır; fazlasını kamyonlar şubelere götürür. Şubeler eksiğini anlaşmalı üreticiden alır. Kesimi ve dolabı büyütürsek daha çok şiş gider, daha çok kazanırız. Kamyonların gideri franchise merkezinin giderine dahil.</p>`;
     },
-    actions: () => {
-      if (!frInfra('mutfak')) return [];
-      const nx = C.fr.filo[(S.fr.filo || 0) + 1];
-      if (!nx) return [{ label: 'Filo en büyük hâlinde', icon: 'check', disabled: true, run: () => false }];
-      const c = px(nx.cost);
-      return [{ label: 'Filoyu büyüt', sub: `${nx.n} kamyon · ayda ${fmtK(nx.cap)} porsiyon taşır`, icon: 'truck', cost: c, tone: frTalep() > frFilo().cap ? 'primary' : '', disabled: S.cash < c, sound: 'build', run: () => A.frFiloUp() }];
-    },
+    actions: () => [],
   };
 }
 
@@ -5293,7 +5380,7 @@ function backdrop() {
   }
   back += poly(quad(P, 10.9, 6.6, 12, 8.0), '#B5432E', 'opacity=".75"');
   if (!S.shop.paket) back += poly(quad(P, PK.x0, PK.y0, PK.x1, PK.y1 + 0.9), '#FFFFFF', 'opacity=".35"') + pl([P(PK.x0, PK.y0), P(PK.x1, PK.y0), P(PK.x1, PK.y1 + 0.9), P(PK.x0, PK.y1 + 0.9), P(PK.x0, PK.y0)], '#2340B8', 1.4, 'stroke-dasharray="5 5" opacity=".55"');
-  const front = B.front + (() => { const [x, y] = P(5.5, D + 0.22, 4.5); return wallText(x, y, 'r', (S.name || '').toLocaleLowerCase('tr-TR'), 8, '#fff', 800); })();
+  const front = B.front + (() => { const [x, y] = P(5.5, D + 0.22, 4.5), t = (S.name || '').toLocaleLowerCase('tr-TR'); return wallText(x, y, 'r', t, r1(fitSize(t, 8, 112, 800)), '#fff', 800); })();
   return { back, front };
 }
 
@@ -5929,18 +6016,16 @@ function workerCard(kind, i) {
   if (w.robot || w.kiosk || w.dbot || w.drone) return machineCard(kind, i, w);
   const wage = wageOfW(w);
   const roleTxt = { ocak: 'Döner ustası', kasa: 'Kasiyer', kurye: 'Kurye' }[kind];
-  const MOOD = ['Kızgın', 'Yorgun', 'İyi', 'Mutlu'];
+  const MOOD = ['Morali bozuk', 'Yorgun', 'İyi', 'Keyifli'];
   return {
     title: w.name, sub: roleTxt, icon: kind === 'ocak' ? 'chef' : kind === 'kasa' ? 'coin' : 'bike',
     body: () => kv([['Şu an', ST_TXT[kind][w.st] || ''], ['Keyfi', w.mood <= 1 ? `<span class="neg">${MOOD[w.mood]}</span>` : MOOD[w.mood]], ['Maaşı', `${fmtTL(wage)} / ay`]])
-      + `<p class="hint">${w.mood === 0 ? 'Çok kızgın; böyle giderse işi bırakır. Prim ver.' : w.mood === 1 ? 'Yoruldu ve yavaşladı. Prim verirsen hemen toparlanır.' : w.busy > 0.85 ? 'Hiç durmadan çalışıyor; yanına bir arkadaş almayı düşün.' : 'Keyfi yerinde.'}</p>`,
+      + `<p class="hint">${w.mood === 0 ? 'Morali çok bozuk; böyle giderse işi bırakır. Teşekkür et ya da prim ver.' : w.mood === 1 ? 'Yoruldu ve yavaşladı. Prim verirsen hemen toparlanır.' : w.busy > 0.85 ? 'Hiç durmadan çalışıyor; yanına bir arkadaş almayı düşün.' : 'Keyfi yerinde.'}</p>`,
     actions: () => {
 const bekle = w.cd > 0 ? 'biraz bekle' : '';
       const out = [
-        { label: 'Moral konuşması yap', sub: w.mood >= 3 ? 'keyfi zaten yerinde' : 'bedava; çoğu zaman keyfi düzelir', icon: 'heart', disabled: w.mood >= 3 || w.cd > 0, hint: w.mood >= 3 ? 'Gerek yok' : bekle, sound: 'toggleOn', run: () => A.talk(kind, i) },
-        { label: 'Azarla', sub: 'bir süre hızlanır ama kırılabilir, işi bile bırakabilir', icon: 'flame', disabled: w.cd > 0, hint: bekle, sound: 'bad', run: () => A.scold(kind, i) },
-        { label: 'Prim ver', sub: w.mood >= 3 ? 'keyfi zaten yerinde' : 'hemen mutlu olur', icon: 'gift', cost: C.shop.prim, tone: w.mood <= 1 ? 'primary' : '', disabled: w.mood >= 3, hint: w.mood >= 3 ? 'Gerek yok' : '', sound: 'prim', run: () => A.prim(kind, i) },
-        { label: 'Maaşına %10 zam yap', sub: (w.raise || 1) >= 1.6 ? 'daha fazla zam yapılamaz' : `ayda +${fmtTL(Math.round(wage * 0.1 / 1000) * 1000)}; sekiz ay keyfi düşmez`, icon: 'up', disabled: (w.raise || 1) >= 1.6, hint: (w.raise || 1) >= 1.6 ? 'Tavan' : '', sound: 'prim', run: () => A.raise(kind, i) },
+        { label: 'Teşekkür et', sub: w.mood >= 3 ? 'keyfi zaten yerinde' : 'bedava; emeğini görmek keyfini düzeltir', icon: 'heart', disabled: w.mood >= 3 || w.cd > 0, hint: w.mood >= 3 ? 'Gerek yok' : bekle, sound: 'toggleOn', run: () => A.talk(kind, i) },
+        { label: 'Prim ver', sub: w.mood >= 3 ? 'keyfi zaten yerinde' : 'hemen keyiflenir', icon: 'gift', cost: C.shop.prim, tone: w.mood <= 1 ? 'primary' : '', disabled: w.mood >= 3, hint: w.mood >= 3 ? 'Gerek yok' : '', sound: 'prim', run: () => A.prim(kind, i) },
       ];
       if (kind !== 'kurye' && techOpen(kind === 'ocak' ? 'robot' : 'kiosk')) { const m = kind === 'ocak' ? C.shop.robot : C.shop.kiosk; out.push({ label: kind === 'ocak' ? 'Yerine robot kur' : 'Yerine kiosk kur', sub: `${w.name} ayrılır`, icon: kind === 'ocak' ? 'robot' : 'screen', cost: m.cost, sound: 'build', run: () => A.buyMachine(kind, i) }); }
       const sc = C.fine.suit, recent = S.fines.fired.filter(t => S.t - t < sc.win * C.month).length;
@@ -6127,7 +6212,8 @@ const MP = { u0: 2.05, u1: 5.95, z0: 9, z1: 60 };
 function wallXY(lon, lat, dy = 0.03) { const [nx, ny] = mapXY(lon, lat); return Q(MP.u0 + nx * (MP.u1 - MP.u0), dy, MP.z1 - ny * (MP.z1 - MP.z0)); }
 // odadakiler: yönetim masası, akademi, denetim, tescil belgesi
 function wingRooms(L) {
-  const F = S.fr, st = k => (F.infra[k] ? (F.infra[k].ok ? 'ok' : 'yapim') : 'yok');
+  const F = S.fr, LV = { akademi: 2, denetim: 4, marka: 5 }, st = k => { const lv = LV[k] || 1; return F.lv >= lv ? 'ok' : F.yapim && F.yapim.lv === lv ? 'yapim' : 'yok'; };
+  const bekleyen = S.decision && S.decision.k === 'fraday' ? S.decision.a.city : null;
   // yönetim: uzun masa ve ekip
   L.dyn.put('fr-masa', { x: 0, y: 0, d: OX + 1.6 + 1.9 + 0.4, v: 'm' + frAcikSube().length, hit: 'oda:franchise', html: () => {
     let s = shadowQ(Q, 1.6, 1.9, 4.6, 1.0, 0.3) + solid(Q, 1.6, 1.9, 4.6, 1.0, 14, '#8E5E3B', { top: '#B98A5E' });
@@ -6138,10 +6224,10 @@ function wingRooms(L) {
   team.forEach(([u, v, o], j) => { const [x, y] = Q(u, v); L.dyn.put('fr-ek' + j, { x, y, d: OX + u + v, v: 'e', hit: 'oda:franchise', html: () => `<g class="bob" style="animation-delay:${-j * 0.5}s">${person(0, 0, Object.assign({ s: 0.84 }, o))}</g>` }); });
   // haritadaki şehirler: şube turuncu, başvuru sarı halka
   for (const c of FR_CITIES) {
-    const n = frSubeSay(c.k), ad = F.adaylar.some(a => a.city === c.k);
+    const n = frSubeSay(c.k), ad = bekleyen === c.k;
     if (!n && !ad) continue;
     const [x, y] = wallXY(c.lon, c.lat, 0.04), bad = frAcikSube().some(sb => sb.city === c.k && sb.puan < 3.9);
-    L.dyn.put('fr-pin' + c.k, { x, y, d: OX + 0.2, v: `${n}|${ad ? 1 : 0}|${bad ? 1 : 0}`, hit: 'fr:sehir:' + c.k, html: () => `<circle r="7" fill="#fff" opacity=".001"/>`
+    L.dyn.put('fr-pin' + c.k, { x, y, d: OX + 0.2, v: `${n}|${ad ? 1 : 0}|${bad ? 1 : 0}`, hit: n ? 'fr:sehir:' + c.k : 'oda:franchise', html: () => `<circle r="7" fill="#fff" opacity=".001"/>`
       + (n ? `<circle r="${n > 1 ? 3.4 : 2.8}" fill="${bad ? '#E53935' : PAL.orange}" stroke="#fff" stroke-width="1"/>${n > 1 ? `<text y="1.6" font-size="4.2" font-weight="800" fill="#fff" text-anchor="middle">${n}</text>` : ''}` : '')
       + (ad ? `<circle r="${n ? 5.2 : 3.4}" fill="none" stroke="${PAL.yellow}" stroke-width="1.3" class="blink"/>` : '') });
   }
@@ -6219,7 +6305,7 @@ function campaignScreen() {
   { const [x, y] = P(0.78, 0.03, 51); s += `<circle cx="${r1(x)}" cy="${r1(y)}" r="2.2" fill="${on.length ? '#FF5C5C' : '#5B6C9E'}"${on.length ? ' class="blink"' : ''}/>`; }
   s += txY(0.95, 48.6, 'KAMPANYA', 6.2, PAL.yellow, 'start');
   const reach = Math.round(campaignAdd() * C.month);
-  s += txY(4.65, 48.6, reach > 0 ? `+${fmtK(reach)} müşteri/ay` : 'kapalı', 5.2, reach > 0 ? '#7FE0A0' : '#8EA0D6', 'end', 700);
+  s += txY(4.65, 48.6, reach > 0 ? `+${fmtK(reach)} kişi/ay` : 'kapalı', 5.2, reach > 0 ? '#7FE0A0' : '#8EA0D6', 'end', 700);
   const n = CAMPS.length, gap = 0.16, bw = (4.78 - 0.62 - 0.3 - gap * (n - 1)) / n;
   CAMPS.forEach((k, j) => {
     const x0 = 0.77 + j * (bw + gap), h = 15 * clamp(lv[j], 0, 1);
@@ -6338,34 +6424,32 @@ const TR_OUT = [[26.33, 41.72], [26.6, 41.97], [28.0, 41.98], [28.6, 41.55], [29
   [27.3, 40.4], [28.0, 40.38], [28.9, 40.38], [29.9, 40.72], [29.3, 40.85], [28.95, 41.0], [28.3, 41.05], [27.5, 40.95], [26.8, 40.55], [26.05, 40.75], [26.35, 41.25]];
 const MAPW = (44.9 - 25.9) * 0.777, MAPH = 42.15 - 35.8;
 const mapXY = (lon, lat) => [(lon - 25.9) * 0.777 / MAPW, (42.15 - lat) / MAPH];      // 0..1
-// kartta düz harita: şehre dokununca o şehrin kartı açılır
-const puanRenk = p => (p >= 4.4 ? '#2E9E4F' : p >= 4.0 ? '#E0A800' : '#E53935');
+// kartta harita (kobalt zemin): şubeye dokununca şubenin kartı açılır
+const puanRenk = p => (p >= 4.4 ? '#17804A' : p >= 4.0 ? '#C98A00' : '#C62828');
+const puanNokta = p => (p >= 4.4 ? '#FFD500' : p >= 4.0 ? '#FF9A3D' : '#FF6B6B');
 function frMapSvg(odak) {
-  const W2m = 292, H2m = Math.round(W2m * MAPH / MAPW) + 8, F = S.fr, q = (lon, lat) => { const [u, v] = mapXY(lon, lat); return [4 + u * (W2m - 8), 4 + v * (H2m - 8)]; };
-  let s = `<svg class="frmap" viewBox="0 0 ${W2m} ${H2m}" role="img" aria-label="Türkiye haritası"><rect width="${W2m}" height="${H2m}" rx="10" fill="#DCE6F7"/><polygon points="${TR_OUT.map(([a, b]) => q(a, b).map(v => v.toFixed(1)).join(',')).join(' ')}" fill="#FBF8F1" stroke="#B9C4DC" stroke-width="1" stroke-linejoin="round"/>`;
+  const W2m = 300, H2m = Math.round(W2m * MAPH / MAPW) + 6, q = (lon, lat) => { const [u, v] = mapXY(lon, lat); return [4 + u * (W2m - 8), 3 + v * (H2m - 6)]; };
+  const bekleyen = S.decision && S.decision.k === 'fraday' ? S.decision.a.city : null;
+  let s = `<svg class="frmap" viewBox="0 0 ${W2m} ${H2m}" role="img" aria-label="Türkiye haritası"><polygon points="${TR_OUT.map(([a, b]) => q(a, b).map(v => v.toFixed(1)).join(',')).join(' ')}" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.38)" stroke-width="1" stroke-linejoin="round"/>`;
   const labs = [];
   for (const c of FR_CITIES) {
-    const sb = frAcikSube().filter(x => x.city === c.k), ad = F.adaylar.some(a => a.city === c.k), [x, y] = q(c.lon, c.lat), X = x.toFixed(1), Y = y.toFixed(1);
-    const on = odak === c.k, go = frHazir() || sb.length ? ` data-card="fr:sehir:${c.k}" class="mc"` : '';
-    if (sb.length) { const p = Math.min(...sb.map(x => x.puan)); s += `<g${go}><circle cx="${X}" cy="${Y}" r="11" fill="transparent"/><circle cx="${X}" cy="${Y}" r="${on ? 7 : 5.5}" fill="${puanRenk(p)}" stroke="${on ? PAL.cobalt : '#fff'}" stroke-width="${on ? 2.2 : 1.6}"/>${sb.length > 1 ? `<text x="${X}" y="${(y + 2.6).toFixed(1)}" font-size="7" font-weight="800" fill="#fff" text-anchor="middle">${sb.length}</text>` : ''}</g>`; labs.push({ x, y, t: c.ad, fs: 8, w: 700, fill: '#14275A', r: on ? 7 : 5.5, pr: on ? 3 : 2 + c.b / 10 }); }
-    else if (ad) { s += `<g${go}><circle cx="${X}" cy="${Y}" r="11" fill="transparent"/><circle cx="${X}" cy="${Y}" r="${on ? 6 : 4.5}" fill="#fff" stroke="#E0A800" stroke-width="2"/></g>`; labs.push({ x, y, t: c.ad, fs: 7.5, w: 600, fill: '#8A6A00', r: on ? 6 : 4.5, pr: on ? 3 : 1 + c.b / 10 }); }
-    else s += `<circle cx="${X}" cy="${Y}" r="${on ? 4 : 2}" fill="${on ? PAL.cobalt : '#B9C4DC'}"/>${on ? '' : ''}`;
-    if (on && !sb.length && !ad) labs.push({ x, y, t: c.ad, fs: 8, w: 700, fill: PAL.cobalt, r: 4, pr: 3 });
+    const sb = frAcikSube().find(x => x.city === c.k), ad = bekleyen === c.k, [x, y] = q(c.lon, c.lat), X = x.toFixed(1), Y = y.toFixed(1), on = odak === c.k;
+    if (sb) { s += `<g data-card="fr:sube:${sb.id}" class="mc"><circle cx="${X}" cy="${Y}" r="11" fill="transparent"/>${on ? `<circle cx="${X}" cy="${Y}" r="9" fill="none" stroke="#fff" stroke-width="1.6"/>` : ''}<circle cx="${X}" cy="${Y}" r="4.6" fill="${puanNokta(sb.puan)}" stroke="#14275A" stroke-width="1.2"/></g>`; labs.push({ x, y, t: c.ad, r: 5, pr: on ? 9 : 2 + c.b / 10 }); }
+    else if (ad) { s += `<circle cx="${X}" cy="${Y}" r="5" fill="none" stroke="#fff" stroke-width="1.8" stroke-dasharray="2.4 1.8"/>`; labs.push({ x, y, t: c.ad, r: 5, pr: 8 }); }
+    else s += `<circle cx="${X}" cy="${Y}" r="1.6" fill="rgba(255,255,255,.35)"/>`;
   }
   // yazılar üst üste binmesin: önce önemliler; üst, alt, sağ, sol denenir, sığmayan yazılmaz
-  const box = [], kes = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+  const box = [], kes = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3], fs = 7.6;
   let lab = '';
   for (const L of labs.sort((a, b) => b.pr - a.pr)) {
-    const tw = L.t.length * L.fs * 0.56, h = L.fs;
+    const tw = L.t.length * fs * 0.56, h = fs;
     const yer = [[L.x - tw / 2, L.y - L.r - 2 - h, 'middle', L.x, L.y - L.r - 3], [L.x - tw / 2, L.y + L.r + 2, 'middle', L.x, L.y + L.r + h], [L.x + L.r + 3, L.y - h / 2, 'start', L.x + L.r + 3, L.y + h / 2 - 1], [L.x - L.r - 3 - tw, L.y - h / 2, 'end', L.x - L.r - 3, L.y + h / 2 - 1]];
-    const ok = yer.find(([x0, y0]) => { const r = [x0, y0, x0 + tw, y0 + h]; return x0 >= 2 && x0 + tw <= W2m - 2 && y0 >= 2 && y0 + h <= H2m - 2 && !box.some(b => kes(r, b)); });
+    const ok = yer.find(([x0, y0]) => { const r = [x0, y0, x0 + tw, y0 + h]; return x0 >= 2 && x0 + tw <= W2m - 2 && y0 >= 1 && y0 + h <= H2m - 1 && !box.some(b => kes(r, b)); });
     if (!ok) continue;
     box.push([ok[0], ok[1], ok[0] + tw, ok[1] + h]);
-    lab += `<text x="${ok[3].toFixed(1)}" y="${ok[4].toFixed(1)}" text-anchor="${ok[2]}" font-size="${L.fs}" font-weight="${L.w}" fill="${L.fill}" paint-order="stroke" stroke="#FBF8F1" stroke-width="2.5">${esc(L.t)}</text>`;
+    lab += `<text x="${ok[3].toFixed(1)}" y="${ok[4].toFixed(1)}" text-anchor="${ok[2]}" font-size="${fs}" font-weight="600" fill="#fff">${esc(L.t)}</text>`;
   }
-  s += lab + '</svg>';
-  if (frAcikSube().length || F.adaylar.length) s += `<p class="frleg"><i style="background:#2E9E4F"></i>iyi <i style="background:#E0A800"></i>idare eder <i style="background:#E53935"></i>sorunlu <i class="ring"></i>başvuru var</p>`;
-  return s;
+  return s + lab + '</svg>';
 }
 const yildiz = p => `<b style="color:${puanRenk(p)}">★${fmtPuan(p)}</b>`;
 let lastWing = null;
@@ -6380,19 +6464,19 @@ function frame(L) {
   L.dyn.put('lobi', { x: 0, y: 0, d: 13, v: 'l', html: lobby });
   if (frOpen()) wingRooms(L);
   else { const [x, y] = P(14.2, 3.2); L.dyn.put('fr-arsa', { x, y, d: 20, v: 'a', hit: 'oda:franchise', html: () => arsaSign() }); }
-  [['pazar', 5.3, 3.55, 'Pazarlama', 2], ['finans', 11.4, 3.55, 'Finans', 2], ['kurul', 4.6, 8.75, 'Yönetim kurulu', 2], ...(frOpen() ? [['franchise', OX + 6.4, 4.2, 'Franchise yönetimi', 2], ['akademi', OX + 2.0, 8.75, 'Eğitim akademisi', 2], ['denetim', OX + 6.0, 8.75, 'Denetim ekibi', 2]] : [])].forEach(([k, a, b, t, z]) => { const [x, y] = P(a, b, z); markPut(L, 'r' + k, x, y, 'info', t, 'oda:' + k); });
+  [['pazar', 5.3, 3.55, 'Pazarlama', 2], ['finans', 11.4, 3.55, 'Finans', 2], ['kurul', 4.6, 8.75, 'Yönetim kurulu', 2], ...(frOpen() ? [['franchise', OX + 6.4, 4.2, 'Franchise yönetimi', 2], ['akademi', OX + 2.0, 8.75, 'Eğitim mutfağı', 2], ['denetim', OX + 6.0, 8.75, 'Denetim ekibi', 2]] : [])].forEach(([k, a, b, t, z]) => { const [x, y] = P(a, b, z); markPut(L, 'r' + k, x, y, 'info', t, 'oda:' + k); });
   managerSprite(L, 'hq', P(9.4, 6.9), 16.3, { shirt: '#fff', jacket: '#2340B8', hairStyle: 'long', hair: '#3B2416', skin: SKINS[1], glasses: false, s: 0.9 });
   for (const e of EVQ.hq) {
-    if (e.type === 'frkur') { const at = { mutfak: [3.8, 2.4], akademi: [1.9, 6.6], denetim: [6.0, 6.6], marka: [1.0, 2.0] }[e.k] || [4, 4], [x, y] = Q(at[0], at[1], 60); fxText(x, y, C.fr.infra[e.k].label + ' kuruluyor', PAL.orange, { size: 10 }); SND.build(); }
+    if (e.type === 'frkur') { const [x, y] = Q(4, 4, 60); fxText(x, y, (C.fr.kademe[e.lv] || {}).ad + ' kuruluyor', PAL.orange, { size: 10 }); SND.build(); }
     if (e.type === 'boost') { const [x, y] = P(3.0, 1.8, 90); fxText(x, y, C.hq.instant[e.k].label + ' başladı!', PAL.orange, { size: 11 }); }
   }
 }
 
 /* ---------- kartlar ---------- */
 function label(id) {
-  if (id.startsWith('fr:sube:')) { const sb = S.fr.subeler.find(x => x.id === +id.slice(8)); return sb ? `${frCity(sb.city).ad} · ${sb.ad} · ★${fmtPuan(sb.puan)}` : ''; }
-  if (id.startsWith('fr:sehir:')) { const c = frCity(id.slice(9)); return c ? `${c.ad} · ${frSubeSay(c.k)} şube${S.fr.adaylar.some(a => a.city === c.k) ? ' · başvuru var' : ''}` : ''; }
-  return { 'oda:akademi': 'Eğitim akademisi', 'oda:denetim': 'Denetim ekibi', 'oda:franchise': frOpen() ? `Franchise · ${frAcikSube().length} şube` : 'Franchise · marka olunca açılır', 'oda:pazar': 'Pazarlama · kampanyalar', 'oda:finans': 'Finans · aylık rapor', 'oda:kurul': `Yönetim kurulu · güven %${Math.round(S.board.trust)}`, 'mgr:hq': `${MANAGERS.hq.name} · ${MANAGERS.hq.role}` }[id] || '';
+  if (id.startsWith('fr:sube:')) { const sb = S.fr.subeler.find(x => x.id === +id.slice(8)); return sb ? `${frCity(sb.city).ad} · ★${fmtPuan(sb.puan)}` : ''; }
+  if (id.startsWith('fr:sehir:')) { const sb = frAcikSube().find(x => x.city === id.slice(9)); return sb ? `${frCity(sb.city).ad} · ★${fmtPuan(sb.puan)}` : ''; }
+  return { 'oda:akademi': 'Eğitim mutfağı', 'oda:denetim': 'Denetim ekibi', 'oda:franchise': frOpen() ? `Franchise · ${frAcikSube().length} şube` : 'Franchise · marka olunca açılır', 'oda:pazar': 'Pazarlama · kampanyalar', 'oda:finans': 'Finans · aylık rapor', 'oda:kurul': `Yönetim kurulu · güven %${Math.round(S.board.trust)}`, 'mgr:hq': `${MANAGERS.hq.name} · ${MANAGERS.hq.role}` }[id] || '';
 }
 function miniChart() {
   const h = S.hist.slice(-12);
@@ -6404,151 +6488,97 @@ function miniChart() {
 }
 const PART = { kurum: 'Franchise merkezi kadrosu (bölge müdürleri, muhasebe, hukuk)', darbe: 'Büyük ödemeler (vergi, zam, kur, dava)', frans: 'Franchise (akademi, denetim, kamyonlar)', maas: 'Maaşlar', malzeme: 'Malzeme (ekmek, sebze, sos)', yem: 'Dışarıdan alınan yem', kira: 'Dükkân kirası', fatura: 'Elektrik, su, doğalgaz', arazi: 'Çiftlik (civciv, aşı, tarla)', gubre: 'Gübre', katki: 'Silo katkıları', vet: 'Veteriner', muh: 'Gıda mühendisi', ek: 'Sağlıklı ürün (organik yem, soğuk zincir)', sigorta: 'Sigorta', bakim: 'Makine bakımı', kampanya: 'Kampanyalar', ceza: 'Cezalar ve davalar', faiz: 'Kredi faizi', vergi: 'Vergi (geçen ayın kârından)', hasar: 'Kriz ve hasar' };
 const gunKaldi = t => Math.max(1, Math.ceil((t - S.t) / C.month * 30));
-// kart içindeki düğmeler (aday seç / geri çevir): ui.js tıklamayı buraya yollar
-window.CARD_DO = Object.assign(window.CARD_DO || {}, {
-  frGive: id => A.frGive(+id),
-  frReject: id => A.frReject(+id),
-});
-const nokta = n => `<span class="dots">${[0, 1, 2, 3, 4].map(i => `<i${i < n ? ' class="on"' : ''}></i>`).join('')}</span>`;
-// sol sütun (geniş ekranda) ya da kartın tepesi: harita ve dört özet
-function frSide(odak) {
-  let h = frMapSvg(odak);
-  const F = S.fr, acik = frAcikSube(), son = F.son;
-  if (frHazir() && acik.length) h += `<div class="kpis"><div><small>Şube</small><b>${acik.length}</b><span>${frSehir()} şehir</span></div><div><small>Marka puanı</small><b>${F.marka ? yildiz(F.marka) : '—'}</b><span>şubelerin ortalaması</span></div>`
-    + `<div><small>Geçen ay kazanç</small><b class="pos">${son && son.sube ? '+' + fmtTL(son.gel) : '—'}</b><span>şiş, lavaş, sos, içecek</span></div><div><small>Teslim edilen mal</small><b${son && son.talep && son.tas / son.talep < 0.9 ? ' class="neg"' : ''}>${son && son.talep ? '%' + Math.round(son.tas / son.talep * 100) : '—'}</b><span>${son && son.tas ? `${sayiEk('%' + Math.round(son.kendi / son.tas * 100), 'i')} kendi şişimiz` : 'kamyonlar taşır'}</span></div></div>`;
-  return h;
+// kobalt vitrin: şube sayısı, geçen ayın net kazancı, harita ve üç küçük sayı
+let frTum = false;
+function frHero(odak) {
+  const F = S.fr, acik = frAcikSube(), son = F.son, net = son ? son.gel - frKurum() : 0;
+  const bek = S.decision && S.decision.k === 'fraday';
+  return `<div class="frhero"><div class="fh1"><div><span class="eyebrow">Franchise ağımız</span><b class="fbig">${acik.length ? acik.length + ' şube' : 'Henüz şube yok'}</b></div>`
+    + `<div class="fnet"><small>Geçen ay</small><b class="${net < 0 ? 'neg' : ''}">${son ? (net >= 0 ? '+' : '') + fmtTL(net) : '—'}</b></div></div>`
+    + frMapSvg(odak)
+    + `<div class="fh3"><span><small>Yer</small><b>${acik.length}/${frKap()}</b></span><span><small>Marka</small><b>${F.marka ? '★' + fmtPuan(F.marka) : '—'}</b></span><span><small>Merkez gideri</small><b>${fmtTL(frKurum())}</b></span></div>`
+    + `<p class="fleg"><i style="background:#FFD500"></i>★4,4+ <i style="background:#FF9A3D"></i>★4,0–4,3 <i style="background:#FF6B6B"></i>★4,0 altı${bek ? ' <i class="ring"></i>başvuru' : ''}</p></div>`
+    + (son ? `<p class="frsum">Geçen ay şubelerden: satış payı <b class="pos">+${fmtTL(son.pay)}</b>${frLv() >= 3 ? ` · kendi şişimiz <b class="pos">+${fmtTL(son.sis)}</b>` : ''} · merkezin gideri <b>${fmtTL(-frKurum())}</b>. Her şube satışının ${sayiEk('%' + Math.round(frPayOran() * 100), 'ini')} bize bırakır.</p>` : '');
+}
+// gelişim yolu: beş kademe, bir çizgi üzerinde
+function frYol() {
+  const F = S.fr, K = C.fr.kademe;
+  let h = `<div class="fryol" style="--p:${(Math.max(0, F.lv - 1) / (K.length - 2) * 80).toFixed(1)}%">`;
+  for (let i = 1; i < K.length; i++) {
+    const st = F.lv >= i ? 'ok' : F.yapim && F.yapim.lv === i ? 'yap' : i === F.lv + 1 ? 'sira' : 'kilit';
+    h += `<div class="fk ${st}"><span class="fd">${st === 'ok' ? ico('check', '#fff') : ico(K[i].icon, st === 'yap' ? '#fff' : st === 'sira' ? '#2340B8' : '#9AA2BD')}</span><b>${esc(K[i].kisa)}</b><small>${st === 'yap' ? gunKaldi(F.yapim.until) + ' gün' : K[i].kap + ' şube'}</small></div>`;
+  }
+  return h + '</div>';
+}
+// sıradaki kademe: ne verir, ne ister
+function frSiradaki() {
+  const N = frSonraki(), F = S.fr;
+  if (F.yapim) { const K = C.fr.kademe[F.yapim.lv]; return `<div class="frnext yap"><span class="eyebrow">Kuruluyor</span><b>${esc(K.ad)}</b><p>${esc(K.ne)}</p><p class="small">${gunKaldi(F.yapim.until)} gün sonra hazır · sonra ${K.kap} şubelik yerimiz olacak.</p></div>`; }
+  if (!N) return '<div class="frnext"><span class="eyebrow">Tamamlandı</span><b>Her şehirde yerimiz var</b><p>Franchise merkezinin bütün kademeleri kuruldu.</p></div>';
+  const chip = r => `<span class="rq ${r.ok ? 'y' : 'n'}">${r.ok ? '✓' : '•'} ${esc(r.t)}${r.ok ? '' : ` <em>· şimdi ${esc(r.v)}</em>`}</span>`;
+  return `<div class="frnext"><span class="eyebrow">Sıradaki kademe</span><b>${esc(N.K.ad)}</b><p>${esc(N.K.ne)}</p><div class="rqs">${N.reqs.map(chip).join('')}</div>`
+    + `<p class="small">${fmtTL(N.cost)} · ${N.K.ay} ayda hazır · merkezin gideri ayda ${fmtTL(px(N.K.gider))} olur · yer ${N.K.kap} şube</p></div>`;
 }
 const geri = (id, t) => `<a class="geri" data-card="${id}">‹ ${esc(t)}</a>`;
-// bir şubenin özet satırı (listelerde)
-const subeSatir = sb => `<tr data-card="fr:sube:${sb.id}"><td><b>${esc(frCity(sb.city).ad)}</b><span>${esc(sb.ad)}${sb.rakip && S.t < sb.rakip ? ' · karşısında rakip' : ''}${frIndirim(sb) ? ' · indirimli mal' : ''}</span></td><td>${yildiz(sb.puan)}<span>${sb.gelir ? '+' + fmtTL(sb.gelir) + '/ay' : fmtK(frSatis(sb)) + ' porsiyon/ay'}</span></td><td><span class="go">›</span></td></tr>`;
+const subeSatir = sb => `<button class="frrow" data-card="fr:sube:${sb.id}"><span class="pp" style="background:${puanRenk(sb.puan)}">★${fmtPuan(sb.puan)}</span><span class="fc"><b>${esc(frCity(sb.city).ad)}</b><small>${esc(sb.ad)}</small></span><span class="fg">${sb.gelir ? '+' + fmtTL(sb.gelir) : 'yeni'}<small>${sb.gelir ? 'ayda' : 'ilk ay'}</small></span></button>`;
 function frCard() {
-  const F = S.fr, I = C.fr.infra;
-  const rk = (ok, t, v) => `<tr><td><span class="rk ${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'}</span>${esc(t)}<span class="sv">${esc(v)}</span></td></tr>`;
+  const F = S.fr;
+  const bek = () => (S.decision && S.decision.k === 'fraday' ? S.decision.a : null);
   return {
-    title: 'Franchise', sub: frOpen() ? (frHazir() ? (frAcikSube().length ? `${frAcikSube().length} şube · ${frSehir()} şehir${F.marka ? ' · marka ★' + fmtPuan(F.marka) : ''}` : F.adaylar.length ? `${F.adaylar.length} başvuru seni bekliyor` : 'adaylar bekleniyor') : 'önce dört altyapı kurulur') : 'marka olunca açılır', icon: 'globe',
-    wide: true, side: () => frSide(),
+    title: 'Franchise', icon: 'globe',
+    get sub() { return !frOpen() ? 'marka olunca açılır' : !F.lv ? (F.yapim ? `ofis kuruluyor · ${gunKaldi(F.yapim.until)} gün` : 'önce franchise ofisi kurulur') : `${frAcikSube().length}/${frKap()} şube${F.marka ? ' · marka ★' + fmtPuan(F.marka) : ''}`; },
+    get wide() { return frHazir(); }, side: () => (frHazir() ? frHero() : ''),
     body: () => {
-      let h = '';
-      if (!frOpen()) {
-        h += `<p>Şehir şehir şube vermek için önce kendi dükkânının adı duyulmalı.</p><table class="tbl res">${rk(S.unvan >= C.fr.unvan, `“${UNVAN[C.fr.unvan].ad}” unvanı`, `şimdi: ${UNVAN[S.unvan].ad}`)}${rk(S.puan >= C.fr.puan - 0.005, `Müşteri puanı ★${fmtPuan(C.fr.puan)}`, `şimdi ★${fmtPuan(S.puan)}`)}</table>`;
-        return h + `<p class="hint">Açılınca bu arsaya franchise merkezi kurulur. Önce dört altyapıyı hazırlarsın; sonra şehirlerden adaylar başvurur. Şubelere döner, lavaş, sos, ayran ve içecek satarsın; asıl kazanç buradan gelir.</p>`;
-      }
-      if (!frHazir()) {
-        h += `<p>Şube verebilmek için dört altyapının hepsi hazır olmalı.</p><table class="tbl res">${Object.keys(I).map(k => { const x = F.infra[k]; return rk(x && x.ok, I[k].label, x ? (x.ok ? 'hazır' : `${gunKaldi(x.until)} gün kaldı`) : 'kurulmadı'); }).join('')}</table>`;
-        return h + `<p class="hint">Akademi, denetim ekibi ve kamyonların aylık gideri vardır; hazır olunca aylık giderlere eklenir.</p>`;
-      }
-      const acik = frAcikSube(), son = F.son;
-      const sehirler = [...new Set(F.adaylar.map(a => a.city))];
-      if (sehirler.length) h += `<h4 class="sh4">Başvurular</h4><table class="tbl frs lnk">${sehirler.map(k => { const n = F.adaylar.filter(a => a.city === k).length; return `<tr data-card="fr:sehir:${k}"><td><b>${esc(frCity(k).ad)}</b><span>${n > 1 ? `${n} aday · karşılaştır, birini seç` : '1 aday · seç ya da geri çevir'}</span></td><td><span class="go">Bak ›</span></td></tr>`; }).join('')}</table>`;
-      if (acik.length) h += `<h4 class="sh4">Şubeler · en düşük puan üstte</h4><table class="tbl frs lnk">${acik.slice().sort((a, b) => a.puan - b.puan).map(subeSatir).join('')}</table>`;
-      else if (!sehirler.length) h += '<p>Henüz başvuru yok; adaylar ayda bir iki gelir.</p>';
-      if (son && son.sube) h += `<h4 class="sh4">Geçen ay şubelere sattıklarımız</h4><table class="tbl frg"><tr><td>Döner şişi (kendi çiftliğimiz)</td><td>+${fmtTL(son.toptan)}</td></tr><tr><td>Döner şişi (anlaşmalı üretici)</td><td>+${fmtTL(son.soz)}</td></tr><tr><td>Lavaş, sos, ayran, içecek</td><td>+${fmtTL(son.malz)}</td></tr>${son.iade ? `<tr><td>İndirimler</td><td class="neg">−${fmtTL(son.iade)}</td></tr>` : ''}</table>`;
-      return h + `<p class="hint">Cirolarından pay almayız; şubelere döner şişi, lavaş, sos, ayran ve içecek satarız. Kendi çiftliğimizden giden şiş en çok kazandırır. Malı mutfaktaki kamyonlar taşır; teslim oranı düşükse filoyu büyüt.</p>`;
-    },
-    actions: () => {
-      if (!frOpen()) return [];
-      const out = [], yok = Object.keys(I).filter(k => !F.infra[k]);
-      for (const k of Object.keys(I)) {
-        const x = F.infra[k], c = px(I[k].cost);
-        if (x && x.ok) continue;
-        if (x) { out.push({ label: `${I[k].label} kuruluyor`, sub: `${gunKaldi(x.until)} gün sonra hazır`, icon: I[k].icon, disabled: true, hint: `${gunKaldi(x.until)} gün`, run: () => false }); continue; }
-        out.push({ label: `Kur: ${I[k].label}`, sub: `${I[k].ne} · ${I[k].ay} ayda kurulur${I[k].gider ? ` · ayda ${fmtTL(px(I[k].gider))} gider` : ''}`, icon: I[k].icon, cost: c, tone: k === yok[0] ? 'primary' : '', disabled: S.cash < c, sound: 'cash', run: () => A.frBuild(k) });
-      }
-      return out;
-    },
-  };
-}
-// aday kartı: kazanç, giriş ücreti, satış, kalite, güven; altında seç ve geri çevir
-function adayKart(a, etiket, yer) {
-  const T = FR_TIP[a.tip], e = frBeklenen(a), kn = clamp(Math.round((e.kal - 0.5) / 0.1), 1, 5), gn = clamp(Math.round((a.durust - 0.45) / 0.12), 1, 5), sn = clamp(Math.round((a.boyut - 0.7) / 0.15) + 1, 1, 5);
-  const gt = gn <= 2 ? 'riskli' : gn === 3 ? 'orta' : 'güvenilir';
-  return `<div class="aday">${etiket ? `<span class="etk">${esc(etiket)}</span>` : ''}<div class="ah"><span class="akar">${frKarakter(a).map(k => karImg(k, 34)).join('')}</span><b>${esc(a.ad)}</b><span>${esc(T.ad)} · ${frKarakter(a).map(k => KAR[k].ad).join(', ')}</span></div>`
-    + `<div class="am"><div><small>Bize aylık</small><b class="pos">≈ +${fmtTL(e.gel)}</b></div><div><small>Giriş ücreti</small><b>+${fmtTL(a.ucret)}</b></div></div>`
-    + `<div class="ar"><span>Satış</span>${nokta(sn)}<em>${fmtK(e.sat)} porsiyon/ay</em></div>`
-    + `<div class="ar"><span>Kalite</span>${nokta(kn)}<em>zamanla ★${fmtPuan(e.puan)}</em></div>`
-    + `<div class="ar"><span>Güven</span>${nokta(gn)}<em>${gt}</em></div>`
-    + `<div class="ab"><button class="abt pri" data-do="frGive:${a.id}" data-snd="cash"${yer ? '' : ' aria-disabled="true"'}>Seç</button><button class="abt" data-do="frReject:${a.id}" data-snd="toggleOff">Geri çevir</button></div>`
-    + `<p class="anot">${esc(T.not.charAt(0).toLocaleUpperCase('tr-TR') + T.not.slice(1))} · ${gunKaldi(a.until)} gün içinde karar bekliyor</p></div>`;
-}
-// şubenin ayrıntıları ve yapılabilecekler
-function subeKv(sb) {
-  return `<div class="karsat dz">${frKarakter(sb).map(k => karImg(k, 30)).join('')}<span>Dönerci karakteri: <b>${frKarakter(sb).map(k => KAR[k].ad).join(', ')}</b></span></div>` + kv([['Puanı', yildiz(sb.puan)], ['Aylık satışı', `${fmtK(frSatis(sb))} porsiyon`], ['Bize kazandırdığı', sb.gelir ? `+${fmtTL(sb.gelir)}/ay` : 'ilk ay sonunda belli olur'],
-    ['Teslim ettiğimiz mal', `%${Math.round((sb.oran == null ? 1 : sb.oran) * 100)}`], ['Açık', `${Math.max(1, sb.ay || 0)} aydır`],
-    sb.rakip && S.t < sb.rakip ? ['Rakip', `<span class="neg">karşısında rakip var · ${gunKaldi(sb.rakip)} gün</span>`] : null, frIndirim(sb) ? ['İndirim', `%${Math.round(sb.indirim * 100)} indirimli mal · ${gunKaldi(sb.indirimT)} gün`] : null]);
-}
-function subeIpucu(sb) {
-  if (sb.puan < 4.0) return `<p class="hint neg">Puanı düşük şube markanın puanını aşağı çeker. Önce denetim gönder: kural dışı bir iş varsa ortaya çıkar. Sonra eğitim ya da yenileme desteğiyle puanı yükselt.</p>`;
-  if (sb.puan < 4.4) return `<p class="hint">Puanı idare eder. Eğitim desteği ustaları, yenileme desteği dükkânı iyileştirir.</p>`;
-  return `<p class="hint">Şube iyi gidiyor.</p>`;
-}
-function subeActs(sb) {
-  const c = frCity(sb.city), out = [], dc = px(C.fr.denetim);
-  out.push(!frInfra('denetim') ? { label: 'Denetim gönder', sub: 'önce denetim ekibi kurulmalı', icon: 'shield', disabled: true, hint: 'Ekip yok', run: () => false }
-    : S.t < (sb.denetimT || 0) ? { label: 'Denetim gönder', sub: 'ekip bu şubeye yeni gitti', icon: 'shield', disabled: true, hint: `${gunKaldi(sb.denetimT)} gün`, run: () => false }
-    : { label: 'Denetim gönder', sub: 'habersiz kontrol: kural dışı iş varsa ortaya çıkar', icon: 'shield', cost: dc, tone: sb.puan < 4.0 ? 'primary' : '', disabled: S.cash < dc, run: () => A.frDenetim(sb.id) });
-  if (S.t < (sb.destekT || 0)) out.push({ label: 'Destek ver', sub: 'son destek henüz yeni', icon: 'heart', disabled: true, hint: `${gunKaldi(sb.destekT)} gün`, run: () => false });
-  else {
-    const ec = frDestekCost(sb, 'egitim'), yc = frDestekCost(sb, 'yenileme');
-    out.push(frInfra('akademi') ? { label: 'Eğitim desteği', sub: 'ustaları akademide eğitiriz · puanı yükselir', icon: 'book', cost: ec, tone: sb.puan < 4.2 ? 'primary' : '', disabled: S.cash < ec, run: () => A.frDestek(sb.id, 'egitim') }
-      : { label: 'Eğitim desteği', sub: 'önce eğitim akademisi kurulmalı', icon: 'book', disabled: true, hint: 'Akademi yok', run: () => false });
-    out.push({ label: 'Yenileme desteği', sub: 'dükkânını yenilemesine ortak oluruz · puanı ve satışı artar', icon: 'tools', cost: yc, disabled: S.cash < yc, run: () => A.frDestek(sb.id, 'yenileme') });
-  }
-  out.push({ label: 'Sözleşmeyi bitir', sub: 'şube kapanır; o şubeye mal satışı da biter', icon: 'x', tone: 'danger', confirm: `${c.ad} şubesi (${sb.ad}) kapanır. Emin misin?`, run: () => A.frEnd(sb.id) });
-  return out;
-}
-// bir şehrin kartı: adaylar yan yana, şubeler liste (tek şube varsa doğrudan şube)
-function frSehirCard(k) {
-  const c = frCity(k), F = S.fr; if (!c) return null;
-  const sbs = () => frAcikSube().filter(x => x.city === k), ads = () => F.adaylar.filter(a => a.city === k);
-  return {
-    title: c.ad, sub: `${frSubeSay(k)} / ${c.n} şube yeri dolu${ads().length ? ` · ${ads().length} başvuru` : ''}`, icon: 'store',
-    wide: true, side: () => frSide(k), sideDar: false,
-    body: () => {
-      let h = geri('oda:franchise', 'Franchise');
-      const A_ = ads(), B_ = sbs(), yer = frBosYer(c) > 0 && frHazir();
-      if (A_.length) {
-        const best = (f, t) => A_.length > 1 ? A_.reduce((m, a) => (f(a) > f(m) ? a : m)).id : null;
-        const bk = best(a => frBeklenen(a).gel), bg = best(a => a.durust), bu = best(a => a.ucret);
-        const et = a => [a.id === bk ? 'En çok kazandıran' : '', a.id === bg ? 'En güvenilir' : '', a.id === bu && a.id !== bk ? 'Giriş ücreti en yüksek' : ''].filter(Boolean).join(' · ');
-        h += `<h4 class="sh4">${A_.length > 1 ? `${A_.length} aday · birini seç` : 'Başvuru'}</h4>`;
-        h += `<p class="hint">${!frHazir() ? 'Altyapı hazır olunca seçebilirsin.' : frBosYer(c) <= 0 ? 'Bu şehirde boş şube yeri kalmadı.' : `Asıl kazanç her ay şubeye sattığımız maldan gelir; giriş ücreti bir kerelik. ${frBosYer(c) > 1 ? `Şehirde ${frBosYer(c)} yer var.` : 'Birini seçince öbürlerine teşekkür edilir.'}`}</p>`;
-        h += `<div class="adaylar n${Math.min(3, A_.length)}">${A_.map(a => adayKart(a, et(a), yer)).join('')}</div>`;
-      }
-      if (B_.length === 1) { const sb = B_[0]; h += `<h4 class="sh4">Şube · ${esc(sb.ad)} · ${esc(FR_TIP[sb.tip].ad.toLocaleLowerCase('tr-TR'))}</h4>` + subeKv(sb) + subeIpucu(sb); }
-      else if (B_.length > 1) h += `<h4 class="sh4">${B_.length} şube · birine dokun</h4><table class="tbl frs lnk">${B_.map(subeSatir).join('')}</table>`;
-      if (!A_.length && !B_.length) h += `<p>${esc(ekDe(c.ad))} henüz şube ya da başvuru yok. Adaylar kendiliğinden başvurur; büyük şehirlerden daha sık gelir.</p>`;
+      if (!frOpen()) { const N = frSonraki(); return `<p>Şehir şehir şube vermek için önce kendi dükkânımızın adı duyulmalı.</p><div class="frnext"><div class="rqs">${N.reqs.map(r => `<span class="rq ${r.ok ? 'y' : 'n'}">${r.ok ? '✓' : '•'} ${esc(r.t)}${r.ok ? '' : ` <em>· şimdi ${esc(r.v)}</em>`}</span>`).join('')}</div></div><p class="hint">İkisi olunca bu arsada franchise binası açılır.</p>`; }
+      if (!F.lv) return `<p>Franchise merkezi kademe kademe büyür. Önce <b>franchise ofisi</b>: sözleşmeler ve açılış desteği, ilk üç şube.</p>` + frYol() + frSiradaki()
+        + `<p class="hint">Yer oldukça iki üç ayda bir bir şehirden başvuru gelir; kabul edersen şube açılır. Her şube satışının bir payını her ay bize bırakır.</p>`;
+      const acik = frAcikSube(), a = bek(), son = F.son;
+      let h = frYol() + frSiradaki();
+      if (a) h += `<div class="frbek"><b>${esc(ekDen(frCity(a.city).ad))} başvuru var</b><span>${esc(a.ad)} · ${esc(FR_TIP[a.tip].ad.toLocaleLowerCase('tr-TR'))}</span><button class="abt pri" data-do="frBak">Başvuruya bak</button></div>`;
+      if (acik.length) {
+        const sira = acik.slice().sort((x, y) => (x.puan < 4 ? 0 : 1) - (y.puan < 4 ? 0 : 1) || (y.gelir || 0) - (x.gelir || 0)), gos = frTum ? sira : sira.slice(0, 6);
+        h += `<h4 class="sh4">Şubeler</h4><div class="frlist">${gos.map(subeSatir).join('')}${sira.length > 6 ? `<button class="frrow more" data-do="frTum">${frTum ? 'Daha az göster' : `Bütün şubeler (${sira.length})`} <span>›</span></button>` : ''}</div>`;
+      } else if (!a) h += '<p class="hint">Henüz şube yok. İlk başvuru birkaç gün içinde gelir.</p>';
       return h;
     },
-    actions: () => { const B_ = sbs(); return B_.length === 1 ? subeActs(B_[0]) : []; },
+    actions: () => {
+      if (!frOpen() || F.yapim) return [];
+      const N = frSonraki(); if (!N) return [];
+      return [{ label: N.K.kur, sub: `${N.K.kap} şubelik yer · ${N.K.ay} ayda hazır`, icon: N.K.icon, cost: N.cost, tone: 'primary', disabled: !N.ok || !N.para, hint: !N.ok ? 'Koşullar tamamlanınca' : !N.para ? 'Para yetmiyor' : '', sound: 'build', run: () => A.frBuild() }];
+    },
   };
 }
-// tek şubenin kartı
+// kart içindeki düğmeler: bekleyen başvuruyu yeniden aç, bütün şubeleri göster
+window.CARD_DO = Object.assign(window.CARD_DO || {}, { frBak: () => { if (S.decision && S.decision.k === 'fraday') { closeCard(); openDecision(); } }, frTum: () => { frTum = !frTum; refreshCard(true); } });
+// şubenin ayrıntıları
 function frSubeCard(id) {
   const sb0 = S.fr.subeler.find(x => x.id === id); if (!sb0) return null;
-  const c = frCity(sb0.city), cok = () => frSubeSay(sb0.city) > 1;
+  const c = frCity(sb0.city);
   return {
-    title: `${c.ad} · ${sb0.ad}`, sub: sb0.kapali ? 'şube kapandı' : `${FR_TIP[sb0.tip].ad} · ${Math.max(1, sb0.ay || 0)} aydır açık`, icon: 'store',
-    wide: true, side: () => frSide(sb0.city), sideDar: false,
+    title: `${c.ad} şubesi`, icon: 'store',
+    get sub() { const sb = S.fr.subeler.find(x => x.id === id); return sb.kapali ? 'yollarımızı ayırdık' : `${sb.ad} · ${Math.max(1, sb.ay || 0)} aydır açık`; },
+    wide: true, side: () => frHero(sb0.city),
     body: () => {
-      const sb = S.fr.subeler.find(x => x.id === id);
-      let h = cok() ? geri('fr:sehir:' + sb.city, c.ad) : geri('oda:franchise', 'Franchise');
-      if (sb.kapali) return h + '<p>Bu şube kapandı.</p>';
-      return h + subeKv(sb) + subeIpucu(sb);
+      const sb = S.fr.subeler.find(x => x.id === id), T = FR_TIP[sb.tip], kar = frKarakter(sb);
+      let h = geri('oda:franchise', 'Franchise');
+      if (sb.kapali) return h + '<p>Bu şubeyle yollarımızı ayırdık.</p>';
+      h += `<div class="frsb"><span class="pp big" style="background:${puanRenk(sb.puan)}">★${fmtPuan(sb.puan)}</span><div><b>${esc(sb.ad)}</b><small>${esc(T.ad)}: ${esc(T.not)}</small></div></div>`;
+      h += `<div class="karsat dz">${kar.map(k => karImg(k, 30)).join('')}<span>Dönerci karakteri: <b>${kar.map(k => KAR[k].ad).join(', ')}</b></span></div>`;
+      h += kv([['Aylık satışı', `${fmtK(frSatis(sb))} porsiyon`], ['Bize bıraktığı', sb.gelir ? `+${fmtTL(sb.gelir)}/ay` : 'ilk ay sonunda belli olur'], ['Açılış', `${Math.max(1, sb.ay || 0)} ay önce`]]);
+      h += sb.puan < 4.0 ? `<p class="hint neg">Puanı düşük; marka puanımızı aşağı çekiyor. ${sb.tip === 'hevesli' ? 'Hevesli genç zamanla toparlar.' : frLv() >= 4 ? 'Denetim ekibimiz şubeyi toparlıyor.' : 'İstersen yollarını ayırabilirsin; yerine başka bir başvuru gelir.'}</p>`
+        : sb.puan < 4.4 ? `<p class="hint">Puanı iyi. ${sb.tip === 'hevesli' ? 'Her ay biraz daha iyi olacak.' : 'Eğitim mutfağı ve denetim ekibi puanı yükseltir.'}</p>` : '<p class="hint">Çok iyi gidiyor; markamızın yüzünü ağartıyor.</p>';
+      return h;
     },
-    actions: () => { const sb = S.fr.subeler.find(x => x.id === id); return sb && !sb.kapali ? subeActs(sb) : []; },
+    actions: () => { const sb = S.fr.subeler.find(x => x.id === id); return sb && !sb.kapali ? [{ label: 'Şubeyle yollarını ayır', sub: 'şube kapanır; o şehre yeni başvuru gelebilir', icon: 'x', tone: 'danger', confirm: `${c.ad} şubesiyle (${sb.ad}) yollarını ayırmak istiyor musun?`, run: () => A.frEnd(sb.id) }] : []; },
   };
 }
 function frOdaCard(k) {
-  const I = C.fr.infra[k], x = S.fr.infra[k];
-  return {
-    title: I.label, sub: x ? (x.ok ? 'hazır' : `${gunKaldi(x.until)} gün sonra hazır`) : 'henüz kurulmadı', icon: I.icon,
-    body: () => `<p>${esc(I.ne)}.</p>` + kv([['Aylık gideri', I.gider ? fmtTL(px(I.gider)) : 'yok'], k === 'denetim' ? ['Ne yapar', 'şubeleri habersiz denetler; şubeye dokunup ayrıca denetim de gönderebilirsin'] : ['Ne yapar', 'yeni şubeler daha iyi başlar; puanı düşen şubeye eğitim desteği verebilirsin']]),
-    actions: () => (x ? [] : frOpen() ? [{ label: `Kur: ${I.label}`, sub: `${I.ay} ayda kurulur`, icon: I.icon, cost: px(I.cost), tone: 'primary', disabled: S.cash < px(I.cost), sound: 'cash', run: () => A.frBuild(k) }] : []),
-  };
+  const lv = k === 'akademi' ? 2 : 4, K = C.fr.kademe[lv];
+  return { title: K.ad, sub: frLv() >= lv ? 'çalışıyor' : 'franchise merkezinin bir kademesi', icon: K.icon, body: () => `<p>${esc(K.ne)}</p><p class="hint">${frLv() >= lv ? 'Gideri franchise merkezinin aylık giderine dahil.' : 'Franchise odasındaki gelişim yolundan kurulur.'}</p>`, actions: () => [] };
 }
 function card(id) {
   if (id === 'oda:franchise') return frCard();
-  if (id.startsWith('fr:sehir:')) return frSehirCard(id.slice(9));
+  if (id.startsWith('fr:sehir:')) { const sb = frAcikSube().find(x => x.city === id.slice(9)); return sb ? frSubeCard(sb.id) : frCard(); }
   if (id.startsWith('fr:sube:')) return frSubeCard(+id.slice(8));
   if (id === 'oda:akademi') return frOdaCard('akademi');
   if (id === 'oda:denetim') return frOdaCard('denetim');
@@ -6573,14 +6603,13 @@ function card(id) {
       const cur = Object.entries(S.acc).filter(([, v]) => v > 0.5);
       h += `<table class="tbl"><tr><td><b>Bu ay şimdiye kadar</b></td><td></td></tr><tr><td>Satış (${fmtK(S.m.sold + S.m.paket)} porsiyon)</td><td class="pos">+${fmtTL(S.m.rev - (S.m.fr || 0))}</td></tr>${S.m.fr > 0 ? `<tr><td>Franchise (giriş ücreti, şiş satışı)</td><td class="pos">+${fmtTL(S.m.fr)}</td></tr>` : ''}${cur.map(([k, v]) => `<tr><td>${PART[k]}</td><td>${fmtTL(-v)}</td></tr>`).join('')}${S.m.buy ? `<tr><td>Yatırımlar (hemen ödendi)</td><td>${fmtTL(-S.m.buy)}</td></tr>` : ''}</table>`;
       if (last) h += `<table class="tbl"><tr><td><b>Geçen ay · ${dateLabel(last.m)}</b></td><td></td></tr><tr><td>Satış (${fmtK(last.sold + (last.paket || 0))} porsiyon)</td><td class="pos">+${fmtTL(last.rev - (last.fr || 0))}</td></tr>${last.fr > 0 ? `<tr><td>Franchise</td><td class="pos">+${fmtTL(last.fr)}</td></tr>` : ''}<tr><td>Giderler</td><td>${fmtTL(-last.cost)}</td></tr>${last.buy ? `<tr><td>Yatırımlar</td><td>${fmtTL(-last.buy)}</td></tr>` : ''}<tr class="tot"><td>İşletme ${last.profit >= 0 ? 'kârı' : 'zararı'}</td><td class="${last.profit >= 0 ? 'pos' : 'neg'}">${fmtTL(last.profit)}</td></tr></table>`;
-      h += kv([['Bankanın kredi limiti', fmtTL(creditLimit())], ['Bugüne kadar ödenen vergi', fmtTL(S.totals.vergi)], ['Sigorta', S.sigorta ? 'var' : 'yok'], [S.totals.rev - S.totals.cost >= 0 ? 'Bugüne kadar kâr' : 'Bugüne kadar zarar', fmtTL(Math.abs(S.totals.rev - S.totals.cost))]]);
+      h += kv([['Bankanın kredi limiti', fmtTL(creditLimit())], ['Bugüne kadar ödenen vergi', fmtTL(S.totals.vergi)], ['Sigorta', 'yangın hasarının %85’ini karşılar'], [S.totals.rev - S.totals.cost >= 0 ? 'Bugüne kadar kâr' : 'Bugüne kadar zarar', fmtTL(Math.abs(S.totals.rev - S.totals.cost))]]);
       h += `<p class="hint">Gelir hemen kasaya girer, giderler ay sonunda ödenir. Kârlı her ayın dörtte biri ertesi ay vergi olarak ödenir. Kasa eksideyken bankaya ayda %${(Math.round(C.bank.faiz * 1000) / 10).toLocaleString('tr-TR')} faiz ödenir; ay sonunda kredi limitini aşarsan iflas edersin.</p>`;
       return h;
     },
     actions: () => [
       ...(S.kredi ? [{ label: 'Krediyi erken kapat', sub: `kalan borç ${fmtTL(S.kredi.kalan)} · ${S.kredi.ay} taksit kaldı`, icon: 'coin', cost: Math.round(S.kredi.kalan), disabled: S.cash < S.kredi.kalan, hint: S.cash < S.kredi.kalan ? 'Para yetmiyor' : '', sound: 'cash', run: () => A.payLoan() }]
         : [0, 1].map(i => ({ label: `Kredi çek: ${fmtTL(krediTutar(i))}`, sub: `${C.kredi.ay} ay · ayda ${fmtTL(krediTaksit(i))} taksit · toplam geri ödeme ${fmtTL(krediTaksit(i) * C.kredi.ay)}`, icon: 'coin', tone: i ? '' : 'primary', disabled: !krediOk(), hint: krediOk() ? '' : S.cash < 0 ? 'Önce eksiyi kapat' : S.board.trust < C.kredi.guven ? 'Kurul güveni düşük' : 'Henüz erken', sound: 'cash', run: () => A.takeLoan(i) }))),
-      { label: S.sigorta ? 'Sigortayı iptal et' : 'Sigorta yaptır', sub: S.sigorta ? 'yangın ve su baskınında hasarı kendin ödersin' : 'yangın ve su baskını hasarının %85\'i karşılanır', icon: 'shield', cost: S.sigorta ? 0 : sigortaCost(), per: !S.sigorta, tone: S.sigorta ? 'danger' : 'primary', sound: S.sigorta ? 'toggleOff' : 'build', run: () => A.toggleSigorta() },
     ],
   };
   if (id === 'oda:kurul') return {
@@ -6691,7 +6720,7 @@ async function rankSubmit(sc) {
   localAdd(sc);
   try {
     if (RANK.backend === 'remote') {
-      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: temizAd(sc.ad), ay: sc.ay, butce: sc.butce, surum: window.APP ? '16-app' : '16' }) });
+      const r = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}`, { method: 'POST', headers: remoteHeaders({ Prefer: 'return=minimal' }), body: JSON.stringify({ ad: temizAd(sc.ad), ay: sc.ay, butce: sc.butce, surum: window.APP ? '17-app' : '17' }) });
       if (r.ok) {
         const q = `or=(ay.gt.${sc.ay},and(ay.eq.${sc.ay},butce.gt.${Math.round(sc.butce)}))`;
         const c = await fetch(`${RANK_REMOTE.url}/rest/v1/${RANK_REMOTE.table}?select=id&${q}`, { headers: remoteHeaders({ Prefer: 'count=exact', Range: '0-0' }) });
@@ -6756,31 +6785,17 @@ const firstFree = k => Math.max(0, S.shop[k].findIndex(o => !o));
 const cardOf = k => UI.cardId && UI.cardId.startsWith(k + ':');
 const shopOpen = () => staffed('kasa').length > 0 && staffed('ocak').length > 0;
 const TUT = [
-  { sec: 'farm', text: () => `Hoş geldin! ${S.name} artık senin. Dönerin yolculuğu dört yerden geçer. Kısa bir tur atalım.`, btn: 'Başlayalım' },
-  { sec: 'farm', text: () => 'Burası tarlamız. Tavukların yemi burada yetişir ve mutfaktaki siloya gider.', target: () => sceneEl('tile:1'), btn: 'Devam' },
-  { sec: 'farm', text: () => 'Burası kümesimiz. Piliçler burada büyür, sonra mutfağa gönderilir.', target: () => sceneEl('tile:2'), btn: 'Devam' },
-  { go: 'kitchen', text: () => `Şimdi mutfağa geçelim. ${dockWhere()} “Mutfak” düğmesine dokun.` },
-  { sec: 'kitchen', text: () => 'Bu silo. Tarladan gelen yem burada durur.', target: () => sceneEl('silo'), btn: 'Devam' },
-  { sec: 'kitchen', text: () => 'Tavuklar bu alanda yem yiyip büyür.', target: () => sceneEl('besi'), btn: 'Devam' },
-  { sec: 'kitchen', text: () => 'Büyüyen tavuk burada döner şişi olur. Şişler kamyonla dükkâna gider.', target: () => sceneEl('kesim'), btn: 'Devam' },
-  { go: 'shop', text: () => `Şimdi dükkânımıza geçelim. ${dockWhere()} “Dükkân” düğmesine dokun.` },
-  { sec: 'shop', text: () => 'Şişler bu dolapta bekler. Usta döneri buradan alıp keser.', target: () => sceneEl('fridge'), btn: 'Devam' },
   {
-    sec: 'shop', text: () => cardOf('kasa') ? '“Kasiyer al” düğmesine dokun.' : 'Kasada kimse yok; kasiyer olmadan müşteri girmez. Boş kasaya dokun.',
+    sec: 'shop', text: () => cardOf('kasa') ? '“Kasiyer al” düğmesine dokun.' : `Hoş geldin! ${S.name} artık senin. Önce dükkânı açalım: boş kasaya dokun.`,
     target: () => cardOf('kasa') ? actBtn('Kasiyer al') : sceneEl('kasa:' + firstFree('kasa')), done: () => staffed('kasa').length > 0,
   },
   {
-    sec: 'shop', text: () => cardOf('ocak') ? '“Usta al” düğmesine dokun.' : 'Döneri kesecek bir usta lazım. Boş ocağa dokun.',
+    sec: 'shop', text: () => cardOf('ocak') ? '“Usta al” düğmesine dokun.' : 'Şimdi döneri kesecek bir usta: boş ocağa dokun.',
     target: () => cardOf('ocak') ? actBtn('Usta al') : sceneEl('ocak:' + firstFree('ocak')), done: () => staffed('ocak').length > 0,
   },
-  { sec: 'shop', text: () => 'Dükkân açıldı! Müşteriler geliyor. Her satışın parası hemen buraya, kasana girer.', target: () => $('moneyCard'), btn: 'Devam' },
-  { text: () => 'Maaş ve kira ay sonunda ödenir. Ay sonunda kasa artıda kalırsa iyi gidiyoruz demektir.', target: () => $('due'), btn: 'Devam' },
-  { text: () => 'Bu yıldızlar müşterilerin bize verdiği puan. Lezzet, temizlik ve hızlı servis puanı yükseltir; puan yükseldikçe daha çok müşteri gelir.', target: () => $('puanBtn'), btn: 'Devam' },
-  { text: () => (VIEW.mode === 'short' ? 'Bu kutu' : 'Bu şerit') + ' yemden tezgâha kadar elimizde ne kadar mal olduğunu gösterir. Biri kırmızıya dönerse orada sorun var.', target: () => $('chain'), btn: 'Devam' },
-  { text: () => 'Merkezde reklam verir, aylık raporuna bakarsın. Oraya sonra uğrarız.', target: () => dockBtn('hq'), btn: 'Devam' },
-  { text: () => 'Zamanı buradan durdurabilir ya da hızlandırabilirsin.', target: () => document.querySelector('#ctrl .seg'), btn: 'Devam' },
-  { text: () => 'Küçük göründüyse iki parmakla ya da bu düğmelerle yakınlaştırabilirsin.', target: () => $('zoom'), btn: 'Devam', skip: () => !UI.coarse },
-  { text: () => 'Hazırsın! Bir sorun olursa seni oraya götürüp ne yapacağını adım adım göstereceğim.', btn: 'Oyna' },
+  { text: () => 'Dükkân açıldı! Her satışın parası hemen kasana girer. Maaş ve kira ay sonunda ödenir.', target: () => $('moneyCard'), btn: 'Devam' },
+  { text: () => 'Döner dört yerden geçer: çiftlikte yem ve piliç, mutfakta şiş, dükkânda satış, merkezde reklam ve rapor. Buradan gezersin.', target: () => $('dock'), btn: 'Devam' },
+  { text: () => 'Zamanı buradan durdurup hızlandırabilirsin. Ne yapacağını “Sıradaki iş” şeridi söyler; dokununca seni oraya götürürüm. Afiyet olsun!', target: () => $('sp1'), btn: 'Oyna' },
 ];
 // ay ay açılan özellikler: açıldığında bir kez söylenir
 const TIPS = [
@@ -6788,7 +6803,6 @@ const TIPS = [
   { k: 'kampanya', when: () => isOpen('kampanya'), text: 'Yeni: reklam açıldı! Merkezdeki pazarlama odasından müşteri artırabilirsin.', go: () => ({ sec: 'hq', hit: 'oda:pazar' }) },
   { k: 'marine', when: () => isOpen('marine'), text: 'Yeni: mutfakta döner tarifini geliştirebilirsin; lezzet arttıkça müşteri artar.', go: () => ({ sec: 'kitchen', hit: 'marine' }) },
   { k: 'paket', when: () => isOpen('paket'), text: 'Yeni: paket servis açıldı! Dükkânın arka köşesinden kurabilirsin.', go: () => ({ sec: 'shop', hit: 'paket' }) },
-  { k: 'sigorta', when: () => monthIdx() >= 8 && !S.sigorta, text: 'Bir öneri: finans odasından sigorta yaptırabiliriz. Yangın ya da su baskını olursa hasarın büyük kısmını sigorta öder.', go: () => ({ sec: 'hq', hit: 'oda:finans' }) },
   { k: 'makine', when: () => techOpen('kiosk'), text: 'Yeni: self servis kiosk piyasaya çıktı. Kasiyer yerine konabilir; yorulmaz ama pahalıdır ve arada bir bozulur.', go: () => ({ sec: 'shop', hit: 'kasa:' + Math.max(0, S.shop.kasa.findIndex(Boolean)) }) },
   { k: 'robot', when: () => techOpen('robot'), text: 'Yeni: döner robotu piyasaya çıktı. Maaş zammı istemez ama çok pahalıdır; maaşlar yükseldikçe daha kârlı olur.', go: () => ({ sec: 'shop', hit: 'ocak:' + Math.max(0, S.shop.ocak.findIndex(Boolean)) }) },
 ];
@@ -6798,7 +6812,7 @@ const AUTO_TASK = /^(nokasa|noocak|sisyok|sisaz|yemyok|yemaz|disyem|notarla|noku
 const guideOn = () => !!(S && S.guide && S.guide.on);
 const inTutorial = () => guideOn() && !S.guide.done;
 // zaman, dükkân açılana kadar ve bir sorun gösterilirken durur: acele yok
-const guidePaused = () => (inTutorial() && !shopOpen()) || !!(GUIDE.task && GUIDE.task.pause);
+const guidePaused = () => false;                 // sürüm 17: yardım zamanı hiç durdurmaz
 
 function guideNext() {
   if (!inTutorial()) return;
@@ -6972,7 +6986,7 @@ function maybeTask(sec, item, lvl, age) {
   const key = sec + ':' + item.id;
   if (GUIDE.snooze[key] && S.t < GUIDE.snooze[key]) return false;
   if (lvl < 2 && age < 20) return false;
-  startTask(sec, item, { pause: S.totals.months < 12 });        // ilk yıl zaman bekler; sonrasında oyun akmaya devam eder
+  startTask(sec, item);
   return true;
 }
 // "Göster" (yeni özellik): doğru yeri aç
@@ -7001,18 +7015,18 @@ function openDecision() {
   const no = () => { SND.click(); closeModal(true); A.decide(D.k, false); paintHud(); };
   if (D.k === 'bakim') {
     openModal('Dükkânın bakımı geldi', decHead('tools', '#B86400', `<p>Boya, tesisat ve havalandırma eskidi. Bakım yaptırmazsan dükkân bakımsız görünür ve <b>müşteri puanı ${fmtPuan(-C.puan.bakim)} yıldız düşer</b>; denetimde de eksik çıkma ihtimali artar.</p>`)
-      + `<div class="menu"><button class="btn o" id="dYes">Bakım yaptır · ${fmtTL(D.cost)}</button><button class="btn w" id="dNo">Şimdi değil</button></div>`, 'decide', { lock: true });
+      + `<div class="menu"><button class="btn o" id="dYes">Bakım yaptır · ${fmtTL(D.cost)}</button><button class="btn w" id="dNo">Şimdi değil</button></div>`, 'decide');
   } else if (D.k === 'zam') {
     const extra = sum(people(), w => wageOf(w.role)) * D.pct / 100;
     openModal('Çalışanlar zam istiyor', decHead('users', '#2340B8', `<p>Çalışanların hepsi maaşlarına <b>%${D.pct} zam</b> istiyor. Zam verirsen keyifleri yerine gelir. Vermezsen küserler ve büyük ihtimalle <b>bir hafta grev</b> yaparlar; o sırada yalnızca makineler çalışır.</p>`)
-      + `<div class="menu"><button class="btn o" id="dYes">Zam ver · ayda +${fmtTL(extra)}</button><button class="btn w" id="dNo">Zam verme</button></div>`, 'decide', { lock: true });
+      + `<div class="menu"><button class="btn o" id="dYes">Zam ver · ayda +${fmtTL(extra)}</button><button class="btn w" id="dNo">Zam verme</button></div>`, 'decide');
   } else if (D.k === 'tasarim') {
     openModal('Dükkân sıradanlaştı', decHead('sparkle', '#2340B8', `<p>Dükkânımız ${Math.floor(designAge() / 12)} yıldır aynı. Müşteri yeni ve modern dükkânlara gidiyor; <b>puanımız her ay biraz düşüyor</b>.</p><p>Yeni bir tasarım diline geçersek dükkân <b>${C.inc.tasarim.gun} gün kapanır</b>, sonra yepyeni açılır ve puan tazelenir.</p>`)
-      + `<div class="menu"><button class="btn o" id="dYes">Yeni tasarıma geç · ${fmtTL(D.cost)}</button><button class="btn w" id="dNo">Şimdi değil</button></div>`, 'decide', { lock: true });
+      + `<div class="menu"><button class="btn o" id="dYes">Yeni tasarıma geç · ${fmtTL(D.cost)}</button><button class="btn w" id="dNo">Şimdi değil</button></div>`, 'decide');
   } else if (D.k === 'ev') {
     const extra = Math.round(kiraNow() * D.pct / 100 / 1000) * 1000;
     openModal('Ev sahibi binayı sattı', decHead('key', '#B86400', `<p>Yeni ev sahibi kirayı <b>%${D.pct} artırmak</b> istiyor: ayda ${fmtTL(extra)} daha fazla.</p><p>Kabul etmezsek taşınırız: <b>${fmtTL(D.cost)}</b> masraf ve <b>${D.gun} gün kapalı</b>; ama yeni yerde dükkân yepyeni olur, kira aynı kalır.</p>`)
-      + `<div class="menu"><button class="btn o" id="dYes">Kirayı kabul et · ayda +${fmtTL(extra)}</button><button class="btn w" id="dNo">Taşın · ${fmtTL(D.cost)}</button></div>`, 'decide', { lock: true });
+      + `<div class="menu"><button class="btn o" id="dYes">Kirayı kabul et · ayda +${fmtTL(extra)}</button><button class="btn w" id="dNo">Taşın · ${fmtTL(D.cost)}</button></div>`, 'decide');
   } else if (!storyDecision(D)) return;
   $('dYes').onclick = yes; $('dNo').onclick = no;
 }
@@ -7023,15 +7037,15 @@ function openDenetim() {
   if (R.n) SND.fine(); else SND.fanfare();
   const rows = R.items.map(x => `<tr><td><span class="rk ${x.bad ? 'n' : 'y'}">${x.bad ? '✗' : '✓'}</span>${esc(x.bad || x.t)}</td><td class="${x.bad ? 'neg' : ''}">${x.bad ? '−' + fmtTL(x.fine) : ''}</td></tr>`).join('');
   const lead = !R.n ? `<p><b>Tam not!</b> Denetçi: “Böyle düzenli bir mutfak az gördüm.” Müşteri puanı bir süre yükselecek.</p>${R.muh ? `<p class="small">Bu titizliğin bedeli belli: gıda mühendisimize ayda ${fmtTL(muhCost())} ödüyoruz. Değiyor.</p>` : ''}`
-    : `<p>Denetçi ${R.n} eksik buldu. Kurallara aykırı en basit şeyin bile cezası ağırdır.${R.kapat ? ` <b>Üç ya da daha fazla eksik çıktığı için eksikleri giderene kadar dükkân ${C.inc.denetim.gun} gün kapalı.</b>` : ''}</p>${R.muh ? '' : '<p class="small">Gıda mühendisimiz olsaydı bu eksiklerin neredeyse hiçbiri çıkmazdı.</p>'}`;
-  openModal(R.n ? 'Denetim: eksikler bulundu' : 'Denetimden tam not', decHead(R.n ? 'receipt' : 'check', R.n ? '#D93025' : '#1F8F4E', lead)
+    : `<p>Denetçi ${R.n} eksik buldu; hemen gideriyoruz. Küçük eksiklerin de bedeli var.${R.kapat ? ` <b>Üç ya da daha fazla eksik çıktığı için eksikleri giderene kadar dükkân ${C.inc.denetim.gun} gün kapalı.</b>` : ''}</p>${R.muh ? '' : '<p class="small">Bir gıda mühendisiyle bu eksiklerin neredeyse hiçbiri çıkmaz.</p>'}`;
+  openModal(R.n ? 'Denetim: birkaç eksik' : 'Denetimden tam not', decHead(R.n ? 'receipt' : 'check', R.n ? '#D93025' : '#1F8F4E', lead)
     + `<table class="tbl res">${rows}${R.n ? `<tr class="tot"><td>Toplam ceza (ay sonu ödenir)</td><td class="neg">−${fmtTL(R.total)}</td></tr>` : ''}</table>`
     + `<div class="menu">${!S.muh && R.n ? `<button class="btn o" id="rMuh">Gıda mühendisi tut · ayda ${fmtTL(muhCost())}</button>` : ''}<button class="btn ${!S.muh && R.n ? 'w' : 'o'}" data-close>Tamam</button></div>`, 'report');
   const b = $('rMuh'); if (b) b.onclick = () => { SND.hire(); A.hireMuh(); closeModal(); paintHud(); };
 }
 // büyük kriz: ne oldu, neye mal oldu, ne işe yarardı
 const KRIZ_TXT = {
-  kusgribi: e => ['Kuş gribi!', 'bird', `<p>Bölgede kuş gribi çıktı. Yetkililer tavuklarımızın <b>${e.vet ? 'yarısını' : 'hepsini'}</b> itlaf etti; kümese <b>${e.vet ? 'iki hafta' : 'bir ay'}</b> civciv gelmeyecek. Dezenfeksiyon: ${fmtTL(e.cost)}.</p><p class="small">${e.vet ? 'Veterinerimiz hastalığı erken fark etti; kayıp yarıda kaldı.' : 'Kadrolu veterinerimiz olsaydı hastalığı erken fark eder, kaybı yarıya indirirdi.'}</p>`],
+  kusgribi: e => ['Kuş gribi!', 'bird', `<p>Bölgede kuş gribi çıktı. Yetkililer tavuklarımızın <b>${e.vet ? 'üçte birini' : 'yarıdan fazlasını'}</b> itlaf etti; kümese <b>${e.vet ? 'bir hafta' : 'iki hafta'}</b> civciv gelmeyecek. Dezenfeksiyon: ${fmtTL(e.cost)}.</p><p class="small">${e.vet ? 'Veterinerimiz hastalığı erken fark etti; kayıp az oldu.' : 'Kadrolu veterinerimiz olsaydı hastalığı erken fark eder, kaybı yarıya indirirdi.'}</p>`],
   ekonomi: e => ['Ekonomik kriz', 'chart', `<p>Döviz bir gecede yükseldi: <b>bütün fiyatlar %${e.pct} arttı</b>. Altı ay boyunca insanlar daha az dışarıda yiyecek (müşteri %20 az); banka da kredi limitini kıstı.</p><p class="small">Menü fiyatını gözden geçir, gereksiz gideri kapat.</p>`],
   zehir: e => e.muh ? ['Elektrik kesintisi', 'zap', `<p>Gece bölgede saatlerce elektrik kesildi, soğuk odamız ısındı. <b>Gıda mühendisimiz sabah sıcaklık kayıtlarına bakıp riskli partiyi hemen ayırdı</b>; müşteriye tek bir riskli şiş gitmedi. İmha edilen mal: ${fmtTL(e.cost)}.</p><p class="small">Her partinin kaydını tutmak işte bu gün için.</p>`]
     : ['Elektrik kesintisi', 'zap', `<p>Gece bölgede saatlerce elektrik kesildi, soğuk odamız ısındı. Hangi partinin ne kadar ısındığını bilemediğimiz için <b>dolaptaki bütün şişleri imha ettik</b> ve dükkânı <b>${e.gun} gün</b> kapatıp baştan temizledik. Kayıp: ${fmtTL(e.cost)}.</p><p class="small">Gıda mühendisimiz olsaydı kayıtlara bakıp yalnızca riskli partiyi ayırırdık.</p>`],
@@ -7041,9 +7055,10 @@ const KRIZ_TXT = {
 const DARBE_TXT = {
   vergi: e => ['Vergi incelemesi', 'receipt', `<p>Maliye büyüyen franchise gelirlerimizi geriye dönük inceledi. <b>Kayıtlarımız düzgün çıktı</b>; yalnızca bazı giderlerin yorumunda fark çıktı, uzlaşmaya gittik.</p><p>Ödeme: <b>${fmtTL(e.cost)}</b> (ay sonunda).</p><p class="small">Şirket büyüdükçe incelemesi de büyük olur.</p>`],
   yonetmelik: e => ['Yeni gıda güvenliği kuralı', 'shield', `<p>Yeni yönetmelikle her döner dükkânına sıcaklık takip sistemi zorunlu oldu. <b>${e.n} şubemizin hepsine sistemi biz kurduk</b>; masrafın yarısını üstlendik: <b>${fmtTL(e.cost)}</b>.</p><p class="small">Şubelerimiz yeni kurala ilk uyanlardan oldu; marka puanı biraz yükseldi.</p>`],
-  yakit: e => ['Akaryakıta büyük zam', 'truck', `<p>Mazot bir gecede pahalandı. Altı ay boyunca <b>kamyon giderlerimiz iki katına</b> çıkıyor: ayda ${fmtTL(e.ek)} daha fazla.</p><p class="small">Şubelere mal yine eksiksiz gidecek.</p>`],
   taklit: e => ['Adımızı taklit ettiler', 'gavel', `<p>${esc(ekDe(e.city))} adımızı ve tabelamızı taklit eden bir dükkân açıldı. <b>Marka tescilimiz sayesinde davayı kısa sürede kazandık</b>; dükkân tabelasını indirdi.</p><p>Avukat ve mahkeme masrafı: <b>${fmtTL(e.cost)}</b>.</p>`],
-  kur: e => ['Kur yükseldi', 'chart', `<p>Döviz yükselince ambalaj, sos ve içecek alış fiyatları arttı. Şubeleri zora sokmamak için onlara satış fiyatını artırmadık.</p><p><b>Altı ay boyunca lavaş, sos ve içecekten kazancımız yarıya iniyor.</b></p>`],
+  kur: () => ['Kur yükseldi', 'chart', `<p>Döviz yükselince ambalaj, sos ve içecek alış fiyatları arttı. Şubeleri zora sokmamak için onlara satış fiyatını artırmadık.</p><p><b>Altı ay boyunca şubelerden kalan payımız dörtte bir az.</b></p><p class="small">Şubelerimiz rahat; kur yatışınca payımız yerine döner.</p>`],
+  zam: () => ['Tavuk ve yem zammı', 'down', `<p>Tavuk ve yem fiyatları ülke genelinde arttı. Şubelere giden şişin fiyatını sabit tuttuk; farkı biz karşılıyoruz.</p><p><b>Altı ay boyunca şubelere giden şişten kazancımız biraz az.</b></p><p class="small">Şubelerimiz fiyat artırmak zorunda kalmadı; müşteri bunu fark eder.</p>`],
+  savas: () => ['İndirim savaşı', 'mega', `<p>Ülke çapında büyük bir zincir indirim kampanyası başlattı. Biz fiyatımızı ve kalitemizi koruyoruz.</p><p><b>Beş ay boyunca şubelerin satışı biraz düşük</b>; kampanya bitince müşteri geri döner.</p>`],
 };
 function openDarbe(e) {
   const f = DARBE_TXT[e.k]; if (!f || !UI.started || S.over) return;
@@ -7061,7 +7076,7 @@ function openKriz(e) {
 /* ---------- olay bantları ---------- */
 const ACILDI = { tadilat: ['Yeni tasarımla açıldık!', 'Dükkân pırıl pırıl; müşteriler hemen fark etti.', 'sparkle', 'green'], denetim: ['Eksikler giderildi', 'Dükkân yeniden açıldı.', 'store', 'green'], zehir: ['Dükkân yeniden açıldı', 'Temizlik bitti; dolap yeniden doluyor.', 'store', 'green'], yangin: ['Onarım bitti', 'Dükkân yeniden açıldı.', 'store', 'green'], tasinma: ['Yeni yerimizde açıldık', 'Yepyeni dükkânımız müşterilerini bekliyor.', 'store', 'green'] };
 const CIFTLIK_TXT = {
-  bocek: ['Tarlaya böcek düştü', 'Hasat durdu. Çiftliğe gidip tarlayı ilaçla; üç ay beklersen toprak ölür.', 'bug', 'red'],
+  bocek: ['Tarlaya böcek düştü', 'Hasat durdu. Çiftliğe gidip tarlayı ilaçlayalım; ilaçlayınca hasat hemen sürer.', 'bug', 'amber'],
   toprakoldu: ['Tarlanın toprağı öldü', 'Böcek üç ay ilaçlanmadı. Toprak ıslah edilmeden ürün vermez.', 'bug', 'red'],
   dinleniyor: ['Tarla dinlenmeye alındı', 'Üç ay ürün vermeyecek; sonra verimi tazelenir.', 'leaf', 'amber'],
   dinlendi: ['Tarla dinlendi', 'Toprak yeniden tam verimle ekiliyor.', 'leaf', 'green'],
@@ -7318,33 +7333,21 @@ function storyDecision(D) {
   if (D.k === 'toplu') {
     const var_ = fridgePors();
     openModal('Toplu sipariş', who('shop', `<p><b>${esc(D.kim)}</b> bizden <b>${fmtK(D.n)} porsiyon</b> döner istiyor. Toplu aldığı için <b>%${D.ind} indirim</b> bekliyor: porsiyonu ₺${fmtNum(D.fiyat)} (dükkânda ₺${fmtNum(S.price)}), toplam <b>${fmtTL(D.pay)}</b>.</p><p>Şişler dolaptan çıkacak ve <b>${D.gun} gün</b> içinde hazır olmalı. Yetişmezse ${fmtTL(D.cezai)} cezai şart öderiz.</p><p class="small">Dolapta şu an ${fmtK(var_)} porsiyon var${var_ >= D.n ? '; sipariş hemen yola çıkar ama dükkâna az şiş kalır.' : '; üretim yetişmezse söz vermeyelim.'}</p>`)
-      + `<div class="menu"><button class="btn o" id="dYes">Siparişi al · ${fmtTL(D.pay)}</button><button class="btn w" id="dAlt">Pazarlık et: indirimi yarıya indir</button><button class="btn w" id="dNo">Geri çevir</button></div><p class="small">Pazarlık tutarsa daha çok kazanırız; tutmazsa müşteri vazgeçer.</p>`, 'decide', { lock: true });
+      + `<div class="menu"><button class="btn o" id="dYes">Siparişi al · ${fmtTL(D.pay)}</button><button class="btn w" id="dAlt">Pazarlık et: indirimi yarıya indir</button><button class="btn w" id="dNo">Geri çevir</button></div><p class="small">Pazarlık tutarsa daha çok kazanırız; tutmazsa müşteri vazgeçer.</p>`, 'decide');
     $('dAlt').onclick = () => { SND.click(); closeModal(true); A.decide('toplu', 'pazar'); paintHud(); };
   } else if (D.k === 'ucuz') {
-    openModal('Ucuz tavuk teklifi', who('kitchen', `<p>Bir toptancı kapıya geldi: <b>dondurulmuş ithal tavuk</b>, malzeme maliyeti <b>%${D.pct} düşer</b>, anlaşma ${D.ay} ay.</p><p>Ama tavuğun nereden geldiğini bilmiyoruz. Müşteri farkı anlar: <b>puanımız ciddi düşer</b>, Denedik ekibi gelirse rezil oluruz, zehirlenme riski de artar.</p><p class="small">Benim oyum belli şefim: bizim tavuk bizim kümesten.</p>`) + btn('Anlaşmayı kabul et', 'Geri çevir: ucuza kaçmayız'), 'decide', { lock: true });
+    openModal('Ucuz tavuk teklifi', who('kitchen', `<p>Bir toptancı kapıya geldi: <b>dondurulmuş ithal tavuk</b>, malzeme maliyeti <b>%${D.pct} düşer</b>, anlaşma ${D.ay} ay.</p><p>Ama tavuğun nereden geldiğini bilmiyoruz. Müşteri farkı anlar: <b>puanımız ciddi düşer</b>, Denedik ekibi gelirse rezil oluruz, zehirlenme riski de artar.</p><p class="small">Benim oyum belli şefim: bizim tavuk bizim kümesten.</p>`) + btn('Anlaşmayı kabul et', 'Geri çevir: ucuza kaçmayız'), 'decide');
   } else if (D.k === 'transfer') {
     const w = S.shop.ocak.find(x => x && x.id === D.id), ek = w ? Math.round(wageOfW(w) * D.pct / 100 / 1000) * 1000 : 0;
-    openModal('Ustaya transfer teklifi', who('shop', `<p>Karşıdaki dönerci <b>${esc(D.name)} Usta</b>’ya iş teklif etmiş. En eski ustamız; elinin ayarını müşteri bilir.</p><p>Maaşını <b>%${D.pct}</b> artırırsak kalır. Artırmazsak gider; ekibin de morali bozulur.</p>`) + btn(`Maaşını artır · ayda +${fmtTL(ek)}`, 'Gitmesine izin ver'), 'decide', { lock: true });
-  } else if (D.k === 'frkacak') {
-    openModal('Denetim ekibimiz yakaladı', who('hq', `<p>Denetim ekibimiz <b>${esc(D.city)}</b> şubesinin şişi bizden değil, dışarıdan ucuza aldığını ve tarifimize uymadığını tespit etti. <b>Müşteriye yansımadan durdurduk.</b> Şube sahibi <b>${esc(D.ad)}</b> özür diliyor.</p><p>Sözleşme cezası kesersek şube kurala döner. Sözleşmeyi bitirirsek şube kapanır; o şehre şiş ve malzeme satışımız da biter.</p>`)
-      + btn(`Ceza kes · +${fmtTL(D.ceza)}`, 'Sözleşmeyi bitir'), 'decide', { lock: true });
-  } else if (D.k === 'frikinci') {
-    openModal('İkinci şube isteği', who('hq', `<p><b>${esc(D.from)}</b> şubemiz çok iyi gidiyor. Sahibi <b>${esc(D.ad)}</b> şimdi <b>${esc(ekDe(D.cityAd))}</b> ${ekDe(D.cityAd).endsWith('e') ? 'de' : 'da'} bir şube açmak istiyor.</p><p>Giriş ücretinde biraz indirim bekliyor: <b>${fmtTL(D.ucret)}</b>. İşini bilen biri; yeni şube de iyi başlar.</p>`)
-      + btn(`Kabul et · +${fmtTL(D.ucret)}`, 'Geri çevir'), 'decide', { lock: true });
-  } else if (D.k === 'frzam') {
-    openModal('Tavuk ve yem zammı', who('hq', `<p>Tavuk ve yem fiyatları ülke genelinde <b>%${D.pct}</b> arttı.</p><p>Şubelere giden malın fiyatını sabit tutarsak zammı altı ay biz karşılarız: ayda yaklaşık <b>${fmtTL(D.aylik)}</b>. Kendi çiftliğimizden giden şiş arttıkça bu yük azalır. Şubeler rahat eder, marka güçlenir.</p><p>Zammı yansıtırsak şubelerin müşterisi azalır; altı ay bizden aldıkları mal da yaklaşık %12 düşer.</p>`)
-      + btn('Fiyatı sabit tut', 'Zammı yansıt'), 'decide', { lock: true });
-  } else if (D.k === 'frsavas') {
-    openModal('İndirim savaşı', who('hq', `<p>Ülke çapında büyük bir zincir altı ay sürecek bir indirim kampanyası başlattı.</p><p>Biz de ülke çapında reklamla karşılık verirsek şubelerimiz yerini korur, marka güçlenir: <b>${fmtTL(D.cost)}</b>.</p><p>Karşılık vermezsek beş ay boyunca şubelerin satışı yaklaşık %18 düşer.</p>`)
-      + btn(`Reklamla karşılık ver · ${fmtTL(D.cost)}`, 'Bekleyelim'), 'decide', { lock: true });
-  } else if (D.k === 'frrakip') {
-    openModal('Şubenin karşısına rakip', who('hq', `<p><b>${esc(D.city)}</b> şubemizin tam karşısına büyük bir zincir açılıyor.</p><p>Yerel reklama destek verirsek rakip tutunamaz. Vermezsek şubenin satışı <b>altı ay boyunca dörtte bir düşer</b>; bizden aldığı şiş ve malzeme de azalır.</p>`)
-      + btn(`Reklama destek ver · ${fmtTL(D.cost)}`, 'Kendi başına baksın'), 'decide', { lock: true });
-  } else if (D.k === 'frayril') {
-    openModal('Şube sahibi ayrılmak istiyor', who('hq', `<p><b>${esc(D.city)}</b> şubesinin sahibi <b>${esc(D.ad)}</b> yeterince kazanamadığını, işi bırakmak istediğini söylüyor.</p><p>Altı ay boyunca şişi ve malzemeyi <b>%30 indirimli</b> verirsek devam eder ve biraz toparlanır. Vermezsek şube kapanır.</p>`)
-      + btn('Altı ay %30 indirim yap', 'Bıraksın'), 'decide', { lock: true });
+    openModal('Ustaya transfer teklifi', who('shop', `<p>Karşıdaki dönerci <b>${esc(D.name)} Usta</b>’ya iş teklif etmiş. En eski ustamız; elinin ayarını müşteri bilir.</p><p>Maaşını <b>%${D.pct}</b> artırırsak kalır. Artırmazsak gider; ekibin de morali bozulur.</p>`) + btn(`Maaşını artır · ayda +${fmtTL(ek)}`, 'Gitmesine izin ver'), 'decide');
+  } else if (D.k === 'fraday') {
+    const a = D.a, T = FR_TIP[a.tip], e = frBeklenen(a), c = frCity(a.city), kar = frKarakter(a);
+    openModal('Franchise başvurusu', who('hq', `<p><b>${esc(ekDen(c.ad))}</b> başvuru var. <b>${esc(a.ad)}</b>, ${esc(T.ad.toLocaleLowerCase('tr-TR'))}: ${esc(T.not)}.</p>`)
+      + `<div class="frap"><div class="akar">${kar.map(k => karImg(k, 40)).join('')}</div><span>Dönerci karakteri: <b>${kar.map(k => KAR[k].ad).join(', ')}</b></span></div>`
+      + kv([['Giriş ücreti', `<b class="pos">+${fmtTL(a.ucret)}</b> · bir kerelik`], ['Bize her ay', `≈ <b class="pos">+${fmtTL(Math.max(0, e.net))}</b> · merkez gideri düşülmüş`], ['Satışı', `ayda ≈ ${fmtK(e.sat)} porsiyon`], ['Puanı', `zamanla ★${fmtPuan(e.puan)}${S.fr.marka ? ` · markamız ★${fmtPuan(S.fr.marka)}` : ''}`]])
+      + btn(`Kabul et · +${fmtTL(a.ucret)}`, 'Geri çevir') + `<p class="small">${e.puan < 4.3 ? 'Puanı ortalamanın altında kalırsa marka puanımızı biraz aşağı çeker.' : 'İyi bir aday; marka puanımıza katkı yapar.'} Kapatırsan karar ${Math.max(1, Math.ceil((D.until - S.t) / C.month * 30))} gün bekler.</p>`, 'decide');
   } else if (D.k === 'festival') {
-    openModal('Şehir lezzet festivali', who('hq', `<p>Bu ay şehirde lezzet festivali var; bize de stant önerdiler. Stant, ekip ve tanıtım: <b>${fmtTL(D.cost)}</b>.</p><p>Gidersek adımız duyulur: <b>iki ay boyunca daha çok müşteri</b> gelir, puanımız da biraz yükselir.</p>`) + btn(`Stant aç · ${fmtTL(D.cost)}`, 'Bu yıl katılma'), 'decide', { lock: true });
+    openModal('Şehir lezzet festivali', who('hq', `<p>Bu ay şehirde lezzet festivali var; bize de stant önerdiler. Stant, ekip ve tanıtım: <b>${fmtTL(D.cost)}</b>.</p><p>Gidersek adımız duyulur: <b>iki ay boyunca daha çok müşteri</b> gelir, puanımız da biraz yükselir.</p>`) + btn(`Stant aç · ${fmtTL(D.cost)}`, 'Bu yıl katılma'), 'decide');
   } else return false;
   return true;
 }
@@ -7364,23 +7367,11 @@ const FIRSAT_TXT = {
   festivalok: () => ['Festivalde stant açtık', 'Kuyruk standı dolandı. İki ay boyunca daha çok müşteri gelecek.', 'sparkle', 'green'],
   yanhazir: e => [`${esc(e.ad)} menüde`, 'Mutfakta denenen tarif tuttu; müşterilerin bir kısmı dürümün yanında bunu da alacak.', 'bowl', 'green'],
   // franchise
-  fracik: () => ['Artık bir markayız', 'Genel Merkez’in yanında franchise merkezi açıldı. Dört altyapıyı kurunca şehirlere şube verebilirsin.', 'globe', 'gold'],
-  frkuruldu: e => [`${esc(e.ad)} hazır`, e.hepsi ? 'Dört altyapı da tamam: adaylar başvurmaya başlayacak.' : 'Kalan altyapıları da kurunca şube verebilirsin.', 'check', 'green'],
-  fraday: e => [`${esc(ekDen(e.city))} ${e.n > 1 ? e.n + ' ' : ''}franchise başvurusu`, e.n > 1 ? 'Franchise merkezinde başvuruları karşılaştırıp birini seçebilirsin.' : 'Franchise merkezinde başvuruya bakıp kabul edebilir ya da geri çevirebilirsin.', 'store', 'amber'],
-  fryeni: e => [`${esc(e.city)} şubesi açıldı`, `Giriş ücreti kasaya girdi: ${fmtTL(e.ucret)}. Şube şişini ve malzemesini bizden alacak.`, 'store', 'gold'],
-  frkapandi: e => [`${esc(e.city)} şubesi kapandı`, `${esc(e.neden.charAt(0).toLocaleUpperCase('tr-TR') + e.neden.slice(1))}.`, 'x', 'red'],
-  frzamok: () => ['Fiyat sabit kaldı', 'Zammı altı ay biz karşılıyoruz; şubelerimiz rahat, marka güçlendi.', 'heart', 'green'],
-  frzamno: () => ['Zam şubelere yansıdı', 'Altı ay şubelerin satışı biraz düşük olacak.', 'down', 'amber'],
-  frsavasok: () => ['Reklamımız her yerde', 'İndirim savaşına karşılık verdik; şubelerimiz yerini korudu.', 'mega', 'green'],
-  frsavasno: () => ['İndirim savaşı', 'Beş ay şubelerin satışı düşük olacak; sonra müşteri geri döner.', 'down', 'amber'],
+  fracik: () => ['Artık bir markayız', 'Genel Merkez’in yanında franchise binası açıldı. Franchise ofisini kurunca şehirlerden başvuru gelir.', 'globe', 'gold'],
+  frkademe: e => { const K = C.fr.kademe[e.lv]; return [`${K.ad} hazır`, `${K.ne} Artık ${K.kap} şubelik yerimiz var${e.lv === 1 ? '; ilk başvuru birkaç gün içinde gelir' : ''}.`, 'check', 'green']; },
+  fryeni: e => [`${esc(e.city)} şubesi açıldı`, `Giriş ücreti kasaya girdi: ${fmtTL(e.ucret)}. Şube her ay satışının bir payını bize bırakacak.`, 'store', 'gold'],
+  frkapandi: e => [`${esc(e.city)} şubesiyle yollarımızı ayırdık`, 'O şehirden yeni bir başvuru gelebilir.', 'store', 'amber'],
   frbasin: () => ['Markamız gazetede', '“Şehir şehir aynı lezzet.” İki ay boyunca dükkânımıza da daha çok müşteri gelecek.', 'star', 'green'],
-  frceza: e => [`${esc(e.city)} şubesine ceza`, `Sözleşme cezası kasaya girdi: ${fmtTL(e.ceza)}. Şube artık daha dikkatli.`, 'gavel', 'green'],
-  frikincired: e => ['İkinci şube isteği geri çevrildi', `${esc(e.city)} boş kaldı; başka bir aday gelebilir.`, 'x', 'amber'],
-  frrakipok: e => [`${esc(e.city)} şubesine destek`, 'Yerel reklamla rakip tutunamadı.', 'mega', 'green'],
-  frrakipno: e => [`${esc(e.city)} şubesinin karşısına rakip açıldı`, 'Altı ay boyunca satışları düşecek.', 'down', 'red'],
-  frindirim: e => [`${esc(e.city)} şubesi devam ediyor`, 'Altı ay boyunca şişi ve malzemeyi %30 indirimli veriyoruz; şube sahibi rahatladı.', 'percent', 'amber'],
-  frtemiz: e => [`${esc(e.city)} şubesi temiz çıktı`, 'Denetim ekibimiz her şeyi yerinde buldu.', 'check', 'green'],
-  frdestek: e => [`${esc(e.city)} şubesine ${e.tur === 'egitim' ? 'eğitim' : 'yenileme'} desteği`, e.tur === 'egitim' ? 'Akademi ekibimiz çalışanları yeniden eğitti; şubenin puanı toparlanacak.' : 'Tezgâh, tabela ve oturma yeri yenilendi; şubenin puanı toparlanacak.', e.tur === 'egitim' ? 'grad' : 'tools', 'green'],
 };
 function firsatFlash(e) {
   const f = FIRSAT_TXT[e.k]; if (!f) return;
@@ -7503,7 +7494,11 @@ function titleArt() {
 }
 
 /* ---------- sıradaki iş: herkes her an ne yapacağını bilsin ---------- */
+const DEC_AD = { bakim: 'Dükkânın bakımı', zam: 'Çalışanların zam isteği', tasarim: 'Yeni tasarım önerisi', ev: 'Kira artışı', toplu: 'Toplu sipariş', ucuz: 'Ucuz tavuk teklifi', transfer: 'Ustaya transfer teklifi', festival: 'Lezzet festivali', fraday: 'Franchise başvurusu' };
 function nextJob() {
+  // kapatılan karar penceresi: süresi dolana kadar en üstte bekler
+  const D = S.decision;
+  if (D && DEC_AD[D.k]) { const g = Math.max(1, Math.ceil((D.until - S.t) / C.month * 30)); return { k: 'd' + D.k + g, tone: 'gold', lab: 'Karar', text: `${DEC_AD[D.k]} seni bekliyor · ${g} gün`, run: () => openDecision() }; }
   let best = null;
   for (const sec of SEC_ORDER) for (const it of (ISSUES[sec] || [])) if (it.go && (!best || it.lvl > best.it.lvl)) best = { sec, it };
   // acil sorun (bant üstte çıktığı anda) beklemeden alttaki çubuğa da gelir
@@ -7681,7 +7676,7 @@ function wireShare() {
    ve durumu güncellenir. Böylece hiçbir dokunuş kaybolmaz.
    ============================================================ */
 const UI = { speed: 1, paused: false, started: false, sec: 'farm', talking: null, cardId: null, cardEl: null, iss: new Map(), talkedAt: {}, talkUntil: 0, blocked: false };
-const TIME_SCALE = 0.6;                  // 1× hızda bir ay 100 saniye: acele ettirmeyen, sakin bir tempo
+const TIME_SCALE = 0.5;                  // 1× hızda bir ay 120 saniye: acele ettirmeyen, sakin bir tempo
 const SEC_ORDER = ['farm', 'kitchen', 'shop', 'hq'];
 const SEC_NAME = { farm: 'Çiftlik', kitchen: 'Mutfak', shop: 'Dükkân', hq: 'Merkez' };
 const SEC_ICON = {
@@ -7773,7 +7768,7 @@ function startNew() {
   try { localStorage.setItem('etd-yardim', guide ? '1' : '0'); } catch (e) { }
   newGame($('inName').value.trim() || 'Benim Dönerim', undefined, { guide });
   if (guide) S.seenHelp.shop = 1;            // dükkânı öğretici anlatır
-  if (introSeen()) begin(); else { $('titleScreen').hidden = true; showIntro(() => begin()); }
+  if (introSeen()) begin('shop'); else { $('titleScreen').hidden = true; showIntro(() => begin('shop')); }
 }
 function begin(sec) {
   lastPuan = ''; lastUnvan = ''; VIEW.shiftY = 0;
@@ -7802,14 +7797,14 @@ function onLayout() {
 }
 // dikey telefonda "yan çevir" ekranı; oyun bu sırada durur
 function checkRotate() {
-  const show = VIEW.mode === 'tall' && UI.coarse && !UI.portraitOk;
+  const show = false;                       // sürüm 17: dikey ekran birinci sınıf; "yan çevir" yok
   $('rotate').hidden = !show;
   UI.blocked = show;
 }
 
 // yakınlaştırma düğmeleri: sahnenin sağ alt köşesinde, diğer düğmelere binmeden
 function placeZoom() {
-  const z = $('zoom'), g = $('game'), sf = VIEW.safe, show = UI.started && !S.over;
+  const z = $('zoom'), g = $('game'), sf = VIEW.safe, show = UI.started && !S.over && !UI.coarse && VIEW.mode !== 'tall';
   z.hidden = !show; if (!show) return;
   const gh = g.clientHeight, gw = g.clientWidth, m = VIEW.mode;
   const right = m === 'short' ? gw - (sf.x + sf.w) + 4 : 12, bottom = m === 'tall' ? gh - (sf.y + sf.h) + 6 : m === 'short' ? 8 : 14;
@@ -8038,8 +8033,8 @@ function boardFlash(e) {
 }
 
 /* ---------- hız ve ses ---------- */
-// hız tek düğmede: her dokunuş 1× → 2× → 4× → 1×; duraklatılmışken dokunmak kaldığı hızla sürdürür
-const SPEEDS = [1, 2, 4];
+// hız tek düğmede: her dokunuş 1× → 2× → 3× → 1×; duraklatılmışken dokunmak kaldığı hızla sürdürür
+const SPEEDS = [1, 2, 3];
 function setSpeed(v) {
   if (!UI.started) return;
   SND.click();
