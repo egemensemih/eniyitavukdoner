@@ -1095,6 +1095,68 @@ img.kar { display: block; flex: none; border-radius: 50%; }
 .act.primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #DB5A00; }
 .coach .cbt .p { box-shadow: 0 4px 0 #DB5A00; } .coach .cbt .p:active { transform: translateY(2px); box-shadow: 0 2px 0 #DB5A00; }
 .abt.pri { box-shadow: 0 3px 0 #DB5A00; }
+
+/* ---------- başlık ekranı (sürüm 17): sitedeki Kobalt Afiş dili ---------- */
+.screen.title { background: radial-gradient(130% 90% at 85% 0%, #3558DA 0%, #2340B8 45%, #1B3296 75%, #14275A 100%); }
+.screen.title .brand { gap: 10px; margin: 0; }
+.screen.title .brand svg { width: 44px; height: 44px; border-radius: 13px; box-shadow: 0 0 0 3px rgba(255, 255, 255, .9), 0 10px 26px rgba(0, 0, 0, .25); }
+.brand .wm { font-weight: 700; letter-spacing: -.02em; }
+.brand .wm b { color: #FF8A2A; }
+.screen.title .brand .wm { font-size: 22px; }
+.screen .kicker { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-size: 11.5px; font-weight: 700; letter-spacing: .12em; color: #FFD500; }
+.screen .kicker::before { content: ''; width: 22px; height: 2px; border-radius: 1px; background: #FF6A00; }
+.thead { margin: 8px 0 0; font-size: clamp(34px, 6.2cqi, 62px); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; color: #fff; text-wrap: balance; }
+.screen.title .lead { margin-top: 12px; font-size: 15px; }
+.tkar { display: flex; align-items: center; gap: 12px; margin: 16px 0 0; }
+.tkar .tks { display: flex; flex: none; }
+.tkar .tks img { width: 52px; height: 52px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px #fff, 0 6px 14px rgba(0, 0, 0, .22); }
+.tkar .tks img + img { margin-left: -12px; }
+.tkar .tks img:nth-child(1) { rotate: -6deg; } .tkar .tks img:nth-child(3) { rotate: 6deg; }
+.tkar .tkt { font-size: 13.5px; font-weight: 600; color: #fff; line-height: 1.3; }
+.tkar .tkt small { display: block; font-size: 12px; font-weight: 500; color: #AEBDF2; margin-top: 2px; }
+.tform { margin-top: 18px; background: #fff; color: var(--ink); border-radius: 24px; padding: 16px; width: min(440px, 100%); box-shadow: 0 20px 50px rgba(3, 8, 28, .35); }
+.screen .tform label { color: var(--ink-2); margin: 0 0 6px; }
+.screen .tform input { width: 100%; background: var(--fill); box-shadow: none; border-radius: 14px; }
+.screen .tform input:focus { box-shadow: 0 0 0 3px rgba(35, 64, 184, .35); }
+.tform .tsw { margin-top: 12px !important; color: var(--ink); }
+.tform .tsw small { color: var(--ink-2) !important; }
+.tmain { display: grid; gap: 8px; margin-top: 14px; }
+.btn.big { width: 100%; padding: 15px 20px; font-size: 17px; font-weight: 700; border-radius: 999px; }
+.btn.big small { font-size: 12px; }
+.btn.w { background: var(--fill); color: var(--ink); border-radius: 999px; }
+.btn.w.big { background: var(--cobalt-l); color: var(--cobalt); }
+.tform .row { margin-top: 10px; gap: 8px; }
+.tform .row .btn { flex: 1 1 auto; padding: 11px 14px; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.tform .row .btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.game[data-mode="tall"] .screen.title { place-items: start center; padding-top: calc(18px + var(--st)); }
+.game[data-mode="tall"] .screen.title .brand svg { width: 38px; height: 38px; }
+.game[data-mode="tall"] .screen.title .brand .wm { font-size: 19px; }
+.game[data-mode="tall"] .thead { font-size: 36px; }
+.game[data-mode="tall"] .screen.title .lead { font-size: 14px; }
+.game[data-mode="short"] .screen.title { place-items: center; }
+.game[data-mode="short"] .screen.title .in { grid-template-columns: 1fr 1fr; gap: 18px; align-items: center; }
+.game[data-mode="short"] .screen.title .tcol { display: grid; grid-template-columns: 1fr; }
+.game[data-mode="short"] .thead { font-size: 28px; }
+.game[data-mode="short"] .screen .kicker { margin-top: 10px; }
+.game[data-mode="short"] .screen.title .lead { display: none; }
+.game[data-mode="short"] .tkar { margin-top: 8px; } .game[data-mode="short"] .tkar .tks img { width: 38px; height: 38px; }
+.game[data-mode="short"] .tform { margin-top: 10px; padding: 12px; }
+.game[data-mode="short"] .btn.big { padding: 11px 16px; font-size: 15px; }
+.game[data-mode="short"] .screen.title .tray { display: none; }
+.tform .tsw .sw { background: #D3D9E5; } .tform .tsw input:checked + .sw { background: var(--good); }
+.tform .tsw .tl b { color: var(--ink); }
+.tform .tsw input:focus-visible + .sw { outline-color: var(--cobalt); }
+/* üretim zinciri */
+.akis { list-style: none; margin: 8px 0 12px; padding: 0; display: grid; gap: 6px; counter-reset: ak; }
+.akis li { display: grid; grid-template-columns: 26px minmax(0, 1fr) 30px; gap: 10px; align-items: center; background: var(--fill); border-radius: 14px; padding: 9px 8px 9px 10px; }
+.akis li b { display: block; font-size: 13.5px; font-weight: 700; } .akis li span { display: block; font-size: 13px; line-height: 1.4; color: var(--ink); } .akis li span b { display: inline; }
+.akis li small { display: block; font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+.akis .ak { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 13px; color: #fff; }
+.akis .ak.ok { background: var(--good); } .akis .ak.wr { background: var(--orange); } .akis .ak.bd { background: var(--bad); }
+.akis .go { width: 30px; height: 30px; border: 0; border-radius: 50%; background: var(--surface); color: var(--cobalt); font: 700 18px/1 var(--f); cursor: pointer; }
+.akdar { background: var(--cobalt-l); border-radius: 14px; padding: 10px 12px; margin-bottom: 4px; } .akdar p { margin: 3px 0 0; font-size: 13.5px; line-height: 1.45; }
+/* sahnenin zemini: düz lacivert yerine ortası hafif kobalt ışıklı derinlik */
+.game { background-color: var(--scene); background-image: radial-gradient(90% 70% at 50% 45%, rgba(53, 88, 218, .42) 0%, rgba(35, 64, 184, .16) 45%, rgba(8, 14, 40, .0) 70%), linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(0, 0, 0, .18)); }
 </style>
 </head>
 <body>
@@ -1152,19 +1214,22 @@ img.kar { display: block; flex: none; border-radius: 50%; }
   <div class="screen title" id="titleScreen">
     <div class="in">
       <div class="tcol">
-        <div class="kicker">Denedik ekibinden bir oyun</div>
-        <h1 class="brand"><svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#2340B8"/><rect x="30.5" y="8" width="3" height="48" rx="1.5" fill="#FFD500"/><path d="M19 16 h26 l-6 32 h-14z" fill="#fff"/><path d="M20.2 22 h23.6 M21.4 29 h21.2 M22.6 36 h18.8 M23.8 43 h16.4" stroke="#FF6A00" stroke-width="3" stroke-linecap="round"/></svg><span class="wm">eniyitavukdoner<b>.com</b></span></h1>
+        <div class="brand"><svg width="44" height="44" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#2340B8"/><rect x="30.5" y="8" width="3" height="48" rx="1.5" fill="#FFD500"/><path d="M19 15h26l-4 34H23z" fill="#fff"/><path d="M19.6 20h24.8l-.5 4.5H20.1zM20.8 30h22.4l-.5 4.5H21.3zM22 40h20l-.5 4.5H22.5z" fill="#FF6A00"/></svg><span class="wm">eniyitavukdoner<b>.com</b></span></div>
+        <span class="kicker">Denedik ekibinden bir oyun</span>
+        <h1 class="thead">Kendi dönercini aç.</h1>
         <p class="lead">Türkiye’nin en iyi tavuk dönerini arıyoruz. Bu kez dükkân senin: yemi yetiştir, tavuğu büyüt, şişi diz, en iyisini sen yap.</p>
-        <label for="inName">Dükkânının adı</label>
-        <input id="inName" maxlength="22" value="Benim Dönerim" autocomplete="off" spellcheck="false" placeholder="Dükkânının adı" enterkeyhint="go">
-        <label class="tsw" for="inGuide"><input type="checkbox" id="inGuide" checked><span class="sw" aria-hidden="true"></span><span class="tl"><b>Yardımlı oyna</b><small>Ne yapacağını adım adım gösterir</small></span></label>
-        <div class="row">
-          <button class="btn o" id="btnNew">Yeni oyun</button>
-          <button class="btn g" id="btnContinue" hidden>Devam et</button>
-          <button class="btn g" id="btnHelp">Nasıl oynanır?</button>
-          <button class="btn g" id="btnRank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6"/></svg>Sıralama</button>
+        <div class="tkar" id="tKar" aria-hidden="true"></div>
+        <div class="tform">
+          <label for="inName">Dükkânının adı</label>
+          <input id="inName" maxlength="22" value="Benim Dönerim" autocomplete="off" spellcheck="false" placeholder="Dükkânının adı" enterkeyhint="go">
+          <label class="tsw" for="inGuide"><input type="checkbox" id="inGuide" checked><span class="sw" aria-hidden="true"></span><span class="tl"><b>Yardımlı oyna</b><small>İlk adımları birlikte atalım</small></span></label>
+          <div class="tmain"><button class="btn o big" id="btnContinue" hidden>Devam et</button><button class="btn o big" id="btnNew">Yeni oyun</button></div>
+          <div class="row">
+            <button class="btn w" id="btnHelp">Nasıl oynanır?</button>
+            <button class="btn w" id="btnRank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6"/></svg>Sıralama</button>
+            <button class="btn w" id="btnFsTitle" hidden><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Tam ekran</button>
+          </div>
         </div>
-        <button class="fsbtn" id="btnFsTitle" hidden><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Tam ekran oyna</button>
       </div>
       <div class="tray" id="tray" aria-hidden="true"></div>
     </div>
@@ -1182,7 +1247,7 @@ img.kar { display: block; flex: none; border-radius: 50%; }
     </div>
   </div>
 </div>
-<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 17</span><span>Oyun kendiliğinden kaydedilir</span></div>
+<div class="caption"><span><b>eniyitavukdoner.com</b> · döner oyunu · sürüm 17.1</span><span>Oyun kendiliğinden kaydedilir</span></div>
 </div>
 
 <script>(function(){var e=window.self!==window.top,m=!!(window.matchMedia&&matchMedia('(pointer: coarse)').matches&&Math.min(screen.width,screen.height)<820);if(e)document.body.classList.add('embed');if(e||m)document.documentElement.classList.add('full');})();</script>
@@ -1235,7 +1300,7 @@ const C = {
     risk: 0.05, crowd: 0.012, spread: 0.8,                       // ay başına olasılık
     sickDeath: 45, get treat() { return px(12000); }, get visit() { return px(20000); }, starve: 0.6, dieW: 0.7,
     kesimTime: [4, 2], beltTime: [5, 3.5], get hizliCost() { return px(300000); }, get hassasCost() { return px(250000); },
-    fridgeCap: [6, 10, 16, 24], get fridgeCost() { return [200000, 380000, 950000].map(px); }, // şiş
+    fridgeCap: [5, 8, 12, 18], get fridgeCost() { return [200000, 380000, 700000].map(px); },   // şiş (bir şiş ≈ 900 porsiyon)
     marine: {
       klasik: { label: 'Klasik marine', lezzet: 0, puan: 0, malz: 0, color: '#D4883A' },
       yogurt: { label: 'Yoğurtlu marine', get cost() { return px(250000); }, time: 30, lezzet: 10, puan: 0.2, malz: 5, color: '#E0A35C', desc: 'Yumuşak ve sulu; müşteriler daha çok gelir.' },
@@ -1289,15 +1354,15 @@ const C = {
     zam: { first: 15, every: [16, 24], pct: 5, strike: 0.6, dur: 0.25 },     // zam isteği; reddedilirse çoğu zaman grev
     rakip: { first: [9, 14], every: [12, 18], later: [9, 14], mult: 0.88, dur: 3 },  // karşıya rakip dönerci açılır; gidince de biraz müşteri götürür
     ariza: { base: 0.015, age: 0.0015, max: 0.2, repair: 0.12, repairAge: 0.005, life: [96, 132], old: 12 },   // makine arızası: ay başına olasılık, yaşla artar; ömrü dolan makine yenilenmeli
-    ciftlik: { first: [3, 5], every: [4, 8], bocek: 40000, cati: 70000, cit: 90000, sulama: 300000, kurak: 0.5 },   // çiftlik sorunları: böcek, fırtına, tilki; yazın kuraklık
-    denetim: { first: [3, 5], every: [4, 7], p: 0.3, pMuh: 0.04, pBakim: 0.15, kapat: 3, gun: 3 },   // gıda ve belediye denetimi
+    ciftlik: { first: [4, 6], every: [5, 9], bocek: 40000, cati: 70000, cit: 90000, sulama: 300000, kurak: 0.5 },   // çiftlik sorunları: böcek, fırtına, tilki; yazın kuraklık
+    denetim: { first: [5, 8], every: [5, 8], p: 0.3, pMuh: 0.04, pBakim: 0.15, kapat: 3, gun: 3 },   // gıda ve belediye denetimi
     asgari: [1.5, 3.5], refPay: 0.9,                                             // ocakta asgari ücret: yıllık enflasyonun üstüne gerçek artış (%); müşterinin cebi de bunun bir kısmı kadar genişler
     kira: [2, 4], kiraYogun: 2,                                              // yıl dönümünde kira: enflasyonun üstüne (%), dükkân çok kalabalıksa fazlası
     vergi: 0.25,                                                             // kârlı ayın vergisi; ertesi ay ödenir
     tasarim: { ask: 36, base: 1600000, grow: 0.12, gun: 5 },                 // dükkân tasarımı eskir; yenisi pahalı ve birkaç gün kapalı
     kriz: { first: [18, 26], every: [22, 34], iyi: 1.4 },                    // büyük kriz: işler iyi giderken daha çabuk gelir
     firsat: { first: [4, 7], every: [5, 9] },                                // fırsatlar ve teklifler: toplu sipariş, festival, gazete, ucuz tedarikçi, usta transferi
-    denedik: { first: [14, 20], every: [22, 32] },                            // Denedik ekibinin habersiz ziyareti: 10 üzerinden puan
+    denedik: { first: [6, 9], every: [18, 26] },                                                          // Denedik ekibinin habersiz ziyareti: 10 üzerinden puan
     wait: 25,                                                                // karar beklenirken geçen süre (sn); sonra kendiliğinden "hayır"
   },
   // mevsim: yazın sokak kalabalık, kışın paket siparişi çok (takvim ayına göre; ocak = 0)
@@ -1327,7 +1392,7 @@ const C = {
     sube: 25000,                               // şube başına merkez gideri (bölge sorumlusu, muhasebe)
     aday: [2.5, 4],                            // iki başvuru arası (ay)
     darbe: { first: [5, 8], every: [5, 8] },   // büyük dış ödemeler (vergi incelemesi, yönetmelik, dava): bilgi verilir, karar yok
-    rezerv: 4,                                 // dolapta kendi dükkânımız için bırakılan şiş
+    rezerv: 2,                                 // dolapta kendi dükkânımız için bırakılan şiş
   },
   // franchise sonrası büyüme: ikinci kesim hattı, komşu arazi, yem fabrikası, kuluçkahane
   buyume: { get kesim2() { return px(1200000); }, get arazi() { return px(1600000); }, get fabrika() { return px(1400000); }, get kulucka() { return px(1400000); }, tesisAy: 40000, tesisEtki: 1.3 },
@@ -1497,7 +1562,7 @@ const fertMult = t => (0.35 + 0.65 * t.fert / 100) * (tesisOn('fabrika') ? C.buy
 // toprak yorgunluğu: beş yıl aralıksız ekilen tarla her ay %2 verim kaybeder (en az yarısı kalır)
 const yorgun = t => 1;   // sürüm 17: tarla yorgunluğu kalktı
 // kampanyanın açılması: bazıları belli bir aydan, bazıları marka olunca (franchise)
-const campOpen = c => monthIdx() >= (c.ay || 0) && (!c.fr || !!(S.fr && S.fr.subeler.length));   // tv ve ünlü: ilk franchise şubesi açılınca
+const campOpen = c => monthIdx() >= (c.ay || 0) && (!c.fr || S.unvan >= 3);   // tv ve ünlü: “Şehrin en iyilerinden” olunca
 const tesisOn = k => !!(S.tesis && S.tesis[k]);
 const slotRate = t => (0.5 + 0.5 * t.fert / 100) / C.farm.slotTime * (tesisOn('kulucka') ? C.buyume.tesisEtki : 1);
 const sickCount = () => S.chickens.filter(c => c.sick).length;
@@ -4372,7 +4437,7 @@ const SND = (() => {
       if (!create) return null;
       const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
       ctx = new AC();
-      master = ctx.createGain(); master.gain.value = 0.6;
+      master = ctx.createGain(); master.gain.value = 0.5;
       const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 5; comp.attack.value = 0.004; comp.release.value = 0.2;
       master.connect(comp); comp.connect(ctx.destination);
       busUi = ctx.createGain(); busUi.gain.value = 0.8; busUi.connect(master);
@@ -4471,7 +4536,7 @@ const SND = (() => {
     pop() { if (!ok('pop', 0.05)) return; const t = now(); tone(420, t, 0.12, 'sine', 0.14, 900, 0.005, busUi); tone(1250, t + 0.07, 0.1, 'triangle', 0.06, null, 0.005, busUi); },
     toggleOn() { if (!ok('tog', 0.05)) return; const t = now(); tone(660, t, 0.07, 'triangle', 0.08, null, 0.004, busUi); tone(990, t + 0.06, 0.09, 'triangle', 0.08, null, 0.004, busUi); },
     toggleOff() { if (!ok('tog', 0.05)) return; const t = now(); tone(880, t, 0.07, 'triangle', 0.07, null, 0.004, busUi); tone(590, t + 0.06, 0.09, 'triangle', 0.06, null, 0.004, busUi); },
-    error() { if (!ok('err', 0.15)) return; const t = now(); tone(220, t, 0.09, 'square', 0.03, 180, 0.004, busUi); tone(180, t + 0.1, 0.12, 'square', 0.03, 150, 0.004, busUi); },
+    error() { if (!ok('err', 0.3)) return; const t = now(); tone(330, t, 0.1, 'triangle', 0.05, 290, 0.004, busUi); tone(262, t + 0.1, 0.14, 'triangle', 0.045, 240, 0.004, busUi); },
     spend() { if (!ok('spend', 0.2)) return; const t = now(); noise(t, 0.05, 0.03, 'highpass', 5000, 1, null, busUi); [1568, 1976].forEach((f, i) => tone(f, t + 0.03 + i * 0.05, 0.12, 'triangle', 0.04, null, 0.003, busUi)); },
     whoosh() { if (!ok('whoosh', 0.1)) return; noise(now(), 0.3, 0.06, 'bandpass', 400, 0.8, 2400, busUi); },
     talkPop() { if (!ok('talkpop', 0.2)) return; const t = now(); tone(740, t, 0.06, 'sine', 0.06, null, 0.003, busUi); tone(988, t + 0.06, 0.08, 'sine', 0.06, null, 0.003, busUi); },
@@ -4479,35 +4544,35 @@ const SND = (() => {
     /* oyun */
     hire() { if (!ok('hire', 0.1)) return; const t = now(); [523, 659, 784].forEach((f, i) => tone(f, t + i * 0.07, 0.16, 'triangle', 0.09)); },
     build() { if (!ok('build', 0.15)) return; const t = now(); tone(110, t, 0.18, 'sine', 0.2, 70); noise(t, 0.12, 0.07, 'lowpass', 900); [784, 1047].forEach((f, i) => tone(f, t + 0.12 + i * 0.08, 0.2, 'triangle', 0.07)); },
-    cash() { if (!ok('cash', 0.28)) return; const t = now(); noise(t, 0.04, 0.03, 'highpass', 5000); tone(1568, t + 0.01, 0.06, 'triangle', 0.045); tone(2093, t + 0.06, 0.14, 'triangle', 0.04); },
-    clunk(v = 1) { if (!ok('clunk', 0.2)) return; const t = now(); tone(150, t, 0.14, 'sine', 0.14 * v, 60); noise(t, 0.08, 0.05 * v, 'lowpass', 700); },
-    slice() { if (!ok('slice', 0.35)) return; const t = now(); noise(t, 0.09, 0.03, 'bandpass', 3600, 3, 1800); },
-    kesim() { if (!ok('kesim', 0.3)) return; const t = now(); noise(t, 0.06, 0.07, 'bandpass', 2400, 2); tone(220, t, 0.08, 'triangle', 0.05, 120); noise(t + 0.08, 0.18, 0.03, 'bandpass', 900, 1, 400); },
+    cash() { if (!ok('cash', 0.9)) return; const t = now(); noise(t, 0.03, 0.012, 'highpass', 6000); tone(1568, t + 0.01, 0.07, 'sine', 0.03); tone(2093, t + 0.06, 0.16, 'sine', 0.028); },
+    clunk(v = 1) { if (!ok('clunk', 0.6)) return; const t = now(); tone(150, t, 0.14, 'sine', 0.14 * v, 60); noise(t, 0.08, 0.05 * v, 'lowpass', 700); },
+    slice() { if (!ok('slice', 1.2)) return; const t = now(); noise(t, 0.09, 0.016, 'bandpass', 3600, 3, 1800); },
+    kesim() { if (!ok('kesim', 1)) return; const t = now(); noise(t, 0.06, 0.04, 'bandpass', 2400, 2); tone(220, t, 0.08, 'triangle', 0.035, 120); noise(t + 0.08, 0.18, 0.018, 'bandpass', 900, 1, 400); },
     chop() { this.kesim(); },
-    van() { if (!ok('van', 1.2)) return; const t = now(); tone(70, t, 0.5, 'sawtooth', 0.02, 95, 0.05); noise(t, 0.45, 0.02, 'lowpass', 300, 0.7); },
-    door() { if (!ok('door', 1)) return; const t = now(); tone(1318, t, 0.4, 'sine', 0.035, null, 0.004); tone(1047, t + 0.16, 0.5, 'sine', 0.03, null, 0.004); },
-    grumble() { if (!ok('grumble', 1.4)) return; const t = now(); tone(180, t, 0.18, 'sawtooth', 0.025, 140, 0.02); tone(150, t + 0.16, 0.2, 'sawtooth', 0.022, 120, 0.02); },
-    order() { if (!ok('order', 0.8)) return; const t = now(); tone(1760, t, 0.08, 'sine', 0.05); tone(2349, t + 0.09, 0.14, 'sine', 0.05); },
-    drone() { if (!ok('drone', 0.8)) return; const t = now(); tone(220, t, 0.9, 'sawtooth', 0.012, 260, 0.08); tone(223, t, 0.9, 'sawtooth', 0.012, 264, 0.08); noise(t, 0.8, 0.012, 'bandpass', 1800, 2, 2400); },
+    van() { if (!ok('van', 3)) return; const t = now(); tone(70, t, 0.5, 'triangle', 0.05, 95, 0.05); noise(t, 0.45, 0.015, 'lowpass', 300, 0.7); },
+    door() { if (!ok('door', 3)) return; const t = now(); tone(1318, t, 0.4, 'sine', 0.035, null, 0.004); tone(1047, t + 0.16, 0.5, 'sine', 0.03, null, 0.004); },
+    grumble() { if (!ok('grumble', 4)) return; const t = now(); tone(220, t, 0.18, 'sine', 0.04, 190, 0.02); tone(185, t + 0.16, 0.22, 'sine', 0.035, 160, 0.02); },
+    order() { if (!ok('order', 2)) return; const t = now(); tone(1760, t, 0.08, 'sine', 0.05); tone(2349, t + 0.09, 0.14, 'sine', 0.05); },
+    drone() { if (!ok('drone', 3)) return; const t = now(); tone(220, t, 0.9, 'triangle', 0.02, 260, 0.08); tone(223, t, 0.9, 'triangle', 0.02, 264, 0.08); noise(t, 0.8, 0.008, 'bandpass', 1800, 2, 2400); },
     fine() { if (!ok('fine', 0.6)) return; const t = now(); tone(140, t, 0.16, 'sine', 0.16, 70); noise(t, 0.07, 0.06, 'lowpass', 800); tone(523, t + 0.14, 0.14, 'triangle', 0.06); tone(415, t + 0.28, 0.24, 'triangle', 0.06, 370); },
-    moto() { if (!ok('moto', 0.8)) return; const t = now(); tone(90, t, 0.7, 'sawtooth', 0.03, 180, 0.03); noise(t, 0.6, 0.02, 'bandpass', 500, 1, 900); },
-    hey() { if (!ok('hey', 2.5)) return; const t = now(); tone(660, t, 0.13, 'triangle', 0.09); tone(880, t + 0.14, 0.18, 'triangle', 0.09); },
-    alarm() { if (!ok('alarm', 4)) return; const t = now(); tone(880, t, 0.12, 'square', 0.03); tone(660, t + 0.14, 0.16, 'square', 0.03); },
+    moto() { if (!ok('moto', 3)) return; const t = now(); tone(90, t, 0.7, 'triangle', 0.05, 180, 0.03); noise(t, 0.6, 0.012, 'bandpass', 500, 1, 900); },
+    hey() { if (!ok('hey', 4)) return; const t = now(); tone(660, t, 0.13, 'triangle', 0.09); tone(880, t + 0.14, 0.18, 'triangle', 0.09); },
+    alarm() { if (!ok('alarm', 6)) return; const t = now(); tone(880, t, 0.14, 'triangle', 0.06); tone(660, t + 0.16, 0.2, 'triangle', 0.055); },
     harvest() { if (!ok('harvest', 1)) return; const t = now(); for (let i = 0; i < 5; i++) noise(t + i * 0.08, 0.11, 0.035, 'bandpass', 3200, 1.5); tone(392, t + 0.3, 0.2, 'triangle', 0.05); tone(523, t + 0.4, 0.25, 'triangle', 0.05); },
-    cluck() { if (!ok('cluck', 2.2)) return; const t = now(); [0, 0.11, 0.2].forEach((d, i) => tone(i === 2 ? 1100 : 820, t + d, 0.07, 'square', 0.022, i === 2 ? 700 : 600)); },
-    sick() { if (!ok('sick', 1)) return; const t = now(); tone(440, t, 0.18, 'triangle', 0.06, 415); tone(370, t + 0.2, 0.3, 'triangle', 0.06, 330); },
-    death() { if (!ok('death', 1)) return; const t = now(); tone(196, t, 0.35, 'sine', 0.08, 98); noise(t, 0.2, 0.03, 'lowpass', 500); },
+    cluck() { if (!ok('cluck', 5)) return; const t = now(); [0, 0.11, 0.2].forEach((d, i) => tone(i === 2 ? 1100 : 820, t + d, 0.07, 'triangle', 0.03, i === 2 ? 700 : 600)); },
+    sick() { if (!ok('sick', 3)) return; const t = now(); tone(440, t, 0.18, 'triangle', 0.06, 415); tone(370, t + 0.2, 0.3, 'triangle', 0.06, 330); },
+    death() { if (!ok('death', 3)) return; const t = now(); tone(196, t, 0.35, 'sine', 0.08, 98); noise(t, 0.2, 0.03, 'lowpass', 500); },
     heal() { if (!ok('heal', 0.3)) return; const t = now(); [784, 988, 1175].forEach((f, i) => tone(f, t + i * 0.06, 0.14, 'sine', 0.06)); },
     prim() { if (!ok('prim', 0.2)) return; const t = now(); [1047, 1319, 1568, 2093].forEach((f, i) => tone(f, t + i * 0.05, 0.15, 'triangle', 0.05)); },
     talk() { if (!ok('talk', 0.2)) return; const t = now(); [523, 587, 659].forEach((f, i) => tone(f, t + i * 0.08, 0.1, 'sine', 0.06)); },
-    scold() { if (!ok('scold', 0.2)) return; const t = now(); tone(196, t, 0.12, 'square', 0.04); tone(196, t + 0.15, 0.18, 'square', 0.04, 165); },
+    scold() { this.talk(); },
     quit() { if (!ok('quit', 0.5)) return; const t = now(); noise(t, 0.12, 0.08, 'lowpass', 600); tone(110, t, 0.2, 'sine', 0.12, 70); tone(294, t + 0.2, 0.3, 'triangle', 0.05, 220); },
     campaign() { if (!ok('camp', 0.3)) return; const t = now(); [659, 784, 988, 1319].forEach((f, i) => tone(f, t + i * 0.06, 0.18, 'triangle', 0.07)); noise(t + 0.2, 0.3, 0.02, 'highpass', 6000); },
     boost() { if (!ok('boost', 0.3)) return; const t = now(); [523, 659, 784, 1047].forEach((f, i) => tone(f, t + i * 0.09, 0.22, 'triangle', 0.08)); },
     fanfare() { if (!ok('fan', 0.3)) return; const t = now(); [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, t + i * 0.09, 0.26, 'triangle', 0.08)); },
     month() { if (!ok('month', 0.5)) return; const t = now(); noise(t, 0.08, 0.04, 'highpass', 4000); tone(2637, t + 0.03, 0.35, 'sine', 0.05); tone(1319, t + 0.03, 0.3, 'sine', 0.035); },
     board() { if (!ok('board', 1)) return; const t = now(); tone(196, t, 1.2, 'sine', 0.09, null, 0.005); tone(392, t, 0.9, 'sine', 0.04, null, 0.005); tone(588, t, 0.6, 'sine', 0.02, null, 0.005); },
-    bad() { if (!ok('bad', 0.4)) return; const t = now(); tone(330, t, 0.16, 'sawtooth', 0.035, 260); tone(247, t + 0.16, 0.24, 'sawtooth', 0.035, 200); },
+    bad() { if (!ok('bad', 0.8)) return; const t = now(); tone(392, t, 0.16, 'triangle', 0.06, 349); tone(311, t + 0.16, 0.26, 'triangle', 0.055, 277); },
     lose() { if (!ok('lose', 1)) return; const t = now(); [392, 330, 262, 196].forEach((f, i) => tone(f, t + i * 0.22, 0.3, 'triangle', 0.09)); },
   };
 })();
@@ -5380,7 +5445,7 @@ function backdrop() {
   }
   back += poly(quad(P, 10.9, 6.6, 12, 8.0), '#B5432E', 'opacity=".75"');
   if (!S.shop.paket) back += poly(quad(P, PK.x0, PK.y0, PK.x1, PK.y1 + 0.9), '#FFFFFF', 'opacity=".35"') + pl([P(PK.x0, PK.y0), P(PK.x1, PK.y0), P(PK.x1, PK.y1 + 0.9), P(PK.x0, PK.y1 + 0.9), P(PK.x0, PK.y0)], '#2340B8', 1.4, 'stroke-dasharray="5 5" opacity=".55"');
-  const front = B.front + (() => { const [x, y] = P(5.5, D + 0.22, 4.5), t = (S.name || '').toLocaleLowerCase('tr-TR'); return wallText(x, y, 'r', t, r1(fitSize(t, 8, 112, 800)), '#fff', 800); })();
+  const front = B.front;                 // ön alçak duvarda yazı yok: arka ve yan duvardaki tabelalar yeter
   return { back, front };
 }
 
@@ -5708,9 +5773,16 @@ function campaignProps(L) {
     L.dyn.put('k-inf2', { x: ix, y: iy, d: 11.55 + 4.6 + 0.1, v: 'i', op: lv('influencer'), hit: 'kamp:influencer',
       html: () => `<g class="serve">${person(0, 0, { s: 0.84, shirt: '#C2185B', hair: HAIRS[3], hairStyle: 'long', skin: SKINS[3], hold: 'doner', glasses: true, flip: true })}</g><g transform="translate(0,-64)">${liveTag()}</g>` });
   }
-  // Denedik ekibinin verdiği dönerci rozetleri: sol penceredeki camda çıkartma
+  // Denedik ekibinin bıraktığı Kobalt Afiş: sol arka pencerenin camında, dükkânın dönerci karakterleriyle
   const kar = S.denedik && S.denedik.kar;
-  if (kar && kar.length) L.dyn.put('k-kar', { x: 0, y: 0, d: 0.32, v: 'k' + kar.join(','), hit: 'karakter', html: () => kar.map((k, i) => { const y1 = 5.72 - i * 0.5, [x, y] = P(0.03, y1, 52); return `<image href="${KAR_IMG[k]}" width="15.4" height="15.4" transform="matrix(1,-.5,0,1,${r1(x)},${r1(y)})"/>`; }).join('') });
+  if (kar && kar.length) L.dyn.put('k-kar', { x: 0, y: 0, d: 0.32, v: 'k' + kar.join(',') + (S.denedik.best || 0), hit: 'karakter', html: () => {
+    const [x0, y0] = P(0.03, 7.88, 51), W = 1.36 * 32, H = 21.5, n = kar.length, d = 10.6, gap = 1.4, sx = (W - n * d - (n - 1) * gap) / 2;
+    let g = `<g transform="matrix(1,-.5,0,1,${r1(x0)},${r1(y0)})"><rect width="${r1(W)}" height="${H}" rx="1.6" fill="#2340B8"/><rect y="${H - 4.6}" width="${r1(W)}" height="4.6" fill="#14275A"/>`;
+    g += `<text x="${r1(W / 2)}" y="3.9" text-anchor="middle" font-size="2.5" font-weight="800" fill="#FFD500" letter-spacing=".08">BU DÖNERCİNİN KARAKTERİ</text>`;
+    kar.forEach((k, i) => { g += `<circle cx="${r1(sx + i * (d + gap) + d / 2)}" cy="${r1(5.2 + d / 2)}" r="${r1(d / 2 + 0.5)}" fill="#fff"/><image href="${KAR_IMG[k]}" x="${r1(sx + i * (d + gap))}" y="5.2" width="${d}" height="${d}"/>`; });
+    g += `<text x="${r1(W / 2)}" y="${r1(H - 1.4)}" text-anchor="middle" font-size="2.6" font-weight="700" fill="#fff">eniyitavukdoner<tspan fill="#FF8A2A">.com</tspan></text>`;
+    return g + '</g>';
+  } });
   if (lv('tv') > 0.02) L.dyn.put('k-tv', { x: 0, y: 0, d: 0.3, v: 't', op: lv('tv'), html: tvSvg, hit: 'kamp:tv' });
   if (lv('sadakat') > 0.02) {
     L.dyn.put('k-sad', { x: 0, y: 0, d: ROLL.x + ROLL.y1, v: 's' + S.name, op: lv('sadakat'), html: kartAfis, hit: 'kamp:sadakat' });
@@ -6590,9 +6662,9 @@ function card(id) {
       + `<p class="hint">Reklam müşteriyi yavaş yavaş artırır; masrafı ay sonunda ödenir. Müşteri artınca usta, kasiyer ve tavuk da artmalı.</p>` + lockNote('Reklamlar', 'kampanya'); },
     actions: () => [
       ...(!isOpen('kampanya') ? [lockRow('Kampanyalar', 'kampanya')] : []),
-      ...(!isOpen('kampanya') ? [] : CAMPS).map(k => { const c = C.hq.camps[k], kilit = !campOpen(c) && !S.camps[k], frK = kilit && c.fr && monthIdx() >= (c.ay || 0); return { label: c.label, sub: frK ? 'ilk franchise şubesi açılınca' : kilit ? `${Math.ceil(c.ay / 12)}. yılda açılır` : `${S.camps[k] ? 'açık · ' : ''}+${fmtK(c.add * C.month)} müşteri / ay${c.paket ? ', paket de artar' : ''}`, icon: c.icon, cost: c.cost, per: true, on: S.camps[k], disabled: kilit, hint: kilit ? 'Henüz değil' : '', run: () => A.toggleCamp(k), sound: S.camps[k] ? 'toggleOff' : 'campaign' }; }),
+      ...(!isOpen('kampanya') ? [] : CAMPS).map(k => { const c = C.hq.camps[k], kilit = !campOpen(c) && !S.camps[k], frK = kilit && c.fr && monthIdx() >= (c.ay || 0); return { label: c.label, sub: frK ? '“Şehrin en iyilerinden” olunca açılır' : kilit ? `${Math.ceil(c.ay / 12)}. yılda açılır` : `${S.camps[k] ? 'açık · ' : ''}+${fmtK(c.add * C.month)} müşteri / ay${c.paket ? ', paket de artar' : ''}`, icon: c.icon, cost: c.cost, per: true, on: S.camps[k], disabled: kilit, hint: kilit ? 'Henüz değil' : '', run: () => A.toggleCamp(k), sound: S.camps[k] ? 'toggleOff' : 'campaign' }; }),
       ...(!isOpen('anlik') ? [lockRow('Tek seferlik kampanyalar', 'anlik')] : []),
-      ...(!isOpen('anlik') ? [] : Object.keys(C.hq.instant)).map(k => { const c = C.hq.instant[k], cd = S.cool[k] && S.t < S.cool[k] ? Math.ceil(S.cool[k] - S.t) : 0; const kilit = !campOpen(c), frK = kilit && c.fr && monthIdx() >= (c.ay || 0), suren = S.boost && S.t < S.boost.until; return { label: c.label, sub: frK ? 'ilk franchise şubesi açılınca' : kilit ? `${Math.ceil(c.ay / 12)}. yılda açılır` : cd ? `tekrar için ${cd} sn` : `${c.dur >= 60 ? Math.round(c.dur / 15) + ' hafta' : c.dur + ' sn'} boyunca ${String(c.mult).replace('.', ',')} kat müşteri${c.puan ? ', puan da artar' : ''}`, icon: c.icon, cost: cd || kilit ? 0 : c.cost, disabled: cd > 0 || kilit || suren, hint: kilit ? 'Henüz değil' : cd ? 'bekle' : suren ? 'biri sürüyor' : '', tone: cd ? '' : 'primary', run: () => A.instant(k), sound: 'boost' }; }),
+      ...(!isOpen('anlik') ? [] : Object.keys(C.hq.instant)).map(k => { const c = C.hq.instant[k], cd = S.cool[k] && S.t < S.cool[k] ? Math.ceil(S.cool[k] - S.t) : 0; const kilit = !campOpen(c), frK = kilit && c.fr && monthIdx() >= (c.ay || 0), suren = S.boost && S.t < S.boost.until; return { label: c.label, sub: frK ? '“Şehrin en iyilerinden” olunca açılır' : kilit ? `${Math.ceil(c.ay / 12)}. yılda açılır` : cd ? `tekrar için ${cd} sn` : `${c.dur >= 60 ? Math.round(c.dur / 15) + ' hafta' : c.dur + ' sn'} boyunca ${String(c.mult).replace('.', ',')} kat müşteri${c.puan ? ', puan da artar' : ''}`, icon: c.icon, cost: cd || kilit ? 0 : c.cost, disabled: cd > 0 || kilit || suren, hint: kilit ? 'Henüz değil' : cd ? 'bekle' : suren ? 'biri sürüyor' : '', tone: cd ? '' : 'primary', run: () => A.instant(k), sound: 'boost' }; }),
     ],
   };
   if (id === 'oda:finans') return {
@@ -6799,7 +6871,7 @@ const TUT = [
 ];
 // ay ay açılan özellikler: açıldığında bir kez söylenir
 const TIPS = [
-  { k: 'buyume', when: () => monthIdx() >= 1, text: 'Büyüme zamanı: çiftlikte bir kümes ya da tarla daha kurarsan daha çok döner satarsın.', go: () => { const t = S.tiles.find(t => t.type === 'satilik'); return t ? { sec: 'farm', hit: 'tile:' + t.id } : null; } },
+  { k: 'buyume', when: () => monthIdx() >= 1, text: 'Büyüme zamanı: kapıya gelen müşteri, yetiştirdiğimiz tavuktan fazla. Çiftlikte bir kümes daha kurarsak daha çok döner satarız.', go: () => { const t = S.tiles.find(t => t.type === 'satilik'); return t ? { sec: 'farm', hit: 'tile:' + t.id } : null; } },
   { k: 'kampanya', when: () => isOpen('kampanya'), text: 'Yeni: reklam açıldı! Merkezdeki pazarlama odasından müşteri artırabilirsin.', go: () => ({ sec: 'hq', hit: 'oda:pazar' }) },
   { k: 'marine', when: () => isOpen('marine'), text: 'Yeni: mutfakta döner tarifini geliştirebilirsin; lezzet arttıkça müşteri artar.', go: () => ({ sec: 'kitchen', hit: 'marine' }) },
   { k: 'paket', when: () => isOpen('paket'), text: 'Yeni: paket servis açıldı! Dükkânın arka köşesinden kurabilirsin.', go: () => ({ sec: 'shop', hit: 'paket' }) },
@@ -6872,6 +6944,12 @@ function coachDodge() {
       const cr = el.getBoundingClientRect(), top0 = gr.top + y - h0 / 2 - (VIEW.shiftY || 0), l = gr.left + x - w0 / 2, r = l + w0;
       if (r > cr.left && l < cr.right) goal = clamp(cr.bottom + 16 - top0, 0, VIEW.safe ? VIEW.safe.h * 0.45 : 200);
     }
+  }
+  // dikey telefonda alttan açılan kart dokunulan nesneyi örtmesin: sahne yukarı kayar, kart kapanınca geri gelir
+  if (!goal && VIEW.mode === 'tall' && UI.cardId && UI.cardEl && UI.cardEl.isConnected && !$('card').hidden && UI.cardEl.closest && UI.cardEl.closest('#scene')) {
+    const r = UI.cardEl.getBoundingClientRect(), c = $('card').getBoundingClientRect(), gr = $('game').getBoundingClientRect();
+    const top = gr.top + (VIEW.safe ? VIEW.safe.y : 60), y0 = r.top + r.height / 2 - (VIEW.shiftY || 0);
+    if (r.width && c.top > top + 60 && y0 > c.top - 30) goal = clamp((top + (c.top - top) * 0.5) - y0, -(VIEW.safe ? VIEW.safe.h * 0.7 : 300), 0);
   }
   shiftGoal = goal;
   const cur = VIEW.shiftY || 0;
@@ -7322,7 +7400,7 @@ function openDenedik(e) {
   openModal('Denedik ekibi geldi', `<div class="dnd"><div class="dsc ${iyi ? 'g' : orta ? 'm' : 'b'}"><b>${fmtPuan(p)}</b><span>/ 10</span></div><div><p>Habersiz geldiler, sıraya girdiler, dönerimizi yediler ve mutfağı gezdiler.</p><p class="dq">${soz}</p></div></div>
     <ul class="dbars">${e.parts.map(x => `<li><span>${esc(x.ad)}</span><span class="dbar"><i style="width:${x.v * 10}%" class="${x.v >= 8 ? 'g' : x.v >= 6 ? 'm' : 'b'}"></i></span><b>${fmtPuan(x.v)}</b></li>`).join('')}</ul>
     <p class="small">${iyi ? 'Yazı yayımlandı: iki ay boyunca kapıya daha çok müşteri gelecek, puanımız da yükselecek.' : p >= 6.5 ? 'Müşteri puanına küçük bir katkısı oldu.' : 'Yazı iyi çıkmadı; müşteri puanı bir süre düşecek.'}${low.v < 9 ? ` En zayıf başlık <b>${esc(low.ad.toLocaleLowerCase('tr-TR'))}</b>: ${DENEDIK_IPUCU[low.k]}` : ''}</p>
-    ${e.kar && e.kar.length ? `<h4 class="sh4">Dönerci karakterimiz</h4><p class="small">Ekip her dükkâna nasıl bir dönerci olduğunu anlatan rozetler verir. Bizimkiler vitrine yapıştırıldı:</p><div class="karlar">${e.kar.map(x => `<div class="krt">${karImg(x.k, 64)}<b>${esc(KAR[x.k].ad)} Dönerci</b><span>${esc(x.neden.charAt(0).toLocaleUpperCase('tr-TR') + x.neden.slice(1))}</span></div>`).join('')}</div>` : ''}
+    ${e.kar && e.kar.length ? `<h4 class="sh4">Dönerci karakterimiz</h4><p class="small">Ekip her dükkâna nasıl bir dönerci olduğunu anlatan rozetler verir. Kobalt afişimiz artık vitrinde:</p><div class="karlar">${e.kar.map(x => `<div class="krt">${karImg(x.k, 64)}<b>${esc(KAR[x.k].ad)} Dönerci</b><span>${esc(x.neden.charAt(0).toLocaleUpperCase('tr-TR') + x.neden.slice(1))}</span></div>`).join('')}</div>` : ''}
     <div class="menu"><button class="btn o" data-close>Tamam</button></div>`, 'report');
 }
 
@@ -7336,7 +7414,7 @@ function storyDecision(D) {
       + `<div class="menu"><button class="btn o" id="dYes">Siparişi al · ${fmtTL(D.pay)}</button><button class="btn w" id="dAlt">Pazarlık et: indirimi yarıya indir</button><button class="btn w" id="dNo">Geri çevir</button></div><p class="small">Pazarlık tutarsa daha çok kazanırız; tutmazsa müşteri vazgeçer.</p>`, 'decide');
     $('dAlt').onclick = () => { SND.click(); closeModal(true); A.decide('toplu', 'pazar'); paintHud(); };
   } else if (D.k === 'ucuz') {
-    openModal('Ucuz tavuk teklifi', who('kitchen', `<p>Bir toptancı kapıya geldi: <b>dondurulmuş ithal tavuk</b>, malzeme maliyeti <b>%${D.pct} düşer</b>, anlaşma ${D.ay} ay.</p><p>Ama tavuğun nereden geldiğini bilmiyoruz. Müşteri farkı anlar: <b>puanımız ciddi düşer</b>, Denedik ekibi gelirse rezil oluruz, zehirlenme riski de artar.</p><p class="small">Benim oyum belli şefim: bizim tavuk bizim kümesten.</p>`) + btn('Anlaşmayı kabul et', 'Geri çevir: ucuza kaçmayız'), 'decide');
+    openModal('Ucuz tavuk teklifi', who('kitchen', `<p>Bir toptancı kapıya geldi: <b>dondurulmuş ithal tavuk</b>, malzeme maliyeti <b>%${D.pct} düşer</b>, anlaşma ${D.ay} ay.</p><p>Ama tavuğun nereden geldiğini bilmiyoruz. Müşteri farkı anlar: <b>puanımız ciddi düşer</b>, Denedik ekibi fark ederse puanımız düşer; sağlık riski de var.</p><p class="small">Benim oyum belli şefim: bizim tavuk bizim kümesten.</p>`) + btn('Anlaşmayı kabul et', 'Geri çevir: ucuza kaçmayız'), 'decide');
   } else if (D.k === 'transfer') {
     const w = S.shop.ocak.find(x => x && x.id === D.id), ek = w ? Math.round(wageOfW(w) * D.pct / 100 / 1000) * 1000 : 0;
     openModal('Ustaya transfer teklifi', who('shop', `<p>Karşıdaki dönerci <b>${esc(D.name)} Usta</b>’ya iş teklif etmiş. En eski ustamız; elinin ayarını müşteri bilir.</p><p>Maaşını <b>%${D.pct}</b> artırırsak kalır. Artırmazsak gider; ekibin de morali bozulur.</p>`) + btn(`Maaşını artır · ayda +${fmtTL(ek)}`, 'Gitmesine izin ver'), 'decide');
@@ -7596,47 +7674,59 @@ async function storyCard() {
   const rr = (x, y, w, h, r, fill) => { g.beginPath(); g.roundRect ? g.roundRect(x, y, w, h, r) : g.rect(x, y, w, h); g.fillStyle = fill; g.fill(); };
   const fit = (txt, w, max, weight) => { let s = max; g.font = F(weight, s); while (g.measureText(txt).width > w && s > 30) { s -= 4; g.font = F(weight, s); } return s; };
   // marka
-  rr(90, 110, 88, 88, 24, '#FFFFFF'); rr(130, 122, 8, 64, 4, '#FFD500');
-  g.fillStyle = '#2340B8'; g.beginPath(); g.moveTo(112, 132); g.lineTo(156, 132); g.lineTo(146, 180); g.lineTo(122, 180); g.closePath(); g.fill();
-  g.strokeStyle = '#FF6A00'; g.lineWidth = 5; g.lineCap = 'round'; for (const [y, a] of [[142, 0], [154, 2], [166, 4]]) { g.beginPath(); g.moveTo(116 + a, y); g.lineTo(152 - a, y); g.stroke(); }
-  g.fillStyle = '#fff'; g.font = F(700, 34); g.fillText('eniyitavukdoner.com', 200, 152); g.fillStyle = '#AEBDF2'; g.font = F(500, 28); g.fillText('döner oyunu', 200, 190);
+  // marka: sitedeki logo (favicon amblemi) beyaz bir zeminde, yanında "eniyitavukdoner" + turuncu ".com"
+  rr(84, 104, 100, 100, 30, '#FFFFFF');
+  g.save(); g.translate(90, 110); g.scale(88 / 64, 88 / 64);
+  rr(0, 0, 64, 64, 18, '#2340B8'); rr(30.5, 8, 3, 48, 1.5, '#FFD500');
+  g.fillStyle = '#fff'; g.fill(new Path2D('M19 15h26l-4 34H23z'));
+  g.fillStyle = '#FF6A00'; g.fill(new Path2D('M19.6 20h24.8l-.5 4.5H20.1zM20.8 30h22.4l-.5 4.5H21.3zM22 40h20l-.5 4.5H22.5z'));
+  g.restore();
+  g.font = F(800, 40); g.fillStyle = '#fff'; g.fillText('eniyitavukdoner', 210, 158); const lw = g.measureText('eniyitavukdoner').width;
+  g.fillStyle = '#FF8A2A'; g.fillText('.com', 210 + lw, 158);
+  g.fillStyle = '#AEBDF2'; g.font = F(500, 28); g.fillText('döner oyunu', 210, 196);
   // başlık
   g.fillStyle = '#AEBDF2'; g.font = F(600, 36); g.fillText(iflas ? 'Kepengi indirdim ama neler yaşadım…' : 'Dükkânımı devrettim. İşte hikâyem:', 90, 330);
   const name = S.name || 'Dönercim'; g.fillStyle = '#fff'; g.font = F(800, fit(name, 900, 120, 800)); g.fillText(name, 90, 470);
   // unvan
   const un = UNVAN[S.unvan].ad; g.font = F(700, 40); const uw = g.measureText(un).width + 80;
   rr(90, 520, uw, 76, 38, '#FFD500'); g.fillStyle = '#4A3700'; g.fillText(un, 130, 572);
-  // dönerci karakteri: Denedik rozetleri (yoksa kararlarına göre)
+  g.fillStyle = '#DCE3FF'; g.font = F(500, 38); g.fillText(`${Math.floor(T.months / 12) ? Math.floor(T.months / 12) + ' yıl ' : ''}${T.months % 12 ? (T.months % 12) + ' ay ' : ''}açık kaldı${T.karAy ? ` · ${T.karAy} ay kâr` : ''}`, 90, 668);
+  // dönerci karakteri: Denedik rozetleri (yoksa kararlarına göre) — Kobalt Afiş gibi
   try {
     const ks = (S.denedik && S.denedik.kar && S.denedik.kar.length ? S.denedik.kar : karakterler().map(x => x.k)).slice(0, 3);
-    const ims = await Promise.all(ks.map(k => new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = KAR_IMG[k]; })));
-    ims.forEach((im, i) => { if (!im) return; const d = 112, x = 990 - d - (ims.length - 1 - i) * 92, y = 500; g.save(); g.beginPath(); g.arc(x + d / 2, y + d / 2, d / 2 + 5, 0, 7); g.fillStyle = '#fff'; g.fill(); g.restore(); g.drawImage(im, x, y, d, d); });
+    if (ks.length) {
+      g.fillStyle = '#FFD500'; g.font = F(800, 30); g.fillText('BU DÖNERCİNİN KARAKTERİ', 90, 752);
+      const ims = await Promise.all(ks.map(k => new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = KAR_IMG[k]; })));
+      const d = 150;
+      ims.forEach((im, i) => { if (!im) return; const x = 90 + i * 128, y = 780; g.save(); g.beginPath(); g.arc(x + d / 2, y + d / 2, d / 2 + 7, 0, 7); g.fillStyle = '#fff'; g.fill(); g.restore(); g.drawImage(im, x, y, d, d); });
+      const nx = 90 + (ks.length - 1) * 128 + d + 36;
+      g.fillStyle = '#fff'; g.font = F(700, 36); ks.forEach((k, i) => g.fillText(KAR[k].ad, nx, 830 + i * 46));
+    }
   } catch (e) { }
-  g.fillStyle = '#DCE3FF'; g.font = F(500, 38); g.fillText(`${Math.floor(T.months / 12) ? Math.floor(T.months / 12) + ' yıl ' : ''}${T.months % 12 ? (T.months % 12) + ' ay ' : ''}açık kaldı${T.karAy ? ` · ${T.karAy} ay kâr` : ''}`, 90, 670);
   // dört kutu
   const nR = ROZET.filter(r => S.rozet[r.k] != null).length;
   const tiles = [[fmtK(T.sold + T.paket), 'porsiyon döner'], [fmtTL(T.peak), 'en yüksek kasa'], [`${nR} / ${ROZET.length}`, 'rozet'], [S.denedik && S.denedik.n ? fmtPuan(S.denedik.best) + ' / 10' : '★ ' + fmtPuan(S.puan), S.denedik && S.denedik.n ? 'Denedik puanı' : 'müşteri puanı']];
   tiles.forEach(([v, k], i) => {
-    const x = 90 + (i % 2) * 460, y = 740 + Math.floor(i / 2) * 250;
-    g.globalAlpha = 0.14; rr(x, y, 440, 220, 36, '#FFFFFF'); g.globalAlpha = 1;
-    g.fillStyle = '#fff'; g.font = F(800, fit(v, 380, 76, 800)); g.fillText(v, x + 36, y + 120);
-    g.fillStyle = '#AEBDF2'; g.font = F(500, 32); g.fillText(k, x + 36, y + 175);
+    const x = 90 + (i % 2) * 460, y = 980 + Math.floor(i / 2) * 230;
+    g.globalAlpha = 0.14; rr(x, y, 440, 205, 36, '#FFFFFF'); g.globalAlpha = 1;
+    g.fillStyle = '#fff'; g.font = F(800, fit(v, 380, 72, 800)); g.fillText(v, x + 36, y + 112);
+    g.fillStyle = '#AEBDF2'; g.font = F(500, 32); g.fillText(k, x + 36, y + 165);
   });
   // kasanın yolu
   const { pts } = cashPath();
   if (pts.length >= 3) {
-    const x0 = 90, y0 = 1270, w = 900, h = 300, vs = pts.map(p => p.v), mn = Math.min(0, ...vs), mx = Math.max(1, ...vs);
+    const x0 = 90, y0 = 1500, w = 900, h = 150, vs = pts.map(p => p.v), mn = Math.min(0, ...vs), mx = Math.max(1, ...vs);
     const X = i => x0 + i * w / (pts.length - 1), Y = v => y0 + h - (v - mn) / (mx - mn) * h;
-    g.fillStyle = '#AEBDF2'; g.font = F(600, 32); g.fillText('Kasanın yolculuğu', x0, y0 - 30);
+    g.fillStyle = '#AEBDF2'; g.font = F(600, 30); g.fillText('Kasanın yolculuğu', x0, y0 - 24);
     const gr = g.createLinearGradient(0, y0, 0, y0 + h); gr.addColorStop(0, 'rgba(255,213,0,.35)'); gr.addColorStop(1, 'rgba(255,213,0,0)');
     g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(X(i), Y(p.v)) : g.moveTo(X(i), Y(p.v))); g.lineTo(X(pts.length - 1), Y(Math.max(0, mn))); g.lineTo(X(0), Y(Math.max(0, mn))); g.closePath(); g.fillStyle = gr; g.fill();
     g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(X(i), Y(p.v)) : g.moveTo(X(i), Y(p.v))); g.strokeStyle = '#FFD500'; g.lineWidth = 8; g.lineJoin = 'round'; g.stroke();
     const k = pts.length - 1; g.beginPath(); g.arc(X(k), Y(pts[k].v), 14, 0, 7); g.fillStyle = '#fff'; g.fill();
   }
   // alt
-  g.globalAlpha = 0.14; rr(90, 1680, 900, 140, 40, '#FFFFFF'); g.globalAlpha = 1;
-  g.fillStyle = '#fff'; g.font = F(700, 38); g.fillText('Sen de kendi dönercini aç', 140, 1742);
-  g.fillStyle = '#FFD500'; g.font = F(600, 34); g.fillText('eniyitavukdoner.com/game', 140, 1790);
+  g.globalAlpha = 0.14; rr(90, 1710, 900, 130, 40, '#FFFFFF'); g.globalAlpha = 1;
+  g.fillStyle = '#fff'; g.font = F(700, 38); g.fillText('Sen de kendi dönercini aç', 140, 1768);
+  g.fillStyle = '#FFD500'; g.font = F(600, 34); g.fillText('eniyitavukdoner.com/game', 140, 1814);
   return cv;
 }
 function wireShare() {
@@ -7715,7 +7805,7 @@ function boot(hot) {
   $('zOut').addEventListener('click', () => { SND.click(); setZoom(VIEW.zoom / 1.45, null, null, true); });
   $('coach').addEventListener('pointerdown', e => e.stopPropagation());
   $('tray').innerHTML = titleArt();
-  $('btnContinue').hidden = !hasSave(); { const ss = saveSummary(); $('btnContinue').innerHTML = ss ? `Devam et<small>${esc(ss)}</small>` : 'Devam et'; }
+  paintTitle();
   $('spPause').addEventListener('click', () => setSpeed(0));
   $('sp1').addEventListener('click', () => setSpeed(UI.paused ? UI.speed : SPEEDS[(SPEEDS.indexOf(UI.speed) + 1) % SPEEDS.length]));
   $('btnSound').addEventListener('click', () => { SND.unlock(); SND.set(!SND.on); paintSound(); if (UI.started) SND.ambient(UI.sec); });
@@ -7985,7 +8075,30 @@ const CHAIN = [
 function buildChain() {
   const ar = '<span class="ar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>';
   $('chain').innerHTML = CHAIN.map((c, i) => `${i ? ar : ''}<button class="chip" data-go="${c.sec}"><svg viewBox="0 0 24 24" aria-hidden="true">${c.ic}</svg><span class="ck">${c.k}</span><b>0</b><span class="cu">${c.unit}</span></button>`).join('');
-  $('chain').querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => goSection(b.dataset.go)));
+  $('chain').querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { SND.click(); openAkis(); }));
+}
+// üretim zinciri: her basamak ayda ne kadar yapıyor, ihtiyaç ne kadar; en dar yer ve ne yapılmalı
+function openAkis() {
+  if (!S) return;
+  const f = forecast(), p9 = porsOf(kesimTarget()), hat = S.kesim2 ? 2 : 1, kesimAy = C.month / C.kitchen.kesimTime[S.kesimHizli ? 1 : 0] * hat;
+  const gun = (stok, ayda) => ayda > 0 ? Math.round(stok / ayda * 30) : 0;
+  const durum = (ok, warn) => ok ? '<i class="ak ok">✓</i>' : warn ? '<i class="ak wr">!</i>' : '<i class="ak bd">!</i>';
+  const satis = Math.min(f.demand, f.pors, f.ustaCap, f.kasaCap);
+  const rows = [
+    ['farm', 'Yem', `Tarlalar ayda <b>${fmtNum(Math.round(f.yem))} çuval</b> verir; tavuklar <b>${fmtNum(Math.round(f.eat))} çuval</b> yer.`, `Siloda ${fmtNum(Math.round(S.silo))} çuval: ≈ ${gun(S.silo, f.eat)} gün yeter.`, f.yem >= f.eat * 0.98, f.yem >= f.eat * 0.8],
+    ['farm', 'Piliç', `Kümesler ayda <b>${fmtK(f.pilic)} piliç</b> yetiştirir: ≈ <b>${fmtK(f.pors)} porsiyon</b> döner.`, `Müşteri ayda ≈ ${fmtK(f.demand)} porsiyon istiyor.`, f.pors >= f.demand * 0.98, f.pors >= f.demand * 0.85],
+    ['kitchen', 'Besi ve kesim', `Besi alanında <b>${fmtK(S.chickens.length)} / ${fmtK(besiCap())}</b> tavuk. Kesim hattı ayda <b>${fmtK(kesimAy)}</b> tavuk keser.`, S.kesimWait ? `${fmtK(S.kesimWait)} tavuk kesim bekliyor.` : 'Kesim akıyor.', kesimAy >= f.pilic * 0.98 && S.chickens.length < besiCap(), S.chickens.length < besiCap()],
+    ['shop', 'Dolap', `Dolapta <b>${fmtK(fridgePors())} porsiyon</b> şiş: ≈ <b>${gun(fridgePors(), Math.max(satis, 0.1))} gün</b> satışa yeter.`, `Dolabın yeri ${fmtK(fridgeCap() * p9)} porsiyon.`, S.fridge.length > 0 && S.fridge.length < fridgeCap(), S.fridge.length > 0],
+    ['shop', 'Usta', `Ustalar ayda <b>${fmtK(f.ustaCap)} porsiyon</b> keser.`, '', f.ustaCap >= Math.min(f.demand, f.pors) * 0.98, f.ustaCap >= Math.min(f.demand, f.pors) * 0.85],
+    ['shop', 'Kasa', `Kasiyerler ayda <b>${fmtK(f.kasaCap)} müşteriye</b> bakar.`, '', f.kasaCap >= f.demand * 0.98, f.kasaCap >= f.demand * 0.85],
+    ['hq', 'Müşteri', `Ayda ≈ <b>${fmtK(f.demand)} müşteri</b> geliyor.`, `Müşteri puanı ★${fmtPuan(S.puan)}${f.demand < f.pors * 0.85 ? '; reklamla artırılabilir.' : '.'}`, f.demand >= Math.min(f.pors, f.ustaCap, f.kasaCap) * 0.9, true],
+  ];
+  const dar = [['tavuk', f.pors], ['usta', f.ustaCap], ['kasiyer', f.kasaCap], ['müşteri', f.demand]].sort((a, b) => a[1] - b[1])[0][0];
+  const DAR = { tavuk: 'Müşteriye yetecek kadar tavuk yetişmiyor: kümes kur ya da piliç sayısını artır; yemin de yetmesine bak.', usta: 'Döneri kesmeye usta yetişmiyor: dükkâna bir usta daha al.', kasiyer: 'Kasada sıra birikiyor: bir kasiyer daha al.', müşteri: 'Üretim hazır, müşteri az: kampanya aç, puanı yükselt ya da fiyatı biraz düşür.' };
+  openModal('Üretim zinciri', `<p class="small">Döner tarladan müşteriye yedi basamaktan geçer. Bir basamak yetişmezse arkası bekler. Rakamlar aylık tahmindir.</p>
+    <ol class="akis">${rows.map(([sec, ad, a, b, ok, wr]) => `<li data-sec="${sec}">${durum(ok, wr)}<div><b>${ad}</b><span>${a}</span>${b ? `<small>${b}</small>` : ''}</div><button class="go" data-akgo="${sec}" aria-label="${ad}: bölüme git">›</button></li>`).join('')}</ol>
+    <div class="akdar"><span class="eyebrow">En dar yer: ${dar}</span><p>${DAR[dar]}</p></div><div class="menu"><button class="btn o" data-close>Tamam</button></div>`, 'akis');
+  document.querySelectorAll('#sheet [data-akgo]').forEach(b => b.addEventListener('click', () => { const sec = b.dataset.akgo; closeModal(); goSection(sec); }));
 }
 function paintChain() {
   if (!S) return;
@@ -8178,6 +8291,20 @@ function openCard(id, el) {
   placeCard(el); showPulse();
   box.classList.remove('show'); void box.offsetWidth; box.classList.add('show');
   hideTalk(); placeCoach();
+  if (VIEW.mode === 'tall') revealAbove(el, box);
+}
+// dikey telefonda kart alttan açılınca dokunulan nesne kartın altında kalmasın: sahne yumuşakça kayar
+function revealAbove(el, box) {
+  if (!el || !el.isConnected) return;
+  const g = $('game').getBoundingClientRect(), r = el.getBoundingClientRect(), cb = box.getBoundingClientRect();
+  if (!r.width) return;
+  const top = g.top + (VIEW.safe ? VIEW.safe.y : 60), bot = cb.top - 24 + 24;    // kartın açılış kaydırması (24px) hesaba katılır
+  const cy = r.top + r.height / 2, cx = r.left + r.width / 2, want = top + (bot - top) * 0.55;
+  const dy = 0, dx = cx < g.left + 30 || cx > g.right - 30 ? cx - (g.left + g.right) / 2 : 0;     // dikey kaydırmayı coachDodge yapar
+  if (!dy && !dx) return;
+  let k = 0; const n = 12, sx = dx / n, sy = dy / n;
+  const go = () => { if (++k > n) return; panBy(-sx, -sy); requestAnimationFrame(go); };
+  requestAnimationFrame(go);
 }
 function refreshCard(force) {
   const box = $('card'); if (box.hidden || !UI.cardId) return;
@@ -8412,7 +8539,7 @@ function openMenu() {
 }
 function toTitle() {
   clearSave(); UI.started = false; closeCard(); hideTalk();
-  $('endScreen').hidden = true; $('titleScreen').hidden = false; $('btnContinue').hidden = true; $('game').classList.remove('playing');
+  $('endScreen').hidden = true; $('titleScreen').hidden = false; paintTitle(); $('game').classList.remove('playing');
   SND.ambient(null); paintSpeed(); hideCoach(); setPointer(null); placeZoom();
 }
 function openHelp() {
@@ -8421,7 +8548,7 @@ function openHelp() {
       <div class="st"><span class="sn">1</span><div><b>Çiftlik</b><p>Satılık arsalara tarla ya da kümes kur. Tarla tavukların yemini, kümes yeni piliçleri verir.</p></div></div>
       <div class="st"><span class="sn">2</span><div><b>Mutfak</b><p>Piliçler yemle büyür, kesilip döner şişi olur. Veteriner tavukları, gıda mühendisi mutfağı korur; ikisi de pahalıdır ama değer.</p></div></div>
       <div class="st"><span class="sn">3</span><div><b>Dükkân</b><p>Boş ocağa usta, boş kasaya kasiyer al; kasada kimse yoksa müşteri girmez. Tasarım yıllar içinde eskir; yenisi pahalıdır.</p></div></div>
-      <div class="st"><span class="sn">4</span><div><b>Merkez</b><p>Reklam müşteriyi artırır. Finans odasında vergi ve sigorta var. Kurul her üç ayda iki hedef koyar. Marka olunca yan arsaya franchise merkezi kurulur: şehir şehir şube verir, şişi ve malzemeyi sen satarsın.</p></div></div>
+      <div class="st"><span class="sn">4</span><div><b>Merkez</b><p>Reklam müşteriyi artırır. Finans odası paranın nereye gittiğini gösterir. Kurul her üç ayda iki hedef koyar. Marka olunca franchise ofisi kurulur; merkez kademe kademe büyüdükçe şehir şehir şube açılır.</p></div></div>
     </div>
     <p class="small">Sol üstteki <b>kasaya dokunursan</b> bu ayın gelir ve giderini görürsün. <b>Müşteri puanı (★)</b> kalabalığı belirler: tarif, hijyen, veteriner, tasarımın tazeliği ve hızlı servis puanı yükseltir.</p>
     <p class="small"><b>Hedef:</b> beş basamaklı unvan merdivenini tırman ve “Türkiye’nin en iyi tavuk döneri” ol. Her basamağın şartları “Hikâyem” sayfasında yazar; her yeni unvan ödül ve yeni müşteri getirir. Denedik ekibi arada bir habersiz gelir ve 10 üzerinden puan verir.</p>
@@ -8437,7 +8564,7 @@ function showEnd() {
   const stat = (v, k, cls = '') => `<div class="${cls}"><b>${v}</b><span>${k}</span></div>`;
   const why = iflas ? iflasNedeni() : null;
   const score = { ad: S.name, ay: T.months, butce: Math.round(T.peak), t: Date.now() };
-  $('endIn').innerHTML = `<div class="brand small">${brandSvg(28)}<span>eniyitavukdoner.com oyunu</span></div>
+  $('endIn').innerHTML = `<div class="brand small">${brandSvg(28)}<span class="wm">eniyitavukdoner<b>.com</b></span></div>
     <h1>${iflas ? 'İflas ettik' : 'Dükkânı devrettin'}</h1>
     <p class="lead">${iflas ? `${esc(S.name)} ${T.months} ay ayakta kaldı. Ay sonunda kasa <span class="nw">${fmtTL(S.cash)}</span> oldu ve bankanın <span class="nw">${fmtTL(o.limit)}</span> kredi limiti aşıldı.` : `${esc(S.name)} ${T.months} ay boyunca senin elindeydi. Devrederken kasada <span class="nw">${fmtTL(S.cash)}</span> vardı.`}</p>
     ${endStory()}
@@ -8465,8 +8592,16 @@ function showEnd() {
     box.innerHTML = place + `<h4 class="sh4">${whereTxt(top.where)}</h4>` + rankRows(top.list, score);
   });
 }
+// başlık ekranı: kayıt varsa "Devam et" öne çıkar; üç dönerci karakteri
+function paintTitle() {
+  const var_ = hasSave(), ss = var_ ? saveSummary() : '';
+  $('btnContinue').hidden = !var_; $('btnContinue').innerHTML = ss ? `Devam et<small>${esc(ss)}</small>` : 'Devam et';
+  $('btnNew').className = var_ ? 'btn w big' : 'btn o big';
+  const ks = Object.keys(KAR_IMG).sort(() => Math.random() - 0.5).slice(0, 3);
+  $('tKar').innerHTML = `<span class="tks">${ks.map(k => karImg(k, 58)).join('')}</span><span class="tkt">Sen nasıl bir dönerci olacaksın?<small>${ks.map(k => esc(KAR[k].ad)).join(' · ')}</small></span>`;
+}
 function brandSvg(size) {
-  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#2340B8"/><rect x="30.5" y="8" width="3" height="48" rx="1.5" fill="#FFD500"/><path d="M19 16 h26 l-6 32 h-14z" fill="#fff"/><path d="M20.2 22 h23.6 M21.4 29 h21.2 M22.6 36 h18.8 M23.8 43 h16.4" stroke="#FF6A00" stroke-width="3" stroke-linecap="round"/></svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#2340B8"/><rect x="30.5" y="8" width="3" height="48" rx="1.5" fill="#FFD500"/><path d="M19 15h26l-4 34H23z" fill="#fff"/><path d="M19.6 20h24.8l-.5 4.5H20.1zM20.8 30h22.4l-.5 4.5H21.3zM22 40h20l-.5 4.5H22.5z" fill="#FF6A00"/></svg>`;
 }
 
 window.addEventListener('load', () => {
